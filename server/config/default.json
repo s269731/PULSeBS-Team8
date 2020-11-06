@@ -1,0 +1,4 @@
+{
+	"DBSOURCE": "./db/database.db",
+	"verbose": true
+}
