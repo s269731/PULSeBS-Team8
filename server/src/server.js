@@ -1,0 +1,67 @@
+const express = require('express');
+const jwt = require('express-jwt');
+const jsonwebtoken = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const cookieParser = require('cookie-parser');
+const userDao = require('./userDao');
+
+const jwtSecret = 'BçFDJDLKSAJOIFBHNI$48tgopW$ITH"W$TBL';
+const tokenExpireTime = 60 * 60; // 1 hour
+const authErrorObj = { errors: [{ msg: 'Authorization error' }] };
+const PORT = 3001;
+const app = express();
+app.disable('x-powered-by');
+
+app.use(express.json());
+
+app.post('/api/login', (req, res) => {
+  const { email } = req.body;
+  const { password } = req.body;
+
+  userDao.getUser(email)
+    .then((user) => {
+      if (user === undefined) {
+        res.status(404).send({
+          errors: [{ msg: 'E-mail non valida' }],
+        });
+      } else if (!userDao.checkPassword(user, password)) {
+        res.status(401).send({
+          errors: [{ msg: 'Password errata' }],
+        });
+      } else {
+        // AUTHENTICATION SUCCESS
+        const token = jsonwebtoken.sign({ user: user.id }, jwtSecret, { expiresIn: tokenExpireTime });
+        res.cookie('token', token, { httpOnly: true, sameSite: true, maxAge: 1000 * tokenExpireTime });
+        res.json({ id: user.id, username: user.username });
+      }
+    }).catch(
+      // Delay response when wrong user/pass is sent to avoid fast guessing attempts
+      (err) => {
+        new Promise((resolve) => { setTimeout(resolve, 1000); }).then(() => res.status(401).json(authErrorObj));
+      },
+    );
+});
+
+app.use(cookieParser());
+
+app.post('/api/logout', (req, res) => {
+  res.clearCookie('token').end();
+});
+
+// AUTHENTICATED REST API endpoints
+app.use(jwt({ secret: jwtSecret, getToken: (req) => req.cookies.token, algorithms: ['RS256'] }));
+
+app.get('/api/user', (req, res) => {
+  const user = req.user && req.user.user;
+  userDao.getUserById(user)
+    .then((user) => {
+      res.json({ id: user.id, username: user.username });
+    })
+    .catch(
+      (err) => {
+        res.status(401).json(authErrorObj);
+      },
+    );
+});
+
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}/`));
