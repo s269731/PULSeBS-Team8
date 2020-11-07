@@ -3,6 +3,7 @@ const jwt = require('express-jwt');
 const jsonwebtoken = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const userDao = require('./userDao');
+const lecturesDao = require('./lecturesDao');
 
 const jwtSecret = 'BçFDJDLKSAJOIFBHNI$48tgopW$ITH"W$TBL';
 const tokenExpireTime = 60 * 60; // 1 hour
