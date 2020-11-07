@@ -1,4 +1,5 @@
 const express = require('express');
+const moment = require('moment');
 const jwt = require('express-jwt');
 const jsonwebtoken = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
@@ -66,6 +67,19 @@ app.get('/api/user', (req, res) => {
 app.get('/api/lectures', (req, res) => {
   const userId = req.user && req.user.user;
   lecturesDao.getLecturesByUserId(userId)
+    .then((lectures) => {
+      res.json(lectures);
+    })
+    .catch(() => {
+      res.json(lecturesErr);
+    });
+});
+
+app.get('/api/lecturesTeacher', (req, res) => {
+  const teacherId = req.user && req.user.user;
+  const d = new Date();
+  const today = moment(d).format("YYYY-MM-DD HH:MM:SS.SSS");
+  lecturesDao.getNextLecturesByTeacherId(teacherId, today)
     .then((lectures) => {
       res.json(lectures);
     })

@@ -38,3 +38,27 @@ exports.getLecturesByUserId = (id) => new Promise((resolve, reject) => {
     reject("There aren't lecture for this StudentId");
   }
 });
+
+exports.getNextLecturesByTeacherId = (id, todayDateHour) => new Promise((resolve, reject) => {
+  const sql = "SELECT * FROM Lectures WHERE TeacherId = ? and DateHour > DATETIME(?)";
+  const stmt = db.prepare(sql);
+  const rows = stmt.all(id, todayDateHour);
+  const lectures = {};
+
+  if (rows.length > 0) {
+    rows.forEach((rawlecture) => {
+      const subjectName = subjectDao.getSubjectName(rawlecture.SubjectId);
+      const teacher = userDao.getUserById(rawlecture.TeacherId);
+      const teacherName = string.concat(teacher.Name, teacher.Surname);
+      lecture = new Lecture(rawlecture.LectureId, subjectName, teacherName, rawlecture.DateHour, rawlecture.Modality, rawlecture.Class, rawlecture.Capacity, rawlecture.bookedPeople);
+
+      lectures.push(lecture);
+    });
+
+    console.log(lectures);
+    resolve(lectures);
+  } else {
+    // There aren't lectures for this StudentId
+    reject("No lectures scheduled for this TeacherId");
+  }  
+});
