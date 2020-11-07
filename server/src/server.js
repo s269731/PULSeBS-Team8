@@ -64,7 +64,7 @@ app.get('/api/user', (req, res) => {
 });
 
 app.get('/api/lectures',(req,res)=>{
-const userId = req.userid;
+    const userId = req.user && req.user.user;
 lecturesDao.getLecturesByUserId(userId)
     .then((lectures)=>{
         res.json(lectures);
