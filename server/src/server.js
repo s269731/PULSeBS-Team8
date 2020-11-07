@@ -78,13 +78,25 @@ app.get('/api/lectures', (req, res) => {
 app.get('/api/lecturesTeacher', (req, res) => {
   const teacherId = req.user && req.user.user;
   const d = new Date();
-  const today = moment(d).format("YYYY-MM-DD HH:MM:SS.SSS");
+  const today = moment(d).format('YYYY-MM-DD HH:MM:SS.SSS');
   lecturesDao.getNextLecturesByTeacherId(teacherId, today)
     .then((lectures) => {
       res.json(lectures);
     })
     .catch(() => {
       res.json(lecturesErr);
+    });
+});
+
+app.post('/api/reserve', (req, res) => {
+  const userId = req.user && req.user.user;
+  const { lectureId } = req.body;
+  lecturesDao.insertReservation(lectureId, userId)
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((error) => {
+      res.json(error);
     });
 });
 
