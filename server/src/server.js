@@ -8,7 +8,7 @@ const lecturesDao = require('./lecturesDao');
 const jwtSecret = 'BçFDJDLKSAJOIFBHNI$48tgopW$ITH"W$TBL';
 const tokenExpireTime = 60 * 60; // 1 hour
 const authErrorObj = { errors: [{ msg: 'Authorization error' }] };
-const lecturesErr = {errors: [{ msg:'There was an error retrieving available lectures'}] };
+const lecturesErr = { errors: [{ msg: 'There was an error retrieving available lectures' }] };
 const PORT = 3001;
 const app = express();
 app.disable('x-powered-by');
@@ -63,16 +63,15 @@ app.get('/api/user', (req, res) => {
     );
 });
 
-app.get('/api/lectures',(req,res)=>{
-    const userId = req.user && req.user.user;
-lecturesDao.getLecturesByUserId(userId)
-    .then((lectures)=>{
-        res.json(lectures);
+app.get('/api/lectures', (req, res) => {
+  const userId = req.user && req.user.user;
+  lecturesDao.getLecturesByUserId(userId)
+    .then((lectures) => {
+      res.json(lectures);
     })
     .catch(() => {
-        res.json(lecturesErr);
-    })
-
+      res.json(lecturesErr);
+    });
 });
 
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}/`));
