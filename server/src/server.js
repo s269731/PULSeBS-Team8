@@ -1,7 +1,6 @@
 const express = require('express');
 const jwt = require('express-jwt');
 const jsonwebtoken = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
 const cookieParser = require('cookie-parser');
 const userDao = require('./userDao');
 
@@ -34,12 +33,10 @@ app.post('/api/login', (req, res) => {
         res.cookie('token', token, { httpOnly: true, sameSite: true, maxAge: 1000 * tokenExpireTime });
         res.json({ id: user.id, username: user.username });
       }
-    }).catch(
+    }).catch(() => {
       // Delay response when wrong user/pass is sent to avoid fast guessing attempts
-      (err) => {
-        new Promise((resolve) => { setTimeout(resolve, 1000); }).then(() => res.status(401).json(authErrorObj));
-      },
-    );
+      new Promise((resolve) => { setTimeout(resolve, 1000); }).then(() => res.status(401).json(authErrorObj));
+    });
 });
 
 app.use(cookieParser());
@@ -52,13 +49,13 @@ app.post('/api/logout', (req, res) => {
 app.use(jwt({ secret: jwtSecret, getToken: (req) => req.cookies.token, algorithms: ['RS256'] }));
 
 app.get('/api/user', (req, res) => {
-  const user = req.user && req.user.user;
-  userDao.getUserById(user)
+  const userId = req.user && req.user.user;
+  userDao.getUserById(userId)
     .then((user) => {
       res.json({ id: user.id, username: user.username });
     })
     .catch(
-      (err) => {
+      () => {
         res.status(401).json(authErrorObj);
       },
     );

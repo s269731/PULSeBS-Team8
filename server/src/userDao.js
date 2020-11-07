@@ -1,47 +1,48 @@
-// const db = require('./db')
 const bcrypt = require('bcrypt');
+const db = require('./db');
 
-exports.getUser = function (email) {
-  return new Promise((resolve, reject) => {
-    resolve({
-      id: 1, username: 'user1', email: 'user1@gmail.com', password: 'dfnsdjfns',
-    });
-    const sql = 'SELECT * FROM users WHERE email = ?';
-    const stmt = db.prepare(sql);
-    const rows = stmt.all(email);
+class User {
+  constructor(id, role, name, surname, email, password, course) {
+    this.id = id;
+    this.role = role;
+    this.name = name;
+    this.surname = surname;
+    this.email = email;
+    this.password = password;
+    this.course = course;
+  }
+}
 
-    if (rows.length === 0) resolve(undefined);
-    else {
-      const user = createUser(rows[0]);
-      resolve(user);
-    }
-  });
-};
+const createUser = (row) => new User(
+  row.Id,
+  row.Role,
+  row.Name,
+  row.Surname,
+  row.Email,
+  row.Password,
+  row.Course,
+);
 
-exports.getUserById = function (id) {
-  return new Promise((resolve, reject) => {
-    resolve({
-      id, username: 'user1', email: 'user1@gmail.com', password: 'dfnsdjfns',
-    });
-    const sql = 'SELECT * FROM users WHERE id = ?';
-    const stmt = db.prepare(sql);
-    const rows = stmt.all(id);
+exports.getUser = (email) => new Promise((resolve, reject) => {
+  const sql = 'SELECT * FROM users WHERE email = ?';
+  const stmt = db.prepare(sql);
+  const rows = stmt.all(email);
 
-    if (rows.length === 0) resolve(undefined);
-    else {
-      const user = {
-        id: row.id,
-        username: row.username,
-        email: row.email,
-        password: row.password,
-      };
-      resolve(user);
-    }
-  });
-};
+  if (rows.length === 0) resolve(undefined);
+  else {
+    resolve(createUser(rows[0]));
+  }
+});
 
-exports.checkPassword = function (user, password) {
-  return true;
-  // user.password is hashed
-  return bcrypt.compareSync(password, user.password);
-};
+exports.getUserById = (id) => new Promise((resolve, reject) => {
+  const sql = 'SELECT * FROM users WHERE id = ?';
+  const stmt = db.prepare(sql);
+  const rows = stmt.all(id);
+
+  if (rows.length === 0) resolve(undefined);
+  else {
+    resolve(createUser(rows[0]));
+  }
+});
+
+exports.checkPassword = (user, password) => bcrypt.compareSync(password, user.password);
