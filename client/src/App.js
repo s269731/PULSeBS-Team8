@@ -1,25 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import './App.css'
+import Navbars from './Components/Navbar.js'
+import TeacherPage from "./Components/TeacherPage";
+import {Switch} from 'react-router';
+import {withRouter,Redirect, Route} from 'react-router-dom';
+import {Alert} from 'react-bootstrap';
+import Login from './pages/logins/index'
+ 
+class App extends React.Component{
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  constructor(props) {
+    super(props);
+  }
+  render(){
+    return <>
+
+        <Navbars path={this.props.location.pathname}></Navbars>
+        <Switch>
+          <Route exact path='/home'>
+            <Alert variant="info">Login page not implemented.</Alert>
+            <Alert variant="info">Student page not implemented.</Alert>
+            <Alert variant="info">Teacher page implemented. Go to localhost:3000/teacher</Alert>
+          </Route>
+          <Route exact path='/login' >
+            <Login></Login>
+          </Route>
+          <Route exact path='/teacher'>
+            <TeacherPage></TeacherPage>
+          </Route>
+          <Route exact path='/student'>
+            <Alert variant="info">Student page not implemented. Insert here Student components.</Alert>
+          </Route>
+          <Route><Redirect to='/home'/></Route>
+        </Switch>
+    </>
+  }
+
+
+
+
 }
-
-export default App;
+export default withRouter(App);
