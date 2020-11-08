@@ -32,12 +32,14 @@ app.post('/api/login', (req, res) => {
         });
       } else {
         // AUTHENTICATION SUCCESS
+        // eslint-disable-next-line max-len
         const token = jsonwebtoken.sign({ user: user.id }, jwtSecret, { expiresIn: tokenExpireTime });
         res.cookie('token', token, { httpOnly: true, sameSite: true, maxAge: 1000 * tokenExpireTime });
         res.json({ id: user.id, username: user.username });
       }
     }).catch(() => {
       // Delay response when wrong user/pass is sent to avoid fast guessing attempts
+    // eslint-disable-next-line max-len
       new Promise((resolve) => { setTimeout(resolve, 1000); }).then(() => res.status(401).json(authErrorObj));
     });
 });
@@ -91,7 +93,9 @@ app.get('/api/lecturesTeacher', (req, res) => {
 app.post('/api/reserve', (req, res) => {
   const userId = req.user && req.user.user;
   const { lectureId } = req.body;
-  lecturesDao.insertReservation(lectureId, userId)
+  const d = new Date();
+  const today = moment(d).format('YYYY-MM-DD HH:MM:SS.SSS');
+  lecturesDao.insertReservation(lectureId, userId, today)
     .then((result) => {
       res.json(result);
     })

@@ -63,17 +63,30 @@ exports.getNextLecturesByTeacherId = (id, todayDateHour) => new Promise((resolve
   }
 });
 
-exports.insertReservation = (lectureId, studentId) => new Promise((resolve, reject) => {
+const getLectureTimeConstraint = (lectureId) => new Promise((resolve, reject) => {
+  const sql = 'SELECT DateHour FROM Lectures WHERE LectureId=?';
+  const stmt = db.prepare(sql);
+  const row = stmt.get(lectureId);
+  if (row !== undefined) {
+    const lectureTimeConstraint = new Date(row.dateHour);
+    lectureTimeConstraint.setHours(0, 0, 0, 0);
+    resolve(lectureTimeConstraint);
+  } else reject('No Lecture for that LectureId');
+});
+
+exports.insertReservation = (lectureId, studentId, todayDateHour) => new Promise((resolve, reject) => {
   const sql = 'SELECT * FROM Bookings WHERE LectureId=? AND StudentId=?';
   const stmt = db.prepare(sql);
   const row = stmt.get(lectureId, studentId);
-  if (row !== undefined) {
-    reject('The Student has already booked a seat for this lecture');
-  } else {
-    const sql1 = 'INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)';
-    const stmt1 = db.prepare(sql1);
-    const res = stmt1.run(lectureId, studentId);
-    if (res.changes === 1) resolve({ result: res.changes });
-    else reject('Error in inserting the row');
-  }
+  if (todayDateHour < getLectureTimeConstraint(lectureId)) {
+    if (row !== undefined) {
+      reject('The Student has already booked a seat for that Lecture');
+    } else {
+      const sql1 = 'INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)';
+      const stmt1 = db.prepare(sql1);
+      const res = stmt1.run(lectureId, studentId);
+      if (res.changes === 1) resolve({ result: res.changes });
+      else reject('Error in inserting row');
+    }
+  } else reject('Booking is closed for that Lecture');
 });
