@@ -93,14 +93,13 @@ app.get('/api/lecturesTeacher', (req, res) => {
 app.post('/api/reserve', (req, res) => {
   const userId = req.user && req.user.user;
   const { lectureId } = req.body;
-  const d = new Date();
-  const today = moment(d).format('YYYY-MM-DD HH:MM:SS.SSS');
-  lecturesDao.insertReservation(lectureId, userId, today)
+
+  lecturesDao.insertReservation(lectureId, userId)
     .then((result) => {
       res.json(result);
     })
     .catch((error) => {
-      res.json(error);
+      res.json({ errors: [{ msg: error }] });
     });
 });
 

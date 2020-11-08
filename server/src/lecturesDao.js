@@ -1,8 +1,9 @@
+const moment = require('moment');
 const db = require('./db');
 const userDao = require('./userDao');
 const subjectDao = require('./subjectsDao');
 
-class Lecture {
+export default class Lecture {
   constructor(lectureId, subjectName, teacherName, dateHour, modality, className, capacity, bookedPeople) {
     this.lectureId = lectureId;
     this.subjectName = subjectName;
@@ -63,22 +64,27 @@ exports.getNextLecturesByTeacherId = (id, todayDateHour) => new Promise((resolve
   }
 });
 
-const getLectureTimeConstraint = (lectureId) => new Promise((resolve, reject) => {
+const getLectureTimeConstraint = (lectureId) => {
   const sql = 'SELECT DateHour FROM Lectures WHERE LectureId=?';
   const stmt = db.prepare(sql);
   const row = stmt.get(lectureId);
   if (row !== undefined) {
     const lectureTimeConstraint = new Date(row.dateHour);
     lectureTimeConstraint.setHours(0, 0, 0, 0);
-    resolve(lectureTimeConstraint);
-  } else reject('No Lecture for that LectureId');
-});
+    return lectureTimeConstraint;
+  }
+  return row;
+};
 
-exports.insertReservation = (lectureId, studentId, todayDateHour) => new Promise((resolve, reject) => {
+exports.insertReservation = (lectureId, studentId) => new Promise((resolve, reject) => {
   const sql = 'SELECT * FROM Bookings WHERE LectureId=? AND StudentId=?';
   const stmt = db.prepare(sql);
   const row = stmt.get(lectureId, studentId);
-  if (todayDateHour < getLectureTimeConstraint(lectureId)) {
+  const d = new Date();
+  const todayDateHour = moment(d).format('YYYY-MM-DD HH:MM:SS.SSS');
+  const timeconstraint = getLectureTimeConstraint(lectureId);
+  if (timeconstraint === undefined) reject(timeconstraint);
+  if (todayDateHour < timeconstraint) {
     if (row !== undefined) {
       reject('The Student has already booked a seat for that Lecture');
     } else {
