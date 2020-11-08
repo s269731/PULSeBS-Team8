@@ -15,7 +15,7 @@ app.disable('x-powered-by');
 
 app.use(express.json());
 
-const db = require('./db')
+const db = require('./db');
 
 app.post('/api/login', (req, res) => {
   const { email } = req.body;

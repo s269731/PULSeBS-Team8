@@ -18,8 +18,7 @@ class Lecture {
 async function getLecturesByUserId(id) {
   const user = await userDao.getUserById(id);
   let sql = 'SELECT * FROM Lectures WHERE SubjectId IN (SELECT SubjectId FROM Enrollments WHERE StudentId=?)';
-  if(user.role === 'D')
-    sql = "SELECT * FROM Lectures WHERE TeacherId = ? and DateHour > DATETIME('now')";
+  if (user.role === 'D') sql = "SELECT * FROM Lectures WHERE TeacherId = ? and DateHour > DATETIME('now')";
 
   const stmt = db.prepare(sql);
   const rows = stmt.all(id);
@@ -29,7 +28,7 @@ async function getLecturesByUserId(id) {
     await Promise.all(rows.map(async (rawlecture) => {
       const subjectName = await subjectDao.getSubjectName(rawlecture.SubjectId);
       const teacher = await userDao.getUserById(rawlecture.TeacherId);
-      const teacherName = teacher.name + ' ' + teacher.surname;
+      const teacherName = `${teacher.name} ${teacher.surname}`;
       const lecture = new Lecture(rawlecture.LectureId, subjectName, teacherName, rawlecture.DateHour, rawlecture.Modality, rawlecture.Class, rawlecture.Capacity, rawlecture.bookedPeople);
 
       lectures.push(lecture);
@@ -37,11 +36,9 @@ async function getLecturesByUserId(id) {
 
     console.log(lectures);
     return lectures;
-  } else {
-    if(user.role === 'D')
-        throw('No lectures scheduled for this TeacherId');
-    else throw("There are no lectures for this StudentId");
   }
+  if (user.role === 'D') throw ('No lectures scheduled for this TeacherId');
+  else throw ('There are no lectures for this StudentId');
 }
 
 const getLectureTimeConstraint = (lectureId) => {
