@@ -13,6 +13,45 @@ const PORT = 3001;
 const app = express();
 app.disable('x-powered-by');
 
+const nodemailer = require('nodemailer');
+
+const mail = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'info.trackingplatform@gmail.com',
+    pass: 'Fitness#consoft1'
+  }
+});
+
+const now = new Date();
+const end_of_today = new Date(now);      
+end_of_today.setHours(23,59,59,999);
+
+setTimeout(sendingEmailBookedPeople, end_of_today.getTime() - now.getTime());
+
+function sendingEmailBookedPeople() {
+  const array = lecturesDao.getTeachersForEmail();
+  if(array.length > 0) {
+    for(var i=0; i<array.length; i++) {
+      var mailOptions = {
+        from: 'info.trackingplatform@gmail.com',
+        to: array[i].email_addr,
+        subject: 'Booked people for tomorrow lesson',
+        text: 'There are ' + array[i].booked_people + ' people booked for the lesson: ' + array[i].subject + ' of tomorrow'
+      };
+  
+      mail.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
+    }
+  }
+  setTimeout(sendingEmailBookedPeople, 8,64e+7) //set timeout for the following day
+}
+
 app.use(express.json());
 
 const db = require('./db');

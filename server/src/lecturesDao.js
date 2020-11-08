@@ -73,4 +73,36 @@ exports.insertReservation = (lectureId, studentId) => new Promise((resolve, reje
   } else reject('Booking is closed for that Lecture');
 });
 
+exports.getTeachersForEmail = () => {
+  const d1 = new Date();
+  d1.setHours(23,59,59,999);    //last minute of today
+  const d2 = new Date(d1);      
+  d2.setDate(d2.getDate() + 1);
+  d2.setHours(23,59,59,999);    //last minute of the day of the lecture
+  const dateHour1 = moment(d1).format('YYYY-MM-DD HH:MM:SS.SSS');
+  const dateHour2 = moment(d2).format('YYYY-MM-DD HH:MM:SS.SSS');
+
+  const sql = 'SELECT TeacherId, BookedPeople, SubjectId FROM Lectures WHERE DateHour BETWEEN DATETIME(?) AND DATETIME(?)';
+  const stmt = db.prepare(sql);
+  const rows = stmt.all(dateHour1, dateHour2);
+  const email_bp = [];
+
+  if (rows.length > 0) {
+    rows.forEach((rawlecture) => {
+      const teacher = userDao.getUserById(rawlecture.TeacherId);
+      const email = teacher.Email;
+      const subjectName = subjectDao.getSubjectName(rawlecture.SubjectId);
+      const bp = rawlecture.BookedPeople;
+      
+      const obj = {
+        email_addr: email,
+        subject: subjectName,
+        booked_people: bp
+      };
+      email_bp.push(obj);
+    });
+  }
+  return email_bp;
+};
+
 exports.getLecturesByUserId = getLecturesByUserId;
