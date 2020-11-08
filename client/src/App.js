@@ -5,6 +5,7 @@ import TeacherPage from "./Components/TeacherPage";
 import {Switch} from 'react-router';
 import {withRouter,Redirect, Route} from 'react-router-dom';
 import {Alert} from 'react-bootstrap';
+import Login from './pages/logins/index'
 
 
 class App extends React.Component{
@@ -23,7 +24,7 @@ class App extends React.Component{
             <Alert variant="info">Teacher page implemented. Go to localhost:3000/teacher</Alert>
           </Route>
           <Route exact path='/login'>
-            <Alert variant="info">Login page not implemented. Insert here Login components.</Alert>
+            <Login></Login>
           </Route>
           <Route exact path='/teacher'>
             <TeacherPage></TeacherPage>
