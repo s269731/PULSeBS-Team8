@@ -1,27 +1,32 @@
 import React from 'react'
 import {Container, Row,Col, Alert} from 'react-bootstrap'
 
-const LectureItem=(props)=>{/*
+const LectureItem=(props)=>{
+    let l=props.lecture;
     return <>
         <Container>
                 <Row>
                     <Col>
                         <Alert variant="primary">
-                            <Row className="subjectName">
-                                <h5>{props.subject}<br/></h5>
-                            </Row>
                             <Row>
-                               <Col  xs={6} md={4} className="align-content-start"><h4>Lecture of {props.date} at {props.hour}</h4></Col>
+                                <Col className="subjectName">
+                                    <h6>{l.subject}<br/></h6>
+                                </Col>
                             </Row>
-                            <Row>
-                               <Col  xs={6} md={4} className="align-content-start"><h4>Room: {props.room}</h4></Col>
-                               <Col  xs={6} md={4} className="align-content-end"><h4>Booked students: {props.bookedStudents}</h4></Col>
+                            <Row className="justify-content-md-center">
+                               <Col className="align-content-start date">
+                                   <h5>Lecture of {l.date} at {l.hour}</h5>
+                               </Col>
+                            </Row>
+                            <Row >
+                               <Col  xs={6} md={4} className="align-content-start"><h5>Room: {l.room}</h5></Col>
+                               <Col  xs={6} md={4} className="align-content-end"><h5>Booked students: {l.bookedStudents}</h5></Col>
                             </Row>
                         </Alert>
                     </Col>
                 </Row>
             </Container>
-    </>*/
+    </>
 }
 
 
@@ -33,24 +38,10 @@ class LectureTable extends React.Component{
     render(){
         return(
             <>
-            <Container>
-                <Row>
-                    <Col>
-                        <Alert variant="primary">
-                            <Row className="subjectName">
-                                <h5>Subject1<br/></h5>
-                            </Row>
-                            <Row>
-                               <Col  xs={6} md={4} className="align-content-start"><h4>Lecture of 12/10/2020 at 16:00</h4></Col>
-                            </Row>
-                            <Row>
-                               <Col  xs={6} md={4} className="align-content-start"><h4>Room: Virtual</h4></Col>
-                               <Col  xs={6} md={4} className="align-content-end"><h4>Booked students: 100</h4></Col>
-                            </Row>
-                        </Alert>
-                    </Col>
-                </Row>
-            </Container>
+                <Container fluid>
+                    <Row className="justify-content-md-center below-nav"><h3>Your next lectures: </h3></Row>
+                    {this.props.lectures.map((e)=>{return <LectureItem lecture={e}/>})}
+                </Container>
 
             </>
 

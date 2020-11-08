@@ -4,20 +4,19 @@ import LectureTable from "./LectureTable.js";
 class TeacherPage extends React.Component{
     constructor(props) {
         super(props);
+        this.state={lectures:[
+            {subject:"COMPUTER SCIENCE",date:"30/11/2020",hour:"16:00",room:"VIRTUAL",bookedStudents:26},
+                {subject:"COMPUTER SCIENCE",date:"01/12/2020",hour:"13:00",room:"VIRTUAL",bookedStudents:123},
+                {subject:"COMPUTER SCIENCE",date:"04/12/2020",hour:"10:00",room:"VIRTUAL",bookedStudents:78},
+                {subject:"COMPUTER SCIENCE",date:"05/12/2020",hour:"08:30",room:"VIRTUAL",bookedStudents:56}
+
+            ]}
     }
 
     render(){
         return <>
-            <Container>
-            <Col>
-            <Row className="justify-content-md-left ">
-                <h1>Hello, teacher!</h1>
-            </Row>
-            <Row className="justify-content-md-left ">
-                <h3>This is your personal page</h3>
-            </Row>
-            </Col>
-                <LectureTable></LectureTable>
+            <Container fluid>
+                <LectureTable lectures={this.state.lectures}></LectureTable>
             </Container>
             </>
     }
