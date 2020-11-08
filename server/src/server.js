@@ -1,5 +1,4 @@
 const express = require('express');
-const moment = require('moment');
 const jwt = require('express-jwt');
 const jsonwebtoken = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
@@ -15,6 +14,8 @@ const app = express();
 app.disable('x-powered-by');
 
 app.use(express.json());
+
+const db = require('./db')
 
 app.post('/api/login', (req, res) => {
   const { email } = req.body;
@@ -51,7 +52,7 @@ app.post('/api/logout', (req, res) => {
 });
 
 // AUTHENTICATED REST API endpoints
-app.use(jwt({ secret: jwtSecret, getToken: (req) => req.cookies.token, algorithms: ['RS256'] }));
+app.use(jwt({ secret: jwtSecret, getToken: (req) => req.cookies.token, algorithms: ['HS256'] }));
 
 app.get('/api/user', (req, res) => {
   const userId = req.user && req.user.user;
@@ -69,19 +70,6 @@ app.get('/api/user', (req, res) => {
 app.get('/api/lectures', (req, res) => {
   const userId = req.user && req.user.user;
   lecturesDao.getLecturesByUserId(userId)
-    .then((lectures) => {
-      res.json(lectures);
-    })
-    .catch(() => {
-      res.json(lecturesErr);
-    });
-});
-
-app.get('/api/lecturesTeacher', (req, res) => {
-  const teacherId = req.user && req.user.user;
-  const d = new Date();
-  const today = moment(d).format('YYYY-MM-DD HH:MM:SS.SSS');
-  lecturesDao.getNextLecturesByTeacherId(teacherId, today)
     .then((lectures) => {
       res.json(lectures);
     })

@@ -1,9 +1,8 @@
-const moment = require('moment');
 const db = require('./db');
 const userDao = require('./userDao');
 const subjectDao = require('./subjectsDao');
 
-export default class Lecture {
+class Lecture {
   constructor(lectureId, subjectName, teacherName, dateHour, modality, className, capacity, bookedPeople) {
     this.lectureId = lectureId;
     this.subjectName = subjectName;
@@ -16,53 +15,34 @@ export default class Lecture {
   }
 }
 
-exports.getLecturesByUserId = (id) => new Promise((resolve, reject) => {
-  const sql = 'SELECT * FROM Lectures WHERE SubjectId IN (SELECT SubjectId FROM Enrollments WHERE StudentId=?)  ';
+async function getLecturesByUserId(id) {
+  const user = await userDao.getUserById(id);
+  let sql = 'SELECT * FROM Lectures WHERE SubjectId IN (SELECT SubjectId FROM Enrollments WHERE StudentId=?)';
+  if(user.role === 'D')
+    sql = "SELECT * FROM Lectures WHERE TeacherId = ? and DateHour > DATETIME('now')";
+
   const stmt = db.prepare(sql);
   const rows = stmt.all(id);
   const lectures = [];
 
   if (rows.length > 0) {
-    rows.forEach((rawlecture) => {
-      const subjectName = subjectDao.getSubjectName(rawlecture.SubjectId);
-      const teacher = userDao.getUserById(rawlecture.TeacherId);
-      const teacherName = string.concat(teacher.Name, teacher.Surname);
+    await Promise.all(rows.map(async (rawlecture) => {
+      const subjectName = await subjectDao.getSubjectName(rawlecture.SubjectId);
+      const teacher = await userDao.getUserById(rawlecture.TeacherId);
+      const teacherName = teacher.name + ' ' + teacher.surname;
       const lecture = new Lecture(rawlecture.LectureId, subjectName, teacherName, rawlecture.DateHour, rawlecture.Modality, rawlecture.Class, rawlecture.Capacity, rawlecture.bookedPeople);
 
       lectures.push(lecture);
-    });
+    }));
 
     console.log(lectures);
-    resolve(lectures);
+    return lectures;
   } else {
-    // There aren't lectures for this StudentId
-    reject("There aren't lecture for this StudentId");
+    if(user.role === 'D')
+        throw('No lectures scheduled for this TeacherId');
+    else throw("There are no lectures for this StudentId");
   }
-});
-
-exports.getNextLecturesByTeacherId = (id, todayDateHour) => new Promise((resolve, reject) => {
-  const sql = 'SELECT * FROM Lectures WHERE TeacherId = ? and DateHour > DATETIME(?)';
-  const stmt = db.prepare(sql);
-  const rows = stmt.all(id, todayDateHour);
-  const lectures = [];
-
-  if (rows.length > 0) {
-    rows.forEach((rawlecture) => {
-      const subjectName = subjectDao.getSubjectName(rawlecture.SubjectId);
-      const teacher = userDao.getUserById(rawlecture.TeacherId);
-      const teacherName = string.concat(teacher.Name, teacher.Surname);
-      const lecture = new Lecture(rawlecture.LectureId, subjectName, teacherName, rawlecture.DateHour, rawlecture.Modality, rawlecture.Class, rawlecture.Capacity, rawlecture.bookedPeople);
-
-      lectures.push(lecture);
-    });
-
-    console.log(lectures);
-    resolve(lectures);
-  } else {
-    // There aren't lectures for this StudentId
-    reject('No lectures scheduled for this TeacherId');
-  }
-});
+}
 
 const getLectureTimeConstraint = (lectureId) => {
   const sql = 'SELECT DateHour FROM Lectures WHERE LectureId=?';
@@ -80,8 +60,7 @@ exports.insertReservation = (lectureId, studentId) => new Promise((resolve, reje
   const sql = 'SELECT * FROM Bookings WHERE LectureId=? AND StudentId=?';
   const stmt = db.prepare(sql);
   const row = stmt.get(lectureId, studentId);
-  const d = new Date();
-  const todayDateHour = moment(d).format('YYYY-MM-DD HH:MM:SS.SSS');
+  const todayDateHour = new Date();
   const timeconstraint = getLectureTimeConstraint(lectureId);
   if (timeconstraint === undefined) reject(timeconstraint);
   if (todayDateHour < timeconstraint) {
@@ -96,3 +75,5 @@ exports.insertReservation = (lectureId, studentId) => new Promise((resolve, reje
     }
   } else reject('Booking is closed for that Lecture');
 });
+
+exports.getLecturesByUserId = getLecturesByUserId;
