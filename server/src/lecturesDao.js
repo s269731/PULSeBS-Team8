@@ -105,4 +105,25 @@ exports.getTeachersForEmail = () => {
   return email_bp;
 };
 
+exports.getInfoBookingConfirmation = (lectureId, studentId) => {
+  const sql = 'SELECT DateHour, SubjectId, Class FROM Lectures WHERE LectureId=?';
+  const stmt = db.prepare(sql);
+  const row = stmt.get(lectureId);
+  const info = [];
+
+  if (row !== undefined) {
+    const student = userDao.getUserById(studentId);
+    const subjectName = subjectDao.getSubjectName(row.SubjectId);
+    
+    const obj = {
+      email: student.email,
+      subject: subjectName,
+      date_hour: row.DateHour,
+      class: row.Class
+    };
+    info.push(obj);
+  }
+  return info;
+}
+
 exports.getLecturesByUserId = getLecturesByUserId;
