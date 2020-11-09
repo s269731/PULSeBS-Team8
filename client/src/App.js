@@ -4,7 +4,7 @@ import Navbars from './Components/Navbar.js'
 import TeacherPage from "./Components/TeacherPage";
 import {Switch} from 'react-router';
 import {withRouter,Redirect, Route} from 'react-router-dom';
-import {Alert} from 'react-bootstrap';
+import {Alert,Container} from 'react-bootstrap';
 import Login from './pages/logins/index'
 import API from "./api";
 
@@ -50,8 +50,11 @@ class App extends React.Component{
         <Navbars path={this.props.location.pathname} loggedUser={this.state.loggedUser} logout={this.logout}/>
         <Switch>
           <Route exact path='/home'>
+            <Container>
+           <h1>Welcome</h1><br/><h3>This is a tool to manage lectures and bookings</h3>
+            </Container>
             <Alert variant="info">Student page not implemented.</Alert>
-            <Alert variant="info">Teacher page implemented but with only stub data. Go to localhost:3000/teacher</Alert>
+
           </Route>
           <Route exact path='/login'>
             {(this.state.loggedUser && this.state.loggedUser.role==="D") &&  <Redirect to='/teacher'/>}
