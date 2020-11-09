@@ -73,7 +73,7 @@ exports.insertReservation = (lectureId, studentId) => new Promise((resolve, reje
   } else reject('Booking is closed for that Lecture');
 });
 
-exports.getTeachersForEmail = () => {
+async function getTeachersForEmail() {
   const d1 = new Date();
   d1.setHours(23,59,59,999);    //last minute of today
   const d2 = new Date(d1);      
@@ -88,10 +88,10 @@ exports.getTeachersForEmail = () => {
   const email_bp = [];
 
   if (rows.length > 0) {
-    rows.forEach((rawlecture) => {
-      const teacher = userDao.getUserById(rawlecture.TeacherId);
+    rows.forEach(async (rawlecture) => {
+      const teacher = await userDao.getUserById(rawlecture.TeacherId);
       const email = teacher.Email;
-      const subjectName = subjectDao.getSubjectName(rawlecture.SubjectId);
+      const subjectName = await subjectDao.getSubjectName(rawlecture.SubjectId);
       const bp = rawlecture.BookedPeople;
       
       const obj = {
@@ -105,25 +105,26 @@ exports.getTeachersForEmail = () => {
   return email_bp;
 };
 
-exports.getInfoBookingConfirmation = (lectureId, studentId) => {
+async function getInfoBookingConfirmation(lectureId, studentId) {
   const sql = 'SELECT DateHour, SubjectId, Class FROM Lectures WHERE LectureId=?';
   const stmt = db.prepare(sql);
   const row = stmt.get(lectureId);
-  const info = [];
+  const info = {};
 
   if (row !== undefined) {
-    const student = userDao.getUserById(studentId);
-    const subjectName = subjectDao.getSubjectName(row.SubjectId);
+    const student = await userDao.getUserById(studentId);
+    const subjectName = await subjectDao.getSubjectName(row.SubjectId);
     
-    const obj = {
+    info = {
       email: student.email,
       subject: subjectName,
       date_hour: row.DateHour,
       class: row.Class
     };
-    info.push(obj);
   }
   return info;
 }
 
 exports.getLecturesByUserId = getLecturesByUserId;
+exports.getTeachersForEmail = getTeachersForEmail;
+exports.getInfoBookingConfirmation = getInfoBookingConfirmation;

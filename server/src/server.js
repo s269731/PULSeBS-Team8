@@ -123,13 +123,13 @@ app.post('/api/reserve', (req, res) => {
 
   lecturesDao.insertReservation(lectureId, userId)
     .then((result) => {
-      const array = lecturesDao.getInfoBookingConfirmation(lectureId, userId);
-      if (array.length === 1) {
+      const info = lecturesDao.getInfoBookingConfirmation(lectureId, userId);
+      if (Object.keys(info).length !== 0 && info.constructor !== Object) {
         var mailOptions = {
           from: 'info.trackingplatform@gmail.com',
-          to: array[0].email,
+          to: info.email,
           subject: 'Booking confirmation',
-          text: 'You have been successfully booked for the ' + array[0].subject + '\'s lesson. Date: ' + array[0].date_hour + ', Class: ' + array[0].class
+          text: 'You have been successfully booked for the ' + info.subject + '\'s lesson. Date: ' + info.date_hour + ', Class: ' + info.class
         };
     
         mail.sendMail(mailOptions, function(error, info){
