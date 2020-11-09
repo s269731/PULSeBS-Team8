@@ -26,7 +26,7 @@ class Navbars extends Component {
                     </Navbar.Collapse>
                     <Nav className="ml-md-auto">
                         {this.props.path==="/teacher" &&  <Link to='/home' className="headerLinks"><Navbar.Text className="headerLinks">&nbsp; Home </Navbar.Text></Link>}
-                        {this.props.path==="/home" &&  <Link to='/teacher' className="headerLinks"><Navbar.Text className="headerLinks" >&nbsp; Teacher </Navbar.Text></Link>}
+                        {this.props.path==="/home" &&  <Link to='/login' className="headerLinks"><Navbar.Text className="headerLinks" >&nbsp; Login </Navbar.Text></Link>}
                     </Nav>
                 </Navbar>
 

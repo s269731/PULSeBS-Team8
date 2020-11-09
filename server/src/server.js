@@ -49,7 +49,7 @@ function sendingEmailBookedPeople() {
       });
     }
   }
-  setTimeout(sendingEmailBookedPeople, 8,64e+7) //set timeout for the following day
+  setTimeout(sendingEmailBookedPeople, 8.64e+7) //set timeout for the following day
 }
 
 app.use(express.json());

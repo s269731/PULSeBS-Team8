@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 
 import { Grid, TextField, CssBaseline, Box, Snackbar, Typography, Container, Button, Avatar, makeStyles } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
@@ -7,7 +7,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import { Login } from "../../api"
+import API from "../../api"
 
 
 
@@ -47,37 +47,38 @@ const useStyles1 = makeStyles((theme) => ({
   },
 }));
 
-function SignUp() {
+function SignUp(props) {
   const classes = useStyles();
   let [email, setUser] = useState("");
   let [password, setPwd] = useState("");
   let [open, setOpen] = useState(false);
+  let [Submitted, setSubmitted] = useState(false);
   let [ErrorMock, setErrorMock] = useState(false);
   let [warningMock, setwarningMock] = useState(false)
   const [identity, setIdentity] = useState('teacher');
   const utils = { vertical: 'top', horizontal: 'center' };
+
   const handleChange = (event) => {
     setIdentity(event.target.value);
   };
 
-  let handleRegistry = async () => {
-    //   //条件赛选
-    if (email.trim() != '' && password.trim() != '' && identity.trim() != '') {
-    
-        const res = await Login({
-          email,
-          password,
-          identity
-        })
-        //     // console.log(code)
-        if (res.code == 1) {
-          //       //注册成功回调
-          setOpen(true)
-        } else if (res.code == 2) {
-          //       //失败回调
-          setwarningMock(true)
+  let handleRegistry = async (ev) => {
 
-        }
+    //   //条件赛选
+    ev.preventDefault()
+    setErrorMock(false);
+    setOpen(false);
+    setwarningMock(false);
+    setSubmitted(false);
+    if (email.trim() !== '' && password.trim() !== '' && identity.trim() !== '') {
+      console.log(email)
+      console.log(password)
+      let res = await props.login({
+        email,
+        password,
+        identity
+      })
+      setSubmitted(true)
       } else {
         setErrorMock(true)
       }
@@ -90,12 +91,21 @@ function SignUp() {
     }
     setErrorMock(false);
     setOpen(false);
-    setwarningMock(false)
+    setwarningMock(false);
+    setSubmitted(false);
    
   };
+  useEffect(()=>{
+    //to correctly show the alerts for error/success
+    if(Submitted && !props.loading) {
+      if (props.error)
+        setwarningMock(true)
+      else
+        setOpen(true)
+    }
+  })
   return (
-    <div>
-      <h1 style={{paddingTop:'100px'}}>Pandemic University Lecture Seat Booking System</h1>
+    <Container>
       <Container component="main" maxWidth="xs">
         <Box mt={5}>
           {/* {弹框提示} */}
@@ -125,7 +135,7 @@ function SignUp() {
             {/* <LockOutlinedIcon /> */}
           </Avatar>
           <Typography component="h1" variant="h5">
-          Login In
+          Log In
         </Typography>
           <div className={classes.form} >
             <Grid container spacing={2}>
@@ -182,16 +192,16 @@ function SignUp() {
               variant="contained"
               color="primary"
               className={classes.submit}
-              onClick={handleRegistry}
+              onClick={(ev)=>{handleRegistry(ev)}}
             >
-              Login In
+              Log In
           </Button>
 
           </div>
         </div>
 
       </Container>
-    </div>
+    </Container>
   );
 }
 
