@@ -1,22 +1,30 @@
 import React from 'react';
-import {Row,Col,Container}from 'react-bootstrap'
+import {Alert,Spinner,Container}from 'react-bootstrap'
 import LectureTable from "./LectureTable.js";
+import API from "../api";
+
 class TeacherPage extends React.Component{
     constructor(props) {
         super(props);
-        this.state={lectures:[
-            {subject:"COMPUTER SCIENCE",date:"30/11/2020",hour:"16:00",room:"VIRTUAL",bookedStudents:26},
-                {subject:"COMPUTER SCIENCE",date:"01/12/2020",hour:"13:00",room:"VIRTUAL",bookedStudents:123},
-                {subject:"COMPUTER SCIENCE",date:"04/12/2020",hour:"10:00",room:"VIRTUAL",bookedStudents:78},
-                {subject:"COMPUTER SCIENCE",date:"05/12/2020",hour:"08:30",room:"VIRTUAL",bookedStudents:56}
+        this.state={loading:true,serverErr:null}
+    }
 
-            ]}
+    componentDidMount() {
+        //retrieve lectures for the teacher
+        API.getLectures().then((res)=>{
+            console.log(res)
+            this.setState({lectures:res,loading:null,serverErr:null})
+        }).catch((err)=>{
+            this.setState({serverErr:true,loading:null})
+        })
     }
 
     render(){
         return <>
             <Container fluid>
-                <LectureTable lectures={this.state.lectures}></LectureTable>
+                {this.state.serverErr && <Alert variant="danger">Server Error</Alert>}
+                {this.state.serverErr===null && this.state.loading && <Alert variant="primary"><Spinner animation="border" variant="primary"/> Loading ...</Alert>}
+                {this.state.serverErr===null && this.state.loading===null && <LectureTable lectures={this.state.lectures}/>}
             </Container>
             </>
     }

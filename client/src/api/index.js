@@ -1,16 +1,3 @@
-/*import axios from "axios";
-//注册接口
-
-export const Login = async (params) => {
-    return axios.post("/api/login ",
-        {
-            params
-        }).then(res => {
-            return res;
-        }).catch(err => {
-            return err
-        })
-}*/
 const baseURL="/api";
 async function Login(params) {
     let username=params.email
@@ -36,5 +23,63 @@ async function Login(params) {
         }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] }) }); // connection errors
     });
 }
-const API = {Login} ;
+
+async function getLectures(){
+    let url="/lectures";
+    const response=await fetch(baseURL+url);
+    const lecturesJson=await response.json();
+    if(response.ok){
+        return lecturesJson.map((l)=>{
+            let fields=l.dateHour.split("T")
+            let date=fields[0]
+            let hour=fields[1].split(".")[0].split(":")[0]+":"+fields[1].split(".")[0].split(":")[1]
+            return {
+                subject:l.subjectName.SubjectName,
+                date:date,
+                hour:hour,
+                modality:l.modality,
+                room:l.className,
+                capacity:l.capacity,
+                bookedStudents:l.bookedPeople
+        }})
+    }
+    else{
+        let err={status:response.status, errObj:lecturesJson};
+        throw err;
+    }
+}
+
+async function getUser(){
+    let url="/user";
+    const response=await fetch(baseURL+url);
+    const userJson=await response.json();
+    if(response.ok){
+        return userJson
+    }
+    else{
+        let err={status:response.status, errObj:userJson};
+        throw err;
+    }
+}
+
+async function userLogout() {
+    return new Promise((resolve, reject) => {
+        fetch(baseURL + '/logout', {
+            method: 'POST',
+        }).then((response) => {
+            if (response.ok) {
+                resolve(null);
+            } else {
+                // analyze the cause of error
+                response.json()
+                    .then((obj) => { reject(obj); }) // error msg in the response body
+                    .catch((err) => { reject({ errors: [{ param: "Application", msg: "Cannot parse server response" }] }) }); // something else
+            }
+        });
+    });
+}
+
+
+
+const API = {Login,getLectures,getUser,userLogout} ;
 export default API;

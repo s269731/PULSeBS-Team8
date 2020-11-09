@@ -97,7 +97,7 @@ app.get('/api/user', (req, res) => {
   const userId = req.user && req.user.user;
   userDao.getUserById(userId)
     .then((user) => {
-      res.json({ id: user.id, username: user.username });
+      res.json({ id: user.id, role: user.role,name:user.name, surname:user.surname });
     })
     .catch(
       () => {

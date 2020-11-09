@@ -3,6 +3,7 @@ import {Container, Row,Col, Alert} from 'react-bootstrap'
 
 const LectureItem=(props)=>{
     let l=props.lecture;
+    console.log(l)
     return <>
         <Container>
                 <Row>
@@ -17,9 +18,13 @@ const LectureItem=(props)=>{
                                <Col className="align-content-start date">
                                    <h5>Lecture of {l.date} at {l.hour}</h5>
                                </Col>
+                                {(l.modality && l.modality==="In person" )?  <><Col  xs={6} md={4} className="align-content-start"><h5>Room: {l.room}</h5></Col>
+                                       </>
+                                    :
+                                    <Col  xs={6} md={4} className="align-content-start"><h5>Room: Virtual</h5></Col>}
                             </Row>
                             <Row >
-                               <Col  xs={6} md={4} className="align-content-start"><h5>Room: {l.room}</h5></Col>
+                                {(l.modality && l.modality==="In person" ) &&  <><Col  xs={6} md={4} className="align-content-start"><h5>Room Capacity: {l.capacity}</h5></Col></>}
                                <Col  xs={6} md={4} className="align-content-end"><h5>Booked students: {l.bookedStudents}</h5></Col>
                             </Row>
                         </Alert>

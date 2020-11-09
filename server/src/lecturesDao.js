@@ -29,7 +29,7 @@ async function getLecturesByUserId(id) {
       const subjectName = await subjectDao.getSubjectName(rawlecture.SubjectId);
       const teacher = await userDao.getUserById(rawlecture.TeacherId);
       const teacherName = `${teacher.name} ${teacher.surname}`;
-      const lecture = new Lecture(rawlecture.LectureId, subjectName, teacherName, rawlecture.DateHour, rawlecture.Modality, rawlecture.Class, rawlecture.Capacity, rawlecture.bookedPeople);
+      const lecture = new Lecture(rawlecture.LectureId, subjectName, teacherName, rawlecture.DateHour, rawlecture.Modality, rawlecture.Class, rawlecture.Capacity, rawlecture.BookedPeople);
 
       lectures.push(lecture);
     }));
