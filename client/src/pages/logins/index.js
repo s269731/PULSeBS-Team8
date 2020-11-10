@@ -1,7 +1,7 @@
 
 import React, {useEffect, useState} from 'react';
 
-import { Grid, TextField, CssBaseline, Box, Snackbar, Typography, Container, Button, Avatar, makeStyles } from '@material-ui/core';
+import { Grid, TextField, Input, CssBaseline, Box, Snackbar, Typography, Container, Button, Avatar, makeStyles } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -14,7 +14,7 @@ import API from "../../api"
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: 180,
+    marginTop: 40,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -49,20 +49,16 @@ const useStyles1 = makeStyles((theme) => ({
 
 function SignUp(props) {
   const classes = useStyles();
-  let [email, setUser] = useState("");
-  let [password, setPwd] = useState("");
-  let [open, setOpen] = useState(false);
-  let [Submitted, setSubmitted] = useState(false);
-  let [ErrorMock, setErrorMock] = useState(false);
-  let [warningMock, setwarningMock] = useState(false)
+  const [email, setUser] = useState("");
+  const [password, setPwd] = useState("");
+  const [open, setOpen] = useState(false);
+  const [Submitted, setSubmitted] = useState(false);
+  const [ErrorMock, setErrorMock] = useState(false);
+  const [warningMock, setwarningMock] = useState(false)
   const [identity, setIdentity] = useState('teacher');
   const utils = { vertical: 'top', horizontal: 'center' };
 
-  const handleChange = (event) => {
-    setIdentity(event.target.value);
-  };
-
-  let handleRegistry = async (ev) => {
+  const handleRegistry = async (ev) => {
 
     //   //条件赛选
     ev.preventDefault()
@@ -70,13 +66,12 @@ function SignUp(props) {
     setOpen(false);
     setwarningMock(false);
     setSubmitted(false);
-    if (email.trim() !== '' && password.trim() !== '' && identity.trim() !== '') {
+    if (email.trim() !== '' && password.trim() !== '') {
       console.log(email)
       console.log(password)
-      let res = await props.login({
+      const res = await props.login({
         email,
-        password,
-        identity
+        password
       })
       setSubmitted(true)
       } else {
@@ -118,7 +113,7 @@ function SignUp(props) {
             </Snackbar>
             {/* {失败} */}
             <Snackbar open={ErrorMock} autoHideDuration={2000} onClose={handleClose} anchorOrigin={utils}>
-              <Alert onClose={handleClose} severity="error">
+              <Alert onClose={handleClose} severity="error" data-testid="alert-error">
                 Please complete the login failure parameters!
               </Alert>
             </Snackbar>
@@ -140,8 +135,9 @@ function SignUp(props) {
           <div className={classes.form} >
             <Grid container spacing={2}>
               {/* {账号输入区域} */}
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12}>
                 <TextField
+                  data-testid="input-email"
                   autoComplete="email"
                   name="email"
                   variant="outlined"
@@ -153,26 +149,10 @@ function SignUp(props) {
                   value={email} onChange={(e) => setUser(e.target.value)}
                 />
               </Grid>
-              {/* {身份} */}
-              <Grid item xs={12} sm={6}>
-                <FormControl variant="outlined" className={classes.formControl}>
-                  <InputLabel id="demo-simple-select-outlined-label">identity</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-outlined-label"
-                    id="demo-simple-select-outlined"
-                    value={identity}
-                    onChange={handleChange}
-                    label="identity"
-                  >
-                    <MenuItem value={'admin'}>admin</MenuItem>
-                    <MenuItem value={'student'}>student</MenuItem>
-                    <MenuItem value={'teacher'}>teacher</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
               {/* {密码输入区域} */}
               <Grid item xs={12}>
                 <TextField
+                  data-testid="input-password"
                   variant="outlined"
                   required
                   fullWidth
@@ -193,6 +173,7 @@ function SignUp(props) {
               color="primary"
               className={classes.submit}
               onClick={(ev)=>{handleRegistry(ev)}}
+              data-testid="login"
             >
               Log In
           </Button>
