@@ -5,9 +5,16 @@ import React from 'react'
 import { Router } from 'react-router-dom'
 import '@testing-library/jest-dom/extend-expect'
 import App from './App';
+import API from "./api";
 
 test('full app rendering/navigating', () => {
   const history = createMemoryHistory()
+
+  const mockGetUser = jest.mock();
+  mockGetUser.spyOn(API, 'getUser').mockReturnValue(
+    new Promise(resolve => resolve({id:1, role:"D", "email":"dfdf@sdf.com"}))
+  );
+
   render(
     <Router history={history}>
       <App />
@@ -22,10 +29,16 @@ test('full app rendering/navigating', () => {
 
   // check that the content changed to the new page
   expect(screen.getByText(/- Login/i)).toBeInTheDocument()
+
+  API.getUser.mockRestore();
 })
 
 test('random routes redirect to home page', () => {
   const history = createMemoryHistory()
+  const mockGetUser = jest.mock();
+  mockGetUser.spyOn(API, 'getUser').mockReturnValue(
+    new Promise(resolve => resolve({id:1, role:"S", "email":"dfdf@sdf.com"}))
+  );
   history.push('/some/bad/route')
   render(
     <Router history={history}>
