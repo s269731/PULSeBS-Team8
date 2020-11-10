@@ -2,6 +2,7 @@ const express = require('express');
 const jwt = require('express-jwt');
 const jsonwebtoken = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
+const nodemailer = require('nodemailer');
 const userDao = require('./userDao');
 const lecturesDao = require('./lecturesDao');
 
@@ -13,43 +14,41 @@ const PORT = 3001;
 const app = express();
 app.disable('x-powered-by');
 
-const nodemailer = require('nodemailer');
-
 const mail = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: 'info.trackingplatform@gmail.com',
-    pass: 'Fitness#consoft1'
-  }
+    pass: 'Fitness#consoft1',
+  },
 });
 
 const now = new Date();
-const end_of_today = new Date(now);      
-end_of_today.setHours(23,59,59,999);
+const end_of_today = new Date(now);
+end_of_today.setHours(23, 59, 59, 999);
 
 setTimeout(sendingEmailBookedPeople, end_of_today.getTime() - now.getTime());
 
 function sendingEmailBookedPeople() {
   const array = lecturesDao.getTeachersForEmail();
-  if(array.length > 0) {
-    for(var i=0; i<array.length; i++) {
-      var mailOptions = {
+  if (array.length > 0) {
+    for (let i = 0; i < array.length; i++) {
+      const mailOptions = {
         from: 'info.trackingplatform@gmail.com',
         to: array[i].email_addr,
         subject: 'Booked people for tomorrow lesson',
-        text: 'There are ' + array[i].booked_people + ' people booked for the lesson: ' + array[i].subject + ' of tomorrow'
+        text: `There are ${array[i].booked_people} people booked for the lesson: ${array[i].subject} of tomorrow`,
       };
-  
-      mail.sendMail(mailOptions, function(error, info){
+
+      mail.sendMail(mailOptions, (error, info) => {
         if (error) {
           console.log(error);
         } else {
-          console.log('Email sent: ' + info.response);
+          console.log(`Email sent: ${info.response}`);
         }
       });
     }
   }
-  setTimeout(sendingEmailBookedPeople, 8.64e+7) //set timeout for the following day
+  setTimeout(sendingEmailBookedPeople, 8.64e+7); // set timeout for the following day
 }
 
 app.use(express.json());
@@ -97,7 +96,9 @@ app.get('/api/user', (req, res) => {
   const userId = req.user && req.user.user;
   userDao.getUserById(userId)
     .then((user) => {
-      res.json({ id: user.id, role: user.role,name:user.name, surname:user.surname });
+      res.json({
+        id: user.id, role: user.role, name: user.name, surname: user.surname,
+      });
     })
     .catch(
       () => {
@@ -125,18 +126,18 @@ app.post('/api/reserve', (req, res) => {
     .then((result) => {
       const info = lecturesDao.getInfoBookingConfirmation(lectureId, userId);
       if (Object.keys(info).length !== 0 && info.constructor !== Object) {
-        var mailOptions = {
+        const mailOptions = {
           from: 'info.trackingplatform@gmail.com',
           to: info.email,
           subject: 'Booking confirmation',
-          text: 'You have been successfully booked for the ' + info.subject + '\'s lesson. Date: ' + info.date_hour + ', Class: ' + info.class
+          text: `You have been successfully booked for the ${info.subject}'s lesson. Date: ${info.date_hour}, Class: ${info.class}`,
         };
-    
-        mail.sendMail(mailOptions, function(error, info){
+
+        mail.sendMail(mailOptions, (error, info) => {
           if (error) {
             console.log(error);
           } else {
-            console.log('Email sent: ' + info.response);
+            console.log(`Email sent: ${info.response}`);
           }
         });
       }

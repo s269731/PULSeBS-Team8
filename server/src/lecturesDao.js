@@ -1,3 +1,4 @@
+const moment = require('moment');
 const db = require('./db');
 const userDao = require('./userDao');
 const subjectDao = require('./subjectsDao');
@@ -29,7 +30,7 @@ async function getLecturesByUserId(id) {
       const subjectName = await subjectDao.getSubjectName(rawlecture.SubjectId);
       const teacher = await userDao.getUserById(rawlecture.TeacherId);
       const teacherName = `${teacher.name} ${teacher.surname}`;
-      const lecture = new Lecture(rawlecture.LectureId, subjectName, teacherName, rawlecture.DateHour, rawlecture.Modality, rawlecture.Class, rawlecture.Capacity, rawlecture.BookedPeople);
+      const lecture = new Lecture(rawlecture.LectureId, subjectName.SubjectName, teacherName, rawlecture.DateHour, rawlecture.Modality, rawlecture.Class, rawlecture.Capacity, rawlecture.BookedPeople);
 
       lectures.push(lecture);
     }));
@@ -75,10 +76,10 @@ exports.insertReservation = (lectureId, studentId) => new Promise((resolve, reje
 
 async function getTeachersForEmail() {
   const d1 = new Date();
-  d1.setHours(23,59,59,999);    //last minute of today
-  const d2 = new Date(d1);      
+  d1.setHours(23, 59, 59, 999); // last minute of today
+  const d2 = new Date(d1);
   d2.setDate(d2.getDate() + 1);
-  d2.setHours(23,59,59,999);    //last minute of the day of the lecture
+  d2.setHours(23, 59, 59, 999); // last minute of the day of the lecture
   const dateHour1 = moment(d1).format('YYYY-MM-DD HH:MM:SS.SSS');
   const dateHour2 = moment(d2).format('YYYY-MM-DD HH:MM:SS.SSS');
 
@@ -93,17 +94,17 @@ async function getTeachersForEmail() {
       const email = teacher.Email;
       const subjectName = await subjectDao.getSubjectName(rawlecture.SubjectId);
       const bp = rawlecture.BookedPeople;
-      
+
       const obj = {
         email_addr: email,
         subject: subjectName,
-        booked_people: bp
+        booked_people: bp,
       };
       email_bp.push(obj);
     });
   }
   return email_bp;
-};
+}
 
 async function getInfoBookingConfirmation(lectureId, studentId) {
   const sql = 'SELECT DateHour, SubjectId, Class FROM Lectures WHERE LectureId=?';
@@ -114,12 +115,12 @@ async function getInfoBookingConfirmation(lectureId, studentId) {
   if (row !== undefined) {
     const student = await userDao.getUserById(studentId);
     const subjectName = await subjectDao.getSubjectName(row.SubjectId);
-    
+
     info = {
       email: student.email,
       subject: subjectName,
       date_hour: row.DateHour,
-      class: row.Class
+      class: row.Class,
     };
   }
   return info;
