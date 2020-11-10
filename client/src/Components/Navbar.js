@@ -28,7 +28,7 @@ class Navbars extends Component {
                     </Navbar.Collapse>
                     <Nav className="ml-md-auto">
                         <Navbar.Text>
-                        {this.props.path==="/home" &&  <Link to='/login' className="headerLinks"><span className="headerLinks" >&nbsp; Login </span></Link>}
+                        {!this.props.loggedUser && this.props.path==="/home" &&  <Link to='/login' className="headerLinks"><span className="headerLinks" >&nbsp; Login </span></Link>}
                         {this.props.loggedUser && this.props.loggedUser.name && <><span className="headerLinks"> Welcome, {this.props.loggedUser.name} !</span>
                             <Link to='/home' className="headerLinks " onClick={this.props.logout}>Logout </Link><Link to='/home' className="headerLinks"><span className="headerLinks">&nbsp; Home </span></Link></>}
                         </Navbar.Text>
