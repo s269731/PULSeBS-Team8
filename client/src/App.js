@@ -7,7 +7,7 @@ import AvailableCourses from "./Components/Student/AvailableCourses";
 import RegisteredCourses from "./Components/Student/RegisteredCourses";
 import {Switch} from 'react-router';
 import {withRouter,Redirect, Route} from 'react-router-dom';
-import {Alert,Container} from 'react-bootstrap';
+import {Row,Col,Container} from 'react-bootstrap';
 import Login from './pages/logins/index'
 import API from "./api";
 
@@ -54,9 +54,16 @@ class App extends React.Component{
         <Switch>
           <Route exact path='/home'>
             <Container>
-           <h1>Welcome</h1><br/><h3>This is a tool to manage lectures and bookings</h3>
+              <Col>
+                <Row className="justify-content-md-center below-nav">
+                  <h1>Welcome</h1>
+                </Row>
+                <Row className="justify-content-md-center below-nav">
+                  <h3>This is a tool to manage lectures and bookings</h3>
+                </Row>
+              </Col>
             </Container>
-            <Alert variant="info">Student page not implemented.</Alert>
+
 
           </Route>
           <Route exact path='/login'>
