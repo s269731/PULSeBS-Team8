@@ -10,6 +10,7 @@ const jwtSecret = 'BçFDJDLKSAJOIFBHNI$48tgopW$ITH"W$TBL';
 const tokenExpireTime = 60 * 60; // 1 hour
 const authErrorObj = { errors: [{ msg: 'Authorization error' }] };
 const lecturesErr = { errors: [{ msg: 'There was an error retrieving available lectures' }] };
+const studentListError = { errors: [{ msg: 'There was an error retrieving list of students for this lectureId' }] };
 const PORT = 3001;
 const app = express();
 app.disable('x-powered-by');
@@ -146,6 +147,17 @@ app.post('/api/reserve', (req, res) => {
     .catch((error) => {
       res.json({ errors: [{ msg: error }] });
     });
+});
+
+app.get('/api/lectureslist', (req, res) => {
+  const { lectureId } = req.body;
+  lecturesDao.getStudentsListByLectureId(lectureId).then((list) => {
+    if (list === undefined) {
+      res.json(studentListError);
+    } else {
+      res.json(list);
+    }
+  });
 });
 
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}/`));

@@ -36,6 +36,33 @@ db.prepare('DELETE FROM Users').run();
 db.prepare('INSERT INTO Users(Id, Role, Name, Surname, Email, Password, Course) VALUES(?,?,?,?,?,?,?)').run(
   [1, 'D', 'Marco', 'Torchiano', 'd0001@prof.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'Computer Engineering'],
 );
+db.prepare('INSERT INTO Users(Id, Role, Name, Surname, Email, Password, Course) VALUES(?,?,?,?,?,?,?)').run(
+  [2, 'S', 'Jinzhuo', 'Chen', 's0002@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'Computer Engineering'],
+);
+db.prepare('INSERT INTO Users(Id, Role, Name, Surname, Email, Password, Course) VALUES(?,?,?,?,?,?,?)').run(
+  [3, 'S', 'Daniele', 'Laudani', 's0003@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'Computer Engineering'],
+);
+db.prepare('INSERT INTO Users(Id, Role, Name, Surname, Email, Password, Course) VALUES(?,?,?,?,?,?,?)').run(
+  [4, 'S', 'Luca', 'Torchiano', 's0004@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'Computer Engineering'],
+);
+db.prepare('INSERT INTO Users(Id, Role, Name, Surname, Email, Password, Course) VALUES(?,?,?,?,?,?,?)').run(
+  [5, 'S', 'Loredana', 'Finocchiaro', 's0005@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'Computer Engineering'],
+);
+db.prepare('INSERT INTO Users(Id, Role, Name, Surname, Email, Password, Course) VALUES(?,?,?,?,?,?,?)').run(
+  [6, 'S', 'Elchin', 'Farhad', 's0006@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'Computer Engineering'],
+);
+db.prepare('INSERT INTO Users(Id, Role, Name, Surname, Email, Password, Course) VALUES(?,?,?,?,?,?,?)').run(
+  [7, 'S', 'Nino', 'Nicolò', 's0007@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'Computer Engineering'],
+);
+
+// populate Bookings Table
+db.prepare('DELETE FROM Bookings').run();
+db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)').run(1, 2);
+db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)').run(1, 3);
+db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)').run(1, 4);
+db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)').run(1, 5);
+db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)').run(1, 6);
+db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)').run(1, 7);
 
 test('Should return list of lectures for the userId', async () => {
   const userid = 1;
@@ -90,4 +117,22 @@ test('Second reservation should return a message showing that a seat for that le
   const obj1 = await lecturesDao.insertReservation(lectureId, studentId);
   expect(obj1).toBeTruthy();
   // expect(obj1).toBe('The Student has already booked a seat for that Lecture');
+});
+
+test('Should return list of student booked for a certain lectureId', async () => {
+  const lectureId = 1;
+  const obj = await lecturesDao.getStudentsListByLectureId(lectureId);
+  expect(obj).toBeTruthy();
+  expect(obj[0].id).toBe(2);
+  expect(obj[1].id).toBe(3);
+  expect(obj[2].id).toBe(4);
+  expect(obj[3].id).toBe(5);
+  expect(obj[4].id).toBe(6);
+  expect(obj[5].id).toBe(7);
+});
+
+test('Should not return list of student but undefined because of wrong lectureId', async () => {
+  const lectureId = 10;
+  const obj = await lecturesDao.getStudentsListByLectureId(lectureId);
+  expect(obj).toBeUndefined();
 });

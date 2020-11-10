@@ -126,6 +126,24 @@ async function getInfoBookingConfirmation(lectureId, studentId) {
   return info;
 }
 
+async function getStudentsListByLectureId(lectureId) {
+  const sql = 'SELECT StudentId FROM Bookings WHERE LectureId=?';
+  const stmt = db.prepare(sql);
+  const rows = stmt.all(lectureId);
+  const studentlist = [];
+  console.log(`number of rows:${rows}`);
+  if (rows.length > 0) {
+    rows.forEach(async (row) => {
+      const student = await userDao.getUserById(row.StudentId);
+      studentlist.push(student);
+    });
+    console.log(studentlist);
+    return studentlist;
+  }
+  return (undefined);
+}
+
 exports.getLecturesByUserId = getLecturesByUserId;
 exports.getTeachersForEmail = getTeachersForEmail;
 exports.getInfoBookingConfirmation = getInfoBookingConfirmation;
+exports.getStudentsListByLectureId = getStudentsListByLectureId;
