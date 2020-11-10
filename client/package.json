@@ -50,6 +50,13 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "prettier": "^2.1.2",
     "react-test-renderer": "^17.0.1"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}",
+      "!src/reportWebVitals.js"
+    ]
   }
 }
