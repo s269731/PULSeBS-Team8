@@ -32,6 +32,9 @@ class Navbars extends Component {
                         {this.props.loggedUser && this.props.loggedUser.name && <><span className="headerLinks"> Welcome, {this.props.loggedUser.name} !</span>
                             <Link to='/home' className="headerLinks " onClick={this.props.logout}>Logout </Link><Link to='/home' className="headerLinks"><span className="headerLinks">&nbsp; Home </span></Link></>}
                         </Navbar.Text>
+                        {this.props.path==="/courses" &&  <Link to='/student' className="headerLinks"><Navbar.Text className="headerLinks" >&nbsp; Student Page </Navbar.Text></Link>}
+                        {this.props.path==="/registeredCourses"  &&  <Link to='/student' className="headerLinks"><Navbar.Text className="headerLinks" >&nbsp; Student Page </Navbar.Text></Link>}
+
                         </Nav>
 
                 </Navbar>

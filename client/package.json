@@ -52,7 +52,6 @@
   "devDependencies": {
     "react-test-renderer": "^17.0.1"
   },
-
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}",
@@ -60,4 +59,3 @@
     ]
   }
 }
-

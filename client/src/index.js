@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import StudentPage from './Components/Student/StudentPage';
+import AvailableCourses from './Components/Student/AvailableCourses';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter as Router} from 'react-router-dom';

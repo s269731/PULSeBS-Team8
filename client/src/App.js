@@ -2,6 +2,9 @@ import React from 'react'
 import './App.css'
 import Navbars from './Components/Navbar.js'
 import TeacherPage from "./Components/TeacherPage";
+import StudentPage from "./Components/Student/StudentPage";
+import AvailableCourses from "./Components/Student/AvailableCourses";
+import RegisteredCourses from "./Components/Student/RegisteredCourses";
 import {Switch} from 'react-router';
 import {withRouter,Redirect, Route} from 'react-router-dom';
 import {Alert,Container} from 'react-bootstrap';
@@ -66,9 +69,16 @@ class App extends React.Component{
 
           </Route>
           <Route exact path='/student'>
-            {(this.state.loggedUser && this.state.loggedUser.role==="S") ?  <Alert variant="info">Student page not implemented. Insert here Student components.</Alert> :<Redirect to='/login'/>}
+            {(this.state.loggedUser && this.state.loggedUser.role==="S") ?  <StudentPage/> :<Redirect to='/login'/>}
+          </Route>
+          <Route exact path='/courses'>
+          {(this.state.loggedUser && this.state.loggedUser.role==="S") ?  <AvailableCourses/> :<Redirect to='/login'/>}
+          </Route>
+          <Route exact path='/registeredCourses'>
+          {(this.state.loggedUser && this.state.loggedUser.role==="S") ?  <RegisteredCourses/> :<Redirect to='/login'/>}
           </Route>
           <Route><Redirect to='/home'/></Route>
+          
         </Switch>
     </>
   }
