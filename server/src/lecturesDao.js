@@ -35,19 +35,18 @@ async function getLecturesByUserId(id) {
       lectures.push(lecture);
     }));
 
-    console.log(lectures);
-    return lectures;
+    //console.log(lectures);
   }
-  if (user.role === 'D') throw ('No lectures scheduled for this TeacherId');
-  else throw ('There are no lectures for this StudentId');
+  return lectures;
 }
 
 const getLectureTimeConstraint = (lectureId) => {
   const sql = 'SELECT DateHour FROM Lectures WHERE LectureId=?';
   const stmt = db.prepare(sql);
   const row = stmt.get(lectureId);
+  //console.log(row)
   if (row !== undefined) {
-    const lectureTimeConstraint = new Date(row.dateHour);
+    const lectureTimeConstraint = new Date(row.DateHour);
     lectureTimeConstraint.setHours(0, 0, 0, 0);
     return lectureTimeConstraint;
   }
@@ -60,7 +59,7 @@ exports.insertReservation = (lectureId, studentId) => new Promise((resolve, reje
   const row = stmt.get(lectureId, studentId);
   const todayDateHour = new Date();
   const timeconstraint = getLectureTimeConstraint(lectureId);
-  if (timeconstraint === undefined) reject(timeconstraint);
+  if (timeconstraint === undefined) reject("No lecture for the specified id");
   if (todayDateHour < timeconstraint) {
     if (row !== undefined) {
       reject('The Student has already booked a seat for that Lecture');
@@ -80,12 +79,10 @@ async function getTeachersForEmail() {
   const d2 = new Date(d1);
   d2.setDate(d2.getDate() + 1);
   d2.setHours(23, 59, 59, 999); // last minute of the day of the lecture
-  const dateHour1 = moment(d1).format('YYYY-MM-DD HH:MM:SS.SSS');
-  const dateHour2 = moment(d2).format('YYYY-MM-DD HH:MM:SS.SSS');
 
   const sql = 'SELECT TeacherId, BookedPeople, SubjectId FROM Lectures WHERE DateHour BETWEEN DATETIME(?) AND DATETIME(?)';
   const stmt = db.prepare(sql);
-  const rows = stmt.all(dateHour1, dateHour2);
+  const rows = stmt.all(d1.toISOString(), d2.toISOString());
   const email_bp = [];
 
   if (rows.length > 0) {
@@ -131,13 +128,13 @@ async function getStudentsListByLectureId(lectureId) {
   const stmt = db.prepare(sql);
   const rows = stmt.all(lectureId);
   const studentlist = [];
-  console.log(`number of rows:${rows}`);
+  //console.log(`number of rows:${rows}`);
   if (rows.length > 0) {
     rows.forEach(async (row) => {
       const student = await userDao.getUserById(row.StudentId);
       studentlist.push(student);
     });
-    console.log(studentlist);
+    //console.log(studentlist);
     return studentlist;
   }
   return (undefined);

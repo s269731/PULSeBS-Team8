@@ -40,7 +40,7 @@ db.prepare('INSERT INTO Users(Id, Role, Name, Surname, Email, Password, Course) 
   [2, 'S', 'Jinzhuo', 'Chen', 's0002@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'Computer Engineering'],
 );
 db.prepare('INSERT INTO Users(Id, Role, Name, Surname, Email, Password, Course) VALUES(?,?,?,?,?,?,?)').run(
-  [3, 'S', 'Daniele', 'Laudani', 's0003@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'Computer Engineering'],
+  [3, 'S', 'Daniele', 'fhgfghf', 's0003@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'Computer Engineering'],
 );
 db.prepare('INSERT INTO Users(Id, Role, Name, Surname, Email, Password, Course) VALUES(?,?,?,?,?,?,?)').run(
   [4, 'S', 'Luca', 'Torchiano', 's0004@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'Computer Engineering'],
@@ -82,7 +82,7 @@ test('Should return list of lectures for the userId', async () => {
 test('Should not return the list of lectures for a userId that doesnt exist', async () => {
   const userid = 2;
   const obj = await lecturesDao.getLecturesByUserId(userid);
-  expect(obj).toBeTruthy();
+  expect(obj.length).toBe(0);
   // expect(obj).toBe('There aren\'t lecture for this StudentId');
 });
 
@@ -92,14 +92,18 @@ test('Should return 1 to indicate that the reservation was correctly inserted ',
   const obj = await lecturesDao.insertReservation(lectureId, studentId);
   expect(obj).toBeTruthy();
   expect(obj.result).toBe(1);
+  //cleanup
+  db.prepare('DELETE FROM Bookings').run();
 });
 
 test('Should not return 1 because lectureId doesn\'t correspond to any lecture ', async () => {
   const lectureId = 5;
   const studentId = 1;
-  const obj = await lecturesDao.insertReservation(lectureId, studentId);
-  expect(obj).toBeTruthy();
-  expect(obj.result).toBeUndefined();
+  try {
+    const obj = await lecturesDao.insertReservation(lectureId, studentId);
+  } catch(err) {
+    expect(err).toBe("No lecture for the specified id");
+  }
 });
 
 test('Should return a message indicating lectureId bookings are closed ', async () => {
@@ -114,9 +118,14 @@ test('Second reservation should return a message showing that a seat for that le
   const lectureId = 1;
   const studentId = 1;
   const obj = await lecturesDao.insertReservation(lectureId, studentId);
-  const obj1 = await lecturesDao.insertReservation(lectureId, studentId);
-  expect(obj1).toBeTruthy();
-  // expect(obj1).toBe('The Student has already booked a seat for that Lecture');
+  expect(obj).toBeTruthy();
+  expect(obj.result).toBe(1);
+  try {
+    const obj1 = await lecturesDao.insertReservation(lectureId, studentId);
+  } catch(err) {
+  console.log(err)
+    expect(err).toBe("The Student has already booked a seat for that Lecture");
+  }
 });
 
 test('Should return list of student booked for a certain lectureId', async () => {

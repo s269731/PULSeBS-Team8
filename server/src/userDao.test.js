@@ -44,3 +44,8 @@ test('Should not return users with an id that does not exist', async () => {
   const obj = await userDao.getUserById(12332);
   expect(obj).toBeUndefined();
 });
+
+test('Hashed password should match with the provided plaintext one', async () => {
+  const user = await userDao.getUserById(1);
+  expect(userDao.checkPassword(user, "pass1")).toBe(true);
+});
