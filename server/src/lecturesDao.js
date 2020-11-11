@@ -4,7 +4,7 @@ const userDao = require('./userDao');
 const subjectDao = require('./subjectsDao');
 
 class Lecture {
-  constructor(lectureId, subjectName, teacherName, dateHour, modality, className, capacity, bookedPeople) {
+  constructor(lectureId, subjectName, teacherName, dateHour, modality, className, capacity, bookedPeople, booked) {
     this.lectureId = lectureId;
     this.subjectName = subjectName;
     this.teacherName = teacherName;
@@ -13,7 +13,16 @@ class Lecture {
     this.className = className;
     this.capacity = capacity;
     this.bookedPeople = bookedPeople;
+    this.booked = booked;
   }
+}
+
+function getReservation(studentId, lectureId) {
+  const sql = 'SELECT * FROM Bookings WHERE StudentId=? AND LectureId=?';
+  const stmt = db.prepare(sql);
+  const row = stmt.get(studentId, lectureId);
+  if (row === undefined) return false;
+  return true;
 }
 
 async function getLecturesByUserId(id) {
@@ -30,12 +39,13 @@ async function getLecturesByUserId(id) {
       const subjectName = await subjectDao.getSubjectName(rawlecture.SubjectId);
       const teacher = await userDao.getUserById(rawlecture.TeacherId);
       const teacherName = `${teacher.name} ${teacher.surname}`;
-      const lecture = new Lecture(rawlecture.LectureId, subjectName.SubjectName, teacherName, rawlecture.DateHour, rawlecture.Modality, rawlecture.Class, rawlecture.Capacity, rawlecture.BookedPeople);
+      const reservation = getReservation(id, rawlecture.LectureId);
+      const lecture = new Lecture(rawlecture.LectureId, subjectName.SubjectName, teacherName, rawlecture.DateHour, rawlecture.Modality, rawlecture.Class, rawlecture.Capacity, rawlecture.BookedPeople, reservation);
 
       lectures.push(lecture);
     }));
 
-    //console.log(lectures);
+    // console.log(lectures);
   }
   return lectures;
 }
@@ -44,7 +54,7 @@ const getLectureTimeConstraint = (lectureId) => {
   const sql = 'SELECT DateHour FROM Lectures WHERE LectureId=?';
   const stmt = db.prepare(sql);
   const row = stmt.get(lectureId);
-  //console.log(row)
+  // console.log(row)
   if (row !== undefined) {
     const lectureTimeConstraint = new Date(row.DateHour);
     lectureTimeConstraint.setHours(0, 0, 0, 0);
@@ -59,7 +69,7 @@ exports.insertReservation = (lectureId, studentId) => new Promise((resolve, reje
   const row = stmt.get(lectureId, studentId);
   const todayDateHour = new Date();
   const timeconstraint = getLectureTimeConstraint(lectureId);
-  if (timeconstraint === undefined) reject("No lecture for the specified id");
+  if (timeconstraint === undefined) reject('No lecture for the specified id');
   if (todayDateHour < timeconstraint) {
     if (row !== undefined) {
       reject('The Student has already booked a seat for that Lecture');
@@ -84,12 +94,12 @@ async function getTeachersForEmail() {
   const stmt = db.prepare(sql);
   const rows = stmt.all(d1.toISOString(), d2.toISOString());
   const email_bp = [];
-  var obj = {};
+  let obj = {};
 
   if (rows.length > 0) {
     await Promise.all(rows.map(async (rawlecture) => {
       const teacher = await userDao.getUserById(rawlecture.TeacherId);
-      const email = teacher.email;
+      const { email } = teacher;
       const subjectName = await subjectDao.getSubjectName(rawlecture.SubjectId);
       const bp = rawlecture.BookedPeople;
 
@@ -98,7 +108,7 @@ async function getTeachersForEmail() {
         subject: subjectName.SubjectName,
         booked_people: bp,
       };
-      email_bp.push(obj);       
+      email_bp.push(obj);
     }));
   }
   return email_bp;
@@ -108,7 +118,7 @@ async function getInfoBookingConfirmation(lectureId, studentId) {
   const sql = 'SELECT DateHour, SubjectId, Class FROM Lectures WHERE LectureId=?';
   const stmt = db.prepare(sql);
   const row = stmt.get(lectureId);
-  var info = {};
+  let info = {};
 
   if (row !== undefined) {
     const student = await userDao.getUserById(studentId);
@@ -129,13 +139,13 @@ async function getStudentsListByLectureId(lectureId) {
   const stmt = db.prepare(sql);
   const rows = stmt.all(lectureId);
   const studentlist = [];
-  //console.log(`number of rows:${rows}`);
+  // console.log(`number of rows:${rows}`);
   if (rows.length > 0) {
     rows.forEach(async (row) => {
       const student = await userDao.getUserById(row.StudentId);
       studentlist.push(student);
     });
-    //console.log(studentlist);
+    // console.log(studentlist);
     return studentlist;
   }
   return (undefined);
