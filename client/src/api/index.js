@@ -40,7 +40,9 @@ async function getLectures(){
                 modality:l.modality,
                 room:l.className,
                 capacity:l.capacity,
-                bookedStudents:l.bookedPeople
+                bookedStudents:l.bookedPeople,
+                teacherName: l.teacherName,
+                leactureId: l.leactureId
         }})
     }
     else{
