@@ -3,9 +3,10 @@ import {Container, Row,Col, Alert, Button} from 'react-bootstrap'
 import API from "../../api";
 
 
-
 const LectureItem=(props)=>{
-    let l=props.lecture;
+    let ref=props.refresh;
+     let l=props.lecture;
+     let bookLeacture=props.bookLeacture;
     return <>
         <Container>
                 <Row>
@@ -13,7 +14,7 @@ const LectureItem=(props)=>{
                         <Alert variant="primary">
                             <Row>
                                 <Col className="subjectName">
-                                    <h6>{l.subject}<br/></h6>
+                                    <h6>{l.subject}<br/> </h6>
                                 </Col>
                             </Row>
                             <Row className="justify-content-md-center">
@@ -35,8 +36,10 @@ const LectureItem=(props)=>{
                                <Col  xs={20} md={3} className="align-content-start"><h5>Room: {l.room}</h5></Col>
                                <Col  xs={20} md={3} className="align-content-end"><h5>Booked students: {l.bookedStudents}</h5></Col>
                                <Col  xs={20} md={3} className="align-content-end"><h5>Class Capacity: {l.capacity}</h5></Col>
-                               {l.bookedStudents<l.capacity && <Col><Button size="lg" variant="success" block>Book Now</Button></Col> }
-                               {l.bookedStudents>l.capacity && <Col><Button size="lg" variant="warning" block>Wait</Button></Col> }
+                               { l.booked===false && l.bookedStudents<l.capacity && <Col><Button onClick={() => bookLeacture(l.lectureId)} size="lg" variant="success" block>Book Now</Button></Col> }
+                               {l.booked===false && l.bookedStudents>l.capacity && <Col><Button onClick={() => bookLeacture(l.lectureId)} size="lg" variant="warning" block>Wait</Button></Col> }
+                               {l.booked===true && l.bookedStudents<l.capacity && <Col><h5>You already booked</h5></Col> } 
+                               {l.booked===true && l.bookedStudents>l.capacity && <Col><h5>You are in waiting list</h5></Col>} 
                             </Row>
                             
                         </Alert>
@@ -45,9 +48,6 @@ const LectureItem=(props)=>{
             </Container>
     </>
 }
-
-
-
 
 class AvailableCourses extends React.Component{
 
@@ -61,16 +61,31 @@ class AvailableCourses extends React.Component{
         })
     }
 
+
+    bookLeacture=(id)=> {
+        this.setState({ refresh: false });
+
+        this.forceUpdate();
+
+        API.bookLeacture(id).then((res)=>{
+            console.log(res)
+        }).catch((err)=>{
+            this.setState({serverErr:true,loading:null})
+        })
+      }
+
+
     constructor(props) {
         super(props);
-        this.state={lectures:[]}
+        this.state={lectures:[],
+            refresh: true}
     }
     render(){
         return(
             <>
                 <Container fluid>
                     <Row className="justify-content-md-center below-nav"><h3>Available Courses: </h3></Row>
-                    {this.state.lectures.map((e)=>{return <LectureItem lecture={e}/>})}
+                    {this.state.lectures.map((e, key)=>{return <LectureItem refresh={this.state.refresh} lecture={e}  bookLeacture={this.bookLeacture} key={key}/>})}
                 </Container>
 
             </>

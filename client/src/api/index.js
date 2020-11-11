@@ -34,7 +34,7 @@ async function getLectures(){
             let date=fields[0]
             let hour=fields[1].split(".")[0].split(":")[0]+":"+fields[1].split(".")[0].split(":")[1]
             return {
-                subject:l.subjectName.SubjectName,
+                subject:l.subjectName,
                 date:date,
                 hour:hour,
                 modality:l.modality,
@@ -42,7 +42,8 @@ async function getLectures(){
                 capacity:l.capacity,
                 bookedStudents:l.bookedPeople,
                 teacherName: l.teacherName,
-                leactureId: l.leactureId
+                lectureId: l.lectureId,
+                booked: l.booked
         }})
     }
     else{
@@ -61,6 +62,21 @@ async function getUser(){
     else{
         let err={status:response.status, errObj:userJson};
         throw err;
+    }
+}
+
+async function bookLeacture(id){
+    let url="/reserve"
+    const response= await fetch(baseURL + url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({lectureId: id}),
+    });
+    const result=await response.json();
+    if(response.ok){
+        return (result)
     }
 }
 
@@ -83,5 +99,7 @@ async function userLogout() {
 
 
 
-const API = {Login,getLectures,getUser,userLogout} ;
+
+
+const API = {Login,getLectures,getUser,userLogout, bookLeacture} ;
 export default API;
