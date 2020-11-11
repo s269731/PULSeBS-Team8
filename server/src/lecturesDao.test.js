@@ -92,8 +92,6 @@ test('Should return 1 to indicate that the reservation was correctly inserted ',
   const obj = await lecturesDao.insertReservation(lectureId, studentId);
   expect(obj).toBeTruthy();
   expect(obj.result).toBe(1);
-  //cleanup
-  db.prepare('DELETE FROM Bookings').run();
 });
 
 test('Should not return 1 because lectureId doesn\'t correspond to any lecture ', async () => {
@@ -117,9 +115,6 @@ test('Should return a message indicating lectureId bookings are closed ', async 
 test('Second reservation should return a message showing that a seat for that lectureId is already booked', async () => {
   const lectureId = 1;
   const studentId = 1;
-  const obj = await lecturesDao.insertReservation(lectureId, studentId);
-  expect(obj).toBeTruthy();
-  expect(obj.result).toBe(1);
   try {
     const obj1 = await lecturesDao.insertReservation(lectureId, studentId);
   } catch(err) {
@@ -132,12 +127,12 @@ test('Should return list of student booked for a certain lectureId', async () =>
   const lectureId = 1;
   const obj = await lecturesDao.getStudentsListByLectureId(lectureId);
   expect(obj).toBeTruthy();
-  expect(obj[0].id).toBe(2);
-  expect(obj[1].id).toBe(3);
-  expect(obj[2].id).toBe(4);
-  expect(obj[3].id).toBe(5);
-  expect(obj[4].id).toBe(6);
-  expect(obj[5].id).toBe(7);
+  expect(obj[1].id).toBe(2);
+  expect(obj[2].id).toBe(3);
+  expect(obj[3].id).toBe(4);
+  expect(obj[4].id).toBe(5);
+  expect(obj[5].id).toBe(6);
+  expect(obj[6].id).toBe(7);
 });
 
 test('Should not return list of student but undefined because of wrong lectureId', async () => {
