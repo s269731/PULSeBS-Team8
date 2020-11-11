@@ -35,8 +35,8 @@ const LectureItem=(props)=>{
                                <Col  xs={20} md={3} className="align-content-start"><h5>Room: {l.room}</h5></Col>
                                <Col  xs={20} md={3} className="align-content-end"><h5>Booked students: {l.bookedStudents}</h5></Col>
                                <Col  xs={20} md={3} className="align-content-end"><h5>Class Capacity: {l.capacity}</h5></Col>
-                               {l.bookedStudents>l.capacity && <Col><Button size="lg" variant="success" block>Book Now</Button></Col> }
-                               {l.bookedStudents<l.capacity && <Col><Button size="lg" variant="warning" block>Wait</Button></Col> }
+                               {l.bookedStudents<l.capacity && <Col><Button size="lg" variant="success" block>Book Now</Button></Col> }
+                               {l.bookedStudents>l.capacity && <Col><Button size="lg" variant="warning" block>Wait</Button></Col> }
                             </Row>
                             
                         </Alert>
