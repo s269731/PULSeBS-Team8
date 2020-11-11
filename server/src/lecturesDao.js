@@ -77,28 +77,29 @@ async function getTeachersForEmail() {
   const d1 = new Date();
   d1.setHours(23, 59, 59, 999); // last minute of today
   const d2 = new Date(d1);
-  d2.setDate(d2.getDate() + 1);
-  d2.setHours(23, 59, 59, 999); // last minute of the day of the lecture
+  d2.setDate(d2.getDate() + 2);
+  d2.setHours(1, 0, 0, 0); // day after the lecture (=day after tomorrow)
 
   const sql = 'SELECT TeacherId, BookedPeople, SubjectId FROM Lectures WHERE DateHour BETWEEN DATETIME(?) AND DATETIME(?)';
   const stmt = db.prepare(sql);
   const rows = stmt.all(d1.toISOString(), d2.toISOString());
   const email_bp = [];
+  var obj = {};
 
   if (rows.length > 0) {
-    rows.forEach(async (rawlecture) => {
+    await Promise.all(rows.map(async (rawlecture) => {
       const teacher = await userDao.getUserById(rawlecture.TeacherId);
-      const email = teacher.Email;
+      const email = teacher.email;
       const subjectName = await subjectDao.getSubjectName(rawlecture.SubjectId);
       const bp = rawlecture.BookedPeople;
 
-      const obj = {
+      obj = {
         email_addr: email,
-        subject: subjectName,
+        subject: subjectName.SubjectName,
         booked_people: bp,
       };
-      email_bp.push(obj);
-    });
+      email_bp.push(obj);       
+    }));
   }
   return email_bp;
 }
@@ -107,7 +108,7 @@ async function getInfoBookingConfirmation(lectureId, studentId) {
   const sql = 'SELECT DateHour, SubjectId, Class FROM Lectures WHERE LectureId=?';
   const stmt = db.prepare(sql);
   const row = stmt.get(lectureId);
-  const info = {};
+  var info = {};
 
   if (row !== undefined) {
     const student = await userDao.getUserById(studentId);
@@ -115,7 +116,7 @@ async function getInfoBookingConfirmation(lectureId, studentId) {
 
     info = {
       email: student.email,
-      subject: subjectName,
+      subject: subjectName.SubjectName,
       date_hour: row.DateHour,
       class: row.Class,
     };

@@ -79,7 +79,7 @@ test('Should return list of lectures for the userId', async () => {
   expect(obj[0].bookedPeople).toBeTruthy();
 });
 
-test('Should not return the list of lectures for a userId that doesnt exist', async () => {
+test('Should not return the list of lectures for a userId that doesn\'t exist', async () => {
   const userid = 2;
   const obj = await lecturesDao.getLecturesByUserId(userid);
   expect(obj.length).toBe(0);
@@ -139,4 +139,36 @@ test('Should not return list of student but undefined because of wrong lectureId
   const lectureId = 10;
   const obj = await lecturesDao.getStudentsListByLectureId(lectureId);
   expect(obj).toBeUndefined();
+});
+
+test('Should return info about all the lectures scheduled for tomorrow, so that email notifications can be sent', async () => {
+  const array = await lecturesDao.getTeachersForEmail();
+  expect(Array.isArray(array)).toBe(true);
+  expect(array.length).toBe(2);
+  expect(array[0].email_addr).toBe('d0001@prof.com');
+  expect(array[0].subject).toBe('SoftwareEngineering II');
+  expect(array[0].booked_people).toBe(100);
+  expect(array[1].email_addr).toBe('d0001@prof.com');
+  expect(array[1].subject).toBe('SoftwareEngineering II');
+  expect(array[1].booked_people).toBe(100);
+});
+
+test('Should return an object with necessary info related to specific booking, so that the email confirmation can be sent', async () => {
+  const lectureId = 1;
+  const studentId = 5;
+  const tomorrow = moment(d).add(1, 'days');
+  const obj = await lecturesDao.getInfoBookingConfirmation(lectureId, studentId);
+  expect(obj).toBeTruthy();
+  expect(obj.email).toBe('s0005@student.com');
+  expect(obj.subject).toBe('SoftwareEngineering II');
+  expect(obj.date_hour).toBe(tomorrow.toISOString());
+  expect(obj.class).toBe('12A');
+});
+
+test('Should return an empty object', async () => {
+  const lectureId = 10;
+  const studentId = 5;
+  const obj = await lecturesDao.getInfoBookingConfirmation(lectureId, studentId);
+  expect(Object.keys(obj).length).toBe(0);
+  expect(obj.constructor).toBe(Object);
 });
