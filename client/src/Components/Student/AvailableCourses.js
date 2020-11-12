@@ -4,7 +4,6 @@ import API from "../../api";
 
 
 const LectureItem=(props)=>{
-    let ref=props.refresh;
      let l=props.lecture;
      let bookLeacture=props.bookLeacture;
     return <>
@@ -52,10 +51,8 @@ const LectureItem=(props)=>{
 class AvailableCourses extends React.Component{
 
     componentDidMount() {
-        //retrieve lectures for the student
         API.getLectures().then((res)=>{
-            console.log(res)
-            this.setState({lectures:res,loading:null,serverErr:null})
+             this.setState({lectures:res,loading:null,serverErr:null})
         }).catch((err)=>{
             this.setState({serverErr:true,loading:null})
         })
@@ -63,10 +60,7 @@ class AvailableCourses extends React.Component{
 
 
     bookLeacture=(id)=> {
-        this.setState({ refresh: false });
-
-        this.forceUpdate();
-
+         this.componentDidMount();
         API.bookLeacture(id).then((res)=>{
             console.log(res)
         }).catch((err)=>{
@@ -85,7 +79,7 @@ class AvailableCourses extends React.Component{
             <>
                 <Container fluid>
                     <Row className="justify-content-md-center below-nav"><h3>Available Courses: </h3></Row>
-                    {this.state.lectures.map((e, key)=>{return <LectureItem refresh={this.state.refresh} lecture={e}  bookLeacture={this.bookLeacture} key={key}/>})}
+                    {this.state.lectures.map((e, key)=>{return <LectureItem  lecture={e}  bookLeacture={this.bookLeacture} key={key}/>})}
                 </Container>
 
             </>
