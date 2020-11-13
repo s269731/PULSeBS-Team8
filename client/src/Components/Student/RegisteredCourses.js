@@ -1,62 +1,63 @@
-import React from 'react'
-import {Container, Row,Col, Alert, Button} from 'react-bootstrap'
+import React, {Component} from 'react';
+import {BigCalendar, Calendar, momentLocalizer} from 'react-big-calendar';
+import moment from 'moment';
+import 'moment/locale/nb';
+import '../../assets/sass/styles.scss'
+import API from "../../api";
+const localizer = momentLocalizer(moment);
+
+export default class NewCalendarView extends Component {
 
 
-const LectureItem=(props)=>{
-    let l=props.lecture;
-    return <>
-        <Container>
-                <Row>
-                    <Col>
-                        <Alert variant="success">
-                            <Row>
-                                <Col className="subjectName">
-                                    <h6>{l.subject}<br/></h6>
-                                </Col>
-                            </Row>
-                            <Row className="justify-content-md-center">
-                               <Col className="align-content-start date">
-                                   <h5>Lecture of {l.date} at {l.hour}</h5>
-                               </Col>
-                            </Row>
-                            <Row >
-                               <Col  xs={6} md={4} className="align-content-start"><h5>Room: {l.room}</h5></Col>
-                               <Col  xs={6} md={4} className="align-content-end"><h5>Booked students: {l.bookedStudents}</h5></Col>
-                               <Col><h5></h5></Col>
-                               <Col><Button variant="danger">Cancel</Button></Col>
-                            </Row>
-                        </Alert>
-                    </Col>
-                </Row>
-            </Container>
-    </>
+  componentDidMount() {
+    API.getLectures().then((res)=>{
+      console.log(res)
+      // console.log("res: " + JSON.stringify(res))
+       const cal=res.map((lec)=>{
+         let lecture= {
+          title: lec.subject,
+          startDate : moment(lec.date+"T"+lec.hour).toDate(),
+          endDate:  moment(lec.date+"T"+lec.hour+"-02:00").toDate()
+          }   
+          return lecture;
+      })
+          this.setState({events:cal,loading:null,serverErr:null})
+    }).catch((err)=>{
+        this.setState({serverErr:true,loading:null})
+    })
 }
 
+  constructor(props) {
+    super(props);
 
-class RegisteredCourses extends React.Component{
-    constructor(props) {
-        super(props);
-        this.state={lectures:[
-            {subject:"COMPUTER SCIENCE",date:"30/11/2020",hour:"16:00",room:"VIRTUAL",bookedStudents:26},
-                {subject:"COMPUTER SCIENCE",date:"01/12/2020",hour:"13:00",room:"VIRTUAL",bookedStudents:123},
-                {subject:"COMPUTER SCIENCE",date:"04/12/2020",hour:"10:00",room:"VIRTUAL",bookedStudents:78},
-                {subject:"COMPUTER SCIENCE",date:"05/12/2020",hour:"08:30",room:"VIRTUAL",bookedStudents:56}
-
-            ]}
-    }
-    render(){
-        return(
-            <>
-                <Container fluid>
-                    <Row className="justify-content-md-center below-nav"><h3>Registered Courses: </h3></Row>
-                    {this.state.lectures.map((e)=>{return <LectureItem lecture={e}/>})}
-                </Container>
-
-            </>
-
-
-        )
+    this.state = {
+       events: []
     }
 
+  }
+
+  render() {
+    return (
+      <div style={{
+        flex: 1
+      }}>
+        {console.log(this.state.events)}
+
+        
+        <Calendar
+
+          localizer={localizer}
+          events={this.state.events}
+          startAccessor='startDate'
+          endAccessor='endDate'
+          defaultView='week'
+          views={['month', 'week', 'day']}
+          min={new Date(2020, 1, 0, 7, 0, 0)} 
+          max={new Date(2022, 1, 0, 21, 0, 0)}
+          culture='en'
+
+          />
+      </div>
+    );
+  }
 }
-export default RegisteredCourses;

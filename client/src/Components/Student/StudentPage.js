@@ -33,7 +33,7 @@ class StudentPage extends Component {
             <Button style={{
           padding: '1rem 1.1rem',
           fontSize: '1.3rem'
-        }} onClick={this.routeAllCourses} variant="info">Available Courses</Button>
+        }} onClick={this.routeAllCourses} variant="info">Available Lectures</Button>
           </Card.Body>
         </Card>
         <Card style={{
@@ -47,7 +47,7 @@ class StudentPage extends Component {
             <Button style={{
           padding: '1rem 1.1rem',
           fontSize: '1.3rem'
-        }} onClick={this.routeRegCourses} variant="info">Registered Courses</Button>
+        }} onClick={this.routeRegCourses} variant="info">Registered Lectures</Button>
           </Card.Body>
         </Card>
 
