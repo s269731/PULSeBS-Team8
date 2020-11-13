@@ -148,7 +148,6 @@ async function getStudentsListByLectureId(lectureId) {
     // console.log(studentlist);
     return studentlist;
   }
-  return (undefined);
 }
 
 exports.getLecturesByUserId = getLecturesByUserId;

@@ -1,163 +1,96 @@
 const express = require('express');
+const config = require('config');
 const jwt = require('express-jwt');
 const jsonwebtoken = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
-const nodemailer = require('nodemailer');
+const emailService = require('./services/email');
 const userDao = require('./userDao');
 const lecturesDao = require('./lecturesDao');
 
-const jwtSecret = 'BçFDJDLKSAJOIFBHNI$48tgopW$ITH"W$TBL';
-const tokenExpireTime = 60 * 60; // 1 hour
 const authErrorObj = { errors: [{ msg: 'Authorization error' }] };
 const lecturesErr = { errors: [{ msg: 'There was an error retrieving available lectures' }] };
 const studentListError = { errors: [{ msg: 'There was an error retrieving list of students for this lectureId' }] };
-const PORT = 3001;
 const app = express();
 app.disable('x-powered-by');
 
-const mail = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'info.trackingplatform@gmail.com',
-    pass: 'Fitness#consoft1',
-  },
-});
-
-const now = new Date();
-const end_of_today = new Date(now);
-end_of_today.setHours(23, 59, 59, 999);
-
-setTimeout(sendingEmailBookedPeople, end_of_today.getTime() - now.getTime());
-
-function sendingEmailBookedPeople() {
-  const array = lecturesDao.getTeachersForEmail();
-  if (array.length > 0) {
-    for (let i = 0; i < array.length; i++) {
-      const mailOptions = {
-        from: 'info.trackingplatform@gmail.com',
-        to: array[i].email_addr,
-        subject: 'Booked people for tomorrow lesson',
-        text: `There are ${array[i].booked_people} people booked for the lesson: ${array[i].subject} of tomorrow`,
-      };
-
-      mail.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.log(error);
-        } else {
-          console.log(`Email sent: ${info.response}`);
-        }
-      });
-    }
-  }
-  setTimeout(sendingEmailBookedPeople, 8.64e+7); // set timeout for the following day
-}
+emailService.start();
 
 app.use(express.json());
 
-const db = require('./db');
-
-app.post('/api/login', (req, res) => {
-  const { email } = req.body;
-  const { password } = req.body;
-
-  userDao.getUser(email)
-    .then((user) => {
-      if (user === undefined) {
-        res.status(404).send({
-          errors: [{ msg: 'E-mail non valida' }],
-        });
-      } else if (!userDao.checkPassword(user, password)) {
-        res.status(401).send({
-          errors: [{ msg: 'Password errata' }],
-        });
-      } else {
-        // AUTHENTICATION SUCCESS
-        // eslint-disable-next-line max-len
-        const token = jsonwebtoken.sign({ user: user.id }, jwtSecret, { expiresIn: tokenExpireTime });
-        res.cookie('token', token, { httpOnly: true, sameSite: true, maxAge: 1000 * tokenExpireTime });
-        res.json({ id: user.id, username: user.username });
-      }
-    }).catch(() => {
-      // Delay response when wrong user/pass is sent to avoid fast guessing attempts
+app.post('/api/login', async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await userDao.getUser(email);
+    if (user === undefined || !userDao.checkPassword(user, password)) {
+      res.status(401).send({
+        errors: [{ msg: 'Invalid credentials' }],
+      });
+    } else {
+      // AUTHENTICATION SUCCESS
+      // eslint-disable-next-line max-len
+      const token = jsonwebtoken.sign({ user: user.id }, config.jwtSecret, { expiresIn: config.tokenExpireTime });
+      res.cookie('token', token, { httpOnly: true, sameSite: true, maxAge: 1000 * config.tokenExpireTime });
+      res.json({ id: user.id, username: user.username });
+    }
+  } catch {
+    // Delay response when wrong user/pass is sent to avoid fast guessing attempts
     // eslint-disable-next-line max-len
-      new Promise((resolve) => { setTimeout(resolve, 1000); }).then(() => res.status(401).json(authErrorObj));
-    });
+    new Promise((resolve) => { setTimeout(resolve, 1000); }).then(() => res.status(401).json(authErrorObj));
+  }
 });
 
 app.use(cookieParser());
+
+// AUTHENTICATED REST API endpoints
+app.use(jwt({ secret: config.jwtSecret, getToken: (req) => req.cookies.token, algorithms: ['HS256'] }));
 
 app.post('/api/logout', (req, res) => {
   res.clearCookie('token').end();
 });
 
-// AUTHENTICATED REST API endpoints
-app.use(jwt({ secret: jwtSecret, getToken: (req) => req.cookies.token, algorithms: ['HS256'] }));
-
-app.get('/api/user', (req, res) => {
+app.get('/api/user', async (req, res) => {
   const userId = req.user && req.user.user;
-  userDao.getUserById(userId)
-    .then((user) => {
-      res.json({
-        id: user.id, role: user.role, name: user.name, surname: user.surname,
-      });
-    })
-    .catch(
-      () => {
-        res.status(401).json(authErrorObj);
-      },
-    );
-});
-
-app.get('/api/lectures', (req, res) => {
-  const userId = req.user && req.user.user;
-  lecturesDao.getLecturesByUserId(userId)
-    .then((lectures) => {
-      res.json(lectures);
-    })
-    .catch(() => {
-      res.json(lecturesErr);
+  try {
+    const user = await userDao.getUserById(userId);
+    res.json({
+      id: user.id, role: user.role, name: user.name, surname: user.surname,
     });
+  } catch {
+    res.status(401).json(authErrorObj);
+  }
 });
 
-app.post('/api/reserve', (req, res) => {
+app.get('/api/lectures', async (req, res) => {
+  const userId = req.user && req.user.user;
+  try {
+    const lectures = await lecturesDao.getLecturesByUserId(userId);
+    res.json(lectures);
+  } catch {
+    res.json(lecturesErr);
+  }
+});
+
+app.post('/api/reserve', async (req, res) => {
   const userId = req.user && req.user.user;
   const { lectureId } = req.body;
-
-  lecturesDao.insertReservation(lectureId, userId)
-    .then((result) => {
-      const info = lecturesDao.getInfoBookingConfirmation(lectureId, userId);
-      if (Object.keys(info).length !== 0 && info.constructor !== Object) {
-        const mailOptions = {
-          from: 'info.trackingplatform@gmail.com',
-          to: info.email,
-          subject: 'Booking confirmation',
-          text: `You have been successfully booked for the ${info.subject}'s lesson. Date: ${info.date_hour}, Class: ${info.class}`,
-        };
-
-        mail.sendMail(mailOptions, (error, info) => {
-          if (error) {
-            console.log(error);
-          } else {
-            console.log(`Email sent: ${info.response}`);
-          }
-        });
-      }
-      res.json(result);
-    })
-    .catch((error) => {
-      res.json({ errors: [{ msg: error }] });
-    });
+  try {
+    const result = await lecturesDao.insertReservation(lectureId, userId);
+    // no need to wait
+    emailService.sendBookingConfirmationEmail(lectureId, userId);
+    res.json(result);
+  } catch (error) {
+    res.json({ errors: [{ msg: error }] });
+  }
 });
 
-app.get('/api/lectureslist', (req, res) => {
+app.get('/api/lectureslist', async (req, res) => {
   const { lectureId } = req.body;
-  lecturesDao.getStudentsListByLectureId(lectureId).then((list) => {
-    if (list === undefined) {
-      res.json(studentListError);
-    } else {
-      res.json(list);
-    }
-  });
+  try {
+    const list = await lecturesDao.getStudentsListByLectureId(lectureId);
+    res.json(list);
+  } catch {
+    res.json(studentListError);
+  }
 });
 
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}/`));
+app.listen(config.PORT, () => console.log(`Server running on http://localhost:${config.PORT}/`));

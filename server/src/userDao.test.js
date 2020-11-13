@@ -47,5 +47,5 @@ test('Should not return users with an id that does not exist', async () => {
 
 test('Hashed password should match with the provided plaintext one', async () => {
   const user = await userDao.getUserById(1);
-  expect(userDao.checkPassword(user, "pass1")).toBe(true);
+  expect(userDao.checkPassword(user, 'pass1')).toBe(true);
 });

@@ -99,8 +99,8 @@ test('Should not return 1 because lectureId doesn\'t correspond to any lecture '
   const studentId = 1;
   try {
     const obj = await lecturesDao.insertReservation(lectureId, studentId);
-  } catch(err) {
-    expect(err).toBe("No lecture for the specified id");
+  } catch (err) {
+    expect(err).toBe('No lecture for the specified id');
   }
 });
 
@@ -117,9 +117,9 @@ test('Second reservation should return a message showing that a seat for that le
   const studentId = 1;
   try {
     const obj1 = await lecturesDao.insertReservation(lectureId, studentId);
-  } catch(err) {
-  console.log(err)
-    expect(err).toBe("The Student has already booked a seat for that Lecture");
+  } catch (err) {
+    console.log(err);
+    expect(err).toBe('The Student has already booked a seat for that Lecture');
   }
 });
 
