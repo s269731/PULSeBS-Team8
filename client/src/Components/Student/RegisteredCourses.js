@@ -18,10 +18,11 @@ const popover = (
 );
 
 
+
 const Event = ({event}) => (
   <OverlayTrigger trigger="click" placement="top" overlay={popover}>
-    <Button variant='info'
-    // style={{ color:"#138D75"}}
+    <Button 
+     style={{background:"transparent", border:"none"}}
     >{event.title} <br/> Lecture Room:{event.room}<br/> Teacher: {event.instructor}</Button>
   </OverlayTrigger>
 );
