@@ -1,6 +1,6 @@
 import React from 'react'
 import {Container, Row,Col, Alert, Button} from 'react-bootstrap'
-import API from "../../api";
+import API from "../../api/api";
 
 
 const LectureItem=(props)=>{

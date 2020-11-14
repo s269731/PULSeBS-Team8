@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Nav, Navbar} from 'react-bootstrap';
+import {Nav, Navbar,Col,Row} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 import '../App.css';
 //import {Link} from 'react-router-dom'
@@ -14,13 +14,17 @@ class Navbars extends Component {
                 <Navbar  variant="dark" bg="primary">
                     <Navbar.Brand >
                         <Navbar.Text  className="headerLinks">
-                            Pandemic University Lecture Seat Booking System (PULSeBS)
+                            <Row >
+                                <Link to='/home'>
+                            <Col>
+                                <Row className="justify-content-md-center"><span className="headerLinks">PULSeBS</span></Row>
+                                <Row className="justify-content-md-center">
+                            <span className="headerNames"> Pandemic University Lecture Seat Booking System</span>
+                                </Row>
+                            </Col>
+                                </Link>
 
-                        {this.props.path==="/home" && <Navbar.Text className="headerLinks">&nbsp; -  Home </Navbar.Text>}
-                        {this.props.path==="/login" && <Navbar.Text className="headerLinks">&nbsp; -  Login </Navbar.Text>}
-                        {this.props.path==="/student" && <Navbar.Text className="headerLinks">&nbsp; -  Student Page </Navbar.Text>}
-                        {this.props.path==="/teacher" && <Navbar.Text className="headerLinks">&nbsp; -  Teacher Page </Navbar.Text>}
-
+                            </Row>
                         </Navbar.Text>
                         {/*this.props.path==="/officer" && <Navbar.Text>&nbsp; - Officer Portal</Navbar.Text>*/}
                     </Navbar.Brand>
@@ -28,13 +32,12 @@ class Navbars extends Component {
                     </Navbar.Collapse>
                     <Nav className="ml-md-auto">
                         <Navbar.Text>
-                        {!this.props.loggedUser && this.props.path==="/home" &&  <Link to='/login' className="headerLinks"><span className="headerLinks" >&nbsp; Login </span></Link>}
-                        {this.props.loggedUser && this.props.loggedUser.name && <><span className="headerLinks"> Welcome, {this.props.loggedUser.name} !</span>
-                            <Link to='/home' className="headerLinks " onClick={this.props.logout}>Logout </Link><Link to='/home' className="headerLinks"><span className="headerLinks">&nbsp; Home </span></Link></>}
+                        {!this.props.loggedUser && this.props.path==="/home" &&  <Link to='/login' className="headerLinks"><span className="headerLinks" >Login </span></Link>}
+                        {this.props.loggedUser && this.props.loggedUser.name && <><span className="headerWelcome"> Welcome, {this.props.loggedUser.name} !<span className={"badge"}><span className={"badgeText"}>{this.props.loggedUser.role==="S" && <>STUDENT</>}{this.props.loggedUser.role==="D" && <>TEACHER</>}</span> </span> </span>
+                            <Link to='/home' className="headerLinks " onClick={this.props.logout}>Logout </Link></>}
+                        {this.props.loggedUser  && this.props.loggedUser.role==="S" && <Link to='/student' className="headerLinks"><span className="headerLinks">Personal Area </span></Link>}
+                        {this.props.loggedUser  && this.props.loggedUser.role==="D" && <Link to='/teacher' className="headerLinks"><span className="headerLinks">Personal Area </span></Link>}
                         </Navbar.Text>
-                        {this.props.path==="/courses" &&  <Link to='/student' className="headerLinks"><Navbar.Text className="headerLinks" >&nbsp; Student Page </Navbar.Text></Link>}
-                        {this.props.path==="/registeredCourses"  &&  <Link to='/student' className="headerLinks"><Navbar.Text className="headerLinks" >&nbsp; Student Page </Navbar.Text></Link>}
-
                         </Nav>
 
                 </Navbar>

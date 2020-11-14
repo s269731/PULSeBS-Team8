@@ -1,7 +1,7 @@
 import React from 'react';
 import {Alert,Spinner,Container}from 'react-bootstrap'
 import LectureTable from "./LectureTable.js";
-import API from "../api";
+import API from "../../api/api";
 
 class TeacherPage extends React.Component{
     constructor(props) {

@@ -3,7 +3,7 @@ import {BigCalendar, Calendar, momentLocalizer} from 'react-big-calendar';
 import moment from 'moment';
 import 'moment/locale/nb';
 import '../../assets/sass/styles.scss'
-import API from "../../api";
+import API from "../../api/api";
 const localizer = momentLocalizer(moment);
 
 export default class NewCalendarView extends Component {

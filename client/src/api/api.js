@@ -34,6 +34,7 @@ async function getLectures(){
             let date=fields[0]
             let hour=fields[1].split(".")[0].split(":")[0]+":"+fields[1].split(".")[0].split(":")[1]
             return {
+                id:l.lectureId,
                 subject:l.subjectName,
                 date:date,
                 hour:hour,
@@ -96,10 +97,42 @@ async function userLogout() {
         });
     });
 }
+async function getStudentListByLectureId(id) {
+
+    let url="/lectureslist/"+String(id);
+    console.log(url)
+    const response=await fetch(baseURL+url);
+    const listJson=await response.json();
+    if(response.ok){
+        console.log(listJson);
+           return listJson.sort((a,b)=> {
+               if (a.surname.localeCompare(b.surname) === -1) {
+                   return 0;
+               }
+               if (a.surname.localeCompare(b.surname) === 1) {
+                   return 1;
+               }
+               if (a.surname.localeCompare(b.surname) === 0) {
+                   if (a.name.localeCompare(b.name) === -1) {
+                       return 0;
+                   }
+                   if (a.name.localeCompare(b.name) === 1) {
+                       return 1;
+                   }
+               }
+           })
+
+
+        }
+    else{
+        let err={status:response.status, errObj:listJson};
+        throw err;
+    }
+
+}
 
 
 
 
-
-const API = {Login,getLectures,getUser,userLogout, bookLeacture} ;
+const API = {Login,getLectures,getUser,userLogout, bookLeacture,getStudentListByLectureId} ;
 export default API;

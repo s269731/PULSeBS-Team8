@@ -83,10 +83,14 @@ app.post('/api/reserve', async (req, res) => {
   }
 });
 
-app.get('/api/lectureslist', async (req, res) => {
-  const { lectureId } = req.body;
+app.get('/api/lectureslist/:lectureId', async (req, res) => {
+  console.log(req.params.lectureId)
+
   try {
-    const list = await lecturesDao.getStudentsListByLectureId(lectureId);
+    const list = await lecturesDao.getStudentsListByLectureId(req.params.lectureId);
+    if (!list) {
+      res.json([]);
+    }
     res.json(list);
   } catch {
     res.json(studentListError);

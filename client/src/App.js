@@ -1,15 +1,15 @@
 import React from 'react'
 import './App.css'
 import Navbars from './Components/Navbar.js'
-import TeacherPage from "./Components/TeacherPage";
+import TeacherPage from "./Components/Teacher/TeacherPage";
 import StudentPage from "./Components/Student/StudentPage";
 import AvailableCourses from "./Components/Student/AvailableCourses";
 import RegisteredCourses from "./Components/Student/RegisteredCourses";
 import {Switch} from 'react-router';
-import {withRouter,Redirect, Route} from 'react-router-dom';
-import {Row,Col,Container} from 'react-bootstrap';
+import {withRouter,Redirect, Route, Link} from 'react-router-dom';
+import {Row,Col,Container,Alert} from 'react-bootstrap';
 import Login from './pages/logins/index'
-import API from "./api";
+import API from "./api/api";
 
 
 class App extends React.Component{
@@ -56,10 +56,13 @@ class App extends React.Component{
             <Container>
               <Col>
                 <Row className="justify-content-md-center below-nav">
-                  <h1>Welcome</h1>
+                  <h1>Welcome{this.state.loggedUser && this.state.loggedUser.name && <>, {this.state.loggedUser.name} !</>}</h1>
                 </Row>
                 <Row className="justify-content-md-center below-nav">
-                  <h3>This is a tool to manage lectures and bookings</h3>
+                  <h3>This is a tool to manage bookings of lectures during this pandemic period<br/><br/></h3>
+                  {this.state.loggedUser && this.state.loggedUser.role && this.state.loggedUser.role==="S" && <><Alert variant={"info"}><Link to="/student"> ACCESS TO YOUR PERSONAL PAGE </Link></Alert></>}
+                  {this.state.loggedUser && this.state.loggedUser.role && this.state.loggedUser.role==="D" && <><Alert variant={"info"}><Link to="/student"> ACCESS TO YOUR PERSONAL PAGE </Link></Alert></>}
+
                 </Row>
               </Col>
             </Container>
