@@ -7,6 +7,21 @@ class TeacherPage extends React.Component{
     constructor(props) {
         super(props);
         this.state={loading:true,serverErr:null}
+        this.cancelLecture=this.cancelLecture.bind(this)
+    }
+
+    cancelLecture(id){
+
+        //this is a stub functions that delete only local state of lectures
+        //UPDATE THIS WITH CONNECTION WITH SERVER AS SOON AS THE API IS AVAILABLE
+       let newLectures=[];
+       for(let l of this.state.lectures){
+           if(l.id!==id){
+               newLectures.push(l)
+           }
+       }
+       this.setState({lectures:newLectures}
+       )
     }
 
     componentDidMount() {
@@ -24,7 +39,7 @@ class TeacherPage extends React.Component{
             <Container fluid>
                 {this.state.serverErr && <Alert variant="danger">Server Error</Alert>}
                 {this.state.serverErr===null && this.state.loading && <Alert variant="primary"><Spinner animation="border" variant="primary"/> Loading ...</Alert>}
-                {this.state.serverErr===null && this.state.loading===null && <LectureTable lectures={this.state.lectures}/>}
+                {this.state.serverErr===null && this.state.loading===null && <LectureTable lectures={this.state.lectures} cancelLecture={this.cancelLecture}/>}
             </Container>
             </>
     }

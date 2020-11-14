@@ -1,7 +1,8 @@
 import React from 'react'
-import {Container, Row,Col, Alert} from 'react-bootstrap'
+import {Container, Row,Col, Alert, Button} from 'react-bootstrap'
 import StudentList from "./StudentList";
 import API from "../../api/api";
+import CancelForm from "./CancelForm";
 const LectureItem=(props)=>{
     let l=props.lecture;
 
@@ -32,7 +33,9 @@ const LectureItem=(props)=>{
                                     </Row>
                                 </Col>
                             <Col>
-                                <Row className="justify-content-md-center"><StudentList id={l.id} /></Row>
+                                <Row className="justify-content-md-center">
+                                    <StudentList id={l.id} />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <CancelForm l={l} cancelLecture={props.cancelLecture}/></Row>
                             </Col>
                             </Row>
                         </Alert>
@@ -56,7 +59,7 @@ class LectureTable extends React.Component{
             <>
                 <Container fluid>
                     <Row className="justify-content-md-center below-nav"><h3>Your next lectures: </h3></Row>
-                    {this.props.lectures.map((e)=>{return <LectureItem lecture={e} />})}
+                    {this.props.lectures.map((e)=>{return <LectureItem lecture={e} cancelLecture={this.props.cancelLecture}/>})}
                 </Container>
 
             </>
