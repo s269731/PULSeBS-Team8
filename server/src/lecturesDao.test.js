@@ -175,3 +175,52 @@ test('Should return an empty object', async () => {
   expect(Object.keys(obj).length).toBe(0);
   expect(obj.constructor).toBe(Object);
 });
+
+test('Should permit the deletion of the booking by the student', async () => {
+  const lectureId = 1;
+  const studentId = 7;
+  const obj = await lecturesDao.deleteBookingStudent(lectureId, studentId);
+  expect(obj).toBeTruthy();
+  expect(obj.result).toBe(1);
+});
+
+test('Should reject the request of deletion of booking by the student', async () => {
+  const lectureId = 10;
+  const studentId = 5;
+  try {
+    const obj = await lecturesDao.deleteBookingStudent(lectureId, studentId);
+  } catch (err) {
+    console.log(err);
+    expect(err).toBe('Deletion fails: selected lecture not available among the bookings of the student');
+  }
+});
+
+test('Should permit the deletion of lecture by the teacher since the time constraint is satisfied', async () => {
+  const lectureId = 1;
+  const teacherId = 1;
+  const obj = await lecturesDao.deleteLectureTeacher(lectureId, teacherId);
+  expect(obj).toBeTruthy();
+  expect(obj.result).toBe(1);
+});
+
+test('Should reject the request of deletion by a teacher because of the not satisfied time constraint', async () => {
+  const lectureId = 3;
+  const teacherId = 1;
+  try {
+    const obj = await lecturesDao.deleteLectureTeacher(lectureId, teacherId);
+  } catch (err) {
+    console.log(err);
+    expect(err).toBe('Deletion fails: time constaint is not satisfied');
+  }
+});
+
+test('Should reject the request of deletion by a teacher', async () => {
+  const lectureId = 10;
+  const teacherId = 1;
+  try {
+    const obj = await lecturesDao.deleteLectureTeacher(lectureId, teacherId);
+  } catch (err) {
+    console.log(err);
+    expect(err).toBe('Deletion fails: selected lecture was not found');
+  }
+});
