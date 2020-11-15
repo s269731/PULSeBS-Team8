@@ -13,8 +13,11 @@ function CancelForm(props) {
     }
     return (
         <>
-            <Button variant="danger" onClick={handleShow}>Cancel this lecture</Button>
+            {props.l.canDelete ?
+                <Button variant="danger" onClick={handleShow}>Cancel this lecture</Button> :
+                <Button variant="danger" disabled={true}>Cannot cancel this lecture</Button>
 
+            }
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Warning</Modal.Title>

@@ -30,7 +30,15 @@ async function getLectures() {
         fetch(baseURL + url).then((response) => {
             if (response.ok) {
                 response.json().then((list) => {
-                    resolve(list.map((l) => {
+                    resolve(list.sort((l1,l2)=>{
+                        return new Date(l1.dateHour)-new Date(l2.dateHour)
+                    }).map((l) => {
+                        let now=new Date()
+                        let lectDay=new Date(l.dateHour)
+                        let canDelete= lectDay-now-3600000>0
+                        console.log(lectDay-now)
+                        console.log(now)
+                        console.log(lectDay)
                         let fields = l.dateHour.split("T")
                         let date = fields[0]
                         let hour = fields[1].split(".")[0].split(":")[0] + ":" + fields[1].split(".")[0].split(":")[1]
@@ -46,7 +54,8 @@ async function getLectures() {
                             teacherName: l.teacherName,
                             lectureId: l.lectureId,
                             booked: l.booked,
-                            visible: true
+                            visible: true,
+                            canDelete:canDelete
                         }
                     }))
                 })
