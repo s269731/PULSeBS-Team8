@@ -18,7 +18,7 @@ function CancelForm(props) {
                 <Button variant="danger" disabled={true}>Cannot cancel this lecture</Button>
 
             }
-            <Modal show={show} onHide={handleClose}>
+            <Modal show={show} onHide={handleClose} data-testid="cancel-lecture-modal">
                 <Modal.Header closeButton>
                     <Modal.Title>Warning</Modal.Title>
                 </Modal.Header>

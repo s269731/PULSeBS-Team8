@@ -7,19 +7,6 @@ import CancelForm from "./CancelForm";
 
 const LectureItem=(props)=>{
     let l=props.lecture;
-    let month = new Array();
-    month[0] = "January";
-    month[1] = "February";
-    month[2] = "March";
-    month[3] = "April";
-    month[4] = "May";
-    month[5] = "June";
-    month[6] = "July";
-    month[7] = "August";
-    month[8] = "September";
-    month[9] = "October";
-    month[10] = "November";
-    month[11] = "December";
     const date=new Date(l.date)
     return <>
         {l.visible &&
@@ -39,7 +26,7 @@ const LectureItem=(props)=>{
                                     </Row>
                                     <Row className="justify-content-md-center">
                                        <Col className="align-content-start date">
-                                           <h6 className="tableHeader">Date</h6><h5>{date.getDate()} {month[date.getMonth()]} {date.getFullYear()} at {l.hour}</h5>
+                                           <h6 className="tableHeader">Date</h6><h5>{date.getDate()} {date.toLocaleString('en', {month: 'long'})} {date.getFullYear()} at {l.hour}</h5>
                                        </Col>
                                         {(l.modality && l.modality==="In person" )?  <><Col  xs={6} md={4} className="align-content-start"><h6 className="tableHeader">Room</h6><h5>{l.room}</h5></Col>
                                                </>
@@ -91,7 +78,7 @@ class LectureTable extends React.Component{
                             <ButtonGroup vertical>
                                 {this.props.subjects.map((e)=>{
                                 console.log(e)
-                                return <><Button variant="primary" value={e} key={e} onClick={(e)=>{this.handleLectures(e.target.value)}}>
+                                return <><Button variant="primary" value={e} key={e} onClick={(e)=>{this.handleLectures(e.target.value)}} data-testid="handlelecture-button">
                                     {e}
                                 </Button><br/></>})}
                             </ButtonGroup>

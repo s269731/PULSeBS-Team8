@@ -40,7 +40,7 @@ class TeacherPage extends React.Component{
 
             this.setState({subjects:subjects, lectures:res,loading:null,serverErr:null})
         }).catch((err)=>{
-            console.log(err)
+            console.log(err.status)
             if(err.status===401){
                 this.props.notLoggedUser();
             }

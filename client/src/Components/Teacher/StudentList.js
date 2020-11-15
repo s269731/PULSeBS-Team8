@@ -33,8 +33,6 @@ function StudentList(props) {
             setLoading(false)
         })
         setShow(true);
-            console.log("ERROR:")
-            console.log(serverErr)
     }
 
 
