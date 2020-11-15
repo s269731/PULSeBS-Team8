@@ -181,7 +181,7 @@ test('Should permit the deletion of the booking by the student', async () => {
   const studentId = 7;
   const obj = await lecturesDao.deleteBookingStudent(lectureId, studentId);
   expect(obj).toBeTruthy();
-  expect(obj.result).toBe(1);
+  expect(obj.result).toBe('1 1');
 });
 
 test('Should reject the request of deletion of booking by the student', async () => {
