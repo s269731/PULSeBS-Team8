@@ -182,7 +182,7 @@ exports.deleteLectureTeacher = (lectureId, teacherId) => new Promise((resolve, r
     const d1 = new Date();
     const d2 = new Date(row.DateHour);
     if (d2.getTime() - d1.getTime() < 3.6e+6) { // milliseconds in 1 hour
-      reject('Deletion fails: time constaint is not satisfied')
+      reject('Deletion fails: time constraint is not satisfied')
     } else {
       const sql2 = 'DELETE FROM Lectures WHERE LectureId=? AND TeacherId=?';
       const stmt2 = db.prepare(sql2);
