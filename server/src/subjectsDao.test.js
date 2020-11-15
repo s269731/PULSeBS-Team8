@@ -6,8 +6,8 @@ const subjectDao = require('./subjectsDao');
 // delete all the tickets inserted
 db.prepare('DELETE from Subjects').run();
 // populate db
-db.prepare('INSERT INTO Subjects(SubjectId,TeacherId,SubjName,Course) VALUES(?,?,?,?)').run([1, 't0002', 'SoftwareEngineering II', 'Computer Engineering']);
-db.prepare('INSERT INTO Subjects(SubjectId,TeacherId,SubjName,Course) VALUES(?,?,?,?)').run([2, 't0002', 'SoftwareEngineering I', 'Computer Engineering']);
+db.prepare('INSERT INTO Subjects(SubjectId, TeacherId,SubjName,Course) VALUES(?,?,?,?)').run([1, 1, 'SoftwareEngineering II', 'Computer Engineering']);
+db.prepare('INSERT INTO Subjects(SubjectId, TeacherId,SubjName,Course) VALUES(?,?,?,?)').run([2, 1, 'SoftwareEngineering I', 'Computer Engineering']);
 
 test('Should return correctly subject name by it id', async () => {
   const subjectid = 1;

@@ -10,27 +10,7 @@ const lecturesDao = require('./lecturesDao');
 db.prepare('DELETE from Lectures').run();
 // populate db
 const d = new Date();
-// populate Lectures Table
-const today = moment(d); // .format('YYYY-MM-DD HH:MM:SS.SSS');
-db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
-  [1, 1, 1, today.add(1, 'days').toISOString(), 'In person', '12A', 150, 100],
-);
-db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
-  [2, 1, 1, today.add(2, 'hours').toISOString(), 'In person', '12A', 50, 100],
-);
-db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
-  [3, 1, 1, today.subtract(3, 'days').toISOString(), 'In person', '12A', 50, 100],
-);
-db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
-  [4, 1, 1, today.add(5, 'days').toISOString(), 'In person', '12A', 50, 100],
-);
-// populate Enrollments Table
-db.prepare('DELETE FROM Enrollments').run();
-db.prepare('INSERT INTO Enrollments(StudentId,SubjectId) VALUES(?,?)').run(1, 1);
-// populate Subjects Table
-db.prepare('DELETE FROM Subjects').run();
-db.prepare('INSERT INTO Subjects(SubjectId,TeacherId,SubjName,Course) VALUES(?,?,?,?)').run([1, 1, 'SoftwareEngineering II', 'Computer Engineering']);
-db.prepare('INSERT INTO Subjects(SubjectId,TeacherId,SubjName,Course) VALUES(?,?,?,?)').run([2, 1, 'SoftwareEngineering I', 'Computer Engineering']);
+
 // populate Users Table
 db.prepare('DELETE FROM Users').run();
 db.prepare('INSERT INTO Users(Id, Role, Name, Surname, Email, Password, Course) VALUES(?,?,?,?,?,?,?)').run(
@@ -54,6 +34,29 @@ db.prepare('INSERT INTO Users(Id, Role, Name, Surname, Email, Password, Course) 
 db.prepare('INSERT INTO Users(Id, Role, Name, Surname, Email, Password, Course) VALUES(?,?,?,?,?,?,?)').run(
   [7, 'S', 'Nino', 'Nicolò', 's0007@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'Computer Engineering'],
 );
+
+// populate Subjects Table
+db.prepare('DELETE FROM Subjects').run();
+db.prepare('INSERT INTO Subjects(SubjectId,TeacherId,SubjName,Course) VALUES(?,?,?,?)').run([1, 1, 'SoftwareEngineering II', 'Computer Engineering']);
+db.prepare('INSERT INTO Subjects(SubjectId,TeacherId,SubjName,Course) VALUES(?,?,?,?)').run([2, 1, 'SoftwareEngineering I', 'Computer Engineering']);
+
+// populate Lectures Table
+const today = moment(d); // .format('YYYY-MM-DD HH:MM:SS.SSS');
+db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
+  [1, 1, 1, today.add(1, 'days').toISOString(), 'In person', '12A', 150, 100],
+);
+db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
+  [2, 1, 1, today.add(2, 'hours').toISOString(), 'In person', '12A', 50, 100],
+);
+db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
+  [3, 1, 1, today.subtract(3, 'days').toISOString(), 'In person', '12A', 50, 100],
+);
+db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
+  [4, 1, 1, today.add(5, 'days').toISOString(), 'In person', '12A', 50, 100],
+);
+// populate Enrollments Table
+db.prepare('DELETE FROM Enrollments').run();
+db.prepare('INSERT INTO Enrollments(StudentId,SubjectId) VALUES(?,?)').run(1, 1);
 
 // populate Bookings Table
 db.prepare('DELETE FROM Bookings').run();
