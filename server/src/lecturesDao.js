@@ -150,6 +150,49 @@ async function getStudentsListByLectureId(lectureId) {
   }
 }
 
+exports.deleteBookingStudent = (lectureId, studentId) => new Promise((resolve, reject) =>  {
+  const sql1 = 'SELECT * FROM Bookings WHERE LectureId=? AND StudentId=?';
+  const stmt1 = db.prepare(sql1);
+  const row = stmt1.get(lectureId, studentId);
+
+  if (row === undefined) {
+    reject('Deletion fails: selected lecture not available among the bookings of the student');
+  } else {
+    const sql2 = 'DELETE FROM Bookings WHERE LectureId=? AND StudentId=?';
+    const stmt2 = db.prepare(sql2);
+    const res = stmt2.run(lectureId, studentId);
+
+    if (res.changes === 1)
+      resolve({ result: res.changes });
+    else
+      reject('Error in deleting row');
+  }
+});
+
+exports.deleteLectureTeacher = (lectureId, teacherId) => new Promise((resolve, reject) => {
+  const sql1 = 'SELECT DateHour FROM Lectures WHERE LectureId=? AND TeacherId=?';
+  const stmt1 = db.prepare(sql1);
+  const row = stmt1.get(lectureId, teacherId);
+  if (row === undefined) {
+    reject('Deletion fails: selected lecture was not found');
+  } else {
+    const d1 = new Date();
+    const d2 = new Date(row.DateHour);
+    if (d2.getTime() - d1.getTime() < 3.6e+6) { // milliseconds in 1 hour
+      reject('Deletion fails: time constaint is not satisfied')
+    } else {
+      const sql2 = 'DELETE FROM Lectures WHERE LectureId=? AND TeacherId=?';
+      const stmt2 = db.prepare(sql2);
+      const res = stmt2.run(lectureId, teacherId);
+
+      if (res.changes === 1)
+        resolve({ result: res.changes });
+      else
+        reject('Error in deleting row');
+    }
+  }
+});
+
 exports.getLecturesByUserId = getLecturesByUserId;
 exports.getTeachersForEmail = getTeachersForEmail;
 exports.getInfoBookingConfirmation = getInfoBookingConfirmation;
