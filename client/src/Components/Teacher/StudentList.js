@@ -25,6 +25,9 @@ function StudentList(props) {
             setLoading(false)
             setServerErr(false)
         }).catch((e)=>{
+            if(e.status===401){
+                props.notLoggedUser();
+            }
             setStudents([])
             setLoading(false)
             setServerErr(false)

@@ -40,6 +40,10 @@ class TeacherPage extends React.Component{
 
             this.setState({subjects:subjects, lectures:res,loading:null,serverErr:null})
         }).catch((err)=>{
+            console.log(err)
+            if(err.status===401){
+                this.props.notLoggedUser();
+            }
             this.setState({serverErr:true,loading:null})
         })
     }
@@ -51,7 +55,7 @@ class TeacherPage extends React.Component{
             <Container fluid>
                 {this.state.serverErr && <Alert variant="danger">Server Error</Alert>}
                 {this.state.serverErr===null && this.state.loading && <Alert variant="primary"><Spinner animation="border" variant="primary"/> Loading ...</Alert>}
-                {this.state.serverErr===null && this.state.loading===null && this.state.subjects && <LectureTable subjects={this.state.subjects} lectures={this.state.lectures} cancelLecture={this.cancelLecture}/>}
+                {this.state.serverErr===null && this.state.loading===null && this.state.subjects && <LectureTable subjects={this.state.subjects} lectures={this.state.lectures} cancelLecture={this.cancelLecture} notLoggedUser={this.props.notLoggedUser}/>}
             </Container>
             </>
     }

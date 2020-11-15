@@ -50,10 +50,14 @@ const LectureItem=(props)=>{
 
 class AvailableCourses extends React.Component{
 
+
     componentDidMount() {
         API.getLectures().then((res)=>{
              this.setState({lectures:res,loading:null,serverErr:null})
         }).catch((err)=>{
+            if(err.status===401){
+                this.props.notLoggedUser()
+            }
             this.setState({serverErr:true,loading:null})
         })
     }
@@ -64,6 +68,9 @@ class AvailableCourses extends React.Component{
         API.bookLeacture(id).then((res)=>{
             console.log(res)
         }).catch((err)=>{
+            if(err.status===401){
+                this.props.notLoggedUser()
+            }
             this.setState({serverErr:true,loading:null})
         })
       }

@@ -38,7 +38,7 @@ const LectureItem=(props)=>{
                                 </Col>
                             <Col>
                                 <Row className="justify-content-md-center">
-                                    <StudentList id={l.id} />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <StudentList id={l.id} notLoggedUser={props.notLoggedUser}/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 <CancelForm l={l} cancelLecture={props.cancelLecture}/></Row>
                             </Col>
                             </Row>
@@ -83,7 +83,7 @@ class LectureTable extends React.Component{
 
                         </Col>
                         <Col>
-                            {this.props.lectures.map((e)=>{return <LectureItem lecture={e} cancelLecture={this.props.cancelLecture}/>})}
+                            {this.props.lectures.map((e)=>{return <LectureItem lecture={e} cancelLecture={this.props.cancelLecture} notLoggedUser={this.props.notLoggedUser}/>})}
                         </Col>
                     </Row>
 

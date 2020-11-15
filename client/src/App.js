@@ -20,6 +20,7 @@ class App extends React.Component{
     this.login=this.login.bind(this);
     this.logout=this.logout.bind(this);
     this.getUser=this.getUser.bind(this);
+    this.notLoggedUser=this.notLoggedUser.bind(this);
   }
 
   componentDidMount() {
@@ -28,6 +29,10 @@ class App extends React.Component{
   getUser=()=>{
     API.getUser().then((res)=>{
       this.setState({loggedUser:res})
+    }).catch((err)=>{
+      if(err.status===401) {
+        this.setState({loggedUser:null})
+      }
     })
   }
   login=(pars)=>{
@@ -45,7 +50,12 @@ class App extends React.Component{
   logout = () => {
     API.userLogout().then(() => {
       this.setState({loggedUser: null,authErr: null});
+    }).catch((err)=>{
+      this.setState({loggedUser: null,authErr: null});
     });
+  }
+  notLoggedUser(){
+    this.setState({loggedUser:null})
   }
   render(){
     return <>
@@ -75,17 +85,17 @@ class App extends React.Component{
             {(!this.state.loggedUser) && <Login login={this.login} error={this.state.authErr} loading={this.state.loading}/>}}
           </Route>
           <Route exact path='/teacher'>
-            {(this.state.loggedUser && this.state.loggedUser.role==="D") ?  <TeacherPage/> :<Redirect to='/login'/>}
+            {(this.state.loggedUser && this.state.loggedUser.role==="D") ?  <TeacherPage notLoggedUser={this.notLoggedUser}/> :<Redirect to='/login'/>}
 
           </Route>
           <Route exact path='/student'>
-            {(this.state.loggedUser && this.state.loggedUser.role==="S") ?  <StudentPage/> :<Redirect to='/login'/>}
+            {(this.state.loggedUser && this.state.loggedUser.role==="S") ?  <StudentPage /> :<Redirect to='/login'/>}
           </Route>
           <Route exact path='/courses'>
-          {(this.state.loggedUser && this.state.loggedUser.role==="S") ?  <AvailableCourses/> :<Redirect to='/login'/>}
+          {(this.state.loggedUser && this.state.loggedUser.role==="S") ?  <AvailableCourses notLoggedUser={this.notLoggedUser}/> :<Redirect to='/login'/>}
           </Route>
           <Route exact path='/registeredCourses'>
-          {(this.state.loggedUser && this.state.loggedUser.role==="S") ?  <RegisteredCourses/> :<Redirect to='/login'/>}
+          {(this.state.loggedUser && this.state.loggedUser.role==="S") ?  <RegisteredCourses notLoggedUser={this.notLoggedUser}/> :<Redirect to='/login'/>}
           </Route>
           <Route><Redirect to='/home'/></Route>
           
