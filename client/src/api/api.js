@@ -44,7 +44,8 @@ async function getLectures(){
                 bookedStudents:l.bookedPeople,
                 teacherName: l.teacherName,
                 lectureId: l.lectureId,
-                booked: l.booked
+                booked: l.booked,
+                visible:true
         }})
     }
     else{
