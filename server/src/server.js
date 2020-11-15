@@ -10,6 +10,8 @@ const lecturesDao = require('./lecturesDao');
 const authErrorObj = { errors: [{ msg: 'Authorization error' }] };
 const lecturesErr = { errors: [{ msg: 'There was an error retrieving available lectures' }] };
 const studentListError = { errors: [{ msg: 'There was an error retrieving list of students for this lectureId' }] };
+const deleteLectureError = { errors: [{ msg: 'There was an error in deleting the selected lecture' }] };
+
 const app = express();
 app.disable('x-powered-by');
 
@@ -96,5 +98,28 @@ app.get('/api/lectureslist/:lectureId', async (req, res) => {
     res.json(studentListError);
   }
 });
+
+///////////////// TO BE FIXED ////////////////
+/*app.delete('/api/lectures/:lectureId', async (req, res) => {
+  const userId = req.user && req.user.user;
+
+  try {
+    const result = await lecturesDao.deleteBookingStudent(req.params.lectureId, userId);
+    res.json(result);
+  } catch {
+    res.json(deleteLectureError);
+  }
+});
+
+app.delete('/api/lectures/:lectureId', async (req, res) => {
+  const userId = req.user && req.user.user;
+
+  try {
+    const result = await lecturesDao.deleteLectureTeacher(req.params.lectureId, userId);
+    res.json(result);
+  } catch {
+    res.json(deleteLectureError);
+  }
+});*/
 
 app.listen(config.PORT, () => console.log(`Server running on http://localhost:${config.PORT}/`));
