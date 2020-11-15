@@ -45,7 +45,12 @@ app.use(cookieParser());
 
 // AUTHENTICATED REST API endpoints
 app.use(jwt({ secret: config.jwtSecret, getToken: (req) => req.cookies.token, algorithms: ['HS256'] }));
-
+// To return a better object in case of errors
+app.use(function (err, req, res, next) {
+  if (err.name === 'UnauthorizedError') {
+    res.status(401).json(authErrorObj);
+  }
+});
 app.post('/api/logout', (req, res) => {
   res.clearCookie('token').end();
 });

@@ -161,11 +161,14 @@ exports.deleteBookingStudent = (lectureId, studentId) => new Promise((resolve, r
     const sql2 = 'DELETE FROM Bookings WHERE LectureId=? AND StudentId=?';
     const stmt2 = db.prepare(sql2);
     const res = stmt2.run(lectureId, studentId);
+    const sql3 = 'UPDATE Lectures SET BookedPeople = BookedPeople - 1 WHERE LectureId=?';
+    const stmt3 = db.prepare(sql3);
+    const res2 = stmt3.run(lectureId);
 
-    if (res.changes === 1)
-      resolve({ result: res.changes });
+    if (res.changes === 1 && res2.changes === 1)
+      resolve({ result: `${res.changes} ${res2.changes}`});
     else
-      reject('Error in deleting row');
+      reject('Error in deleting row or updating BookedPeople number');
   }
 });
 

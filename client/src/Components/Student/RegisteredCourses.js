@@ -43,6 +43,9 @@ export default class NewCalendarView extends Component {
       })
           this.setState({events:cal,loading:null,serverErr:null})
     }).catch((err)=>{
+        if(err.status===401){
+            this.props.notLoggedUser()
+        }
         this.setState({serverErr:true,loading:null})
     })
 }

@@ -12,7 +12,7 @@ class TeacherPage extends React.Component{
 
     cancelLecture(id){
 
-        //this is a stub functions that delete only local state of lectures
+        //this is a stub function that deletes only local state of lectures
         //UPDATE THIS WITH CONNECTION WITH SERVER AS SOON AS THE API IS AVAILABLE
        let newLectures=[];
        for(let l of this.state.lectures){
@@ -28,18 +28,34 @@ class TeacherPage extends React.Component{
         //retrieve lectures for the teacher
         API.getLectures().then((res)=>{
             console.log(res)
-            this.setState({lectures:res,loading:null,serverErr:null})
+
+            let subjects=[]
+            for(let l of res){
+                subjects.push(l.subject)
+            }
+            subjects=subjects.filter(this.onlyUnique)
+            subjects=subjects.sort()
+            console.log(subjects)
+
+
+            this.setState({subjects:subjects, lectures:res,loading:null,serverErr:null})
         }).catch((err)=>{
+            console.log(err)
+            if(err.status===401){
+                this.props.notLoggedUser();
+            }
             this.setState({serverErr:true,loading:null})
         })
     }
-
+    onlyUnique(value, index, self) {
+        return self.indexOf(value) === index;
+    }
     render(){
         return <>
             <Container fluid data-testid="teacher-page">
                 {this.state.serverErr && <Alert variant="danger" data-testid="error-message">Server Error</Alert>}
                 {this.state.serverErr===null && this.state.loading && <Alert variant="primary"><Spinner animation="border" variant="primary"/> Loading ...</Alert>}
-                {this.state.serverErr===null && this.state.loading===null && <LectureTable lectures={this.state.lectures} cancelLecture={this.cancelLecture}/>}
+                {this.state.serverErr===null && this.state.loading===null && this.state.subjects && <LectureTable subjects={this.state.subjects} lectures={this.state.lectures} cancelLecture={this.cancelLecture} notLoggedUser={this.props.notLoggedUser}/>}
             </Container>
             </>
     }

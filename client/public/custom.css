@@ -33,3 +33,7 @@
     font-size: small;
     color:white !important;
 }
+.tableHeader{
+    color: darkred !important;
+    border-bottom: 1px solid white;
+}
