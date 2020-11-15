@@ -18,6 +18,11 @@ class StudentPage extends Component {
 
   render() {
     return (
+      <Card>
+      <Card style={{
+        
+        margin: "auto"
+      }}>
       <Container data-testid="student-page">
         <Row>
           <Card style={{
@@ -38,7 +43,7 @@ class StudentPage extends Component {
           <Card style={{
             width: '20rem',
             float: "left",
-            margin: "20px",
+            margin: "20px"
 
           }}>
             <Card.Img variant="top" src={Jumbotron} />
@@ -53,6 +58,8 @@ class StudentPage extends Component {
           </Card>
         </Row>
       </Container>
+      </Card>
+      </Card>
     );
   }
 }
