@@ -53,7 +53,7 @@ class App extends React.Component{
         <Navbars path={this.props.location.pathname} loggedUser={this.state.loggedUser} logout={this.logout}/>
         <Switch>
           <Route exact path='/home'>
-            <Container>
+            <Container data-testid="home-page">
               <Col>
                 <Row className="justify-content-md-center below-nav">
                   <h1>Welcome{this.state.loggedUser && this.state.loggedUser.name && <>, {this.state.loggedUser.name} !</>}</h1>

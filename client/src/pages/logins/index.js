@@ -101,7 +101,7 @@ function SignUp(props) {
   })
   return (
     <Container>
-      <Container component="main" maxWidth="xs">
+      <Container component="main" maxWidth="xs" data-testid="login-page">
         <Box mt={5}>
           {/* {弹框提示} */}
           <div className={classes1.root}>

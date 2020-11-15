@@ -26,25 +26,27 @@ function StudentList(props) {
             setServerErr(false)
         }).catch((e)=>{
             setStudents([])
+            setServerErr(true)
             setLoading(false)
-            setServerErr(false)
         })
         setShow(true);
+            console.log("ERROR:")
+            console.log(serverErr)
     }
 
 
     return (
         <>
-            <Button variant="primary" onClick={handleShow}>
+            <Button variant="primary" onClick={handleShow} data-testid="studentlist-button">
                 Show list of booked students
             </Button>
 
-            <Modal show={show} onHide={handleClose}>
+            <Modal show={show} onHide={handleClose} data-testid="studentlist-modal">
                 <Modal.Header closeButton>
                     <Modal.Title>Booked students</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {serverErr && <Alert variant="danger">Server Error</Alert>}
+                    {serverErr && <Alert variant="danger" data-testid="error-message">Server Error</Alert>}
                     {!serverErr && loading && <Alert variant="primary"><Spinner animation="border" variant="primary"/> Loading ...</Alert>}
                     {!serverErr && !loading && students.length===0 && <><hr  style={{
                         color: '#000000',
@@ -75,7 +77,7 @@ function StudentList(props) {
                     {!serverErr && !loading  && students.length!==0 && students.map((s)=>{return <StudentItem s={s}/>})}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
+                    <Button variant="secondary" onClick={handleClose} data-testid="close-button">
                         Close
                     </Button>
 

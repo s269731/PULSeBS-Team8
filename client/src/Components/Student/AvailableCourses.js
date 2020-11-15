@@ -7,7 +7,7 @@ const LectureItem=(props)=>{
      let l=props.lecture;
      let bookLeacture=props.bookLeacture;
     return <>
-        <Container>
+        <Container data-testid="courses-page">
                 <Row>
                     <Col>
                         <Alert variant="primary">

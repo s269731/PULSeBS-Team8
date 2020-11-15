@@ -36,8 +36,8 @@ class TeacherPage extends React.Component{
 
     render(){
         return <>
-            <Container fluid>
-                {this.state.serverErr && <Alert variant="danger">Server Error</Alert>}
+            <Container fluid data-testid="teacher-page">
+                {this.state.serverErr && <Alert variant="danger" data-testid="error-message">Server Error</Alert>}
                 {this.state.serverErr===null && this.state.loading && <Alert variant="primary"><Spinner animation="border" variant="primary"/> Loading ...</Alert>}
                 {this.state.serverErr===null && this.state.loading===null && <LectureTable lectures={this.state.lectures} cancelLecture={this.cancelLecture}/>}
             </Container>

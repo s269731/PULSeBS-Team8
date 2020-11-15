@@ -4,7 +4,7 @@ import moment from 'moment';
 import 'moment/locale/nb';
 import '../../assets/sass/styles.scss'
 import API from "../../api/api";
-import {Button,Popover, OverlayTrigger} from 'react-bootstrap';
+import {Container, Row, Button,Popover, OverlayTrigger} from 'react-bootstrap';
 const localizer = momentLocalizer(moment);
 
 const popover = (
@@ -56,27 +56,31 @@ export default class NewCalendarView extends Component {
 
   render() {
     return (
-      <div style={{
-        flex: 1
-      }}>
-        {console.log(this.state.events)}
+      <Container data-testid="registered-courses-page">
+        <Row>
+          <div style={{
+            flex: 1
+          }}>
+            {console.log(this.state.events)}
 
-        <Calendar
-          localizer={localizer}
-          events={this.state.events}
-          startAccessor='startDate'
-          endAccessor='endDate'
-          defaultView='week'
-          views={['month', 'week', 'day']}
-          min={new Date(2020, 1, 0, 7, 0, 0)} 
-          max={new Date(2022, 1, 0, 21, 0, 0)}
-          culture='en'
-          components={{
-            event: Event
-          }}
+            <Calendar
+              localizer={localizer}
+              events={this.state.events}
+              startAccessor='startDate'
+              endAccessor='endDate'
+              defaultView='week'
+              views={['month', 'week', 'day']}
+              min={new Date(2020, 1, 0, 7, 0, 0)}
+              max={new Date(2022, 1, 0, 21, 0, 0)}
+              culture='en'
+              components={{
+                event: Event
+              }}
 
-          />
-      </div>
+              />
+          </div>
+          </Row>
+        </Container>
     );
   }
 }

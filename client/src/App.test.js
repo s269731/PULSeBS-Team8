@@ -28,7 +28,7 @@ test('full app rendering/navigating', () => {
   userEvent.click(screen.getByText(/Login/i), leftClick)
 
   // check that the content changed to the new page
-  expect(screen.getByText(/- Login/i)).toBeInTheDocument()
+  expect(screen.getByTestId('login-page')).toBeInTheDocument()
 
   API.getUser.mockRestore();
 })
@@ -46,5 +46,5 @@ test('random routes redirect to home page', () => {
     </Router>
   )
 
-  expect(screen.getByText(/Home/i)).toBeInTheDocument()
+  expect(screen.getByTestId('home-page')).toBeInTheDocument()
 })
