@@ -6,17 +6,19 @@ import '@testing-library/jest-dom/extend-expect'
 import StudentList from './StudentList';
 import API from "../../api/api";
 
+const leftClick = { button: 0 };
+const studentsList = [{name:"aa",surname:"bb",email:"a@b.c"},{name:"zz",surname:"yy",email:"z@y.x"}];
+
 test('StudentList modal rendering with student list', async () => {
 
   const mockGetStudentList = jest.spyOn(API, 'getStudentListByLectureId');
   mockGetStudentList.mockReturnValue(
-    new Promise(resolve => resolve([{name:"aa",surname:"bb",email:"a@b.c"},{name:"zz",surname:"yy",email:"z@y.x"}]))
+    new Promise(resolve => resolve(studentsList))
   );
   const mockNotLoggedUser = jest.fn();
 
   render(<StudentList notLoggedUser={mockNotLoggedUser} />)
 
-  const leftClick = { button: 0 }
   userEvent.click(screen.getByTestId('studentlist-button'), leftClick)
   await waitFor(() => expect(mockGetStudentList).toHaveBeenCalledTimes(1))
   await waitFor(() => expect(mockNotLoggedUser).toHaveBeenCalledTimes(0))
@@ -36,7 +38,6 @@ test('StudentList modal rendering without student list', async () => {
 
   render(<StudentList notLoggedUser={mockNotLoggedUser} />)
 
-  const leftClick = { button: 0 }
   userEvent.click(screen.getByTestId('studentlist-button'), leftClick)
   await waitFor(() => expect(mockGetStudentList).toHaveBeenCalledTimes(1))
   await waitFor(() => expect(mockNotLoggedUser).toHaveBeenCalledTimes(1))
@@ -44,3 +45,4 @@ test('StudentList modal rendering without student list', async () => {
   expect(screen.getByTestId('error-message')).toBeInTheDocument();
 
 })
+

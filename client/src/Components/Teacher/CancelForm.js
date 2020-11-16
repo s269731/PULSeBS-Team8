@@ -14,7 +14,7 @@ function CancelForm(props) {
     return (
         <>
             {props.l.canDelete ?
-                <Button variant="danger" onClick={handleShow}>Cancel this lecture</Button> :
+                <Button data-testid="cancel-lecture-button" variant="danger" onClick={handleShow}>Cancel this lecture</Button> :
                 <Button variant="danger" disabled={true}>Cannot cancel this lecture</Button>
 
             }
@@ -32,7 +32,7 @@ function CancelForm(props) {
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="danger" onClick={HandleDelete}>
+                    <Button data-testid="cancel-lecture-closemodal-button" variant="danger" onClick={HandleDelete}>
                         Delete
                     </Button>
                 </Modal.Footer>

@@ -75,7 +75,7 @@ function StudentList(props) {
                             borderColor : '#000000'
                         }}/>
                     </>}
-                    {!serverErr && !loading  && students.length!==0 && students.map((s)=>{return <StudentItem s={s}/>})}
+                    {!serverErr && !loading  && students.length!==0 && students.map((s,id)=>{return <StudentItem key={id} s={s}/>})}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose} data-testid="close-button">

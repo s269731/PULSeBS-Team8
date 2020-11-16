@@ -10,8 +10,6 @@ const LectureItem=(props)=>{
     const date=new Date(l.date)
     return <>
         {l.visible &&
-        <Container>
-
                 <Row className="justify-content-md-center">
 
                     <Col>
@@ -48,7 +46,7 @@ const LectureItem=(props)=>{
                     </Col>
 
                 </Row>
-            </Container>}
+            }
     </>
 }
 
@@ -70,7 +68,7 @@ class LectureTable extends React.Component{
     render(){
         return(
             <>
-                <Container fluid>
+                <Container fluid data-testid="lecturetable">
                     <Row className="justify-content-md-center below-nav"><h3>Your next lectures: </h3></Row>
                     <Row className="justify-content-md-center below-nav">
                         <Col className="col-3 justify-content-md-center">
