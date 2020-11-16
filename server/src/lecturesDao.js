@@ -97,7 +97,7 @@ async function getTeachersForEmail() {
   d2.setDate(d2.getDate() + 2);
   d2.setHours(1, 0, 0, 0); // day after the lecture (=day after tomorrow)
 
-  const sql = 'SELECT TeacherId, BookedPeople, SubjectId FROM Lectures WHERE DateHour BETWEEN DATETIME(?) AND DATETIME(?)';
+  const sql = 'SELECT TeacherId, BookedPeople, SubjectId FROM Lectures WHERE DateHour BETWEEN DATETIME(?) AND DATETIME(?) AND Modality=\'In person\'';
   const stmt = db.prepare(sql);
   const rows = stmt.all(d1.toISOString(), d2.toISOString());
   const email_bp = [];

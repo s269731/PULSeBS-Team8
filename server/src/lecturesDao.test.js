@@ -56,7 +56,7 @@ db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Moda
 );
 // populate Enrollments Table
 db.prepare('DELETE FROM Enrollments').run();
-db.prepare('INSERT INTO Enrollments(StudentId,SubjectId) VALUES(?,?)').run(1, 1);
+db.prepare('INSERT INTO Enrollments(StudentId,SubjectId) VALUES(?,?)').run(2, 1);
 
 // populate Bookings Table
 db.prepare('DELETE FROM Bookings').run();
@@ -83,7 +83,7 @@ test('Should return list of lectures for the userId', async () => {
 });
 
 test('Should not return the list of lectures for a userId that doesn\'t exist', async () => {
-  const userid = 2;
+  const userid = 3;
   const obj = await lecturesDao.getLecturesByUserId(userid);
   expect(obj.length).toBe(0);
   // expect(obj).toBe('There aren\'t lecture for this StudentId');
