@@ -46,7 +46,7 @@ app.use(cookieParser());
 // AUTHENTICATED REST API endpoints
 app.use(jwt({ secret: config.jwtSecret, getToken: (req) => req.cookies.token, algorithms: ['HS256'] }));
 // To return a better object in case of errors
-app.use(function (err, req, res, next) {
+app.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
     res.status(401).json(authErrorObj);
   }
@@ -91,7 +91,7 @@ app.post('/api/reserve', async (req, res) => {
 });
 
 app.get('/api/lectureslist/:lectureId', async (req, res) => {
-  console.log(req.params.lectureId)
+  console.log(req.params.lectureId);
 
   try {
     const list = await lecturesDao.getStudentsListByLectureId(req.params.lectureId);
@@ -104,8 +104,18 @@ app.get('/api/lectureslist/:lectureId', async (req, res) => {
   }
 });
 
-///////////////// TO BE FIXED ////////////////
-/*app.delete('/api/lectures/:lectureId', async (req, res) => {
+app.get('/api/student/bookings', async (req, res) => {
+  const userId = req.user && req.user.user;
+  try {
+    const lectures = await lecturesDao.getBookingsByUserId(userId);
+    res.json(lectures);
+  } catch {
+    res.json(lecturesErr);
+  }
+});
+
+/// ////////////// TO BE FIXED ////////////////
+/* app.delete('/api/lectures/:lectureId', async (req, res) => {
   const userId = req.user && req.user.user;
 
   try {
@@ -125,6 +135,6 @@ app.delete('/api/lectures/:lectureId', async (req, res) => {
   } catch {
     res.json(deleteLectureError);
   }
-});*/
+}); */
 
 app.listen(config.PORT, () => console.log(`Server running on http://localhost:${config.PORT}/`));

@@ -150,10 +150,10 @@ test('Should return info about all the lectures scheduled for tomorrow, so that 
   expect(array.length).toBe(2);
   expect(array[0].email_addr).toBe('d0001@prof.com');
   expect(array[0].subject).toBe('SoftwareEngineering II');
-  expect(array[0].booked_people).toBe(100);
+  expect(array[0].booked_people).toBe(101);
   expect(array[1].email_addr).toBe('d0001@prof.com');
   expect(array[1].subject).toBe('SoftwareEngineering II');
-  expect(array[1].booked_people).toBe(100);
+  expect(array[1].booked_people).toBe(101);
 });
 
 test('Should return an object with necessary info related to specific booking, so that the email confirmation can be sent', async () => {
@@ -223,4 +223,18 @@ test('Should reject the request of deletion by a teacher', async () => {
     console.log(err);
     expect(err).toBe('Deletion fails: selected lecture was not found');
   }
+});
+
+test('Should return Bookings for a certain student', async () => {
+  const studentId = 1;
+  const obj = await lecturesDao.getBookingsByUserId(studentId);
+  expect(obj).toBeTruthy();
+  expect(obj[0].lectureId).toBeTruthy();
+  expect(obj[0].subjectName).toBeTruthy();
+  expect(obj[0].teacherName).toBeTruthy();
+  expect(obj[0].dateHour).toBeTruthy();
+  expect(obj[0].modality).toBeTruthy();
+  expect(obj[0].className).toBeTruthy();
+  expect(obj[0].capacity).toBeTruthy();
+  expect(obj[0].bookedPeople).toBeTruthy();
 });
