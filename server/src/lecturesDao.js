@@ -65,22 +65,29 @@ const getLectureTimeConstraint = (lectureId) => {
 
 exports.insertReservation = (lectureId, studentId) => new Promise((resolve, reject) => {
   const sql = 'SELECT * FROM Bookings WHERE LectureId=? AND StudentId=?';
+  const insertbookings = db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)');
+  const updatelecture = db.prepare('UPDATE Lectures SET BookedPeople=BookedPeople+1 WHERE LectureId=? AND BookedPeople>0');
   const stmt = db.prepare(sql);
   const row = stmt.get(lectureId, studentId);
   const todayDateHour = new Date();
   const timeconstraint = getLectureTimeConstraint(lectureId);
+
   if (timeconstraint === undefined) reject('No lecture for the specified id');
   if (todayDateHour < timeconstraint) {
     if (row !== undefined) {
       reject('The Student has already booked a seat for that Lecture');
-    } else {
-      const sql1 = 'INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)';
-      const stmt1 = db.prepare(sql1);
-      const res = stmt1.run(lectureId, studentId);
-      if (res.changes === 1) resolve({ result: res.changes });
-      else reject('Error in inserting row');
     }
-  } else reject('Booking is closed for that Lecture');
+
+    const transaction = db.transaction(() => {
+      const insertres = insertbookings.run(lectureId, studentId);
+      const updateres = updatelecture.run(lectureId);
+      return insertres.changes === 1 && updateres.changes === insertres.changes;
+    });
+    const transactionresult = transaction();
+
+    if (transactionresult === true) resolve({ result: 1 });
+    reject('Error in the transaction related to the reservation');
+  } reject('Booking is closed for that Lecture'); // throw
 });
 
 async function getTeachersForEmail() {
@@ -150,25 +157,24 @@ async function getStudentsListByLectureId(lectureId) {
   }
 }
 
-exports.deleteBookingStudent = (lectureId, studentId) => new Promise((resolve, reject) =>  {
+exports.deleteBookingStudent = (lectureId, studentId) => new Promise((resolve, reject) => {
   const sql1 = 'SELECT * FROM Bookings WHERE LectureId=? AND StudentId=?';
   const stmt1 = db.prepare(sql1);
   const row = stmt1.get(lectureId, studentId);
+  const deletesql = db.prepare('DELETE FROM Bookings WHERE LectureId=? AND StudentId=?');
+  const updatesql = db.prepare('UPDATE Lectures SET BookedPeople = BookedPeople - 1 WHERE LectureId=?');
 
   if (row === undefined) {
     reject('Deletion fails: selected lecture not available among the bookings of the student');
   } else {
-    const sql2 = 'DELETE FROM Bookings WHERE LectureId=? AND StudentId=?';
-    const stmt2 = db.prepare(sql2);
-    const res = stmt2.run(lectureId, studentId);
-    const sql3 = 'UPDATE Lectures SET BookedPeople = BookedPeople - 1 WHERE LectureId=?';
-    const stmt3 = db.prepare(sql3);
-    const res2 = stmt3.run(lectureId);
-
-    if (res.changes === 1 && res2.changes === 1)
-      resolve({ result: `${res.changes} ${res2.changes}`});
-    else
-      reject('Error in deleting row or updating BookedPeople number');
+    const transaction = db.transaction(() => {
+      const deleteres = deletesql.run(lectureId, studentId);
+      const updateres = updatesql.run(lectureId);
+      return deleteres.changes === 1 && updateres.changes === deleteres.changes;
+    });
+    const transactionresult = transaction();
+    if (transactionresult === true) resolve({ result: '1 1' });
+    reject('Error in deleting row or updating BookedPeople number');
   }
 });
 
@@ -182,21 +188,41 @@ exports.deleteLectureTeacher = (lectureId, teacherId) => new Promise((resolve, r
     const d1 = new Date();
     const d2 = new Date(row.DateHour);
     if (d2.getTime() - d1.getTime() < 3.6e+6) { // milliseconds in 1 hour
-      reject('Deletion fails: time constaint is not satisfied')
+      reject('Deletion fails: time constaint is not satisfied');
     } else {
       const sql2 = 'DELETE FROM Lectures WHERE LectureId=? AND TeacherId=?';
       const stmt2 = db.prepare(sql2);
       const res = stmt2.run(lectureId, teacherId);
-
-      if (res.changes === 1)
-        resolve({ result: res.changes });
-      else
-        reject('Error in deleting row');
+      if (res.changes === 1) { resolve({ result: res.changes }); } else { reject('Error in deleting row'); }
     }
   }
 });
+
+async function getBookingsByUserId(studentId) {
+  const sql = "SELECT * FROM Bookings B, Lectures L WHERE B.StudentId=? AND B.LectureId=L.LectureId AND DateHour > DateTime('now')";
+  const stmt = db.prepare(sql);
+  const rows = stmt.all(studentId);
+  const lectures = [];
+
+  if (rows.length > 0) {
+    await Promise.all(rows.map(async (rawlecture) => {
+      const subjectName = await subjectDao.getSubjectName(rawlecture.SubjectId);
+      const teacher = await userDao.getUserById(rawlecture.TeacherId);
+      const teacherName = `${teacher.name} ${teacher.surname}`;
+      const reservation = getReservation(studentId, rawlecture.LectureId);
+      // eslint-disable-next-line max-len
+      const lecture = new Lecture(rawlecture.LectureId, subjectName.SubjectName, teacherName, rawlecture.DateHour, rawlecture.Modality, rawlecture.Class, rawlecture.Capacity, rawlecture.BookedPeople, reservation);
+
+      lectures.push(lecture);
+    }));
+
+    // console.log(lectures);
+  }
+  return lectures;
+}
 
 exports.getLecturesByUserId = getLecturesByUserId;
 exports.getTeachersForEmail = getTeachersForEmail;
 exports.getInfoBookingConfirmation = getInfoBookingConfirmation;
 exports.getStudentsListByLectureId = getStudentsListByLectureId;
+exports.getBookingsByUserId = getBookingsByUserId;
