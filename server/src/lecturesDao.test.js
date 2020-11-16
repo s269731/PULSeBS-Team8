@@ -210,7 +210,7 @@ test('Should reject the request of deletion by a teacher because of the not sati
     const obj = await lecturesDao.deleteLectureTeacher(lectureId, teacherId);
   } catch (err) {
     console.log(err);
-    expect(err).toBe('Deletion fails: time constaint is not satisfied');
+    expect(err).toBe('Deletion fails: time constraint is not satisfied');
   }
 });
 

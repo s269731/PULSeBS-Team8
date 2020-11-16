@@ -62,3 +62,4 @@ async function sendBookingConfirmationEmail(lectureId, userId) {
 
 exports.start = start;
 exports.sendBookingConfirmationEmail = sendBookingConfirmationEmail;
+exports.sendingEmailBookedPeople = sendingEmailBookedPeople;
