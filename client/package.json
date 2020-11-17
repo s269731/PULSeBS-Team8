@@ -27,6 +27,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:coverage": "react-scripts test --testResultsProcessor jest-sonar-reporter --coverage --watchAll",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -53,6 +54,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "jest-sonar-reporter": "^2.0.0",
     "prettier": "^2.1.2",
     "react-test-renderer": "^17.0.1"
   },
