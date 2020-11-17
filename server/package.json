@@ -32,6 +32,7 @@
     "nodemon": "^2.0.6"
   },
   "jest": {
-    "testResultsProcessor": "jest-sonar"
+    "collectCoverage": true,
+    "reporters": ["default", "jest-sonar"]
   }
 }
