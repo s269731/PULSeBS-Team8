@@ -25,6 +25,6 @@ html,
 #Moutlined-basic /deep/ .MuiOutlinedInput-input {
   padding: 19.5px 65px !important;
 }
-/deep/ .MuiSelect-select {
+ /deep/ .MuiSelect-select {
   width: 100%;
 }

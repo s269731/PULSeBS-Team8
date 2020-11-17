@@ -1,5 +1,5 @@
-@import "./variables";
-@import "./time-column";
+@import './variables';
+@import './time-column';
 
 .rbc-slot-selection {
   z-index: 10;
@@ -95,9 +95,9 @@
     border-right: 1px solid $cell-border;
   }
 
-  > .rbc-row.rbc-row-resource {
-    border-bottom: 1px solid $cell-border;
-    flex-shrink: 0;
+  >.rbc-row.rbc-row-resource {
+      border-bottom: 1px solid $cell-border;
+      flex-shrink: 0;
   }
 }
 
