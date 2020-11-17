@@ -7,9 +7,6 @@
 node_modules/
 dist/
 
-# coverage folders
-coverage/
-
 # Compiled Java class files
 *.class
 
