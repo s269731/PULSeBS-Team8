@@ -67,17 +67,17 @@ app.get('/api/user', async (req, res) => {
   }
 });
 
-app.get('/api/lectures', async (req, res) => {
-  const userId = req.user && req.user.user;
+app.get('/api/student/lectures', async (req, res) => {
+  const studentId = req.user && req.user.user;
   try {
-    const lectures = await lecturesDao.getLecturesByUserId(userId);
+    const lectures = await lecturesDao.getLecturesByUserId(studentId);
     res.json(lectures);
   } catch {
     res.json(lecturesErr);
   }
 });
 
-app.post('/api/reserve', async (req, res) => {
+app.post('/api/student/reserve', async (req, res) => {
   const userId = req.user && req.user.user;
   const { lectureId } = req.body;
   try {
@@ -87,20 +87,6 @@ app.post('/api/reserve', async (req, res) => {
     res.json(result);
   } catch (error) {
     res.json({ errors: [{ msg: error }] });
-  }
-});
-
-app.get('/api/lectureslist/:lectureId', async (req, res) => {
-  console.log(req.params.lectureId);
-
-  try {
-    const list = await lecturesDao.getStudentsListByLectureId(req.params.lectureId);
-    if (!list) {
-      res.json([]);
-    }
-    res.json(list);
-  } catch {
-    res.json(studentListError);
   }
 });
 
@@ -114,10 +100,8 @@ app.get('/api/student/bookings', async (req, res) => {
   }
 });
 
-/// ////////////// TO BE FIXED ////////////////
-/* app.delete('/api/lectures/:lectureId', async (req, res) => {
+app.delete('/api/student/lectures/:lectureId', async (req, res) => {
   const userId = req.user && req.user.user;
-
   try {
     const result = await lecturesDao.deleteBookingStudent(req.params.lectureId, userId);
     res.json(result);
@@ -126,15 +110,36 @@ app.get('/api/student/bookings', async (req, res) => {
   }
 });
 
-app.delete('/api/lectures/:lectureId', async (req, res) => {
-  const userId = req.user && req.user.user;
+app.get('/api/teacher/lectures', async (req, res) => {
+  const teacherId = req.user && req.user.user;
+  try {
+    const lectures = await lecturesDao.getLecturesByUserId(teacherId);
+    res.json(lectures);
+  } catch {
+    res.json(lecturesErr);
+  }
+});
 
+app.get('/api/teacher/lectures/:lectureId', async (req, res) => {
+  try {
+    const list = await lecturesDao.getStudentsListByLectureId(req.params.lectureId);
+    if (!list) {
+      res.json([]);
+    }
+    res.json(list);
+  } catch {
+    res.json(studentListError);
+  }
+});
+
+app.delete('/api/teacher/lectures/:lectureId', async (req, res) => {
+  const userId = req.user && req.user.user;
   try {
     const result = await lecturesDao.deleteLectureTeacher(req.params.lectureId, userId);
     res.json(result);
   } catch {
     res.json(deleteLectureError);
   }
-}); */
+});
 
 app.listen(config.PORT, () => console.log(`Server running on http://localhost:${config.PORT}/`));

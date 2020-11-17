@@ -3,8 +3,8 @@ process.env.NODE_ENV = 'test';
 const moment = require('moment');
 const Mailer = require('nodemailer/lib/mailer');
 const waitForExpect = require('wait-for-expect');
-const db = require('./db');
-const emailService = require('./services/email');
+const db = require('../db');
+const emailService = require('./email');
 
 db.prepare('DELETE from Lectures').run();
 db.prepare('DELETE FROM Users').run();
