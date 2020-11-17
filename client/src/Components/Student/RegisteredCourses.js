@@ -93,6 +93,7 @@ export default class NewCalendarView extends Component {
             startAccessor='startDate'
             endAccessor='endDate'
             defaultView='week'
+            style={{height: 900}}
             views={['month', 'week', 'day']}
             min={new Date(2020, 1, 0, 7, 0, 0)}
             max={new Date(2022, 1, 0, 21, 0, 0)}
