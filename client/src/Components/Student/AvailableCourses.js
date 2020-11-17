@@ -9,7 +9,7 @@ const LectureItem=(props)=>{
     return <>
             <Row>
                 <Col>
-                    <Alert variant="primary">
+                    <Alert variant="primary" className="box-shadow">
                         <Row>
                             <Col className="subjectName">
                                 <h6>{l.subject}<br/> </h6>
@@ -82,7 +82,7 @@ class AvailableCourses extends React.Component{
     render(){
         return(
             <>
-                <Container fluid data-testid="courses-page">
+                <Container data-testid="courses-page">
                     <Row className="justify-content-md-center below-nav"><h3>Available Courses: </h3></Row>
                     {this.state.lectures.map((e, key)=>{return <LectureItem  lecture={e}  bookLecture={this.bookLecture} key={key}/>})}
                 </Container>

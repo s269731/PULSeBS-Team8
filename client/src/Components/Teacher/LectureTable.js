@@ -13,7 +13,7 @@ const LectureItem=(props)=>{
                 <Row className="justify-content-md-center">
 
                     <Col>
-                        <Alert variant="primary">
+                        <Alert variant="primary" className="box-shadow">
                             <Row>
                                 <Col>
                                     <Row className="justify-content-md-center">
