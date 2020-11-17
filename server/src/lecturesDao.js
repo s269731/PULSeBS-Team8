@@ -27,7 +27,7 @@ function getReservation(studentId, lectureId) {
 
 async function getLecturesByUserId(id) {
   const user = await userDao.getUserById(id);
-  let sql = 'SELECT * FROM Lectures WHERE SubjectId IN (SELECT SubjectId FROM Enrollments WHERE StudentId=?)';
+  let sql = "SELECT * FROM Lectures WHERE DateHour > DATETIME('now') AND SubjectId IN (SELECT SubjectId FROM Enrollments WHERE StudentId=?)";
   if (user.role === 'D') sql = "SELECT * FROM Lectures WHERE TeacherId = ? and DateHour > DATETIME('now')";
 
   const stmt = db.prepare(sql);
