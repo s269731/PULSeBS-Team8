@@ -36,7 +36,6 @@ const LectureItem=(props)=>{
                            <Col></Col>
                            <Col className="align-content-start date">
                                {<h5>{errMsg[key]}</h5>}
-                               {console.log(key+" kkk")}
                            </Col>
                         </Row>
                         <Row >
@@ -57,8 +56,6 @@ const LectureItem=(props)=>{
 }
 
 class AvailableCourses extends React.Component{
-
-
     componentDidMount() {
         API.getLectures().then((res)=>{
              this.setState({lectures:res,loading:null,serverErr:null})
@@ -70,12 +67,11 @@ class AvailableCourses extends React.Component{
         })
     }
 
-
     bookLecture=(id)=> {
-         this.componentDidMount();
         API.bookLeacture(id).then((res)=>{
+            this.componentDidMount();
             let a=JSON.stringify(res.errors[0].msg);
-            console.log(a+" aa");
+            
             const err=this.state.lectures.map((i, key)=>{
                 if(i.id===id && a === '"Booking is closed for that Lecture"'){
                     return a;
@@ -85,6 +81,7 @@ class AvailableCourses extends React.Component{
                 }
             })
             this.setState({errMsg: err})
+            
         }).catch((err)=>{
             if(err.status===401){
                 this.props.notLoggedUser()
