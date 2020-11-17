@@ -9,13 +9,21 @@ const localizer = momentLocalizer(moment);
 
 export default class NewCalendarView extends Component {
 
-  cancelMethod(id) {
-    alert("Deleted Course Id: " + id);
+  cancelBookingByStudent(id) { 
+      API.cancelBookingByStudent(id).then((res)=>{
+          this.componentDidMount();
+      }).catch((err)=>{
+          console.log(err.status)
+          if(err.status===401){
+              this.props.notLoggedUser();
+          }
+          this.setState({serverErr:true})
+      })
   }
 
   componentDidMount() {
     API
-      .getLectures()
+      .getBookedLectures()
       .then((res) => {
         console.log(res)
         const cal = res.map((lec) => {
@@ -53,7 +61,7 @@ export default class NewCalendarView extends Component {
       <Popover.Title as="h3">Cancel reservation</Popover.Title>
       <Popover.Content>
         for <strong>canceling</strong> course. Click here:
-        <Button data-testid="cancel-reservation-button" onClick={() => this.cancelMethod(event.id)} variant='danger'>Cancel</Button>
+        <Button data-testid="cancel-reservation-button" onClick={() => this.cancelBookingByStudent(event.id)} variant='danger'>Cancel</Button>
       </Popover.Content>
     </Popover>
   );
