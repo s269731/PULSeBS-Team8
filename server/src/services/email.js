@@ -41,13 +41,13 @@ function sendingEmailBookedPeople() {
 }
 
 async function sendBookingConfirmationEmail(lectureId, userId) {
-  const info = await lecturesDao.getInfoBookingConfirmation(lectureId, userId);
-  if (info.email) {
+  const information = await lecturesDao.getInfoBookingConfirmation(lectureId, userId);
+  if (information.email) {
     const mailOptions = {
       from: config.mailer.email,
-      to: info.email,
+      to: information.email,
       subject: 'Booking confirmation',
-      text: `You have been successfully booked for the ${info.subject}'s lesson. Date: ${info.date_hour}, Class: ${info.class}`,
+      text: `You have been successfully booked for the ${information.subject}'s lesson. Date: ${information.date_hour}, Class: ${information.class}`,
     };
 
     mail.sendMail(mailOptions, (error, info) => {
