@@ -26,7 +26,7 @@ class TeacherPage extends React.Component{
 
     componentDidMount() {
         //retrieve lectures for the teacher
-        API.getLectures().then((res)=>{
+        API.getLecturesTeacher().then((res)=>{
             console.log(res)
 
             let subjects=[]
