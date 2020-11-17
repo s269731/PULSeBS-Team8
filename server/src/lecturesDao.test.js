@@ -101,7 +101,7 @@ test('Should not return 1 because lectureId doesn\'t correspond to any lecture '
   const lectureId = 5;
   const studentId = 1;
   try {
-    const obj = await lecturesDao.insertReservation(lectureId, studentId);
+    await lecturesDao.insertReservation(lectureId, studentId);
   } catch (err) {
     expect(err).toBe('No lecture for the specified id');
   }
@@ -119,7 +119,7 @@ test('Second reservation should return a message showing that a seat for that le
   const lectureId = 1;
   const studentId = 1;
   try {
-    const obj1 = await lecturesDao.insertReservation(lectureId, studentId);
+    await lecturesDao.insertReservation(lectureId, studentId);
   } catch (err) {
     console.log(err);
     expect(err).toBe('The Student has already booked a seat for that Lecture');
@@ -188,7 +188,7 @@ test('Should reject the request of deletion of booking by the student', async ()
   const lectureId = 10;
   const studentId = 5;
   try {
-    const obj = await lecturesDao.deleteBookingStudent(lectureId, studentId);
+    await lecturesDao.deleteBookingStudent(lectureId, studentId);
   } catch (err) {
     console.log(err);
     expect(err).toBe('Deletion fails: selected lecture not available among the bookings of the student');
@@ -207,7 +207,7 @@ test('Should reject the request of deletion by a teacher because of the not sati
   const lectureId = 3;
   const teacherId = 1;
   try {
-    const obj = await lecturesDao.deleteLectureTeacher(lectureId, teacherId);
+    await lecturesDao.deleteLectureTeacher(lectureId, teacherId);
   } catch (err) {
     console.log(err);
     expect(err).toBe('Deletion fails: time constraint is not satisfied');
@@ -218,7 +218,7 @@ test('Should reject the request of deletion by a teacher', async () => {
   const lectureId = 10;
   const teacherId = 1;
   try {
-    const obj = await lecturesDao.deleteLectureTeacher(lectureId, teacherId);
+    await lecturesDao.deleteLectureTeacher(lectureId, teacherId);
   } catch (err) {
     console.log(err);
     expect(err).toBe('Deletion fails: selected lecture was not found');

@@ -22,7 +22,7 @@ test('Should return correctly subject name by it id', async () => {
 
 test('Should not return subjects with an id that does not exist', async () => {
   try {
-    const text = await subjectDao.getSubjectName('12342459');
+    await subjectDao.getSubjectName('12342459');
   } catch (err) {
     expect(err).toMatch("There isn't any Subject with that SubjectId");
   }
