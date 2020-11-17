@@ -14,18 +14,25 @@ class TeacherPage extends React.Component{
 
         //this is a stub function that deletes only local state of lectures
         //UPDATE THIS WITH CONNECTION WITH SERVER AS SOON AS THE API IS AVAILABLE
-       let newLectures=[];
+       /*let newLectures=[];
        for(let l of this.state.lectures){
            if(l.id!==id){
                newLectures.push(l)
            }
        }
        this.setState({lectures:newLectures}
-       )
+       )*/
+        API.deleteLectureByTeacher(id).then((res)=>{
+            this.getLuctures()
+        }).catch((err)=>{
+            console.log(err.status)
+            if(err.status===401){
+                this.props.notLoggedUser();
+            }
+            this.setState({serverErr:true})
+        })
     }
-
-    componentDidMount() {
-        //retrieve lectures for the teacher
+    getLuctures(){
         API.getLecturesTeacher().then((res)=>{
             console.log(res)
 
@@ -46,6 +53,11 @@ class TeacherPage extends React.Component{
             }
             this.setState({serverErr:true,loading:null})
         })
+    }
+    componentDidMount() {
+        //retrieve lectures for the teacher
+        this.getLuctures()
+
     }
     onlyUnique(value, index, self) {
         return self.indexOf(value) === index;

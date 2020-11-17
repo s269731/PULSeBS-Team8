@@ -188,42 +188,56 @@ async function userLogout() {
 }
 async function getStudentListByLectureId(id) {
 
-    let url="/teacher/lectures/"+String(id);
+    let url = "/teacher/lectures/" + String(id);
     console.log(url)
-    const response=await fetch(baseURL+url);
-    const listJson=await response.json();
-    if(response.ok){
+    const response = await fetch(baseURL + url);
+    const listJson = await response.json();
+    if (response.ok) {
         console.log("here")
         console.log(listJson);
-           return listJson.sort((a,b)=> {
-               if (a.surname.localeCompare(b.surname) === -1) {
-                   return 0;
-               }
-               if (a.surname.localeCompare(b.surname) === 1) {
-                   return 1;
-               }
-               if (a.surname.localeCompare(b.surname) === 0) {
-                   if (a.name.localeCompare(b.name) === -1) {
-                       return 0;
-                   }
-                   if (a.name.localeCompare(b.name) === 1) {
-                       return 1;
-                   }
-               }
-           })
+        return listJson.sort((a, b) => {
+            if (a.surname.localeCompare(b.surname) === -1) {
+                return 0;
+            }
+            if (a.surname.localeCompare(b.surname) === 1) {
+                return 1;
+            }
+            if (a.surname.localeCompare(b.surname) === 0) {
+                if (a.name.localeCompare(b.name) === -1) {
+                    return 0;
+                }
+                if (a.name.localeCompare(b.name) === 1) {
+                    return 1;
+                }
+            }
+        })
 
 
-        }
-    else{
+    } else {
         console.log("not auth")
-        let err={status:response.status, errObj:listJson};
+        let err = {status: response.status, errObj: listJson};
         throw err;
     }
+    }
 
+async function deleteLectureByTeacher(id) {
+        let url = "/teacher/lectures/" + String(id);
+        const response = await fetch(baseURL + url, {
+            method: 'DELETE'
+        });
+        const result = await response.json();
+        if (response.ok) {
+            return (result)
+        } else {
+            let err = {status: response.status, errObj: result};
+
+            throw err;
+        }
 }
 
 
 
 
-const API = {Login,getLectures,getUser,userLogout, bookLeacture,getStudentListByLectureId,getLecturesTeacher} ;
+
+const API = {Login,getLectures,getUser,userLogout, bookLeacture,getStudentListByLectureId,getLecturesTeacher,deleteLectureByTeacher} ;
 export default API;
