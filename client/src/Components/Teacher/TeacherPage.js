@@ -11,17 +11,6 @@ class TeacherPage extends React.Component{
     }
 
     cancelLecture(id){
-
-        //this is a stub function that deletes only local state of lectures
-        //UPDATE THIS WITH CONNECTION WITH SERVER AS SOON AS THE API IS AVAILABLE
-       /*let newLectures=[];
-       for(let l of this.state.lectures){
-           if(l.id!==id){
-               newLectures.push(l)
-           }
-       }
-       this.setState({lectures:newLectures}
-       )*/
         API.deleteLectureByTeacher(id).then((res)=>{
             this.getLuctures()
         }).catch((err)=>{
