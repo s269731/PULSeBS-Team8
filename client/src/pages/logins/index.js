@@ -14,11 +14,6 @@ import {
 } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 
-
-
-
-
-
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: 40,
@@ -61,11 +56,11 @@ function SignUp(props) {
   const [Submitted, setSubmitted] = useState(false);
   const [ErrorMock, setErrorMock] = useState(false);
   const [warningMock, setwarningMock] = useState(false);
-  const [identity, setIdentity] = useState("teacher");
+ 
   const utils = { vertical: "top", horizontal: "center" };
 
   const handleRegistry = async (ev) => {
-    //   //条件赛选
+    
     ev.preventDefault();
     setErrorMock(false);
     setOpen(false);
