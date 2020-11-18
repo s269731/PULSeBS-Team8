@@ -46,13 +46,16 @@ db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Moda
   [1, 1, 1, today.add(1, 'days').toISOString(), 'In person', '12A', 150, 100],
 );
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
-  [2, 1, 1, today.add(2, 'hours').toISOString(), 'In person', '12A', 50, 100],
+  [2, 1, 1, today.add(2, 'hours').toISOString(), 'In person', '12A', 100, 50],
 );
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
-  [3, 1, 1, today.subtract(3, 'days').toISOString(), 'In person', '12A', 50, 100],
+  [3, 1, 1, today.subtract(3, 'days').toISOString(), 'In person', '12A', 100, 50],
 );
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
-  [4, 1, 1, today.add(5, 'days').toISOString(), 'In person', '12A', 50, 100],
+  [4, 1, 1, today.add(5, 'days').toISOString(), 'In person', '12A', 100, 50],
+);
+db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
+  [5, 1, 1, today.add(5, 'days').toISOString(), 'In person', '12A', 100, 100],
 );
 // populate Enrollments Table
 db.prepare('DELETE FROM Enrollments').run();
@@ -98,7 +101,7 @@ test('Should return 1 to indicate that the reservation was correctly inserted ',
 });
 
 test('Should not return 1 because lectureId doesn\'t correspond to any lecture ', async () => {
-  const lectureId = 5;
+  const lectureId = 6;
   const studentId = 1;
   try {
     await lecturesDao.insertReservation(lectureId, studentId);
@@ -110,9 +113,21 @@ test('Should not return 1 because lectureId doesn\'t correspond to any lecture '
 test('Should return a message indicating lectureId bookings are closed ', async () => {
   const lectureId = 2;
   const studentId = 1;
-  const obj = await lecturesDao.insertReservation(lectureId, studentId);
-  expect(obj).toBeTruthy();
-  // expect(obj.result).toBe('Booking is closed for that Lecture');
+  try {
+    await lecturesDao.insertReservation(lectureId, studentId);
+  } catch (err) {
+    expect(err).toBe('Booking is closed for that Lecture');
+  }
+});
+
+test('Should return a message indicating that the capacity for the classroom is exceeded ', async () => {
+  const lectureId = 5;
+  const studentId = 1;
+  try {
+    await lecturesDao.insertReservation(lectureId, studentId);
+  } catch (err) {
+    expect(err).toBe('The classroom capacity has been exceeded');
+  }
 });
 
 test('Second reservation should return a message showing that a seat for that lectureId is already booked', async () => {
@@ -153,7 +168,7 @@ test('Should return info about all the lectures scheduled for tomorrow, so that 
   expect(array[0].booked_people).toBe(101);
   expect(array[1].email_addr).toBe('d0001@prof.com');
   expect(array[1].subject).toBe('SoftwareEngineering II');
-  expect(array[1].booked_people).toBe(101);
+  expect(array[1].booked_people).toBe(51);
 });
 
 test('Should return an object with necessary info related to specific booking, so that the email confirmation can be sent', async () => {

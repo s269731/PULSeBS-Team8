@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BigCalendar, Calendar, momentLocalizer } from "react-big-calendar";
+import {Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "moment/locale/nb";
 import "../../assets/sass/styles.scss";

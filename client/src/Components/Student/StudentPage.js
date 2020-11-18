@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Row, Button, Card, Image } from "react-bootstrap";
+import { Container, Row, Button, Card} from "react-bootstrap";
 import Jumbotron from "../../assets/courses.png";
 import { withRouter } from "react-router-dom";
 

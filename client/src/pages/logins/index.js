@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import {
   Grid,
   TextField,
-  Input,
   CssBaseline,
   Box,
   Snackbar,
@@ -14,11 +13,6 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import API from "../../api/api";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -62,11 +56,11 @@ function SignUp(props) {
   const [Submitted, setSubmitted] = useState(false);
   const [ErrorMock, setErrorMock] = useState(false);
   const [warningMock, setwarningMock] = useState(false);
-  const [identity, setIdentity] = useState("teacher");
+ 
   const utils = { vertical: "top", horizontal: "center" };
 
   const handleRegistry = async (ev) => {
-    //   //条件赛选
+    
     ev.preventDefault();
     setErrorMock(false);
     setOpen(false);
@@ -75,7 +69,7 @@ function SignUp(props) {
     if (email.trim() !== "" && password.trim() !== "") {
       console.log(email);
       console.log(password);
-      const res = await props.login({
+       await props.login({
         email,
         password,
       });
