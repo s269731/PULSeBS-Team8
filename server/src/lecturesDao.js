@@ -25,6 +25,11 @@ function getReservation(studentId, lectureId) {
   return true;
 }
 
+function getBookedPeople(lectureId) {
+  const result = db.prepare("SELECT COUNT(*) as num from Bookings WHERE lectureId=?").get(lectureId);
+  return result.num || 0;
+}
+
 async function getLecturesByUserId(id) {
   const user = await userDao.getUserById(id);
   let sql = "SELECT * FROM Lectures WHERE DateHour > DATETIME('now') AND SubjectId IN (SELECT SubjectId FROM Enrollments WHERE StudentId=?)";
@@ -40,7 +45,7 @@ async function getLecturesByUserId(id) {
       const teacher = await userDao.getUserById(rawlecture.TeacherId);
       const teacherName = `${teacher.name} ${teacher.surname}`;
       const reservation = getReservation(id, rawlecture.LectureId);
-      const lecture = new Lecture(rawlecture.LectureId, subjectName.SubjectName, teacherName, rawlecture.DateHour, rawlecture.Modality, rawlecture.Class, rawlecture.Capacity, rawlecture.BookedPeople, reservation);
+      const lecture = new Lecture(rawlecture.LectureId, subjectName.SubjectName, teacherName, rawlecture.DateHour, rawlecture.Modality, rawlecture.Class, rawlecture.Capacity, getBookedPeople(rawlecture.LectureId), reservation);
 
       lectures.push(lecture);
     }));
@@ -97,7 +102,7 @@ async function getTeachersForEmail() {
   d2.setDate(d2.getDate() + 2);
   d2.setHours(1, 0, 0, 0); // day after the lecture (=day after tomorrow)
 
-  const sql = 'SELECT TeacherId, BookedPeople, SubjectId FROM Lectures WHERE DateHour BETWEEN DATETIME(?) AND DATETIME(?) AND Modality=\'In person\'';
+  const sql = 'SELECT LectureId, TeacherId, SubjectId FROM Lectures WHERE DateHour BETWEEN DATETIME(?) AND DATETIME(?) AND Modality=\'In person\'';
   const stmt = db.prepare(sql);
   const rows = stmt.all(d1.toISOString(), d2.toISOString());
   const email_bp = [];
@@ -108,7 +113,7 @@ async function getTeachersForEmail() {
       const teacher = await userDao.getUserById(rawlecture.TeacherId);
       const { email } = teacher;
       const subjectName = await subjectDao.getSubjectName(rawlecture.SubjectId);
-      const bp = rawlecture.BookedPeople;
+      const bp = getBookedPeople(rawlecture.LectureId);
 
       obj = {
         email_addr: email,
@@ -211,7 +216,7 @@ async function getBookingsByUserId(studentId) {
       const teacherName = `${teacher.name} ${teacher.surname}`;
       const reservation = getReservation(studentId, rawlecture.LectureId);
       // eslint-disable-next-line max-len
-      const lecture = new Lecture(rawlecture.LectureId, subjectName.SubjectName, teacherName, rawlecture.DateHour, rawlecture.Modality, rawlecture.Class, rawlecture.Capacity, rawlecture.BookedPeople, reservation);
+      const lecture = new Lecture(rawlecture.LectureId, subjectName.SubjectName, teacherName, rawlecture.DateHour, rawlecture.Modality, rawlecture.Class, rawlecture.Capacity, getBookedPeople(rawlecture.LectureId), reservation);
 
       lectures.push(lecture);
     }));

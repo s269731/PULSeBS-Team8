@@ -12,51 +12,50 @@ const LectureItem = (props) => {
     <>
       <Row>
         <Col>
-          <Alert variant="primary">
+          <Alert variant="primary" className="rounded box-shadow">
             <Row>
               <Col className="subjectName">
-                <h6>
+                <h5 className="border-bottom border-secondary pb-3 pt-2 mb-0">
                   {l.subject}
-                  <br />{" "}
-                </h6>
-              </Col>
-            </Row>
-            <Row className="justify-content-md-center">
-              <Col className="align-content-start date">
-                <h5>
-                  Lecture Date: {l.date} at {l.hour}
                 </h5>
               </Col>
             </Row>
             <Row className="justify-content-md-center">
               <Col className="align-content-start date">
-                <h5>Teacher Name: {l.teacherName}</h5>
+                <h6 className="pt-3">
+                  Lecture Date: {l.date} at {l.hour}
+                </h6>
               </Col>
             </Row>
             <Row className="justify-content-md-center">
               <Col className="align-content-start date">
-                <h5>Leacture Modality: {l.modality}</h5>
+                <h6>Teacher Name: {l.teacherName}</h6>
+              </Col>
+            </Row>
+            <Row className="justify-content-md-center">
+              <Col className="align-content-start date">
+                <h6>Lecture Modality: {l.modality}</h6>
               </Col>
               <Col></Col>
               <Col></Col>
               <Col className="align-content-start date">
-                {<h5>{errMsg[key]}</h5>}
+                {<h6>{errMsg[key]}</h6>}
               </Col>
             </Row>
             <Row>
               <Col xs={20} md={3} className="align-content-start">
-                <h5>Room: {l.room}</h5>
+                <h6>Room: {l.room}</h6>
               </Col>
               <Col xs={20} md={3} className="align-content-end">
-                <h5>Booked students: {l.bookedStudents}</h5>
+                <h6>Booked students: {l.bookedStudents}</h6>
               </Col>
               <Col xs={20} md={3} className="align-content-end">
-                <h5>Class Capacity: {l.capacity}</h5>
+                <h6>Class Capacity: {l.capacity}</h6>
               </Col>
 
               {l.modality !== "In person" && (
                 <Col>
-                  <h5>Lecture is Virtual</h5>
+                  <h6>Lecture is Virtual</h6>
                 </Col>
               )}
               {l.modality === "In person" &&
@@ -66,7 +65,7 @@ const LectureItem = (props) => {
                     <Button
                       data-testid="course-book-button"
                       onClick={() => bookLecture(l.lectureId)}
-                      size="lg"
+                      size="sm"
                       variant="success"
                       block
                     >
@@ -81,7 +80,7 @@ const LectureItem = (props) => {
                     <Button
                       data-testid="course-wait-button"
                       onClick={() => bookLecture(l.lectureId)}
-                      size="lg"
+                      size="sm"
                       variant="warning"
                       block
                     >
@@ -155,7 +154,7 @@ class AvailableCourses extends React.Component {
   render() {
     return (
       <>
-        <Container fluid data-testid="courses-page">
+        <Container data-testid="courses-page">
           <Row className="justify-content-md-center below-nav">
             <h3>Available Courses: </h3>
           </Row>
