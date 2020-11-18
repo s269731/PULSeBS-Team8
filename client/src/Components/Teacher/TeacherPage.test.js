@@ -5,6 +5,7 @@ import "@testing-library/jest-dom/extend-expect";
 import TeacherPage from "./TeacherPage";
 import API from "../../api/api";
 
+const mockNotLoggedUser = jest.fn();
 const leftClick = { button: 0 };
 const lectures = [
   {
@@ -19,6 +20,7 @@ const lectures = [
     teacherName: "Franco yjtyjty",
     lectureId: 1,
     booked: false,
+    canDelete: true,
   },
   {
     id: 2,
@@ -32,6 +34,7 @@ const lectures = [
     teacherName: "Franco yjtyjty",
     lectureId: 2,
     booked: false,
+    canDelete: true,
   },
   {
     id: 4,
@@ -45,13 +48,13 @@ const lectures = [
     teacherName: "Franco yjtyjty",
     lectureId: 4,
     booked: false,
+    canDelete: true,
   },
 ];
 
 test("Teacher page rendering with lectures", async () => {
   const mockGetLectures = jest.spyOn(API, "getLecturesTeacher");
   mockGetLectures.mockReturnValue(new Promise((resolve) => resolve(lectures)));
-  const mockNotLoggedUser = jest.fn();
 
   render(<TeacherPage notLoggedUser={mockNotLoggedUser} />);
 
@@ -69,7 +72,6 @@ test("Teacher page rendering with failing lectures api", async () => {
       reject({ status: 401 });
     })
   );
-  const mockNotLoggedUser = jest.fn();
 
   render(<TeacherPage notLoggedUser={mockNotLoggedUser} />);
 
@@ -83,7 +85,6 @@ test("Teacher page rendering with failing lectures api", async () => {
 test("LectureTable filter lectures button works", async () => {
   const mockGetLectures = jest.spyOn(API, "getLecturesTeacher");
   mockGetLectures.mockReturnValue(new Promise((resolve) => resolve(lectures)));
-  const mockNotLoggedUser = jest.fn();
 
   render(<TeacherPage />);
 
@@ -96,3 +97,68 @@ test("LectureTable filter lectures button works", async () => {
   userEvent.click(screen.getAllByTestId("handlelecture-button")[1], leftClick);
   //expect(screen.getByTestId('modality-remote')).toBeInTheDocument();
 });
+
+test("LectureTable cancel filter lectures button works", async () => {
+  const mockGetLectures = jest.spyOn(API, "getLecturesTeacher");
+  mockGetLectures.mockReturnValue(new Promise((resolve) => resolve(lectures)));
+
+  render(<TeacherPage />);
+
+  await waitFor(() => expect(mockGetLectures).toHaveBeenCalledTimes(1));
+  await waitFor(() => expect(mockNotLoggedUser).toHaveBeenCalledTimes(0));
+
+  //TODO: add checks to see if the correct modality is shown
+  userEvent.click(screen.getAllByTestId("handlelecture-del-button")[0], leftClick);
+  //expect(screen.getByTestId('modality-in-person')).toBeInTheDocument();
+});
+
+test("Cancel lecture button from Teacher Page works", async () => {
+  const mockDeleteLectureByTeacher = jest.spyOn(API, "deleteLectureByTeacher");
+  mockDeleteLectureByTeacher.mockReturnValue(new Promise((resolve) => resolve(lectures)));
+  const mockGetLectures = jest.spyOn(API, "getLecturesTeacher");
+  mockGetLectures.mockReturnValue(new Promise((resolve) => resolve(lectures)));
+
+  render(<TeacherPage notLoggedUser={mockNotLoggedUser} />);
+
+  await waitFor(() => expect(mockNotLoggedUser).toHaveBeenCalledTimes(0));
+
+  userEvent.click(screen.getAllByTestId("cancel-lecture-button")[0], leftClick);
+
+  expect(screen.getByTestId("cancel-lecture-modal")).toBeInTheDocument();
+
+  userEvent.click(
+    screen.getByTestId("cancel-lecture-closemodal-button"),
+    leftClick
+  );
+
+  await waitFor(() => expect(mockDeleteLectureByTeacher).toHaveBeenCalledTimes(1));
+});
+
+/*FIXME
+test("Cancel lecture button from Teacher Page doesn't work", async () => {
+  const mockGetLectures = jest.spyOn(API, "getLecturesTeacher");
+  mockGetLectures.mockReturnValue(new Promise((resolve) => resolve(lectures)));
+
+  const mockDeleteLectureByTeacher = jest.spyOn(API, "deleteLectureByTeacher");
+  mockDeleteLectureByTeacher.mockReturnValue(
+    new Promise((resolve, reject) => {
+      reject({ status: 401 });
+    })
+  );
+
+  render(<TeacherPage notLoggedUser={mockNotLoggedUser} />);
+
+  await waitFor(() => expect(mockNotLoggedUser).toHaveBeenCalledTimes(0));
+
+  userEvent.click(screen.getAllByTestId("cancel-lecture-button")[0], leftClick);
+
+  expect(screen.getByTestId("cancel-lecture-modal")).toBeInTheDocument();
+
+  userEvent.click(
+    screen.getByTestId("cancel-lecture-closemodal-button"),
+    leftClick
+  );
+
+  await waitFor(() => expect(mockDeleteLectureByTeacher).toHaveBeenCalledTimes(1));
+});
+*/
