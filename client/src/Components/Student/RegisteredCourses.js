@@ -50,9 +50,10 @@ export default class NewCalendarView extends Component {
     super(props);
 
     this.state = {
-      events: [],
+      events: []
     };
   }
+
 
   popover = (event) => (
     <Popover id="popover-basic">
@@ -72,7 +73,7 @@ export default class NewCalendarView extends Component {
 
   Event = ({ event }) => (
     <OverlayTrigger
-      trigger="click"
+      trigger="focus"
       placement="top"
       overlay={this.popover(event)}
     >
