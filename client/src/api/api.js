@@ -54,9 +54,6 @@ async function getLectures() {
                   let now = new Date();
                   let lectDay = new Date(l.dateHour);
                   let canDelete = lectDay - now - 3600000 > 0;
-                  console.log(lectDay - now);
-                  console.log(now);
-                  console.log(lectDay);
                   let fields = l.dateHour.split("T");
                   let date = fields[0];
                   let hour =
@@ -121,9 +118,6 @@ async function getBookedLectures() {
                   let now = new Date();
                   let lectDay = new Date(l.dateHour);
                   let canDelete = lectDay - now - 3600000 > 0;
-                  console.log(lectDay - now);
-                  console.log(now);
-                  console.log(lectDay);
                   let fields = l.dateHour.split("T");
                   let date = fields[0];
                   let hour =
@@ -188,9 +182,6 @@ async function getLecturesTeacher() {
                   let now = new Date();
                   let lectDay = new Date(l.dateHour);
                   let canDelete = lectDay - now - 3600000 > 0;
-                  console.log(lectDay - now);
-                  console.log(now);
-                  console.log(lectDay);
                   let fields = l.dateHour.split("T");
                   let date = fields[0];
                   let hour =
@@ -300,12 +291,9 @@ async function userLogout() {
 }
 async function getStudentListByLectureId(id) {
   let url = "/teacher/lectures/" + String(id);
-  console.log(url);
   const response = await fetch(baseURL + url);
   const listJson = await response.json();
   if (response.ok) {
-    console.log("here");
-    console.log(listJson);
     return listJson.sort((a, b) => {
       if (a.surname.localeCompare(b.surname) === -1) {
         return 0;
@@ -323,7 +311,6 @@ async function getStudentListByLectureId(id) {
       }
     });
   } else {
-    console.log("not auth");
     let err = { status: response.status, errObj: listJson };
     throw err;
   }

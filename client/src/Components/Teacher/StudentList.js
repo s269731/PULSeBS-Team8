@@ -6,7 +6,7 @@ function StudentItem(s) {
   console.log(s.s.surname);
   return (
     <>
-      <Row>
+      <Row data-testid="student-row">
         <Col>{s.s.surname}</Col>
         <Col>{s.s.name}</Col>
         <Col>{s.s.email}</Col>
@@ -66,7 +66,7 @@ function StudentList(props) {
             </Alert>
           )}
           {!serverErr && !loading && students.length === 0 && (
-            <>
+            <span data-testid="no-student-message">
               <hr
                 style={{
                   color: "#000000",
@@ -84,7 +84,7 @@ function StudentList(props) {
                   borderColor: "#000000",
                 }}
               />
-            </>
+            </span>
           )}
           {!serverErr && !loading && students.length !== 0 && (
             <>
@@ -115,7 +115,7 @@ function StudentList(props) {
             !loading &&
             students.length !== 0 &&
             students.map((s, id) => {
-              return <StudentItem key={id} s={s} />;
+              return <StudentItem  key={id} s={s} />;
             })}
         </Modal.Body>
         <Modal.Footer>

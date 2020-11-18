@@ -11,7 +11,7 @@ const LectureItem = (props) => {
 
   return (
     <>
-      <Row>
+      <Row data-testid="lecture-s-row">
         <Col>
           <Alert variant="primary" className="rounded box-shadow">
             <Row>
@@ -49,14 +49,14 @@ const LectureItem = (props) => {
                 l.booked === true &&
                 l.bookedStudents < l.capacity && (
                   <Col>
-                    <h5>You already booked</h5>
+                    <h5 data-testid="confirm-message">You already booked</h5>
                   </Col>
                 )}
               {l.modality === "In person" &&
                 l.booked === true &&
                 l.bookedStudents > l.capacity && (
                   <Col>
-                    <h5>You are in waiting list</h5>
+                    <h5 data-testid="confirm-message">You are in waiting list</h5>
                   </Col>
                 )}
             </Row>
@@ -111,7 +111,7 @@ const LectureItem = (props) => {
                  (
                   <Col>
                     <Button
-                      data-testid="course-book-button"
+                      data-testid="course-cancel-button"
                       onClick={() => cancelBooking(l.lectureId)}
                       size="sm"
                       variant="danger"

@@ -26,7 +26,6 @@ class TeacherPage extends React.Component {
   getLuctures() {
     API.getLecturesTeacher()
       .then((res) => {
-        console.log(res);
 
         let subjects = [];
         for (let l of res) {
@@ -34,7 +33,6 @@ class TeacherPage extends React.Component {
         }
         subjects = subjects.filter(this.onlyUnique);
         subjects = subjects.sort();
-        console.log(subjects);
 
         this.setState({
           subjects: subjects,
