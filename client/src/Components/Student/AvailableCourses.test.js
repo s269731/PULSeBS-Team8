@@ -37,7 +37,7 @@ const lecturesList = [
   {
     id: 3,
     subject: "SoftwareEngineering II",
-    date: "2020-11-20",
+    date: "2019-11-20",
     hour: "15:26",
     modality: "In person",
     room: "12A",

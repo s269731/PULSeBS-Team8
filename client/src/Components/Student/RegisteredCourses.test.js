@@ -63,7 +63,7 @@ const lecturesList = [
 ];
 
 test("RegisteredCourses page rendering with lectures list", async () => {
-  const mockGetLectures = jest.spyOn(API, "getLectures");
+  const mockGetLectures = jest.spyOn(API, "getBookedLectures");
   mockGetLectures.mockReturnValue(Promise.resolve(lecturesList));
   const mockNotLoggedUser = jest.fn();
 
@@ -74,7 +74,7 @@ test("RegisteredCourses page rendering with lectures list", async () => {
   await waitFor(() => expect(mockNotLoggedUser).toHaveBeenCalledTimes(0));
 });
 test("RegisteredCourses page rendering without lectures list", async () => {
-  const mockGetLectures = jest.spyOn(API, "getLectures");
+  const mockGetLectures = jest.spyOn(API, "getBookedLectures");
   mockGetLectures.mockReturnValue(Promise.reject({ status: 401 }));
   const mockNotLoggedUser = jest.fn();
 
@@ -89,14 +89,16 @@ test("RegisteredCourses page rendering without lectures list", async () => {
 });
 
 test("Successfully cancel a reservation", async () => {
-  const mockGetLectures = jest.spyOn(API, "getLectures");
+  const mockGetLectures = jest.spyOn(API, "getBookedLectures");
   mockGetLectures.mockReturnValue(Promise.resolve(lecturesList));
-  const mockBookLecture = jest.spyOn(API, "bookLeacture");
-  mockBookLecture.mockReturnValue(new Promise((resolve) => resolve("ok")));
+  const mockNotLoggedUser = jest.fn();
+  const mockcancelBookingByStudent = jest.spyOn(API, "cancelBookingByStudent");
+  mockcancelBookingByStudent.mockReturnValue(new Promise((resolve) => resolve("ok")));
 
-  render(<RegisteredCourses />);
+  render(<RegisteredCourses notLoggedUser={mockNotLoggedUser} />);
 
   await waitFor(() => expect(mockGetLectures).toHaveBeenCalledTimes(1));
+  await waitFor(() => expect(mockNotLoggedUser).toHaveBeenCalledTimes(0));
 
   userEvent.click(
     screen.getAllByTestId("open-popover-cancel-reservation-button")[0],
@@ -108,4 +110,34 @@ test("Successfully cancel a reservation", async () => {
 
   //FIXME: when a success alert is added, test if it's in the page
   //expect(screen.getByTestId('successfully-cancel-reservation-alert')).toBeInTheDocument()
+});
+
+test("Error in cancelling a reservation", async () => {
+  const mockGetLectures = jest.spyOn(API, "getBookedLectures");
+  mockGetLectures.mockReturnValue(Promise.resolve(lecturesList));
+  const mockNotLoggedUser = jest.fn();
+  const mockcancelBookingByStudent = jest.spyOn(API, "cancelBookingByStudent");
+  mockcancelBookingByStudent.mockImplementation(() => {
+    return new Promise((resolve, reject) => {
+      reject({ status: 401 });
+    });
+  });
+
+  render(<RegisteredCourses notLoggedUser={mockNotLoggedUser} />);
+
+  await waitFor(() => expect(mockGetLectures).toHaveBeenCalledTimes(1));
+
+  userEvent.click(
+    screen.getAllByTestId("open-popover-cancel-reservation-button")[0],
+    leftClick
+  );
+  const cancelButton = screen.getByTestId("cancel-reservation-button");
+  expect(cancelButton).toBeInTheDocument();
+  userEvent.click(cancelButton, leftClick);
+
+  await waitFor(() => expect(mockcancelBookingByStudent).toHaveBeenCalledTimes(1));
+  await waitFor(() => expect(mockNotLoggedUser).toHaveBeenCalledTimes(1));
+
+  //FIXME: when an error alert is added, test if it's in the page
+  //expect(screen.getByTestId('error-cancel-reservation-alert')).toBeInTheDocument()
 });

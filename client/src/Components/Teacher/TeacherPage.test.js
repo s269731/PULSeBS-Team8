@@ -50,7 +50,7 @@ const lectures = [
 ];
 
 test("Teacher page rendering with lectures", async () => {
-  const mockGetLectures = jest.spyOn(API, "getLectures");
+  const mockGetLectures = jest.spyOn(API, "getLecturesTeacher");
   mockGetLectures.mockReturnValue(new Promise((resolve) => resolve(lectures)));
   const mockNotLoggedUser = jest.fn();
 
@@ -64,7 +64,7 @@ test("Teacher page rendering with lectures", async () => {
 });
 
 test("Teacher page rendering with failing lectures api", async () => {
-  const mockGetLectures = jest.spyOn(API, "getLectures");
+  const mockGetLectures = jest.spyOn(API, "getLecturesTeacher");
   mockGetLectures.mockReturnValue(
     new Promise((resolve, reject) => {
       reject({ status: 401 });
@@ -82,7 +82,7 @@ test("Teacher page rendering with failing lectures api", async () => {
 });
 
 test("LectureTable filter lectures button works", async () => {
-  const mockGetLectures = jest.spyOn(API, "getLectures");
+  const mockGetLectures = jest.spyOn(API, "getLecturesTeacher");
   mockGetLectures.mockReturnValue(new Promise((resolve) => resolve(lectures)));
   const mockNotLoggedUser = jest.fn();
 

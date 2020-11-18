@@ -124,9 +124,19 @@
 <a name='L65'></a><a href='#L65'>65</a>
 <a name='L66'></a><a href='#L66'>66</a>
 <a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -191,73 +201,99 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {Component} from 'react';
-import {Container, Row, Button, Card, Image} from 'react-bootstrap'
-import Jumbotron from "../../assets/courses.png"
-import { withRouter } from 'react-router-dom';
-&nbsp;
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { Component } from "react";
+import { Container, Row, Button, Card, Image } from "react-bootstrap";
+import Jumbotron from "../../assets/courses.png";
+import { withRouter } from "react-router-dom";
 &nbsp;
 class StudentPage extends Component {
-&nbsp;
-  routeAllCourses=()=&gt; {
+  routeAllCourses = () =&gt; {
     let path = `/courses`;
     this.props.history.push(path);
-  }
+  };
 &nbsp;
-  routeRegCourses=()=&gt; {
+  routeRegCourses = () =&gt; {
     let path = `/registeredCourses`;
     this.props.history.push(path);
-  }
+  };
 &nbsp;
   render() {
     return (
       &lt;Card&gt;
-      &lt;Card style={{
-        
-        margin: "auto"
-      }}&gt;
-      &lt;Container data-testid="student-page"&gt;
-        &lt;Row&gt;
-          &lt;Card style={{
-            width: '20rem',
-            float: "left",
-            margin: "20px",
-          }}&gt;
-            &lt;Card.Img variant="top" src={Jumbotron} /&gt;
-            &lt;Card.Body&gt;
-              &lt;Button style={{
-            padding: '1rem 1.1rem',
-            fontSize: '1.3rem'
+        &lt;Card
+          style={{
+            margin: "auto",
           }}
-          data-testid="courses-button"
-          onClick={this.routeAllCourses} variant="info"&gt;Available Lectures&lt;/Button&gt;
-            &lt;/Card.Body&gt;
-          &lt;/Card&gt;
-          &lt;Card style={{
-            width: '20rem',
-            float: "left",
-            margin: "20px"
-&nbsp;
-          }}&gt;
-            &lt;Card.Img variant="top" src={Jumbotron} /&gt;
-            &lt;Card.Body&gt;
-              &lt;Button style={{
-            padding: '1rem 1.1rem',
-            fontSize: '1.3rem'
-          }}
-          data-testid="registered-courses-button"
-          onClick={this.routeRegCourses} variant="info"&gt;Registered Lectures&lt;/Button&gt;
-            &lt;/Card.Body&gt;
-          &lt;/Card&gt;
-        &lt;/Row&gt;
-      &lt;/Container&gt;
-      &lt;/Card&gt;
+        &gt;
+          &lt;Container data-testid="student-page"&gt;
+            &lt;Row&gt;
+              &lt;Card
+                style={{
+                  width: "20rem",
+                  float: "left",
+                  margin: "20px",
+                }}
+              &gt;
+                &lt;Card.Img variant="top" src={Jumbotron} /&gt;
+                &lt;Card.Body&gt;
+                  &lt;Button
+                    style={{
+                      padding: "1rem 1.1rem",
+                      fontSize: "1.3rem",
+                    }}
+                    data-testid="courses-button"
+                    onClick={this.routeAllCourses}
+                    variant="info"
+                  &gt;
+                    Available Lectures
+                  &lt;/Button&gt;
+                &lt;/Card.Body&gt;
+              &lt;/Card&gt;
+              &lt;Card
+                style={{
+                  width: "20rem",
+                  float: "left",
+                  margin: "20px",
+                }}
+              &gt;
+                &lt;Card.Img variant="top" src={Jumbotron} /&gt;
+                &lt;Card.Body&gt;
+                  &lt;Button
+                    style={{
+                      padding: "1rem 1.1rem",
+                      fontSize: "1.3rem",
+                    }}
+                    data-testid="registered-courses-button"
+                    onClick={this.routeRegCourses}
+                    variant="info"
+                  &gt;
+                    Registered Lectures
+                  &lt;/Button&gt;
+                &lt;/Card.Body&gt;
+              &lt;/Card&gt;
+            &lt;/Row&gt;
+          &lt;/Container&gt;
+        &lt;/Card&gt;
       &lt;/Card&gt;
     );
   }
 }
 &nbsp;
-export default withRouter (StudentPage);
+export default withRouter(StudentPage);
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -265,7 +301,7 @@ export default withRouter (StudentPage);
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Nov 17 2020 11:40:30 GMT+0100 (Ora standard dell’Europa centrale)
+                at Wed Nov 18 2020 13:55:24 GMT+0100 (Ora standard dell’Europa centrale)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
