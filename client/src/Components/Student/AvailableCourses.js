@@ -5,6 +5,7 @@ import API from "../../api/api";
 const LectureItem = (props) => {
   let l = props.lecture;
   let bookLecture = props.bookLecture;
+  let cancelBooking=props.cancelBooking;
   let errMsg = props.errMsg;
   let key = props.k;
 
@@ -31,6 +32,12 @@ const LectureItem = (props) => {
               <Col className="align-content-start date">
                 <h6>Teacher Name: {l.teacherName}</h6>
               </Col>
+              <Col></Col>
+              <Col></Col>
+              <Col className="align-content-start date">
+                {<h6>{errMsg[key]}</h6>} 
+ 
+              </Col>
             </Row>
             <Row className="justify-content-md-center">
               <Col className="align-content-start date">
@@ -38,9 +45,20 @@ const LectureItem = (props) => {
               </Col>
               <Col></Col>
               <Col></Col>
-              <Col className="align-content-start date">
-                {<h6>{errMsg[key]}</h6>}
-              </Col>
+              {l.modality === "In person" &&
+                l.booked === true &&
+                l.bookedStudents < l.capacity && (
+                  <Col>
+                    <h5>You already booked</h5>
+                  </Col>
+                )}
+              {l.modality === "In person" &&
+                l.booked === true &&
+                l.bookedStudents > l.capacity && (
+                  <Col>
+                    <h5>You are in waiting list</h5>
+                  </Col>
+                )}
             </Row>
             <Row>
               <Col xs={20} md={3} className="align-content-start">
@@ -88,18 +106,19 @@ const LectureItem = (props) => {
                     </Button>
                   </Col>
                 )}
-              {l.modality === "In person" &&
+                {l.modality === "In person" &&
                 l.booked === true &&
-                l.bookedStudents < l.capacity && (
+                 (
                   <Col>
-                    <h5>You already booked</h5>
-                  </Col>
-                )}
-              {l.modality === "In person" &&
-                l.booked === true &&
-                l.bookedStudents > l.capacity && (
-                  <Col>
-                    <h5>You are in waiting list</h5>
+                    <Button
+                      data-testid="course-book-button"
+                      onClick={() => cancelBooking(l.lectureId)}
+                      size="sm"
+                      variant="danger"
+                      block
+                    >
+                      Cancel
+                    </Button>
                   </Col>
                 )}
             </Row>
@@ -111,10 +130,13 @@ const LectureItem = (props) => {
 };
 
 class AvailableCourses extends React.Component {
+
+   
   componentDidMount() {
     API.getLectures()
       .then((res) => {
-        this.setState({ lectures: res, loading: null, serverErr: null });
+        this.setState({ lectures: res });
+        this.setState({refresh: false})
       })
       .catch((err) => {
         if (err.status === 401) {
@@ -123,6 +145,20 @@ class AvailableCourses extends React.Component {
         this.setState({ serverErr: true, loading: null });
       });
   }
+
+  cancelBookingByStudent=(id)=> {
+    API.cancelBookingByStudent(id)
+      .then((res) => {
+        this.componentDidMount();
+        this.setState({refresh: true})
+      }).catch((err) => {
+        console.log(err.status);
+        if (err.status === 401) {
+          this.props.notLoggedUser();
+        }
+      });
+  }
+
 
   bookLecture = (id) => {
     API.bookLeacture(id)
@@ -149,7 +185,7 @@ class AvailableCourses extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { lectures: [], refresh: true, errMsg: [] };
+    this.state = { lectures: [], refresh: false, errMsg: [] };
   }
   render() {
     return (
@@ -164,7 +200,9 @@ class AvailableCourses extends React.Component {
                 errMsg={this.state.errMsg}
                 lecture={e}
                 bookLecture={this.bookLecture}
+                cancelBooking={this.cancelBookingByStudent}
                 k={key}
+                refresh={this.state.refresh}
               />
             );
           })}
