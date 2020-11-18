@@ -13,7 +13,7 @@ class TeacherPage extends React.Component {
   cancelLecture(id) {
     API.deleteLectureByTeacher(id)
       .then((res) => {
-        this.getLuctures();
+        this.getLectures();
       })
       .catch((err) => {
         console.log(err.status);
@@ -23,7 +23,7 @@ class TeacherPage extends React.Component {
         this.setState({ serverErr: true });
       });
   }
-  getLuctures() {
+  getLectures() {
     API.getLecturesTeacher()
       .then((res) => {
 
@@ -33,7 +33,10 @@ class TeacherPage extends React.Component {
         }
         subjects = subjects.filter(this.onlyUnique);
         subjects = subjects.sort();
-
+        console.log("subj")
+        console.log(subjects)
+        console.log("lect")
+        console.log(res)
         this.setState({
           subjects: subjects,
           lectures: res,
@@ -51,7 +54,7 @@ class TeacherPage extends React.Component {
   }
   componentDidMount() {
     //retrieve lectures for the teacher
-    this.getLuctures();
+    this.getLectures();
   }
   onlyUnique(value, index, self) {
     return self.indexOf(value) === index;

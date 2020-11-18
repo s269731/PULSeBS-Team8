@@ -102,13 +102,13 @@ class LectureTable extends React.Component {
 
   handleLectures(id) {
     if (id === "del") {
-      let lects = this.state.lectures;
+      let lects = this.props.lectures;
       for (let l of lects) {
         l.visible = true;
       }
       this.setState({ lectures: lects });
     } else {
-      let lects = this.state.lectures;
+      let lects = this.props.lectures;
       for (let l of lects) {
         l.visible = l.subject === id;
       }
@@ -127,7 +127,6 @@ class LectureTable extends React.Component {
               <h5>Courses</h5>
               <ButtonGroup vertical>
                 {this.props.subjects.map((e) => {
-                  console.log(e);
                   return (
                     <>
                       <Button
