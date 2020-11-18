@@ -9,7 +9,7 @@ import StudentPage from "./StudentPage";
 test("Student page rendering/navigation", () => {
   const history = createMemoryHistory();
 
-  const mockGetUser = jest.mock();
+  jest.mock();
 
   render(
     <Router history={history}>
