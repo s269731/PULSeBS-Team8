@@ -69,7 +69,7 @@ function SignUp(props) {
     if (email.trim() !== "" && password.trim() !== "") {
       console.log(email);
       console.log(password);
-      const res = await props.login({
+       await props.login({
         email,
         password,
       });
