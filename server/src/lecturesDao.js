@@ -66,7 +66,7 @@ const getLectureTimeConstraint = (lectureId) => {
 exports.insertReservation = (lectureId, studentId) => new Promise((resolve, reject) => {
   const sql = 'SELECT * FROM Bookings WHERE LectureId=? AND StudentId=?';
   const insertbookings = db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)');
-  const updatelecture = db.prepare('UPDATE Lectures SET BookedPeople=BookedPeople+1 WHERE LectureId=? AND BookedPeople>0');
+  const updatelecture = db.prepare('UPDATE Lectures SET BookedPeople=BookedPeople+1 WHERE LectureId=? AND BookedPeople<Capacity');
   const stmt = db.prepare(sql);
   const row = stmt.get(lectureId, studentId);
   const todayDateHour = new Date();
@@ -86,7 +86,7 @@ exports.insertReservation = (lectureId, studentId) => new Promise((resolve, reje
     const transactionresult = transaction();
 
     if (transactionresult === true) resolve({ result: 1 });
-    reject('Error in the transaction related to the reservation');
+    reject('The classroom capacity has been exceeded');
   } reject('Booking is closed for that Lecture'); // throw
 });
 
