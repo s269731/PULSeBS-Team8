@@ -8,7 +8,6 @@ import {
   ButtonGroup,
 } from "react-bootstrap";
 import StudentList from "./StudentList";
-import  from "../../api/api";
 import CancelForm from "./CancelForm";
 
 const LectureItem = (props) => {
