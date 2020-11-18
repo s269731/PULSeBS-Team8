@@ -36,7 +36,7 @@ test('right login', async () => {
         });
         fireEvent.change(inputPass, { target: { value: "p4ssw0rd" } });
     });
-    const button = container.querySelector("[data-testid=login]");
+    const button = container.querySelector("[data-testid=login-button]");
     button.dispatchEvent(new MouseEvent("click", { bubbles: true }));
 
     await waitFor(() => expect(loginSpy).toHaveBeenCalledTimes(1));
@@ -54,13 +54,12 @@ test('wrong login', async () => {
         <Login login={API.Login} loading={false} error={true} />
     );
 
-    const button = container.querySelector("[data-testid=login]");
+    const button = container.querySelector("[data-testid=login-button]");
     button.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     await waitFor(() => expect(loginSpy).toHaveBeenCalledTimes(0));
 })
 
 test('get auth user', async () => {
-    console.log(location.origin)
     render(<Router>
         <App />
     </Router>)
@@ -74,7 +73,6 @@ test('get no auth user', async () => {
             return res(ctx.status(401), )
         }))
     )
-    console.log(location.origin)
     render(<Router>
         <App />
     </Router>)
@@ -90,7 +88,7 @@ test('logout', async ()=>{
         loggedUser={{id: 1, role: "D", name: "Matteo", surname: "Bianchi"}}
         logout={API.userLogout}
     /></Router>)
-    const button = container.querySelector("[data-testid=logout-button]");
+    const button = container.querySelector("[data-testid=logout-link]");
     button.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     await waitFor(() => expect(logoutSpy).toHaveBeenCalledTimes(1));
 })
