@@ -6,7 +6,8 @@
   "scripts": {
     "linter": "eslint . --fix",
     "start": "nodemon src/server.js",
-    "test": "jest --runInBand"
+    "test": "jest --runInBand",
+    "test:coverage": "jest --runInBand --coverage --silent"
   },
   "keywords": [],
   "author": "",

@@ -165,10 +165,10 @@ test('Should return info about all the lectures scheduled for tomorrow, so that 
   expect(array.length).toBe(2);
   expect(array[0].email_addr).toBe('d0001@prof.com');
   expect(array[0].subject).toBe('SoftwareEngineering II');
-  expect(array[0].booked_people).toBe(101);
+  expect(array[0].booked_people).toBe(7);
   expect(array[1].email_addr).toBe('d0001@prof.com');
   expect(array[1].subject).toBe('SoftwareEngineering II');
-  expect(array[1].booked_people).toBe(51);
+  expect(array[1].booked_people).toBe(1);
 });
 
 test('Should return an object with necessary info related to specific booking, so that the email confirmation can be sent', async () => {

@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">99.36% </span>
+                <span class="strong">99.37% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>155/156</span>
+                <span class='fraction'>157/158</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">89.47% </span>
+                <span class="strong">90% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>34/38</span>
+                <span class='fraction'>36/40</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>20/20</span>
+                <span class='fraction'>21/21</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>146/146</span>
+                <span class='fraction'>148/148</span>
             </div>
         
             
@@ -285,7 +285,12 @@
 <a name='L226'></a><a href='#L226'>226</a>
 <a name='L227'></a><a href='#L227'>227</a>
 <a name='L228'></a><a href='#L228'>228</a>
-<a name='L229'></a><a href='#L229'>229</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<a name='L229'></a><a href='#L229'>229</a>
+<a name='L230'></a><a href='#L230'>230</a>
+<a name='L231'></a><a href='#L231'>231</a>
+<a name='L232'></a><a href='#L232'>232</a>
+<a name='L233'></a><a href='#L233'>233</a>
+<a name='L234'></a><a href='#L234'>234</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
@@ -310,6 +315,11 @@
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -540,6 +550,11 @@ function getReservation(studentId, lectureId) {
   return true;
 }
 &nbsp;
+function getBookedPeople(lectureId) {
+  const result = db.prepare("SELECT COUNT(*) as num from Bookings WHERE lectureId=?").get(lectureId);
+  return result.num || 0;
+}
+&nbsp;
 async function getLecturesByUserId(id) {
   const user = await userDao.getUserById(id);
   let sql = "SELECT * FROM Lectures WHERE DateHour &gt; DATETIME('now') AND SubjectId IN (SELECT SubjectId FROM Enrollments WHERE StudentId=?)";
@@ -555,7 +570,7 @@ async function getLecturesByUserId(id) {
       const teacher = await userDao.getUserById(rawlecture.TeacherId);
       const teacherName = `${teacher.name} ${teacher.surname}`;
       const reservation = getReservation(id, rawlecture.LectureId);
-      const lecture = new Lecture(rawlecture.LectureId, subjectName.SubjectName, teacherName, rawlecture.DateHour, rawlecture.Modality, rawlecture.Class, rawlecture.Capacity, rawlecture.BookedPeople, reservation);
+      const lecture = new Lecture(rawlecture.LectureId, subjectName.SubjectName, teacherName, rawlecture.DateHour, rawlecture.Modality, rawlecture.Class, rawlecture.Capacity, getBookedPeople(rawlecture.LectureId), reservation);
 &nbsp;
       lectures.push(lecture);
     }));
@@ -612,7 +627,7 @@ async function getTeachersForEmail() {
   d2.setDate(d2.getDate() + 2);
   d2.setHours(1, 0, 0, 0); // day after the lecture (=day after tomorrow)
 &nbsp;
-  const sql = 'SELECT TeacherId, BookedPeople, SubjectId FROM Lectures WHERE DateHour BETWEEN DATETIME(?) AND DATETIME(?) AND Modality=\'In person\'';
+  const sql = 'SELECT LectureId, TeacherId, SubjectId FROM Lectures WHERE DateHour BETWEEN DATETIME(?) AND DATETIME(?) AND Modality=\'In person\'';
   const stmt = db.prepare(sql);
   const rows = stmt.all(d1.toISOString(), d2.toISOString());
   const email_bp = [];
@@ -623,7 +638,7 @@ async function getTeachersForEmail() {
       const teacher = await userDao.getUserById(rawlecture.TeacherId);
       const { email } = teacher;
       const subjectName = await subjectDao.getSubjectName(rawlecture.SubjectId);
-      const bp = rawlecture.BookedPeople;
+      const bp = getBookedPeople(rawlecture.LectureId);
 &nbsp;
       obj = {
         email_addr: email,
@@ -726,7 +741,7 @@ async function getBookingsByUserId(studentId) {
       const teacherName = `${teacher.name} ${teacher.surname}`;
       const reservation = getReservation(studentId, rawlecture.LectureId);
       // eslint-disable-next-line max-len
-      const lecture = new Lecture(rawlecture.LectureId, subjectName.SubjectName, teacherName, rawlecture.DateHour, rawlecture.Modality, rawlecture.Class, rawlecture.Capacity, rawlecture.BookedPeople, reservation);
+      const lecture = new Lecture(rawlecture.LectureId, subjectName.SubjectName, teacherName, rawlecture.DateHour, rawlecture.Modality, rawlecture.Class, rawlecture.Capacity, getBookedPeople(rawlecture.LectureId), reservation);
 &nbsp;
       lectures.push(lecture);
     }));
@@ -748,7 +763,7 @@ exports.getBookingsByUserId = getBookingsByUserId;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Nov 17 2020 19:12:50 GMT+0100 (Ora standard dell’Europa centrale)
+                at Wed Nov 18 2020 20:54:03 GMT+0100 (Ora standard dell’Europa centrale)
             </div>
         </div>
         <script src="../prettify.js"></script>
