@@ -134,8 +134,8 @@ class LectureTable extends React.Component {
                         variant="primary"
                         value={e}
                         key={e}
-                        onClick={(e) => {
-                          this.handleLectures(e.target.value);
+                        onClick={(ev) => {
+                          this.handleLectures(ev.target.value);
                         }}
                         data-testid="handlelecture-button"
                       >
