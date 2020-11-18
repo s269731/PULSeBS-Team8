@@ -192,7 +192,7 @@ function SignUp(props) {
               onClick={(ev) => {
                 handleRegistry(ev);
               }}
-              data-testid="login"
+              data-testid="login-button"
             >
               Log In
             </Button>

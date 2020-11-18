@@ -32,7 +32,7 @@ describe("Input", () => {
       });
       fireEvent.change(inputPass, { target: { value: "p4ssw0rd" } });
     });
-    const button = container.querySelector("[data-testid=login]");
+    const button = container.querySelector("[data-testid=login-button]");
     button.dispatchEvent(new MouseEvent("click", { bubbles: true }));
 
     await waitFor(() => expect(mockLogin).toHaveBeenCalledTimes(1));
@@ -46,7 +46,7 @@ describe("Input", () => {
       <Login login={mockLogin} loading={false} error={true} />
     );
 
-    const button = container.querySelector("[data-testid=login]");
+    const button = container.querySelector("[data-testid=login-button]");
     button.dispatchEvent(new MouseEvent("click", { bubbles: true }));
 
     await waitFor(() => expect(mockLogin).toHaveBeenCalledTimes(0));

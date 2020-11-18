@@ -64,7 +64,7 @@ class StudentPage extends Component {
                     onClick={this.routeRegCourses}
                     variant="info"
                   >
-                    Registered Lectures
+                    Calendar
                   </Button>
                 </Card.Body>
               </Card>

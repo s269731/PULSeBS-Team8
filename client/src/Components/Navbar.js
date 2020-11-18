@@ -55,6 +55,7 @@ class Navbars extends Component {
                   to="/home"
                   className="headerLinks "
                   onClick={this.props.logout}
+                  data-testid="logout-link"
                 >
                   Logout{" "}
                 </Link>

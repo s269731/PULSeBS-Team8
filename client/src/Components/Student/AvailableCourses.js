@@ -111,7 +111,7 @@ const LectureItem = (props) => {
                  (
                   <Col>
                     <Button
-                      data-testid="course-book-button"
+                      data-testid="course-cancel-button"
                       onClick={() => cancelBooking(l.lectureId)}
                       size="sm"
                       variant="danger"

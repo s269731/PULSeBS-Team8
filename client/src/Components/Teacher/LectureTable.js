@@ -152,6 +152,7 @@ class LectureTable extends React.Component {
                   onClick={(e) => {
                     this.handleLectures(e.target.value);
                   }}
+                  data-testid="handlelecture-del-button"
                 >
                   Cancel filters
                 </Button>
