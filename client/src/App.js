@@ -72,10 +72,10 @@ class App extends React.Component {
             <Container data-testid="home-page">
               <Col>
                 <Row className="justify-content-md-center below-nav">
-                  <h1>
+                  <h1 >
                     Welcome
                     {this.state.loggedUser && this.state.loggedUser.name && (
-                      <>, {this.state.loggedUser.name} !</>
+                      <span data-testid="user-name">, {this.state.loggedUser.name} !</span>
                     )}
                   </h1>
                 </Row>
@@ -103,7 +103,7 @@ class App extends React.Component {
                     this.state.loggedUser.role === "D" && (
                       <>
                         <Alert variant={"info"}>
-                          <Link to="/student">
+                          <Link to="/teacher">
                             {" "}
                             ACCESS TO YOUR PERSONAL PAGE{" "}
                           </Link>
