@@ -1,10 +1,7 @@
 import React from "react";
-import { unmountComponentAtNode } from "react-dom";
 import {
   render,
   fireEvent,
-  getByTestId,
-  getByText,
   waitFor,
   cleanup,
 } from "@testing-library/react";

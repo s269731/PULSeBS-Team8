@@ -1,6 +1,5 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createMemoryHistory } from "history";
 import React from "react";
 import "@testing-library/jest-dom/extend-expect";
 import AvailableCourses from "./AvailableCourses";
@@ -37,7 +36,7 @@ const lecturesList = [
   {
     id: 3,
     subject: "SoftwareEngineering II",
-    date: "2020-11-20",
+    date: "2019-11-20",
     hour: "15:26",
     modality: "In person",
     room: "12A",

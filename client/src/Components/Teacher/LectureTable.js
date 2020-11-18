@@ -8,7 +8,6 @@ import {
   ButtonGroup,
 } from "react-bootstrap";
 import StudentList from "./StudentList";
-import API from "../../api/api";
 import CancelForm from "./CancelForm";
 
 const LectureItem = (props) => {
@@ -135,8 +134,8 @@ class LectureTable extends React.Component {
                         variant="primary"
                         value={e}
                         key={e}
-                        onClick={(e) => {
-                          this.handleLectures(e.target.value);
+                        onClick={(ev) => {
+                          this.handleLectures(ev.target.value);
                         }}
                         data-testid="handlelecture-button"
                       >

@@ -5,6 +5,7 @@ import API from "../../api/api";
 const LectureItem = (props) => {
   let l = props.lecture;
   let bookLecture = props.bookLecture;
+  let cancelBooking=props.cancelBooking;
   let errMsg = props.errMsg;
   let key = props.k;
 
@@ -12,83 +13,38 @@ const LectureItem = (props) => {
     <>
       <Row>
         <Col>
-          <Alert variant="primary">
+          <Alert variant="primary" className="rounded box-shadow">
             <Row>
               <Col className="subjectName">
-                <h6>
+                <h5 className="border-bottom border-secondary pb-3 pt-2 mb-0">
                   {l.subject}
-                  <br />{" "}
-                </h6>
-              </Col>
-            </Row>
-            <Row className="justify-content-md-center">
-              <Col className="align-content-start date">
-                <h5>
-                  Lecture Date: {l.date} at {l.hour}
                 </h5>
               </Col>
             </Row>
             <Row className="justify-content-md-center">
               <Col className="align-content-start date">
-                <h5>Teacher Name: {l.teacherName}</h5>
+                <h6 className="pt-3">
+                  Lecture Date: {l.date} at {l.hour}
+                </h6>
               </Col>
             </Row>
             <Row className="justify-content-md-center">
               <Col className="align-content-start date">
-                <h5>Leacture Modality: {l.modality}</h5>
+                <h6>Teacher Name: {l.teacherName}</h6>
               </Col>
               <Col></Col>
               <Col></Col>
               <Col className="align-content-start date">
-                {<h5>{errMsg[key]}</h5>}
+                {<h6>{errMsg[key]}</h6>} 
+ 
               </Col>
             </Row>
-            <Row>
-              <Col xs={20} md={3} className="align-content-start">
-                <h5>Room: {l.room}</h5>
+            <Row className="justify-content-md-center">
+              <Col className="align-content-start date">
+                <h6>Lecture Modality: {l.modality}</h6>
               </Col>
-              <Col xs={20} md={3} className="align-content-end">
-                <h5>Booked students: {l.bookedStudents}</h5>
-              </Col>
-              <Col xs={20} md={3} className="align-content-end">
-                <h5>Class Capacity: {l.capacity}</h5>
-              </Col>
-
-              {l.modality !== "In person" && (
-                <Col>
-                  <h5>Lecture is Virtual</h5>
-                </Col>
-              )}
-              {l.modality === "In person" &&
-                l.booked === false &&
-                l.bookedStudents < l.capacity && (
-                  <Col>
-                    <Button
-                      data-testid="course-book-button"
-                      onClick={() => bookLecture(l.lectureId)}
-                      size="lg"
-                      variant="success"
-                      block
-                    >
-                      Book Now
-                    </Button>
-                  </Col>
-                )}
-              {l.modality === "In person" &&
-                l.booked === false &&
-                l.bookedStudents > l.capacity && (
-                  <Col>
-                    <Button
-                      data-testid="course-wait-button"
-                      onClick={() => bookLecture(l.lectureId)}
-                      size="lg"
-                      variant="warning"
-                      block
-                    >
-                      Wait
-                    </Button>
-                  </Col>
-                )}
+              <Col></Col>
+              <Col></Col>
               {l.modality === "In person" &&
                 l.booked === true &&
                 l.bookedStudents < l.capacity && (
@@ -104,6 +60,68 @@ const LectureItem = (props) => {
                   </Col>
                 )}
             </Row>
+            <Row>
+              <Col xs={20} md={3} className="align-content-start">
+                <h6>Room: {l.room}</h6>
+              </Col>
+              <Col xs={20} md={3} className="align-content-end">
+                <h6>Booked students: {l.bookedStudents}</h6>
+              </Col>
+              <Col xs={20} md={3} className="align-content-end">
+                <h6>Class Capacity: {l.capacity}</h6>
+              </Col>
+
+              {l.modality !== "In person" && (
+                <Col>
+                  <h6>Lecture is Virtual</h6>
+                </Col>
+              )}
+              {l.modality === "In person" &&
+                l.booked === false &&
+                l.bookedStudents < l.capacity && (
+                  <Col>
+                    <Button
+                      data-testid="course-book-button"
+                      onClick={() => bookLecture(l.lectureId)}
+                      size="sm"
+                      variant="success"
+                      block
+                    >
+                      Book Now
+                    </Button>
+                  </Col>
+                )}
+              {l.modality === "In person" &&
+                l.booked === false &&
+                l.bookedStudents > l.capacity && (
+                  <Col>
+                    <Button
+                      data-testid="course-wait-button"
+                      onClick={() => bookLecture(l.lectureId)}
+                      size="sm"
+                      variant="warning"
+                      block
+                    >
+                      Wait
+                    </Button>
+                  </Col>
+                )}
+                {l.modality === "In person" &&
+                l.booked === true &&
+                 (
+                  <Col>
+                    <Button
+                      data-testid="course-book-button"
+                      onClick={() => cancelBooking(l.lectureId)}
+                      size="sm"
+                      variant="danger"
+                      block
+                    >
+                      Cancel
+                    </Button>
+                  </Col>
+                )}
+            </Row>
           </Alert>
         </Col>
       </Row>
@@ -112,10 +130,13 @@ const LectureItem = (props) => {
 };
 
 class AvailableCourses extends React.Component {
+
+   
   componentDidMount() {
     API.getLectures()
       .then((res) => {
-        this.setState({ lectures: res, loading: null, serverErr: null });
+        this.setState({ lectures: res });
+        this.setState({refresh: false})
       })
       .catch((err) => {
         if (err.status === 401) {
@@ -124,6 +145,20 @@ class AvailableCourses extends React.Component {
         this.setState({ serverErr: true, loading: null });
       });
   }
+
+  cancelBookingByStudent=(id)=> {
+    API.cancelBookingByStudent(id)
+      .then((res) => {
+        this.componentDidMount();
+        this.setState({refresh: true})
+      }).catch((err) => {
+        console.log(err.status);
+        if (err.status === 401) {
+          this.props.notLoggedUser();
+        }
+      });
+  }
+
 
   bookLecture = (id) => {
     API.bookLeacture(id)
@@ -150,12 +185,12 @@ class AvailableCourses extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { lectures: [], refresh: true, errMsg: [] };
+    this.state = { lectures: [], refresh: false, errMsg: [] };
   }
   render() {
     return (
       <>
-        <Container fluid data-testid="courses-page">
+        <Container data-testid="courses-page">
           <Row className="justify-content-md-center below-nav">
             <h3>Available Courses: </h3>
           </Row>
@@ -165,7 +200,9 @@ class AvailableCourses extends React.Component {
                 errMsg={this.state.errMsg}
                 lecture={e}
                 bookLecture={this.bookLecture}
+                cancelBooking={this.cancelBookingByStudent}
                 k={key}
+                refresh={this.state.refresh}
               />
             );
           })}

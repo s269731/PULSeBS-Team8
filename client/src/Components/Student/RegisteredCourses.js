@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BigCalendar, Calendar, momentLocalizer } from "react-big-calendar";
+import {Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "moment/locale/nb";
 import "../../assets/sass/styles.scss";
@@ -50,9 +50,10 @@ export default class NewCalendarView extends Component {
     super(props);
 
     this.state = {
-      events: [],
+      events: []
     };
   }
+
 
   popover = (event) => (
     <Popover id="popover-basic">
@@ -72,7 +73,7 @@ export default class NewCalendarView extends Component {
 
   Event = ({ event }) => (
     <OverlayTrigger
-      trigger="click"
+      trigger="focus"
       placement="top"
       overlay={this.popover(event)}
     >
