@@ -10,12 +10,12 @@ const mail = nodemailer.createTransport({
   },
 });
 
-function start() {
+/*function start() {
   const now = new Date();
   const end_of_today = new Date(now);
-  end_of_today.setHours(23, 59, 59, 999);
+  end_of_today.setHours(23, 00, 00, 000);
   setTimeout(sendingEmailBookedPeople, end_of_today.getTime() - now.getTime());
-}
+}*/
 
 function sendingEmailBookedPeople() {
   lecturesDao.getTeachersForEmail().then((array) => {
@@ -37,7 +37,7 @@ function sendingEmailBookedPeople() {
       });
     });
   });
-  setTimeout(sendingEmailBookedPeople, 8.64e+7); // set timeout for the following day
+  //setTimeout(sendingEmailBookedPeople, 8.64e+7); // set timeout for the following day
 }
 
 async function sendBookingConfirmationEmail(lectureId, userId) {
@@ -60,6 +60,6 @@ async function sendBookingConfirmationEmail(lectureId, userId) {
   }
 }
 
-exports.start = start;
+//exports.start = start;
 exports.sendBookingConfirmationEmail = sendBookingConfirmationEmail;
 exports.sendingEmailBookedPeople = sendingEmailBookedPeople;

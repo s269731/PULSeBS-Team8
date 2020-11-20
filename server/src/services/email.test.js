@@ -45,11 +45,6 @@ db.prepare('INSERT INTO Enrollments(StudentId,SubjectId) VALUES(?,?)').run(2, 1)
 db.prepare('DELETE FROM Bookings').run();
 db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)').run(1, 2);
 
-test('Should call setTimeout', async () => {
-  jest.useFakeTimers();
-  emailService.start();
-  expect(setTimeout).toHaveBeenCalledTimes(1);
-});
 
 test('Should sent the email to teacher', async () => {
   jest.useFakeTimers();
@@ -58,8 +53,6 @@ test('Should sent the email to teacher', async () => {
   });
   emailService.sendingEmailBookedPeople();
 
-  expect(setTimeout).toHaveBeenCalledTimes(1);
-  expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 8.64e+7);
   await waitForExpect(() => {
     expect(Mailer.prototype.sendMail).toHaveBeenCalledTimes(2);
   });

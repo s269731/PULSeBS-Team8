@@ -97,10 +97,11 @@ exports.insertReservation = (lectureId, studentId) => new Promise((resolve, reje
 
 async function getTeachersForEmail() {
   const d1 = new Date();
-  d1.setHours(23, 59, 59, 999); // last minute of today
+  d1.setDate(d1.getDate() + 1);
+  d1.setHours(1, 0, 0, 0); // tomorrow at midnight
   const d2 = new Date(d1);
   d2.setDate(d2.getDate() + 2);
-  d2.setHours(1, 0, 0, 0); // day after the lecture (=day after tomorrow)
+  d2.setHours(1, 0, 0, 0); // day after tomorrow at midnight
 
   const sql = 'SELECT LectureId, TeacherId, SubjectId FROM Lectures WHERE DateHour BETWEEN DATETIME(?) AND DATETIME(?) AND Modality=\'In person\'';
   const stmt = db.prepare(sql);
