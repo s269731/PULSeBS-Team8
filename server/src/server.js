@@ -10,6 +10,7 @@ const lecturesDao = require('./lecturesDao');
 const authErrorObj = { errors: [{ msg: 'Authorization error' }] };
 const lecturesErr = { errors: [{ msg: 'There was an error retrieving available lectures' }] };
 const studentListError = { errors: [{ msg: 'There was an error retrieving list of students for this lectureId' }] };
+const deleteBookingError = { errors: [{ msg: 'There was an error in deleting the selected booking' }] };
 const deleteLectureError = { errors: [{ msg: 'There was an error in deleting the selected lecture' }] };
 
 const app = express();
@@ -106,7 +107,7 @@ app.delete('/api/student/lectures/:lectureId', async (req, res) => {
     const result = await lecturesDao.deleteBookingStudent(req.params.lectureId, userId);
     res.json(result);
   } catch {
-    res.json(deleteLectureError);
+    res.json(deleteBookingError);
   }
 });
 

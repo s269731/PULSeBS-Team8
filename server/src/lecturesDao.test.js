@@ -199,8 +199,19 @@ test('Should permit the deletion of the booking by the student', async () => {
   expect(obj.result).toBe('1 1');
 });
 
-test('Should reject the request of deletion of booking by the student', async () => {
+test('Should reject the request of deletion of booking by the student because the lectureId doesn\'t exist', async () => {
   const lectureId = 10;
+  const studentId = 5;
+  try {
+    await lecturesDao.deleteBookingStudent(lectureId, studentId);
+  } catch (err) {
+    console.log(err);
+    expect(err).toBe('No lecture found for the specified id');
+  }
+});
+
+test('Should reject the request of deletion of booking by the student because his booking doesn\'t exist', async () => {
+  const lectureId = 2;
   const studentId = 5;
   try {
     await lecturesDao.deleteBookingStudent(lectureId, studentId);
