@@ -169,17 +169,23 @@ exports.deleteBookingStudent = (lectureId, studentId) => new Promise((resolve, r
   const deletesql = db.prepare('DELETE FROM Bookings WHERE LectureId=? AND StudentId=?');
   const updatesql = db.prepare('UPDATE Lectures SET BookedPeople = BookedPeople - 1 WHERE LectureId=?');
 
-  if (row === undefined) {
-    reject('Deletion fails: selected lecture not available among the bookings of the student');
-  } else {
-    const transaction = db.transaction(() => {
-      const deleteres = deletesql.run(lectureId, studentId);
-      const updateres = updatesql.run(lectureId);
-      return deleteres.changes === 1 && updateres.changes === deleteres.changes;
-    });
-    const transactionresult = transaction();
-    if (transactionresult === true) resolve({ result: '1 1' });
-    reject('Error in deleting row or updating BookedPeople number');
+  const todayDateHour = new Date();
+  const timeconstraint = getLectureTimeConstraint(lectureId);
+
+  if (timeconstraint === undefined) reject('No lecture found for the specified id');
+  if (todayDateHour < timeconstraint) {
+    if (row === undefined) {
+      reject('Deletion fails: selected lecture not available among the bookings of the student');
+    } else {
+      const transaction = db.transaction(() => {
+        const deleteres = deletesql.run(lectureId, studentId);
+        const updateres = updatesql.run(lectureId);
+        return deleteres.changes === 1 && updateres.changes === deleteres.changes;
+      });
+      const transactionresult = transaction();
+      if (transactionresult === true) resolve({ result: '1 1' });
+      reject('Error in deleting row or updating BookedPeople number');
+    }
   }
 });
 
@@ -192,6 +198,7 @@ exports.deleteLectureTeacher = (lectureId, teacherId) => new Promise((resolve, r
   } else {
     const d1 = new Date();
     const d2 = new Date(row.DateHour);
+    d1.setHours(d1.getHours() + 1);
     if (d2.getTime() - d1.getTime() < 3.6e+6) { // milliseconds in 1 hour
       reject('Deletion fails: time constraint is not satisfied');
     } else {
