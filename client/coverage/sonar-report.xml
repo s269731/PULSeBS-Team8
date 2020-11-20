@@ -1,0 +1,62 @@
+<testExecutions version="1">
+<file path="src/index.test.js">
+<testCase name="Application root should render without crashing" duration="27" />
+</file>
+<file path="src/pages/logins/index.test.js">
+<testCase name="Input handle login with non-empty email and password" duration="538" />
+<testCase name="Input handle login with empty email and password" duration="262" />
+</file>
+<file path="src/Components/Student/RegisteredCourses.test.js">
+<testCase name="RegisteredCourses page rendering with lectures list" duration="582" />
+<testCase name="RegisteredCourses page rendering without lectures list" duration="368" />
+<testCase name="Successfully cancel a reservation" duration="1048" />
+<testCase name="Error in cancelling a reservation" duration="648" />
+</file>
+<file path="src/Components/Student/AvailableCourses.test.js">
+<testCase name="AvailableCourses page rendering with lectures list" duration="138" />
+<testCase name="AvailableCourses page rendering without lectures list" duration="11" />
+<testCase name="Successfully book a lecture" duration="239" />
+<testCase name="Should fail to book a lecture" duration="168" />
+<testCase name="Successfully cancel a lecture reservation" duration="236" />
+<testCase name="Should fail to cancel a lecture reservation" duration="146" />
+</file>
+<file path="src/api/api.test.js">
+<testCase name="right login" duration="494" />
+<testCase name="wrong login" duration="237" />
+<testCase name="get auth user" duration="120" />
+<testCase name="get no auth user" duration="24" />
+<testCase name="logout" duration="25" />
+<testCase name="loads and displays lectures for teachers" duration="206" />
+<testCase name="handlers server error for teacher lectures" duration="16" />
+<testCase name="get student list with more some student" duration="141" />
+<testCase name="get student list with no students" duration="84" />
+<testCase name="teacher delete a lecture" duration="78" />
+<testCase name="show student lectures list" duration="115" />
+<testCase name="show student lectures list for no auth user" duration="21" />
+<testCase name="book a lecture" duration="108" />
+<testCase name="student get his bookings" duration="345" />
+<testCase name="student deletes a booking" duration="190" />
+</file>
+<file path="src/Components/Teacher/TeacherPage.test.js">
+<testCase name="Teacher page rendering with lectures" duration="161" />
+<testCase name="Teacher page rendering with failing lectures api" duration="18" />
+<testCase name="LectureTable filter lectures button works" duration="165" />
+<testCase name="LectureTable cancel filter lectures button works" duration="118" />
+<testCase name="Cancel lecture button from Teacher Page works" duration="281" />
+</file>
+<file path="src/Components/Student/StudentPage.test.js">
+<testCase name="Student page rendering/navigation" duration="42" />
+</file>
+<file path="src/Components/Teacher/StudentList.test.js">
+<testCase name="StudentList modal rendering with student list" duration="148" />
+<testCase name="StudentList modal rendering without student list" duration="57" />
+</file>
+<file path="src/App.test.js">
+<testCase name="full app rendering/navigating to login and logout" duration="1728" />
+<testCase name="fail when getting the current user" duration="28" />
+<testCase name="random routes redirect to home page" duration="31" />
+</file>
+<file path="src/Components/Teacher/CancelForm.test.js">
+<testCase name="Cancel lecture button works" duration="82" />
+</file>
+</testExecutions>
