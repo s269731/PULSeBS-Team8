@@ -8,7 +8,7 @@ node_modules/
 dist/
 
 # Coverage files
-coverage/*
+coverage/
 !coverage/lcov.info
 !coverage/sonar-report.xml
 
