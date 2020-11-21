@@ -234,8 +234,48 @@ async function getBookingsByUserId(studentId) {
   return lectures;
 }
 
+async function getStudentsCancelledLecture(lectureId, teacherId) {
+  const sql = 'SELECT Email FROM Users WHERE id IN (SELECT StudentId FROM Bookings WHERE LectureId=?)';
+  const stmt = db.prepare(sql);
+  const rows = stmt.all(lectureId);
+  const stud_emails = [];
+  let info = {};
+  let obj = {};
+
+  if (rows.length > 0) {
+    const sql2 = 'SELECT SubjectId, DateHour FROM Lectures WHERE LectureId=? AND TeacherId=?';
+    const stmt2 = db.prepare(sql2);
+    const row = stmt2.get(lectureId, teacherId);
+
+    if (row !== undefined) {
+      const subjectName = await subjectDao.getSubjectName(row.SubjectId);
+      const teacher = await userDao.getUserById(teacherId);
+      const teacherName = `${teacher.name} ${teacher.surname}`
+      const date_hour = row.DateHour;
+
+      info = {
+        subject: subjectName.SubjectName,
+        teacher: teacherName,
+        date_hour: date_hour
+      };
+      stud_emails.push(info);
+
+      await Promise.all(rows.map(async (rawlecture) => {
+
+        obj = {
+          email_addr: rawlecture.Email,
+        };
+        
+        stud_emails.push(obj);
+      }));
+    }
+  }
+  return stud_emails;
+}
+
 exports.getLecturesByUserId = getLecturesByUserId;
 exports.getTeachersForEmail = getTeachersForEmail;
 exports.getInfoBookingConfirmation = getInfoBookingConfirmation;
 exports.getStudentsListByLectureId = getStudentsListByLectureId;
 exports.getBookingsByUserId = getBookingsByUserId;
+exports.getStudentsCancelledLecture = getStudentsCancelledLecture;
