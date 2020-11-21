@@ -43,10 +43,10 @@ db.prepare('INSERT INTO Subjects(SubjectId,TeacherId,SubjName,Course) VALUES(?,?
 // populate Lectures Table
 const today = moment(d); // .format('YYYY-MM-DD HH:MM:SS.SSS');
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
-  [1, 1, 1, today.add(1, 'days').toISOString(), 'In person', '12A', 150, 100],
+  [1, 1, 1, today.add(1, 'days').toISOString(), 'In person', '12A', 150, 7],
 );
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
-  [2, 1, 1, today.add(2, 'hours').toISOString(), 'In person', '12A', 100, 50],
+  [2, 1, 1, today.add(2, 'hours').toISOString(), 'In person', '12A', 100, 7],
 );
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
   [3, 1, 1, today.subtract(3, 'days').toISOString(), 'In person', '12A', 100, 50],
@@ -69,6 +69,12 @@ db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)').run(1, 4);
 db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)').run(1, 5);
 db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)').run(1, 6);
 db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)').run(1, 7);
+db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)').run(2, 2);
+db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)').run(2, 3);
+db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)').run(2, 4);
+db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)').run(2, 5);
+db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)').run(2, 6);
+db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)').run(2, 7);
 
 test('Should return list of lectures for the userId', async () => {
   const userid = 1;
@@ -168,7 +174,7 @@ test('Should return info about all the lectures scheduled for tomorrow, so that 
   expect(array[0].booked_people).toBe(7);
   expect(array[1].email_addr).toBe('d0001@prof.com');
   expect(array[1].subject).toBe('SoftwareEngineering II');
-  expect(array[1].booked_people).toBe(1);
+  expect(array[1].booked_people).toBe(7);
 });
 
 test('Should return an object with necessary info related to specific booking, so that the email confirmation can be sent', async () => {
@@ -263,4 +269,30 @@ test('Should return Bookings for a certain student', async () => {
   expect(obj[0].className).toBeTruthy();
   expect(obj[0].capacity).toBeTruthy();
   expect(obj[0].bookedPeople).toBeTruthy();
+});
+
+test('Should return an empty array since nobody was booked for that cancelled lecture', async () => {
+  const lectureId = 3;
+  const teacherId = 1;
+  const empty = await lecturesDao.getStudentsCancelledLecture(lectureId, teacherId);
+  expect(empty.length).toBe(0);
+});
+
+test('Should return an array of info and emails', async () => {
+  const lectureId = 2;
+  const teacherId = 1;
+  const array = await lecturesDao.getStudentsCancelledLecture(lectureId, teacherId);
+  expect(array).toBeTruthy();
+  expect(array.length).toBe(7);
+  expect(array[0].subject).toBe('SoftwareEngineering II');
+  expect(array[0].teacher).toBe('Marco Torchiano');
+  expect(array[0].date_hour).toBeTruthy();
+  expect(array[1].email_addr).toBeTruthy();
+});
+
+test('Should return an empty array since teacherId for that cancelled lecture doesn\'t exist', async () => {
+  const lectureId = 3;
+  const teacherId = 6;
+  const empty = await lecturesDao.getStudentsCancelledLecture(lectureId, teacherId);
+  expect(empty.length).toBe(0);
 });
