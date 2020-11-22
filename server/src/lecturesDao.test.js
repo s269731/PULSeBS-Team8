@@ -6,8 +6,6 @@ const userDao = require('./userDao');
 const subjectDao = require('./subjectsDao');
 const lecturesDao = require('./lecturesDao');
 
-// delete all the lectures inserted
-db.prepare('DELETE from Lectures').run();
 // populate db
 const d = new Date();
 
@@ -40,13 +38,15 @@ db.prepare('DELETE FROM Subjects').run();
 db.prepare('INSERT INTO Subjects(SubjectId,TeacherId,SubjName,Course) VALUES(?,?,?,?)').run([1, 1, 'SoftwareEngineering II', 'Computer Engineering']);
 db.prepare('INSERT INTO Subjects(SubjectId,TeacherId,SubjName,Course) VALUES(?,?,?,?)').run([2, 1, 'SoftwareEngineering I', 'Computer Engineering']);
 
+// delete all the lectures inserted
+db.prepare('DELETE from Lectures').run();
 // populate Lectures Table
 const today = moment(d); // .format('YYYY-MM-DD HH:MM:SS.SSS');
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
-  [1, 1, 1, today.add(1, 'days').toISOString(), 'In person', '12A', 150, 7],
+  [1, 1, 1, today.add(1, 'days').toISOString(), 'In person', '12A', 150, 6],
 );
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
-  [2, 1, 1, today.add(2, 'hours').toISOString(), 'In person', '12A', 100, 7],
+  [2, 1, 1, today.add(2, 'hours').toISOString(), 'In person', '12A', 100, 6],
 );
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
   [3, 1, 1, today.subtract(3, 'days').toISOString(), 'In person', '12A', 100, 50],
