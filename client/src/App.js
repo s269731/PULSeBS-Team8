@@ -10,6 +10,13 @@ import { withRouter, Redirect, Route, Link } from "react-router-dom";
 import { Row, Col, Container, Alert } from "react-bootstrap";
 import Login from "./pages/logins/index";
 import API from "./api/api";
+import OfficerPage from "./Components/SupportOfficer/OfficerPage";
+import AddStudent from "./Components/SupportOfficer/AddStudent";
+import AddTeacher from "./Components/SupportOfficer/AddTeacher";
+import AddLecture from "./Components/SupportOfficer/AddLecture";
+import AddCourse from "./Components/SupportOfficer/AddCourse";
+
+
 
 class App extends React.Component {
   constructor(props) {
@@ -68,6 +75,21 @@ class App extends React.Component {
           logout={this.logout}
         />
         <Switch>
+        <Route exact path="/officer">
+              <OfficerPage/>
+        </Route>
+          <Route exact path="/officer/addStudent">
+              <AddStudent/>
+          </Route>
+          <Route exact path="/officer/addTeacher">
+              <AddTeacher/>
+          </Route>
+          <Route exact path="/officer/addLecture">
+              <AddLecture/>
+          </Route>
+          <Route exact path="/officer/addCourse">
+              <AddCourse/>
+          </Route>
           <Route exact path="/home">
             <Container data-testid="home-page">
               <Col>
@@ -81,6 +103,8 @@ class App extends React.Component {
                 </Row>
                 <Row className="justify-content-md-center below-nav">
                   <h3>
+                  <h5>For switiching Officer page:  /officer</h5>
+                  <br></br>
                     This is a tool to manage bookings of lectures during this
                     pandemic period
                     <br />
