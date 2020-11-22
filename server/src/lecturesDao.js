@@ -26,7 +26,7 @@ function getReservation(studentId, lectureId) {
 }
 
 function getBookedPeople(lectureId) {
-  const result = db.prepare("SELECT COUNT(*) as num from Bookings WHERE lectureId=?").get(lectureId);
+  const result = db.prepare('SELECT COUNT(*) as num from Bookings WHERE lectureId=?').get(lectureId);
   return result.num || 0;
 }
 
@@ -250,28 +250,56 @@ async function getStudentsCancelledLecture(lectureId, teacherId) {
     if (row !== undefined) {
       const subjectName = await subjectDao.getSubjectName(row.SubjectId);
       const teacher = await userDao.getUserById(teacherId);
-      const teacherName = `${teacher.name} ${teacher.surname}`
+      const teacherName = `${teacher.name} ${teacher.surname}`;
       const date_hour = row.DateHour;
 
       info = {
         subject: subjectName.SubjectName,
         teacher: teacherName,
-        date_hour: date_hour
+        date_hour,
       };
       stud_emails.push(info);
 
       await Promise.all(rows.map(async (rawlecture) => {
-
         obj = {
           email_addr: rawlecture.Email,
         };
-        
+
         stud_emails.push(obj);
       }));
     }
   }
   return stud_emails;
 }
+
+exports.changeLectureModality = (lectureId) => new Promise((resolve, reject) => {
+  const sql = db.prepare('SELECT Modality,DateHour FROM Lectures WHERE LectureId=?');
+  const result = sql.get(lectureId);
+  if (result === undefined) reject('Error in retrieving lecture by his lectureId');
+  else {
+    const now = new Date();
+    const lecturetime = new Date(result.DateHour);
+    console.log(result.Modality);
+    if (lecturetime.getTime() - now.getTime() > 1.8e+6) {
+      if (result.Modality === 'In person') {
+        console.log('Entered in update In Person Lecture');
+        const virtual = 'Virtual';
+        const sqlupdate1 = db.prepare('UPDATE Lectures SET Modality=? WHERE LectureId=?');
+        const result1 = sqlupdate1.run(virtual, lectureId);
+        if (result1.changes === 1) resolve({ result: 'Virtual' });
+        else reject('Error in updating the Lecture Modality');
+      } else {
+        console.log('Entered in update Virtual Lecture');
+        const inperson = 'In person';
+        const sqlupdate2 = db.prepare('UPDATE Lectures SET Modality=? WHERE LectureId=?');
+        const result2 = sqlupdate2.run(inperson, lectureId);
+        if (result2.changes === 1) resolve({ result: 'In person' });
+        else reject('Error in updating the Lecture Modality');
+      }
+    }
+    reject('Lecture Modality can\'t be changed within 30 minutes before its start');
+  }
+});
 
 exports.getLecturesByUserId = getLecturesByUserId;
 exports.getTeachersForEmail = getTeachersForEmail;

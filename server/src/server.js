@@ -13,6 +13,8 @@ const lecturesErr = { errors: [{ msg: 'There was an error retrieving available l
 const studentListError = { errors: [{ msg: 'There was an error retrieving list of students for this lectureId' }] };
 const deleteBookingError = { errors: [{ msg: 'There was an error in deleting the selected booking' }] };
 const deleteLectureError = { errors: [{ msg: 'There was an error in deleting the selected lecture' }] };
+const changeModalityTimeConstraintError = { errors: [{ msg: 'Lecture Modality can\'t be changed within 30 minutes before its start' }] };
+const changeModalityQueryError = { errors: [{ msg: 'error in changing the modality of the Lecture' }] };
 
 const app = express();
 app.disable('x-powered-by');
@@ -145,6 +147,17 @@ app.delete('/api/teacher/lectures/:lectureId', async (req, res) => {
     res.json(result);
   } catch {
     res.json(deleteLectureError);
+  }
+});
+
+app.post('/api/teacher/changemodality', async (req, res) => {
+  const { lectureId } = req.body;
+  try {
+    const newModality = await lecturesDao.changeLectureModality(lectureId);
+    res.json(newModality);
+  } catch (error) {
+    if (error === 'Lecture Modality can\'t be changed within 30 minutes before its start') res.json(changeModalityTimeConstraintError);
+    else res.json(changeModalityQueryError);
   }
 });
 
