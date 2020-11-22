@@ -3,7 +3,8 @@ import {
   Container,
   Row,
   Col,
-  Alert,
+  Card,
+  Accordion,
   Button,
   ButtonGroup,
 } from "react-bootstrap";
@@ -16,74 +17,69 @@ const LectureItem = (props) => {
   return (
     <>
       {l.visible && (
-        <Row className="justify-content-md-center">
-          <Col>
-            <Alert variant="primary" className="box-shadow">
-              <Row>
-                <Col>
-                  <Row className="justify-content-md-center">
-                    <h6>Course:</h6>
-                    <Col className="subjectName">
-                      <h6>
-                        {" "}
-                        {l.subject}
-                        <br />
-                        <br />
-                      </h6>
-                    </Col>
-                  </Row>
+        <Card>
+          <Accordion.Toggle className="subjectName" as={Card.Header} eventKey={props.eId}>
+            <Row>
+              <Col>
+                <h5>{l.subject}</h5>
+              </Col>
+              <Col>
+                <h5>{date.toLocaleDateString("en")}</h5>
+              </Col>
+              <Col>
+                <h5>{l.hour}</h5>
+              </Col>
+            </Row>
+          </Accordion.Toggle>
+
+          <Accordion.Collapse eventKey={props.eId}>
+            <Card.Body>
                   <Row className="justify-content-md-center">
                     <Col className="align-content-start date">
                       <h6 className="tableHeader">Date</h6>
                       <h5>
+                        {date.toLocaleString("en", { weekday: "long" })}{", "}
                         {date.getDate()}{" "}
                         {date.toLocaleString("en", { month: "long" })}{" "}
                         {date.getFullYear()} at {l.hour}
                       </h5>
                     </Col>
-                    {l.modality && l.modality === "In person" ? (
-                      <>
-                        <Col xs={6} md={4} className="align-content-start">
-                          <h6 className="tableHeader">Room</h6>
-                          <h5>{l.room}</h5>
-                        </Col>
-                      </>
-                    ) : (
-                      <Col xs={6} md={4} className="align-content-start">
-                        <h6 className="tableHeader">Room:</h6>
-                        <h5>Virtual</h5>
-                      </Col>
+                    {l.modality && l.modality === "In person" && (
+                        <>
+                          <Col xs={6} md={4} className="align-content-start">
+                            <h6 className="tableHeader">Room Capacity</h6>
+                            <h5> {l.capacity}</h5>
+                          </Col>
+                        </>
                     )}
                   </Row>
                   <Row>
-                    {l.modality && l.modality === "In person" && (
-                      <>
-                        <Col className="align-content-start">
-                          <h6 className="tableHeader">Room Capacity</h6>
-                          <h5> {l.capacity}</h5>
-                        </Col>
-                      </>
-                    )}
+                    <Col className="align-content-start">
+                      <h6 className="tableHeader">Room:</h6>
+                      <h5>
+                        {l.modality && l.modality === "In person" ? (l.room) : ("Virtual")}
+                      </h5>
+                    </Col>
                     <Col xs={6} md={4} className="align-content-end">
                       <h6 className="tableHeader">Booked students</h6>
                       <h5> {l.bookedStudents}</h5>
                     </Col>
                   </Row>
-                </Col>
-                <Col>
-                  <Row className="justify-content-md-center">
-                    <StudentList
-                      id={l.id}
-                      notLoggedUser={props.notLoggedUser}
-                    />
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <CancelForm l={l} cancelLecture={props.cancelLecture} />
+                  {/*BUTTONS*/}
+                  <Row className="pt-4 pb-2">
+                    <Col className="align-content-end">
+                      <StudentList
+                          id={l.id}
+                          notLoggedUser={props.notLoggedUser}
+                      />
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      <CancelForm l={l} cancelLecture={props.cancelLecture} />
+                    </Col>
                   </Row>
-                </Col>
-              </Row>
-            </Alert>
-          </Col>
-        </Row>
+
+            </Card.Body>
+          </Accordion.Collapse>
+        </Card>
       )}
     </>
   );
@@ -122,8 +118,8 @@ class LectureTable extends React.Component {
           <Row className="justify-content-md-center below-nav">
             <h3>Your next lectures: </h3>
           </Row>
-          <Row className="justify-content-md-center below-nav">
-            <Col className="col-3 justify-content-md-center">
+          <Row className="justify-content-md-center">
+            <Col className="col-2 justify-content-md-center">
               <h5>Courses</h5>
               <ButtonGroup vertical>
                 {this.props.subjects.map((e) => {
@@ -157,16 +153,19 @@ class LectureTable extends React.Component {
                 </Button>
               </ButtonGroup>
             </Col>
-            <Col>
-              {this.props.lectures.map((e) => {
-                return (
-                  <LectureItem
-                    lecture={e}
-                    cancelLecture={this.props.cancelLecture}
-                    notLoggedUser={this.props.notLoggedUser}
-                  />
-                );
-              })}
+            <Col className="col-8">
+              <Accordion className="box-shadow" defaultActiveKey="0">
+                {this.props.lectures.map((e, id) => {
+                  return (
+                          <LectureItem
+                            eId={id+1}
+                            lecture={e}
+                            cancelLecture={this.props.cancelLecture}
+                            notLoggedUser={this.props.notLoggedUser}
+                          />
+                  );
+                })}
+              </Accordion>
             </Col>
           </Row>
         </Container>

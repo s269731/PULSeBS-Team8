@@ -19,7 +19,7 @@ function CancelForm(props) {
           variant="danger"
           onClick={handleShow}
         >
-          Cancel this lecture
+          Cancel lecture
         </Button>
       ) : (
         <Button variant="danger" disabled={true}>
