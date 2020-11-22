@@ -47,7 +47,7 @@ function StudentList(props) {
         onClick={handleShow}
         data-testid="studentlist-button"
       >
-        Show list of booked students
+        Booked students
       </Button>
 
       <Modal show={show} onHide={handleClose} data-testid="studentlist-modal">
