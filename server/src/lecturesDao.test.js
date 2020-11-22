@@ -32,7 +32,7 @@ db.prepare('INSERT INTO Users(Id, Role, Name, Surname, Email, Password, Course) 
   [6, 'S', 'Elchin', 'Farhad', 's0006@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'Computer Engineering'],
 );
 db.prepare('INSERT INTO Users(Id, Role, Name, Surname, Email, Password, Course) VALUES(?,?,?,?,?,?,?)').run(
-  [7, 'S', 'Nino', 'Nicolò', 's0007@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'Computer Engineering'],
+  [7, 'S', 'Nino', 'Sasa', 's0007@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'Computer Engineering'],
 );
 
 // populate Subjects Table
@@ -55,7 +55,7 @@ db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Moda
   [4, 1, 1, today.add(5, 'days').toISOString(), 'In person', '12A', 100, 50],
 );
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
-  [5, 1, 1, today.add(5, 'days').toISOString(), 'In person', '12A', 100, 100],
+  [5, 1, 1, today.add(15, 'minutes').toISOString(), 'In person', '12A', 100, 100],
 );
 // populate Enrollments Table
 db.prepare('DELETE FROM Enrollments').run();
@@ -295,4 +295,36 @@ test('Should return an empty array since teacherId for that cancelled lecture do
   const teacherId = 6;
   const empty = await lecturesDao.getStudentsCancelledLecture(lectureId, teacherId);
   expect(empty.length).toBe(0);
+});
+
+test('Should return Virtual as new Modality for the lecture', async () => {
+  const lectureId = 2;
+  const result = await lecturesDao.changeLectureModality(lectureId);
+  expect(result).toBeTruthy();
+  expect(result.result).toBe('Virtual');
+});
+
+test('Should return In person as new Modality for the lecture', async () => {
+  const lectureId = 2;
+  const result = await lecturesDao.changeLectureModality(lectureId);
+  expect(result).toBeTruthy();
+  expect(result.result).toBe('In person');
+});
+
+test('Should return the time constraint error', async () => {
+  const lectureId = 5;
+  try {
+    await lecturesDao.changeLectureModality(lectureId);
+  } catch (err) {
+    expect(err).toBe('Lecture Modality can\'t be changed within 30 minutes before its start');
+  }
+});
+
+test('Should return error for incorrect lectureId', async () => {
+  const lectureId = 16;
+  try {
+    await lecturesDao.changeLectureModality(lectureId);
+  } catch (err) {
+    expect(err).toBe('Error in retrieving lecture by his lectureId');
+  }
 });
