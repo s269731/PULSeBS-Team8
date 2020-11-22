@@ -139,7 +139,9 @@ app.get('/api/teacher/lectures/:lectureId', async (req, res) => {
 app.delete('/api/teacher/lectures/:lectureId', async (req, res) => {
   const userId = req.user && req.user.user;
   try {
+    const booked_students = await lecturesDao.getStudentsCancelledLecture(req.params.lectureId, userId);
     const result = await lecturesDao.deleteLectureTeacher(req.params.lectureId, userId);
+    emailService.sendingEmailCancelledLecture(booked_students);
     res.json(result);
   } catch {
     res.json(deleteLectureError);
