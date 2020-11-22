@@ -99,11 +99,11 @@ async function getTeachersForEmail() {
   const d1 = new Date();
   d1.setDate(d1.getDate() + 1);
   d1.setHours(1, 0, 0, 0); // tomorrow at midnight
-  const d2 = new Date(d1);
+  const d2 = new Date();
   d2.setDate(d2.getDate() + 2);
   d2.setHours(1, 0, 0, 0); // day after tomorrow at midnight
 
-  const sql = 'SELECT LectureId, TeacherId, SubjectId FROM Lectures WHERE DateHour BETWEEN DATETIME(?) AND DATETIME(?) AND Modality=\'In person\'';
+  const sql = 'SELECT LectureId, TeacherId, SubjectId FROM Lectures WHERE DateHour BETWEEN ? AND ? AND Modality=\'In person\'';
   const stmt = db.prepare(sql);
   const rows = stmt.all(d1.toISOString(), d2.toISOString());
   const email_bp = [];

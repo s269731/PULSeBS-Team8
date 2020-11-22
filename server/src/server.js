@@ -3,8 +3,8 @@ const config = require('config');
 const jwt = require('express-jwt');
 const jsonwebtoken = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
-const emailService = require('./services/email');
 const schedule = require('node-schedule');
+const emailService = require('./services/email');
 const userDao = require('./userDao');
 const lecturesDao = require('./lecturesDao');
 
@@ -17,11 +17,7 @@ const deleteLectureError = { errors: [{ msg: 'There was an error in deleting the
 const app = express();
 app.disable('x-powered-by');
 
-//emailService.start();
-var rule = new schedule.RecurrenceRule();
-rule.hour = 23;
- 
-var j = schedule.scheduleJob(rule, function(){
+schedule.scheduleJob('0 23 * * *', () => {
   emailService.sendingEmailBookedPeople();
 });
 

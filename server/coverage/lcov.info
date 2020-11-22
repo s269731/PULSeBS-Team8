@@ -1,5 +1,5 @@
 TN:
-SF:src\db.js
+SF:src/db.js
 FNF:0
 FNH:0
 DA:1,4
@@ -14,7 +14,7 @@ BRF:2
 BRH:1
 end_of_record
 TN:
-SF:src\lecturesDao.js
+SF:src/lecturesDao.js
 FN:7,(anonymous_0)
 FN:20,getReservation
 FN:28,getBookedPeople
@@ -263,7 +263,7 @@ BRF:44
 BRH:40
 end_of_record
 TN:
-SF:src\subjectsDao.js
+SF:src/subjectsDao.js
 FN:18,(anonymous_0)
 FN:18,(anonymous_1)
 FNF:2
@@ -286,7 +286,7 @@ BRF:2
 BRH:2
 end_of_record
 TN:
-SF:src\userDao.js
+SF:src/userDao.js
 FN:5,(anonymous_0)
 FN:16,(anonymous_1)
 FN:26,(anonymous_2)
@@ -336,7 +336,7 @@ BRF:4
 BRH:4
 end_of_record
 TN:
-SF:src\services\email.js
+SF:src/services/email.js
 FN:20,sendingEmailBookedPeople
 FN:21,(anonymous_1)
 FN:23,(anonymous_2)
