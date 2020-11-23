@@ -54,6 +54,7 @@ sections:
   - Total hours spent:12h16m
   - Nr of automated unit test cases :40
   - Coverage (if available)
+  ![image](https://github.com/S274294/PULSeBS-Team8/blob/master/Retrospectives/coverage.png)
 - E2E testing:
   - Total hours estimated
   - Total hours spent
