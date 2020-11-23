@@ -1,0 +1,14 @@
+{
+	"DBSOURCE": "./db/database.db",
+	"PORT": 3001,
+	"verbose": true,
+	"jwtSecret": "'BçFDJDLKSAJOIFBHNI$48tgopW$ITHW$TBL",
+	"tokenExpireTime": 3600,
+	"mailer": {
+	  "service": "DebugMail",
+	  "email": "no-reply@pulsebs.com",
+	  "user": "info.trackingplatform@gmail.com",
+	  "pass": "009ae430-24df-11eb-8504-f9ef215e1b40"
+	}
+
+}

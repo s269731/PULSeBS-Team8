@@ -7,6 +7,11 @@
 node_modules/
 dist/
 
+# Coverage files
+coverage/
+!coverage/lcov.info
+!coverage/sonar-report.xml
+
 # Compiled Java class files
 *.class
 
@@ -25,6 +30,7 @@ dist/
 
 # JetBrains IDE
 .idea/
+*.iml
 
 # Unit test reports
 TEST*.xml
