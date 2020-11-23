@@ -37,7 +37,7 @@ sections:
 |  #13   |    3     |    3    |     2h20m       |              |
 |  #14   |         |   3     |     2h       |              |
 |  #15   |         |   3     |      1h30m      |              |
-1h30m
+
    
 
 > place technical tasks corresponding to story `#0` and leave out story points (not applicable in this case)
