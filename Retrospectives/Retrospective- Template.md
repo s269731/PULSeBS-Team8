@@ -41,7 +41,7 @@ sections:
 
 > place technical tasks corresponding to story `#0` and leave out story points (not applicable in this case)
 
-- Hours per task (average, standard deviation)
+- Hours per task (average, standard deviation):
 
 - Total task estimation error ratio: sum of total hours estimation / sum of total hours spent from previous table
 
