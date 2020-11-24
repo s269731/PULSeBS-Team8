@@ -25,10 +25,10 @@ function getReservation(studentId, lectureId) {
   return true;
 }
 
-/*function getBookedPeople(lectureId) {
+/* function getBookedPeople(lectureId) {
   const result = db.prepare('SELECT COUNT(*) as num from Bookings WHERE lectureId=?').get(lectureId);
   return result.num || 0;
-}*/
+} */
 
 async function getLecturesByUserId(id) {
   const user = await userDao.getUserById(id);
@@ -72,11 +72,14 @@ exports.insertReservation = (lectureId, studentId) => new Promise((resolve, reje
   const sql = 'SELECT * FROM Bookings WHERE LectureId=? AND StudentId=?';
   const insertbookings = db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)');
   const updatelecture = db.prepare('UPDATE Lectures SET BookedPeople=BookedPeople+1 WHERE LectureId=? AND BookedPeople<Capacity');
+  const modalitychecksql = db.prepare('SELECT Modality FROM Lectures WHERE LectureId=?');
   const stmt = db.prepare(sql);
   const row = stmt.get(lectureId, studentId);
   const todayDateHour = new Date();
   const timeconstraint = getLectureTimeConstraint(lectureId);
+  const modalitycheck = modalitychecksql.get(lectureId);
 
+  if (modalitycheck !== undefined && modalitycheck.Modality === 'Virtual') reject('a Virtual Lecture can\'t be booked');
   if (timeconstraint === undefined) reject('No lecture for the specified id');
   if (todayDateHour < timeconstraint) {
     if (row !== undefined) {
@@ -274,6 +277,9 @@ async function getStudentsCancelledLecture(lectureId, teacherId) {
 
 exports.changeLectureModality = (lectureId) => new Promise((resolve, reject) => {
   const sql = db.prepare('SELECT Modality,DateHour FROM Lectures WHERE LectureId=?');
+  const sqlupdate = db.prepare('UPDATE Lectures SET Modality=? WHERE LectureId=?');
+  const sqldelete = db.prepare('DELETE FROM Bookings WHERE LectureId=?');
+  const virtual = 'Virtual';
   const result = sql.get(lectureId);
   if (result === undefined) reject('Error in retrieving lecture by his lectureId');
   else {
@@ -282,20 +288,15 @@ exports.changeLectureModality = (lectureId) => new Promise((resolve, reject) => 
     console.log(result.Modality);
     if (lecturetime.getTime() - now.getTime() > 1.8e+6) {
       if (result.Modality === 'In person') {
-        console.log('Entered in update In Person Lecture');
-        const virtual = 'Virtual';
-        const sqlupdate1 = db.prepare('UPDATE Lectures SET Modality=? WHERE LectureId=?');
-        const result1 = sqlupdate1.run(virtual, lectureId);
-        if (result1.changes === 1) resolve({ result: 'Virtual' });
+        const transaction = db.transaction(() => {
+          const updateres = sqlupdate.run(virtual, lectureId);
+          sqldelete.run(lectureId);
+          return updateres.changes === 1;
+        });
+        const transactionresult = transaction();
+        if (transactionresult === true) resolve({ result: 'Virtual' });
         else reject('Error in updating the Lecture Modality');
-      } else {
-        console.log('Entered in update Virtual Lecture');
-        const inperson = 'In person';
-        const sqlupdate2 = db.prepare('UPDATE Lectures SET Modality=? WHERE LectureId=?');
-        const result2 = sqlupdate2.run(inperson, lectureId);
-        if (result2.changes === 1) resolve({ result: 'In person' });
-        else reject('Error in updating the Lecture Modality');
-      }
+      } else reject('You can\'t convert a Virtual Lecture into a in presence one');
     }
     reject('Lecture Modality can\'t be changed within 30 minutes before its start');
   }

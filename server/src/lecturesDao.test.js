@@ -304,11 +304,13 @@ test('Should return Virtual as new Modality for the lecture', async () => {
   expect(result.result).toBe('Virtual');
 });
 
-test('Should return In person as new Modality for the lecture', async () => {
+test('Should return a message error because a Virtual lecture cant be converted again', async () => {
   const lectureId = 2;
-  const result = await lecturesDao.changeLectureModality(lectureId);
-  expect(result).toBeTruthy();
-  expect(result.result).toBe('In person');
+  try {
+    await lecturesDao.changeLectureModality(lectureId);
+  } catch (err) {
+    expect(err).toBe('You can\'t convert a Virtual Lecture into a in presence one');
+  }
 });
 
 test('Should return the time constraint error', async () => {
@@ -326,5 +328,15 @@ test('Should return error for incorrect lectureId', async () => {
     await lecturesDao.changeLectureModality(lectureId);
   } catch (err) {
     expect(err).toBe('Error in retrieving lecture by his lectureId');
+  }
+});
+
+test('Should return an errore because a Virtual lecture cant be booked', async () => {
+  const lectureId = 2;
+  const studentId = 1;
+  try {
+    await lecturesDao.insertReservation(lectureId, studentId);
+  } catch (err) {
+    expect(err).toBe('a Virtual Lecture can\'t be booked');
   }
 });
