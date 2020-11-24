@@ -15,6 +15,7 @@ const deleteBookingError = { errors: [{ msg: 'There was an error in deleting the
 const deleteLectureError = { errors: [{ msg: 'There was an error in deleting the selected lecture' }] };
 const changeModalityTimeConstraintError = { errors: [{ msg: 'Lecture Modality can\'t be changed within 30 minutes before its start' }] };
 const changeModalityQueryError = { errors: [{ msg: 'error in changing the modality of the Lecture' }] };
+const insertLogError = { errors: [{ msg: 'There was an error in inserting log record'}] };
 
 const app = express();
 app.disable('x-powered-by');
@@ -87,11 +88,9 @@ app.post('/api/student/reserve', async (req, res) => {
   const userId = req.user && req.user.user;
   const { lectureId } = req.body;
   try {
-    //const result = await lecturesDao.insertReservation(lectureId, userId);
-    const result1 = lecturesDao.insertReservation(lectureId, userId);
-    const result2 = lecturesDao.insertLog(userId, 0);
-    const result = [await result1, await result2];
+    const result = await lecturesDao.insertReservation(lectureId, userId);
     // no need to wait
+    lecturesDao.insertLog(userId, 0);
     emailService.sendBookingConfirmationEmail(lectureId, userId);
     res.json(result);
   } catch (error) {
@@ -112,10 +111,8 @@ app.get('/api/student/bookings', async (req, res) => {
 app.delete('/api/student/lectures/:lectureId', async (req, res) => {
   const userId = req.user && req.user.user;
   try {
-    //const result = await lecturesDao.deleteBookingStudent(req.params.lectureId, userId);
-    const result1 = lecturesDao.deleteBookingStudent(req.params.lectureId, userId);
-    const result2 = lecturesDao.insertLog(userId, 1);
-    const result = [await result1, await result2];
+    const result = await lecturesDao.deleteBookingStudent(req.params.lectureId, userId);
+    lecturesDao.insertLog(userId, 1);
     res.json(result);
   } catch {
     res.json(deleteBookingError);
@@ -148,10 +145,8 @@ app.delete('/api/teacher/lectures/:lectureId', async (req, res) => {
   const userId = req.user && req.user.user;
   try {
     const booked_students = await lecturesDao.getStudentsCancelledLecture(req.params.lectureId, userId);
-    //const result = await lecturesDao.deleteLectureTeacher(req.params.lectureId, userId);
-    const result1 = lecturesDao.deleteLectureTeacher(req.params.lectureId, userId);
-    const result2 = lecturesDao.insertLog(userId, 2);
-    const result = [await result1, await result2];
+    const result = await lecturesDao.deleteLectureTeacher(req.params.lectureId, userId);
+    lecturesDao.insertLog(userId, 2);
     emailService.sendingEmailCancelledLecture(booked_students);
     res.json(result);
   } catch {
@@ -163,11 +158,9 @@ app.post('/api/teacher/changemodality', async (req, res) => {
   const userId = req.user && req.user.user;
   const { lectureId } = req.body;
   try {
-    //const newModality = await lecturesDao.changeLectureModality(lectureId);
-    const newModality = lecturesDao.changeLectureModality(lectureId);
-    const result2 = lecturesDao.insertLog(userId, 3);
-    const result = [await newModality, await result2];
-    res.json(result);
+    const newModality = await lecturesDao.changeLectureModality(lectureId);
+    lecturesDao.insertLog(userId, 3);
+    res.json(newModality);
   } catch (error) {
     if (error === 'Lecture Modality can\'t be changed within 30 minutes before its start') res.json(changeModalityTimeConstraintError);
     else res.json(changeModalityQueryError);
