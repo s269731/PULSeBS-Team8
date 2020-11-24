@@ -37,3 +37,12 @@
     color: darkred !important;
     border-bottom: 1px solid white;
 }
+.lectureTable{
+    background-color: ghostwhite;
+}
+#controlled-tab-tab-lectures,#controlled-tab-tab-stats{
+    font-size:1.3rem ;
+}
+.headerLectureList{
+    margin-bottom: 50px;
+}

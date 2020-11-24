@@ -182,6 +182,7 @@ async function getLecturesTeacher() {
                   let now = new Date();
                   let lectDay = new Date(l.dateHour);
                   let canDelete = lectDay - now - 3600000 > 0;
+                  let canModify= lectDay - now - 3600000/2 > 0;
                   let fields = l.dateHour.split("T");
                   let date = fields[0];
                   let hour =
@@ -202,6 +203,7 @@ async function getLecturesTeacher() {
                     booked: l.booked,
                     visible: true,
                     canDelete: canDelete,
+                    canModify:canModify
                   };
                 })
             );
@@ -346,6 +348,43 @@ async function cancelBookingByStudent(id) {
   }
 }
 
+async function changeModalityLecture(id){
+  return new Promise((resolve, reject) => {
+    fetch(baseURL + "/teacher/changemodality", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ lectureId: id }),
+    })
+        .then((response) => {
+          if (response.ok) {
+            response.json().then((res) => {
+              resolve(res);
+            });
+          } else {
+            // analyze the cause of error
+            response
+                .json()
+                .then((obj) => {
+                  obj["status"] = response.status;
+                  reject(obj);
+                }) // error msg in the response body
+                .catch((err) => {
+                  reject({
+                    errors: [
+                      { param: "Application", msg: "Cannot parse server response" },
+                    ],
+                  });
+                }); // something else
+          }
+        })
+        .catch((err) => {
+          reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] });
+        }); // connection errors
+  });
+}
+
 const API = {
   Login,
   getLectures,
@@ -357,5 +396,6 @@ const API = {
   deleteLectureByTeacher,
   getBookedLectures,
   cancelBookingByStudent,
+  changeModalityLecture
 };
 export default API;
