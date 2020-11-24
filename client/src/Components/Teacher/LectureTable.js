@@ -45,27 +45,25 @@ const LectureItem = (props) => {
                         {date.getFullYear()} at {l.hour}
                       </h5>
                     </Col>
-                    {l.modality && l.modality === "In person" && (
-                        <>
-                          <Col xs={6} md={4} className="align-content-start">
-                            <h6 className="tableHeader">Room Capacity</h6>
-                            <h5> {l.capacity}</h5>
-                          </Col>
-                        </>
-                    )}
-                  </Row>
-                  <Row>
-                    <Col className="align-content-start">
+                    <Col xs={6} md={4} className="align-content-start">
                       <h6 className="tableHeader">Room:</h6>
                       <h5>
                         {l.modality && l.modality === "In person" ? (l.room) : ("Virtual")}
                       </h5>
                     </Col>
-                    <Col xs={6} md={4} className="align-content-end">
-                      <h6 className="tableHeader">Booked students</h6>
-                      <h5> {l.bookedStudents}</h5>
-                    </Col>
                   </Row>
+                  {l.modality && l.modality === "In person" && (
+                    <Row>
+                      <Col className="align-content-start">
+                        <h6 className="tableHeader">Room Capacity</h6>
+                        <h5> {l.capacity}</h5>
+                      </Col>
+                      <Col xs={6} md={4} className="align-content-end">
+                        <h6 className="tableHeader">Booked students</h6>
+                        <h5> {l.bookedStudents}</h5>
+                      </Col>
+                    </Row>
+                )}
                   {/*BUTTONS*/}
                   <Row className="pt-4 pb-2">
                     <Col className="align-content-end">
@@ -75,8 +73,11 @@ const LectureItem = (props) => {
                       />
                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                       <CancelForm l={l} cancelLecture={props.cancelLecture} />
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      <ChangeModalityForm l={l} changeModalityLecture={props.changeModalityLecture}/>
+                      {l.modality === "In person" && <>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <ChangeModalityForm l={l} changeModalityLecture={props.changeModalityLecture}/>
+                        </>
+                      }
                     </Col>
                   </Row>
 
@@ -119,7 +120,7 @@ class LectureTable extends React.Component {
       <>
         <Container fluid data-testid="lecturetable" className={"lectureTable"}>
           <Row className="justify-content-md-center below-nav">
-            <h3>Your next lectures: </h3>
+            <h3 className={"headerLectureList"}>Your next lectures </h3>
           </Row>
           <Row className="justify-content-md-center">
             <Col className="col-2 justify-content-md-center">

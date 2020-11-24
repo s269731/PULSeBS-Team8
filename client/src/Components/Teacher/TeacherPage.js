@@ -27,14 +27,17 @@ class TeacherPage extends React.Component {
       });
   }
   changeModalityLecture(id){
-      let newLectures=[];
-      for(let l of this.state.lectures){
-          if(l.id!==id){
-              newLectures.push(l)
-          }
-      }
-      this.setState({lectures:newLectures}
-      )
+      API.changeModalityLecture(id)
+          .then((res) => {
+              this.getLectures();
+          })
+          .catch((err) => {
+              console.log(err.status);
+              if (err.status === 401) {
+                  this.props.notLoggedUser();
+              }
+              this.setState({ serverErr: true });
+          });
   }
   getLectures() {
     API.getLecturesTeacher()

@@ -43,6 +43,6 @@
 #controlled-tab-tab-lectures,#controlled-tab-tab-stats{
     font-size:1.3rem ;
 }
-.nav-tabs{
-
+.headerLectureList{
+    margin-bottom: 50px;
 }
