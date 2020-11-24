@@ -87,7 +87,10 @@ app.post('/api/student/reserve', async (req, res) => {
   const userId = req.user && req.user.user;
   const { lectureId } = req.body;
   try {
-    const result = await lecturesDao.insertReservation(lectureId, userId);
+    //const result = await lecturesDao.insertReservation(lectureId, userId);
+    const result1 = lecturesDao.insertReservation(lectureId, userId);
+    const result2 = lecturesDao.insertLog(userId, 0);
+    const result = [await result1, await result2];
     // no need to wait
     emailService.sendBookingConfirmationEmail(lectureId, userId);
     res.json(result);
@@ -109,7 +112,10 @@ app.get('/api/student/bookings', async (req, res) => {
 app.delete('/api/student/lectures/:lectureId', async (req, res) => {
   const userId = req.user && req.user.user;
   try {
-    const result = await lecturesDao.deleteBookingStudent(req.params.lectureId, userId);
+    //const result = await lecturesDao.deleteBookingStudent(req.params.lectureId, userId);
+    const result1 = lecturesDao.deleteBookingStudent(req.params.lectureId, userId);
+    const result2 = lecturesDao.insertLog(userId, 1);
+    const result = [await result1, await result2];
     res.json(result);
   } catch {
     res.json(deleteBookingError);
@@ -142,7 +148,10 @@ app.delete('/api/teacher/lectures/:lectureId', async (req, res) => {
   const userId = req.user && req.user.user;
   try {
     const booked_students = await lecturesDao.getStudentsCancelledLecture(req.params.lectureId, userId);
-    const result = await lecturesDao.deleteLectureTeacher(req.params.lectureId, userId);
+    //const result = await lecturesDao.deleteLectureTeacher(req.params.lectureId, userId);
+    const result1 = lecturesDao.deleteLectureTeacher(req.params.lectureId, userId);
+    const result2 = lecturesDao.insertLog(userId, 2);
+    const result = [await result1, await result2];
     emailService.sendingEmailCancelledLecture(booked_students);
     res.json(result);
   } catch {
@@ -153,8 +162,11 @@ app.delete('/api/teacher/lectures/:lectureId', async (req, res) => {
 app.post('/api/teacher/changemodality', async (req, res) => {
   const { lectureId } = req.body;
   try {
-    const newModality = await lecturesDao.changeLectureModality(lectureId);
-    res.json(newModality);
+    //const newModality = await lecturesDao.changeLectureModality(lectureId);
+    const newModality = lecturesDao.changeLectureModality(lectureId);
+    const result2 = lecturesDao.insertLog(userId, 3);
+    const result = [await newModality, await result2];
+    res.json(result);
   } catch (error) {
     if (error === 'Lecture Modality can\'t be changed within 30 minutes before its start') res.json(changeModalityTimeConstraintError);
     else res.json(changeModalityQueryError);

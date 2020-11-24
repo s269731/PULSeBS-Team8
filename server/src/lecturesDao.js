@@ -302,6 +302,23 @@ exports.changeLectureModality = (lectureId) => new Promise((resolve, reject) => 
   }
 });
 
+exports.insertLog = (userId, typeOp) => new Promise((resolve, reject) => {
+  // TypeOp is in the range [0, 3]
+  // 0 = insert reservation (only students)
+  // 1 = cancel reservation (only students)
+  // 2 = cancel lecture (only teachers)
+  // 3 = lectures switched to virtual modality (only teachers)
+
+  let date_hour = new Date();
+  let timestamp = date_hour.getTime();
+  console.log(timestamp);
+  const sql = 'INSERT INTO Logs(TypeOp, UserId, Timestamp) VALUES (?, ?, ?)';
+  const stmt = db.prepare(sql);
+  const res = stmt.run(typeOp, userId, timestamp);
+  
+  if (res.changes === 1) { resolve({ result: res.changes }); } else { reject('Error in inserting row'); }
+});
+
 exports.getLecturesByUserId = getLecturesByUserId;
 exports.getTeachersForEmail = getTeachersForEmail;
 exports.getInfoBookingConfirmation = getInfoBookingConfirmation;
