@@ -1,15 +1,17 @@
 import React from "react";
-import { Alert, Spinner, Container } from "react-bootstrap";
+import  {Row,Alert, Spinner, Container, Tabs, Tab} from "react-bootstrap";
 import LectureTable from "./LectureTable.js";
 import API from "../../api/api";
 
 class TeacherPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { loading: true, serverErr: null };
+    this.state = { loading: true, serverErr: null , modality:"lectures"};
     this.cancelLecture = this.cancelLecture.bind(this);
   }
-
+    setModality(k){
+      this.setState({modality:k})
+    }
   cancelLecture(id) {
     API.deleteLectureByTeacher(id)
       .then((res) => {
@@ -76,12 +78,28 @@ class TeacherPage extends React.Component {
           {this.state.serverErr === null &&
             this.state.loading === null &&
             this.state.subjects && (
-              <LectureTable
-                subjects={this.state.subjects}
-                lectures={this.state.lectures}
-                cancelLecture={this.cancelLecture}
-                notLoggedUser={this.props.notLoggedUser}
-              />
+
+                <Tabs
+                    id="controlled-tab"
+                    activeKey={this.state.modality}
+                    onSelect={(k) => this.setModality(k)}
+
+                >
+                    <Tab eventKey="lectures" title="My Lectures">
+                        <LectureTable
+                            subjects={this.state.subjects}
+                            lectures={this.state.lectures}
+                            cancelLecture={this.cancelLecture}
+                            notLoggedUser={this.props.notLoggedUser}
+                        />
+                    </Tab>
+                    <Tab eventKey="stats" title="Statistics">
+
+                    </Tab>
+
+
+                </Tabs>
+
             )}
         </Container>
       </>

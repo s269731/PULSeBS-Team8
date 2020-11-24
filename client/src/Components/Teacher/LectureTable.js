@@ -114,7 +114,7 @@ class LectureTable extends React.Component {
   render() {
     return (
       <>
-        <Container fluid data-testid="lecturetable">
+        <Container fluid data-testid="lecturetable" className={"lectureTable"}>
           <Row className="justify-content-md-center below-nav">
             <h3>Your next lectures: </h3>
           </Row>
