@@ -5,7 +5,7 @@
     padding-bottom: 20px;
 }
 .below-nav {
-    padding-top: 5rem;
+    padding-top: 3rem;
 }
 .headerLinks{
     color: white !important;
@@ -41,8 +41,11 @@
     background-color: ghostwhite;
 }
 #controlled-tab-tab-lectures,#controlled-tab-tab-stats{
-    font-size:1.3rem ;
+    font-size:1.5rem ;
 }
 .headerLectureList{
     margin-bottom: 50px;
+}
+.Nav {
+    font-size: 18px;
 }

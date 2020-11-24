@@ -10,7 +10,7 @@ class Navbars extends Component {
   }
   render() {
     return (
-      <Navbar variant="dark" bg="primary">
+      <Navbar variant="dark" bg="primary" className={"Nav"}>
         <Navbar.Brand>
           <Navbar.Text className="headerLinks">
             <Row>
