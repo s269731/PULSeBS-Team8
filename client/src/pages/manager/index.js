@@ -18,7 +18,7 @@ class Manager extends React.Component {
                             <th>UserName</th>
                             <th>TypeOp</th>
                             <th>TimeStamp</th>
-                            <th>letures</th>
+                            <th>lectures</th>
                         </tr>
                     </thead>
                     <tbody>
