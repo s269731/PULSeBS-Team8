@@ -59,7 +59,7 @@ sections:
   - Total hours estimated
   - Total hours spent
 - Code review 
-  - Total hours estimated：4h
+  - Total hours estimated 
   - Total hours spent:4h30m
 - Technical Debt management:
   - Total hours estimated :3h
