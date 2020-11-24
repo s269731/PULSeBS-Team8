@@ -1,0 +1,39 @@
+.subjectName{
+    color: orangered;
+}
+.date{
+    padding-bottom: 20px;
+}
+.below-nav {
+    padding-top: 5rem;
+}
+.headerLinks{
+    color: white !important;
+    padding-right: 30px;
+}
+.headerNames{
+    color: lightcyan !important;
+    font-size: small;
+}
+.headerWelcome{
+    width: 400px;
+    padding: 5px;
+    border: 1px solid white;
+    margin: 20px;
+    color: white !important;
+}
+.badge{
+    height: 17px;
+    width: 100px;
+    border-radius: 50%;
+    background-color: green;
+    margin:10px
+}
+.badgeText{
+    font-size: small;
+    color:white !important;
+}
+.tableHeader{
+    color: darkred !important;
+    border-bottom: 1px solid white;
+}

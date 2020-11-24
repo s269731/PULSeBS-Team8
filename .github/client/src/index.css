@@ -1,0 +1,40 @@
+ol,
+ul,
+li {
+  list-style: none;
+}
+img {
+  border: 0;
+  vertical-align: middle;
+}
+.clear {
+  clear: both;
+  height: 1px;
+  width: 100%;
+  overflow: hidden;
+  margin-top: -1px;
+}
+body,
+html,
+#root {
+  width: 100%;
+  height: 100%;
+  background-color: #f8f9fa !important;
+}
+.active {
+  background: skyblue;
+}
+#root {
+  display: flex;
+  flex-direction: column;
+}
+.MuiListItem-gutters {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.MuiListItemText-root {
+  flex: 0 !important;
+}
+.MuiListItem-root {
+  text-align: left !important;
+}
