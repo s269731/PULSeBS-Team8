@@ -15,7 +15,7 @@ import AddStudent from "./Components/SupportOfficer/AddStudent";
 import AddTeacher from "./Components/SupportOfficer/AddTeacher";
 import AddLecture from "./Components/SupportOfficer/AddLecture";
 import AddCourse from "./Components/SupportOfficer/AddCourse";
-
+import Manager from "./pages/manager";
 
 
 class App extends React.Component {
@@ -182,7 +182,9 @@ class App extends React.Component {
               <Redirect to="/login" />
             )}
           </Route>
-          <Route>
+          <Route exact path="/manager">
+              <Manager />
+          </Route> <Route>
             <Redirect to="/home" />
           </Route>
         </Switch>
