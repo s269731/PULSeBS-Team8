@@ -160,6 +160,7 @@ app.delete('/api/teacher/lectures/:lectureId', async (req, res) => {
 });
 
 app.post('/api/teacher/changemodality', async (req, res) => {
+  const userId = req.user && req.user.user;
   const { lectureId } = req.body;
   try {
     //const newModality = await lecturesDao.changeLectureModality(lectureId);
