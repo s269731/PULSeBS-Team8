@@ -8,6 +8,7 @@ class TeacherPage extends React.Component {
     super(props);
     this.state = { loading: true, serverErr: null , modality:"lectures"};
     this.cancelLecture = this.cancelLecture.bind(this);
+    this.changeModalityLecture = this.changeModalityLecture.bind(this);
   }
     setModality(k){
       this.setState({modality:k})
@@ -24,6 +25,16 @@ class TeacherPage extends React.Component {
         }
         this.setState({ serverErr: true });
       });
+  }
+  changeModalityLecture(id){
+      let newLectures=[];
+      for(let l of this.state.lectures){
+          if(l.id!==id){
+              newLectures.push(l)
+          }
+      }
+      this.setState({lectures:newLectures}
+      )
   }
   getLectures() {
     API.getLecturesTeacher()
@@ -90,6 +101,7 @@ class TeacherPage extends React.Component {
                             subjects={this.state.subjects}
                             lectures={this.state.lectures}
                             cancelLecture={this.cancelLecture}
+                            changeModalityLecture={this.changeModalityLecture}
                             notLoggedUser={this.props.notLoggedUser}
                         />
                     </Tab>

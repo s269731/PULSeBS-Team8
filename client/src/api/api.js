@@ -182,6 +182,7 @@ async function getLecturesTeacher() {
                   let now = new Date();
                   let lectDay = new Date(l.dateHour);
                   let canDelete = lectDay - now - 3600000 > 0;
+                  let canModify= lectDay - now - 3600000/2 > 0;
                   let fields = l.dateHour.split("T");
                   let date = fields[0];
                   let hour =
@@ -202,6 +203,7 @@ async function getLecturesTeacher() {
                     booked: l.booked,
                     visible: true,
                     canDelete: canDelete,
+                    canModify:canModify
                   };
                 })
             );

@@ -10,6 +10,7 @@ import {
 } from "react-bootstrap";
 import StudentList from "./StudentList";
 import CancelForm from "./CancelForm";
+import ChangeModalityForm from "./ChangeModalityForm";
 
 const LectureItem = (props) => {
   let l = props.lecture;
@@ -74,6 +75,8 @@ const LectureItem = (props) => {
                       />
                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                       <CancelForm l={l} cancelLecture={props.cancelLecture} />
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      <ChangeModalityForm l={l} changeModalityLecture={props.changeModalityLecture}/>
                     </Col>
                   </Row>
 
@@ -161,6 +164,7 @@ class LectureTable extends React.Component {
                             eId={id+1}
                             lecture={e}
                             cancelLecture={this.props.cancelLecture}
+                            changeModalityLecture={this.props.changeModalityLecture}
                             notLoggedUser={this.props.notLoggedUser}
                           />
                   );
