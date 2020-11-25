@@ -9,8 +9,9 @@ const lecturesDao = require('./lecturesDao');
 // populate db
 const d = new Date();
 
-// populate Users Table
+db.prepare('DELETE FROM Logs').run();
 db.prepare('DELETE FROM Users').run();
+// populate Users Table
 db.prepare('INSERT INTO Users(Id, Role, Name, Surname, Email, Password, Course) VALUES(?,?,?,?,?,?,?)').run(
   [1, 'D', 'Marco', 'Torchiano', 'd0001@prof.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'Computer Engineering'],
 );
@@ -75,6 +76,13 @@ db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)').run(2, 4);
 db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)').run(2, 5);
 db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)').run(2, 6);
 db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)').run(2, 7);
+
+// populate Logs table
+//db.prepare('DELETE FROM Logs').run();
+db.prepare('INSERT INTO Logs(TypeOp, UserId, Timestamp) VALUES(?,?,?)').run(0, 2, '1606295135031.0');
+db.prepare('INSERT INTO Logs(TypeOp, UserId, Timestamp) VALUES(?,?,?)').run(1, 3, '1606295137354.0');
+db.prepare('INSERT INTO Logs(TypeOp, UserId, Timestamp) VALUES(?,?,?)').run(2, 1, '1606295180671.0');
+db.prepare('INSERT INTO Logs(TypeOp, UserId, Timestamp) VALUES(?,?,?)').run(3, 1, '1606295191955.0');
 
 test('Should return list of lectures for the userId', async () => {
   const userid = 1;
@@ -331,7 +339,7 @@ test('Should return error for incorrect lectureId', async () => {
   }
 });
 
-test('Should return an errore because a Virtual lecture cant be booked', async () => {
+test('Should return an error because a Virtual lecture can\'t be booked', async () => {
   const lectureId = 2;
   const studentId = 1;
   try {
@@ -339,4 +347,16 @@ test('Should return an errore because a Virtual lecture cant be booked', async (
   } catch (err) {
     expect(err).toBe('a Virtual Lecture can\'t be booked');
   }
+});
+
+test('Should insert the record into Logs table', async () => {
+  const userId = 1;
+  const typeOp = 3;
+  const res = await lecturesDao.insertLog(userId, typeOp);
+  expect(res).toBe(0);
+});
+
+test('Should return all the records of Logs table in descending order', async () => {
+  const logs = await lecturesDao.getLogs();
+  expect(logs.length).toBe(5);
 });

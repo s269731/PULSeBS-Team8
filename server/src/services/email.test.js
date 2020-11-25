@@ -7,6 +7,7 @@ const db = require('../db');
 const emailService = require('./email');
 
 db.prepare('DELETE from Lectures').run();
+db.prepare('DELETE FROM Logs').run();
 db.prepare('DELETE FROM Users').run();
 
 const d = new Date();

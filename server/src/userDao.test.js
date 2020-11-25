@@ -3,7 +3,8 @@ process.env.NODE_ENV = 'test';
 const db = require('./db');
 const userDao = require('./userDao');
 
-// delete all the tickets inserted
+// delete all the users previously inserted
+db.prepare('DELETE FROM Logs').run();
 db.prepare('DELETE from Users').run();
 db.prepare('INSERT INTO Users(Id, Role, Name, Surname, Email, Password, Course) VALUES(?,?,?,?,?,?,?)').run(
   [1, 'D', 'nome1', 'cognome1', 'd0001@prof.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'corso4'],
