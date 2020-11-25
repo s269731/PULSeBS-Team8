@@ -88,6 +88,7 @@ negative：We should improve our ability of estimation.
 - Improvement goals for the next sprint and how to achieve them (technical tasks, team coordination, etc.)
 
 > Propose one or two
+
 Each of us should learn to estimate hours correctly,and improve our skills.
 And we add review,fix,tests under every story,This can better evaluate our working hours.In addition,we will timely communication to help each other.
 
