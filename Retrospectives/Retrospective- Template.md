@@ -74,15 +74,21 @@ sections:
 ## ASSESSMENT
 
 - What caused your errors in estimation (if any)?
+Because we lack the experience of estimating the project, we did not think about review, fix, tests when we did the estimation.
 
 - What lessons did you learn (both positive and negative) in this sprint?
+positive：More communication helps us solve problems more efficiently.
+We can plan and assign tasks better.
+negative：We should improve our ability of estimation.
 
 - Which improvement goals set in the previous retrospective were you able to achieve? 
-  
+  We improve our skills about React.js.
 - Which ones you were not able to achieve? Why?
 
 - Improvement goals for the next sprint and how to achieve them (technical tasks, team coordination, etc.)
 
 > Propose one or two
+Each of us should learn to estimate hours correctly,and improve our skills.
+And we add review,fix,tests under every story,This can better evaluate our working hours.In addition,we will timely communication to help each other.
 
 - One thing you are proud of as a Team!!
