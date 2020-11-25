@@ -385,6 +385,18 @@ async function changeModalityLecture(id){
   });
 }
 
+async function getLogs(){
+  let url = "/manager/logs";
+  const response = await fetch(baseURL + url);
+  const logs = await response.json();
+  if (response.ok) {
+    return logs;
+  } else {
+    let err = { status: response.status, errObj: logs};
+    throw err;
+  }
+}
+
 const API = {
   Login,
   getLectures,
@@ -396,6 +408,7 @@ const API = {
   deleteLectureByTeacher,
   getBookedLectures,
   cancelBookingByStudent,
-  changeModalityLecture
+  changeModalityLecture,
+  getLogs
 };
 export default API;
