@@ -15,7 +15,7 @@ const deleteBookingError = { errors: [{ msg: 'There was an error in deleting the
 const deleteLectureError = { errors: [{ msg: 'There was an error in deleting the selected lecture' }] };
 const changeModalityTimeConstraintError = { errors: [{ msg: 'Lecture Modality can\'t be changed within 30 minutes before its start' }] };
 const changeModalityQueryError = { errors: [{ msg: 'error in changing the modality of the Lecture' }] };
-const insertLogError = { errors: [{ msg: 'There was an error in inserting log record'}] };
+const logsErr = { errors: [{ msg: 'There was an error in retrieving log records'}] };
 
 const app = express();
 app.disable('x-powered-by');
@@ -164,6 +164,21 @@ app.post('/api/teacher/changemodality', async (req, res) => {
   } catch (error) {
     if (error === 'Lecture Modality can\'t be changed within 30 minutes before its start') res.json(changeModalityTimeConstraintError);
     else res.json(changeModalityQueryError);
+  }
+});
+
+app.get('/api/manager/logs', async (req, res) => {
+  // TypeOp is in the range [0, 3]
+  // 0 = insert reservation (only students)
+  // 1 = cancel reservation (only students)
+  // 2 = cancel lecture (only teachers)
+  // 3 = lectures switched to virtual modality (only teachers)
+  
+  try {
+    const logs = await lecturesDao.getLogs();
+    res.json(logs);
+  } catch {
+    res.json(logsErr);
   }
 });
 

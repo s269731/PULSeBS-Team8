@@ -320,6 +320,37 @@ async function insertLog(userId, typeOp) {
   else return 1;
 };
 
+async function getLogs() {
+  // TypeOp is in the range [0, 3]
+  // 0 = insert reservation (only students)
+  // 1 = cancel reservation (only students)
+  // 2 = cancel lecture (only teachers)
+  // 3 = lectures switched to virtual modality (only teachers)
+    
+  const sql = 'SELECT * FROM Logs ORDER BY Id DESC';
+  const stmt = db.prepare(sql);
+  const rows = stmt.all();
+  const logs = [];
+  let obj = {};
+
+  if (rows.length > 0) {
+    await Promise.all(rows.map(async (row) => {
+      const user = await userDao.getUserById(row.UserId);
+      const { name, surname, email } = user;
+      const name_surname = `${name} ${surname}`;
+
+      obj = { 
+        name_surname,
+        email,
+        typeOp: row.TypeOp,
+        timestamp: row.Timestamp
+       };
+      logs.push(obj);
+    }));
+  }
+  return logs;
+};
+
 exports.getLecturesByUserId = getLecturesByUserId;
 exports.getTeachersForEmail = getTeachersForEmail;
 exports.getInfoBookingConfirmation = getInfoBookingConfirmation;
@@ -327,3 +358,4 @@ exports.getStudentsListByLectureId = getStudentsListByLectureId;
 exports.getBookingsByUserId = getBookingsByUserId;
 exports.getStudentsCancelledLecture = getStudentsCancelledLecture;
 exports.insertLog = insertLog;
+exports.getLogs = getLogs;

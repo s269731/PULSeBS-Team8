@@ -48,7 +48,7 @@ async function sendingEmailCancelledLecture(students) {
   if (students.length > 0) {
     const info = students.shift();
     const { subject, teacher, date_hour } = info;
-    const dateString = (new Date(date_hour)).toLocaleString('en');
+    const dateString = (new Date(date_hour)).toLocaleString('en', {timeZone: 'Europe/Helsinki'});
 
     students.forEach((elem) => {
       sendEmail(elem.email_addr, 'Lecture has been cancelled',
