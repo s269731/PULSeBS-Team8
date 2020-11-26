@@ -15,7 +15,7 @@ import StudentList from "../Components/Teacher/StudentList";
 import userEvent from "@testing-library/user-event";
 import CancelForm from "../Components/Teacher/CancelForm";
 import AvailableCourses from "../Components/Student/AvailableCourses";
-import RegisteredCourses from "../Components/Student/RegisteredCourses";
+import RegisteredCourses from "../Components/Student/LecturesCalendar";
 
 
 const leftClick = { button: 0 };

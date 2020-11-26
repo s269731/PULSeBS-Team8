@@ -375,5 +375,10 @@ test('Should insert the record into Logs table', async () => {
 
 test('Should return all the records of Logs table in descending order', async () => {
   const logs = await lecturesDao.getLogs();
+  const info = logs.shift();
+  expect(info.TypeOp0).toBe(1);
+  expect(info.TypeOp1).toBe(1);
+  expect(info.TypeOp2).toBe(1);
+  expect(info.TypeOp3).toBe(2);
   expect(logs.length).toBe(5);
 });

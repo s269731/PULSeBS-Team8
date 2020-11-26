@@ -40,7 +40,7 @@
 .lectureTable{
     background-color: ghostwhite;
 }
-#controlled-tab-tab-lectures,#controlled-tab-tab-stats{
+#controlled-tab-tab-lectures,#controlled-tab-tab-stats,#controlled-tab-tab-calendar{
     font-size:1.5rem ;
 }
 .headerLectureList{
@@ -48,4 +48,7 @@
 }
 .Nav {
     font-size: 18px;
+}
+.FiltersList{
+    border-right: 1px solid black;
 }

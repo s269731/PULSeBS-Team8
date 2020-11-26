@@ -348,6 +348,17 @@ async function getLogs() {
       };
       logs.push(obj);
     }));
+
+    const sql2 = 'SELECT TypeOp, count(*) as count FROM Logs GROUP BY TypeOp ORDER BY TypeOp';
+    const stmt2 = db.prepare(sql2);
+    const records = stmt2.all();
+    let obj2 = {
+      TypeOp0: records[0].count,
+      TypeOp1: records[1].count,
+      TypeOp2: records[2].count,
+      TypeOp3: records[3].count
+    };
+    logs.unshift(obj2);
   }
   return logs;
 }
