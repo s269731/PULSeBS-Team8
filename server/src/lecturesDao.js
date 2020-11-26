@@ -284,8 +284,9 @@ exports.changeLectureModality = (lectureId) => new Promise((resolve, reject) => 
   if (result === undefined) reject('Error in retrieving lecture by his lectureId');
   else {
     const now = new Date();
+    // now.setHours(now.getHours() + 1);
+    console.log(`data: ${now}`);
     const lecturetime = new Date(result.DateHour);
-    console.log(result.Modality);
     if (lecturetime.getTime() - now.getTime() > 1.8e+6) {
       if (result.Modality === 'In person') {
         const transaction = db.transaction(() => {
@@ -309,16 +310,16 @@ async function insertLog(userId, typeOp) {
   // 2 = cancel lecture (only teachers)
   // 3 = lectures switched to virtual modality (only teachers)
 
-  let date_hour = new Date();
-  let timestamp = date_hour.getTime();
-  //console.log(timestamp);
+  const date_hour = new Date();
+  const timestamp = date_hour.getTime();
+  // console.log(timestamp);
   const sql = 'INSERT INTO Logs(TypeOp, UserId, Timestamp) VALUES (?, ?, ?)';
   const stmt = db.prepare(sql);
   const res = stmt.run(typeOp, userId, timestamp);
-  
+
   if (res !== undefined) return 0;
-  else return 1;
-};
+  return 1;
+}
 
 async function getLogs() {
   // TypeOp is in the range [0, 3]
@@ -326,7 +327,7 @@ async function getLogs() {
   // 1 = cancel reservation (only students)
   // 2 = cancel lecture (only teachers)
   // 3 = lectures switched to virtual modality (only teachers)
-    
+
   const sql = 'SELECT * FROM Logs ORDER BY Id DESC';
   const stmt = db.prepare(sql);
   const rows = stmt.all();
@@ -339,17 +340,24 @@ async function getLogs() {
       const { name, surname, email } = user;
       const name_surname = `${name} ${surname}`;
 
-      obj = { 
+      obj = {
         name_surname,
         email,
         typeOp: row.TypeOp,
-        timestamp: row.Timestamp
-       };
+        timestamp: row.Timestamp,
+      };
       logs.push(obj);
     }));
   }
   return logs;
-};
+}
+
+exports.getLecturesBySubjectId = (subjectId) => new Promise((resolve, reject) => {
+  const sql = db.prepare("SELECT LectureId,DateHour,Capacity,BookedPeople FROM Lectures WHERE SubjectId=? AND DateHour < DateTime('now') ORDER BY DateHour");
+  const rows = sql.all(subjectId);
+  if (rows.length > 0) resolve(rows);
+  else reject('There aren\'t lectures for this subjectId');
+});
 
 exports.getLecturesByUserId = getLecturesByUserId;
 exports.getTeachersForEmail = getTeachersForEmail;

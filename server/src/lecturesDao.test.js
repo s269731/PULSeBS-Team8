@@ -84,6 +84,23 @@ db.prepare('INSERT INTO Logs(TypeOp, UserId, Timestamp) VALUES(?,?,?)').run(1, 3
 db.prepare('INSERT INTO Logs(TypeOp, UserId, Timestamp) VALUES(?,?,?)').run(2, 1, '1606295180671.0');
 db.prepare('INSERT INTO Logs(TypeOp, UserId, Timestamp) VALUES(?,?,?)').run(3, 1, '1606295191955.0');
 
+test('Should return an array of objects related to Lectures stats', async () => {
+  const subjectId = 1;
+  const obj = await lecturesDao.getLecturesBySubjectId(subjectId);
+  expect(obj).toBeTruthy();
+  expect(obj[0].LectureId).toBe(3);
+  expect(obj[0].BookedPeople).toBe(50);
+});
+
+test('Should return an array of objects related to Lectures stats', async () => {
+  const subjectId = 3;
+  try {
+    await lecturesDao.getLecturesBySubjectId(subjectId);
+  } catch (err) {
+    expect(err).toBe('There aren\'t lectures for this subjectId');
+  }
+});
+
 test('Should return list of lectures for the userId', async () => {
   const userid = 1;
   const obj = await lecturesDao.getLecturesByUserId(userid);
