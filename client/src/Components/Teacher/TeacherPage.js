@@ -1,6 +1,7 @@
 import React from "react";
 import  {Row,Alert, Spinner, Container, Tabs, Tab} from "react-bootstrap";
 import LectureTable from "./LectureTable.js";
+import StatsPage from './StatsPage';
 import API from "../../api/api";
 
 class TeacherPage extends React.Component {
@@ -109,7 +110,7 @@ class TeacherPage extends React.Component {
                         />
                     </Tab>
                     <Tab eventKey="stats" title="Statistics">
-
+                        <StatsPage  subjects={this.state.subjects} />
                     </Tab>
 
 

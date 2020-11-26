@@ -49,3 +49,6 @@
 .Nav {
     font-size: 18px;
 }
+.FiltersList{
+    border-right: 1px solid black;
+}
