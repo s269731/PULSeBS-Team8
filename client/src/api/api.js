@@ -326,6 +326,7 @@ async function getLogs(){
   const response = await fetch(baseURL + url);
   const logs = await response.json();
   if (response.ok) {
+    console.log(logs)
     return logs;
   } else {
     let err = { status: response.status, errObj: logs};

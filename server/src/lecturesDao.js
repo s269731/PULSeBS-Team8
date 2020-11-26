@@ -309,16 +309,16 @@ async function insertLog(userId, typeOp) {
   // 2 = cancel lecture (only teachers)
   // 3 = lectures switched to virtual modality (only teachers)
 
-  let date_hour = new Date();
-  let timestamp = date_hour.getTime();
-  //console.log(timestamp);
+  const date_hour = new Date();
+  const timestamp = date_hour.getTime();
+  // console.log(timestamp);
   const sql = 'INSERT INTO Logs(TypeOp, UserId, Timestamp) VALUES (?, ?, ?)';
   const stmt = db.prepare(sql);
   const res = stmt.run(typeOp, userId, timestamp);
-  
+
   if (res !== undefined) return 0;
-  else return 1;
-};
+  return 1;
+}
 
 async function getLogs() {
   // TypeOp is in the range [0, 3]
@@ -326,7 +326,7 @@ async function getLogs() {
   // 1 = cancel reservation (only students)
   // 2 = cancel lecture (only teachers)
   // 3 = lectures switched to virtual modality (only teachers)
-    
+
   const sql = 'SELECT * FROM Logs ORDER BY Id DESC';
   const stmt = db.prepare(sql);
   const rows = stmt.all();
@@ -339,28 +339,32 @@ async function getLogs() {
       const { name, surname, email } = user;
       const name_surname = `${name} ${surname}`;
 
-      obj = { 
+      obj = {
         name_surname,
         email,
         typeOp: row.TypeOp,
-        timestamp: row.Timestamp
-       };
+        timestamp: row.Timestamp,
+      };
       logs.push(obj);
     }));
 
     const sql2 = 'SELECT TypeOp, count(*) as count FROM Logs GROUP BY TypeOp ORDER BY TypeOp';
     const stmt2 = db.prepare(sql2);
     const records = stmt2.all();
-    let obj2 = {
-      TypeOp0: records[0].count,
-      TypeOp1: records[1].count,
-      TypeOp2: records[2].count,
-      TypeOp3: records[3].count
-    };
+    let i=0;
+    let obj2 = {};
+    for (let r of records) {
+      obj2[`TypeOp${i}`] = r.count;
+      i = i+1;
+    }
+    while(i<4){
+      obj2[`TypeOp${i}`]=0;
+      i=i+1;
+    }
     logs.unshift(obj2);
   }
   return logs;
-};
+}
 
 exports.getLecturesByUserId = getLecturesByUserId;
 exports.getTeachersForEmail = getTeachersForEmail;
