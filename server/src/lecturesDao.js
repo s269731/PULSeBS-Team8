@@ -284,8 +284,9 @@ exports.changeLectureModality = (lectureId) => new Promise((resolve, reject) => 
   if (result === undefined) reject('Error in retrieving lecture by his lectureId');
   else {
     const now = new Date();
+    // now.setHours(now.getHours() + 1);
+    console.log(`data: ${now}`);
     const lecturetime = new Date(result.DateHour);
-    console.log(result.Modality);
     if (lecturetime.getTime() - now.getTime() > 1.8e+6) {
       if (result.Modality === 'In person') {
         const transaction = db.transaction(() => {
@@ -365,6 +366,13 @@ async function getLogs() {
   }
   return logs;
 }
+
+exports.getLecturesBySubjectId = (subjectId) => new Promise((resolve, reject) => {
+  const sql = db.prepare("SELECT LectureId,DateHour,Capacity,BookedPeople FROM Lectures WHERE SubjectId=? AND DateHour < DateTime('now') ORDER BY DateHour");
+  const rows = sql.all(subjectId);
+  if (rows.length > 0) resolve(rows);
+  else reject('There aren\'t lectures for this subjectId');
+});
 
 exports.getLecturesByUserId = getLecturesByUserId;
 exports.getTeachersForEmail = getTeachersForEmail;

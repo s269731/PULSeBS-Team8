@@ -27,3 +27,20 @@ test('Should not return subjects with an id that does not exist', async () => {
     expect(err).toMatch("There isn't any Subject with that SubjectId");
   }
 });
+
+test('Should return an array with subjectId related to a teacherId', async () => {
+  const teacherId = 1;
+  const obj = await subjectDao.getSubjectsByTeacherId(teacherId);
+  expect(obj).toBeTruthy();
+  expect(obj[0]).toBe(1);
+  expect(obj[1]).toBe(2);
+});
+
+test('Should return an error because there arent subjectsId related to that teacherId', async () => {
+  const teacherId = 2;
+  try {
+    await subjectDao.getSubjectsByTeacherId(teacherId);
+  } catch (err) {
+    expect(err).toBe('No Subject assigned to that teacherId');
+  }
+});
