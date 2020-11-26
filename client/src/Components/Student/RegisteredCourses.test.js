@@ -2,7 +2,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import "@testing-library/jest-dom/extend-expect";
-import RegisteredCourses from "./RegisteredCourses";
+import RegisteredCourses from "./LecturesCalendar";
 import API from "../../api/api";
 
 const leftClick = { button: 0 };

@@ -1,33 +1,20 @@
-import React, { Component } from "react";
-import {Calendar, momentLocalizer } from "react-big-calendar";
+import React, {Component} from "react";
+import {Calendar, momentLocalizer} from "react-big-calendar";
 import moment from "moment";
 import "moment/locale/nb";
 import "../../assets/sass/styles.scss";
 import API from "../../api/api";
-import { Container, Button, Popover, OverlayTrigger } from "react-bootstrap";
+import {Button, OverlayTrigger, Popover} from "react-bootstrap";
+
 const localizer = momentLocalizer(moment);
 
 export default class NewCalendarView extends Component {
-  cancelBookingByStudent(id) {
-    API.cancelBookingByStudent(id)
-      .then((res) => {
-        this.componentDidMount();
-      })
-      .catch((err) => {
-        console.log(err.status);
-        if (err.status === 401) {
-          this.props.notLoggedUser();
-        }
-        this.setState({ serverErr: true });
-      });
-  }
-
   componentDidMount() {
     API.getBookedLectures()
       .then((res) => {
         console.log(res);
         const cal = res.map((lec) => {
-          let lecture = {
+          return {
             id: lec.id,
             instructor: lec.teacherName,
             room: lec.room,
@@ -35,7 +22,6 @@ export default class NewCalendarView extends Component {
             startDate: moment(lec.date + "T" + lec.hour).toDate(),
             endDate: moment(lec.date + "T" + lec.hour + "-02:00").toDate(),
           };
-          return lecture;
         });
         this.setState({ events: cal, loading: null, serverErr: null });
       })
@@ -54,6 +40,10 @@ export default class NewCalendarView extends Component {
     };
   }
 
+  cancelBooking = (id) => {
+    this.props.cancelBooking(id);
+    this.componentDidMount();
+  }
 
   popover = (event) => (
     <Popover id="popover-basic">
@@ -62,7 +52,7 @@ export default class NewCalendarView extends Component {
         for <strong>canceling</strong> course. Click here:
         <Button
           data-testid="cancel-reservation-button"
-          onClick={() => this.cancelBookingByStudent(event.id)}
+          onClick={() => this.cancelBooking(event.id)}
           variant="danger"
         >
           Cancel
@@ -95,13 +85,8 @@ export default class NewCalendarView extends Component {
 
   render() {
     return (
-      <Container fluid data-testid="registered-courses-page">
-        <div
-          style={{
-            flex: 1,
-          }}
-        >
           <Calendar
+            data-testid="registered-courses-page"
             localizer={localizer}
             events={this.state.events}
             startAccessor="startDate"
@@ -116,8 +101,6 @@ export default class NewCalendarView extends Component {
               event: this.Event,
             }}
           />
-        </div>
-      </Container>
     );
   }
 }

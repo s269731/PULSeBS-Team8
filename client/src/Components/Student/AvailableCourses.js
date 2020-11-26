@@ -129,86 +129,26 @@ const LectureItem = (props) => {
   );
 };
 
-class AvailableCourses extends React.Component {
-
-   
-  componentDidMount() {
-    API.getLectures()
-      .then((res) => {
-        this.setState({ lectures: res });
-        this.setState({refresh: false})
-      })
-      .catch((err) => {
-        if (err.status === 401) {
-          this.props.notLoggedUser();
-        }
-        this.setState({ serverErr: true, loading: null });
-      });
-  }
-
-  cancelBookingByStudent=(id)=> {
-    API.cancelBookingByStudent(id)
-      .then((res) => {
-        this.componentDidMount();
-        this.setState({refresh: true})
-      }).catch((err) => {
-        console.log(err.status);
-        if (err.status === 401) {
-          this.props.notLoggedUser();
-        }
-      });
-  }
-
-
-  bookLecture = (id) => {
-    API.bookLeacture(id)
-      .then((res) => {
-        this.componentDidMount();
-        let a = JSON.stringify(res.errors[0].msg);
-
-        const err = this.state.lectures.map((i, key) => {
-          if (i.id === id && a === '"Booking is closed for that Lecture"') {
-            return a;
-          } else {
-            return null;
-          }
-        });
-        this.setState({ errMsg: err });
-      })
-      .catch((err) => {
-        if (err.status === 401) {
-          this.props.notLoggedUser();
-        }
-        this.setState({ serverErr: true, loading: null });
-      });
-  };
-
-  constructor(props) {
-    super(props);
-    this.state = { lectures: [], refresh: false, errMsg: [] };
-  }
-  render() {
-    return (
-      <>
-        <Container data-testid="courses-page">
-          <Row className="justify-content-md-center below-nav">
-            <h3>Available Courses: </h3>
-          </Row>
-          {this.state.lectures.map((e, key) => {
-            return (
-              <LectureItem
-                errMsg={this.state.errMsg}
-                lecture={e}
-                bookLecture={this.bookLecture}
-                cancelBooking={this.cancelBookingByStudent}
-                k={key}
-                refresh={this.state.refresh}
-              />
-            );
-          })}
-        </Container>
-      </>
-    );
-  }
+const AvailableCourses = (props) => {
+  return (
+    <>
+        <Row data-testid="courses-page" className="justify-content-md-center below-nav">
+          <h3>Available Courses: </h3>
+        </Row>
+        {props.lectures.map((e, key) => {
+          return (
+            <LectureItem
+              errMsg={props.errMsg}
+              lecture={e}
+              bookLecture={props.bookLecture}
+              cancelBooking={props.cancelBookingByStudent}
+              k={key}
+              refresh={props.refresh}
+            />
+          );
+        })}
+    </>
+  );
 }
+
 export default AvailableCourses;

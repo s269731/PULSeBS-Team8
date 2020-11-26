@@ -4,7 +4,7 @@ import Navbars from "./Components/Navbar.js";
 import TeacherPage from "./Components/Teacher/TeacherPage";
 import StudentPage from "./Components/Student/StudentPage";
 import AvailableCourses from "./Components/Student/AvailableCourses";
-import RegisteredCourses from "./Components/Student/RegisteredCourses";
+import RegisteredCourses from "./Components/Student/LecturesCalendar";
 import { Switch } from "react-router";
 import { withRouter, Redirect, Route, Link } from "react-router-dom";
 import { Row, Col, Container, Alert } from "react-bootstrap";
@@ -164,20 +164,6 @@ class App extends React.Component {
           <Route exact path="/student">
             {this.state.loggedUser && this.state.loggedUser.role === "S" ? (
               <StudentPage />
-            ) : (
-              <Redirect to="/login" />
-            )}
-          </Route>
-          <Route exact path="/courses">
-            {this.state.loggedUser && this.state.loggedUser.role === "S" ? (
-              <AvailableCourses notLoggedUser={this.notLoggedUser} />
-            ) : (
-              <Redirect to="/login" />
-            )}
-          </Route>
-          <Route exact path="/registeredCourses">
-            {this.state.loggedUser && this.state.loggedUser.role === "S" ? (
-              <RegisteredCourses notLoggedUser={this.notLoggedUser} />
             ) : (
               <Redirect to="/login" />
             )}
