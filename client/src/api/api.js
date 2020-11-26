@@ -102,70 +102,6 @@ async function getLectures() {
   });
 }
 
-async function getBookedLectures() {
-  let url = "/student/bookings";
-  return new Promise((resolve, reject) => {
-    fetch(baseURL + url)
-      .then((response) => {
-        if (response.ok) {
-          response.json().then((list) => {
-            resolve(
-              list
-                .sort((l1, l2) => {
-                  return new Date(l1.dateHour) - new Date(l2.dateHour);
-                })
-                .map((l) => {
-                  let now = new Date();
-                  let lectDay = new Date(l.dateHour);
-                  let canDelete = lectDay - now - 3600000 > 0;
-                  let fields = l.dateHour.split("T");
-                  let date = fields[0];
-                  let hour =
-                    fields[1].split(".")[0].split(":")[0] +
-                    ":" +
-                    fields[1].split(".")[0].split(":")[1];
-                  return {
-                    id: l.lectureId,
-                    subject: l.subjectName,
-                    date: date,
-                    hour: hour,
-                    modality: l.modality,
-                    room: l.className,
-                    capacity: l.capacity,
-                    bookedStudents: l.bookedPeople,
-                    teacherName: l.teacherName,
-                    lectureId: l.lectureId,
-                    booked: l.booked,
-                    visible: true,
-                    canDelete: canDelete,
-                  };
-                })
-            );
-          });
-        } else {
-          response
-            .json()
-            .then((obj) => {
-              obj["status"] = response.status;
-              console.log(obj);
-              reject(obj);
-            }) // error msg in the response body
-            .catch((err) => {
-              reject({
-                errors: [
-                  { param: "Application", msg: "Cannot parse server response" },
-                ],
-              });
-            }); // something else
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] });
-      }); // connection errors
-  });
-}
-
 async function getLecturesTeacher() {
   let url = "/teacher/lectures";
   return new Promise((resolve, reject) => {
@@ -406,7 +342,6 @@ const API = {
   getStudentListByLectureId,
   getLecturesTeacher,
   deleteLectureByTeacher,
-  getBookedLectures,
   cancelBookingByStudent,
   changeModalityLecture,
   getLogs

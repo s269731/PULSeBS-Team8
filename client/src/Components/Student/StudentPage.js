@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import {Container, Row, Button, Card, Tab, Tabs} from "react-bootstrap";
-import Jumbotron from "../../assets/courses.png";
-import { withRouter } from "react-router-dom";
+import {Container, Tab, Tabs} from "react-bootstrap";
 import AvailableCourses from "./AvailableCourses";
 import LecturesCalendar from "./LecturesCalendar";
 import API from "../../api/api";
@@ -16,6 +14,7 @@ class StudentPage extends Component {
   componentDidMount() {
     API.getLectures()
         .then((res) => {
+          console.log(res)
           this.setState({ lectures: res });
           this.setState({refresh: false})
         })
@@ -29,7 +28,7 @@ class StudentPage extends Component {
 
   cancelBookingByStudent=(id)=> {
     API.cancelBookingByStudent(id)
-        .then((res) => {
+        .then(() => {
           this.componentDidMount();
           this.setState({refresh: true})
         }).catch((err) => {
@@ -66,7 +65,7 @@ class StudentPage extends Component {
 
   render() {
     return (
-      <Container className="pt-4" data-testid="student-page">
+      <Container fluid data-testid="student-page">
         <Tabs
             id="controlled-tab"
             activeKey={this.state.modality}
@@ -79,12 +78,12 @@ class StudentPage extends Component {
                 errMsg={this.state.errMsg}
                 refresh={this.state.refresh}
                 bookLecture={this.bookLecture}
-                cancelBooking={this.cancelBookingByStudent}
+                cancelBookingByStudent={this.cancelBookingByStudent}
             />
           </Tab>
           <Tab eventKey="calendar" title="Calendar">
             <LecturesCalendar
-                //bookedLectures={this.state.lectures.map((lecture) => lecture.)}
+                bookedLectures={this.state.lectures.filter((lecture) => lecture.booked===true)}
                 cancelBooking={this.cancelBookingByStudent}
                 notLoggedUser={this.props.notLoggedUser}
             />

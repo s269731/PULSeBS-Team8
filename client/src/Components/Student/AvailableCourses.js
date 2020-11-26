@@ -1,6 +1,5 @@
 import React from "react";
 import { Container, Row, Col, Alert, Button } from "react-bootstrap";
-import API from "../../api/api";
 
 const LectureItem = (props) => {
   let l = props.lecture;
@@ -35,7 +34,7 @@ const LectureItem = (props) => {
               <Col></Col>
               <Col></Col>
               <Col className="align-content-start date">
-                {<h6>{errMsg[key]}</h6>} 
+                {<h6>{errMsg[key]}</h6>}
  
               </Col>
             </Row>

@@ -10,7 +10,7 @@ const lecturesList = [
   {
     id: 1,
     subject: "SoftwareEngineering II",
-    date: "2020-11-20",
+    date: "2020-12-20",
     hour: "15:26",
     modality: "In person",
     room: "12A",
@@ -23,7 +23,7 @@ const lecturesList = [
   {
     id: 2,
     subject: "SoftwareEngineering II",
-    date: "2020-11-20",
+    date: "2020-12-20",
     hour: "15:26",
     modality: "In person",
     room: "12A",
@@ -36,7 +36,7 @@ const lecturesList = [
   {
     id: 3,
     subject: "SoftwareEngineering II",
-    date: "2019-11-20",
+    date: "2019-12-20",
     hour: "15:26",
     modality: "In person",
     room: "12A",
@@ -51,7 +51,7 @@ const lecturesList = [
     subject: "SoftwareEngineering II",
     date: "2020-11-20",
     hour: "15:26",
-    modality: "In person",
+    modality: "Virtual",
     room: "12A",
     capacity: 150,
     bookedStudents: 151,
@@ -62,111 +62,49 @@ const lecturesList = [
 ];
 
 test("AvailableCourses page rendering with lectures list", async () => {
-  const mockGetLectures = jest.spyOn(API, "getLectures");
-  mockGetLectures.mockReturnValue(Promise.resolve(lecturesList));
-  const mockNotLoggedUser = jest.fn();
-
-  render(<AvailableCourses notLoggedUser={mockNotLoggedUser} />);
-
-  expect(screen.getByTestId("courses-page")).toBeInTheDocument();
-  await waitFor(() => expect(mockGetLectures).toHaveBeenCalledTimes(1));
-  await waitFor(() => expect(mockNotLoggedUser).toHaveBeenCalledTimes(0));
-
-  //expect(screen.getByTestId('studentlist-modal')).toBeInTheDocument();
-  //close button
-  //userEvent.click(screen.getByTestId('close-button'), leftClick);
-});
-
-test("AvailableCourses page rendering without lectures list", async () => {
-  const mockGetLectures = jest.spyOn(API, "getLectures");
-  mockGetLectures.mockReturnValue(Promise.reject({ status: 401 }));
-  const mockNotLoggedUser = jest.fn();
-
-  render(<AvailableCourses notLoggedUser={mockNotLoggedUser} />);
+  render(<AvailableCourses
+      lectures={lecturesList}
+      errMsg={[]}
+  />);
 
   expect(screen.getByTestId("courses-page")).toBeInTheDocument();
-  await waitFor(() => expect(mockGetLectures).toHaveBeenCalledTimes(1));
-  await waitFor(() => expect(mockNotLoggedUser).toHaveBeenCalledTimes(1));
+  expect(screen.getAllByTestId("lecture-s-row")[0]).toBeInTheDocument();
 
-  //uncomment this when an error alert with this testid is added to the courses page
-  //expect(screen.getByTestId('error-message')).toBeInTheDocument();
 });
 
 test("Successfully book a lecture", async () => {
-  const mockGetLectures = jest.spyOn(API, "getLectures");
-  mockGetLectures.mockReturnValue(Promise.resolve(lecturesList));
-  const mockBookLecture = jest.spyOn(API, "bookLeacture");
-  mockBookLecture.mockReturnValue(new Promise((resolve) => resolve("ok")));
+  const mockBookLecture = jest.fn();
+  const mockCancelBookingByStudent = jest.fn();
 
-  render(<AvailableCourses />);
+  render(<AvailableCourses
+      lectures={lecturesList}
+      errMsg={[]}
+      bookLecture={mockBookLecture}
+      cancelBookingByStudent={mockCancelBookingByStudent}
+  />);
 
-  await waitFor(() => expect(mockGetLectures).toHaveBeenCalledTimes(1));
-
-  userEvent.click(screen.getAllByTestId("course-book-button")[0], leftClick);
-  userEvent.click(screen.getAllByTestId("course-wait-button")[0], leftClick);
-
-  await waitFor(() => expect(mockBookLecture).toHaveBeenCalledTimes(2));
-});
-
-test("Should fail to book a lecture", async () => {
-  const mockGetLectures = jest.spyOn(API, "getLectures");
-  mockGetLectures.mockReturnValue(Promise.resolve(lecturesList));
-  const mockNotLoggedUser = jest.fn();
-  let mockBookLecture = jest.fn();
-  mockBookLecture = jest.spyOn(API, "bookLeacture");
-  mockBookLecture.mockImplementation(() => {
-    return new Promise((resolve, reject) => {
-      reject({ status: 401 });
-    });
-  });
-
-  render(<AvailableCourses notLoggedUser={mockNotLoggedUser} />);
-
-  await waitFor(() => expect(mockGetLectures).toHaveBeenCalledTimes(1));
+  expect(screen.getByTestId("courses-page")).toBeInTheDocument();
+  expect(screen.getAllByTestId("lecture-s-row")[0]).toBeInTheDocument();
 
   userEvent.click(screen.getAllByTestId("course-book-button")[0], leftClick);
   userEvent.click(screen.getAllByTestId("course-wait-button")[0], leftClick);
 
-  await waitFor(() => expect(mockNotLoggedUser).toHaveBeenCalledTimes(2));
   await waitFor(() => expect(mockBookLecture).toHaveBeenCalledTimes(2));
 });
 
 test("Successfully cancel a lecture reservation", async () => {
-  const mockGetLectures = jest.spyOn(API, "getLectures");
-  mockGetLectures.mockReturnValue(Promise.resolve(lecturesList));
-  const mockNotLoggedUser = jest.fn();
-  let mockcancelBookingByStudent = jest.fn();
-  mockcancelBookingByStudent = jest.spyOn(API, "cancelBookingByStudent");
-  mockcancelBookingByStudent.mockReturnValue(new Promise((resolve) => resolve("ok")));
+  const mockCancelBookingByStudent = jest.fn();
 
-  render(<AvailableCourses notLoggedUser={mockNotLoggedUser} />);
+  render(<AvailableCourses
+      lectures={lecturesList}
+      errMsg={[]}
+      cancelBookingByStudent={mockCancelBookingByStudent}
+  />);
 
-  await waitFor(() => expect(mockGetLectures).toHaveBeenCalledTimes(1));
-
-  userEvent.click(screen.getAllByTestId("course-cancel-button")[0], leftClick);
-
-  await waitFor(() => expect(mockNotLoggedUser).toHaveBeenCalledTimes(0));
-  await waitFor(() => expect(mockcancelBookingByStudent).toHaveBeenCalledTimes(1));
-});
-
-test("Should fail to cancel a lecture reservation", async () => {
-  const mockGetLectures = jest.spyOn(API, "getLectures");
-  mockGetLectures.mockReturnValue(Promise.resolve(lecturesList));
-  const mockNotLoggedUser = jest.fn();
-  let mockcancelBookingByStudent = jest.fn();
-  mockcancelBookingByStudent = jest.spyOn(API, "cancelBookingByStudent");
-  mockcancelBookingByStudent.mockImplementation(() => {
-    return new Promise((resolve, reject) => {
-      reject({ status: 401 });
-    });
-  });
-
-  render(<AvailableCourses notLoggedUser={mockNotLoggedUser} />);
-
-  await waitFor(() => expect(mockGetLectures).toHaveBeenCalledTimes(1));
+  expect(screen.getByTestId("courses-page")).toBeInTheDocument();
+  expect(screen.getAllByTestId("lecture-s-row")[0]).toBeInTheDocument();
 
   userEvent.click(screen.getAllByTestId("course-cancel-button")[0], leftClick);
 
-  await waitFor(() => expect(mockNotLoggedUser).toHaveBeenCalledTimes(1));
-  await waitFor(() => expect(mockcancelBookingByStudent).toHaveBeenCalledTimes(1));
+  await waitFor(() => expect(mockCancelBookingByStudent).toHaveBeenCalledTimes(1));
 });
