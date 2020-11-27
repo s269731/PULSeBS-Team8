@@ -303,7 +303,7 @@ exports.changeLectureModality = (lectureId) => new Promise((resolve, reject) => 
   }
 });
 
-async function insertLog(userId, typeOp) {
+async function insertLog(userId, typeOp, obj) {
   // TypeOp is in the range [0, 3]
   // 0 = insert reservation (only students)
   // 1 = cancel reservation (only students)
@@ -312,10 +312,25 @@ async function insertLog(userId, typeOp) {
 
   const date_hour = new Date();
   const timestamp = date_hour.getTime();
-  // console.log(timestamp);
-  const sql = 'INSERT INTO Logs(TypeOp, UserId, Timestamp) VALUES (?, ?, ?)';
+
+  let lecture;
+  let subjectId;
+  if (isNaN(obj)) {
+    lecture = obj.date_hour;
+    const stmt2 = db.prepare('SELECT SubjectId FROM Subjects WHERE SubjName=?');
+    const row2 = stmt2.get(obj.subject);
+    subjectId = row2.SubjectId;
+  }
+  else {
+    const stmt1 = db.prepare('SELECT DateHour, SubjectId FROM Lectures WHERE LectureId=?');
+    const row1 = stmt1.get(obj);
+    lecture = row1.DateHour;
+    subjectId = row1.SubjectId;
+  }
+  
+  const sql = 'INSERT INTO Logs(TypeOp, UserId, LectDate, SubjectId, Timestamp) VALUES (?, ?, ?, ?, ?)';
   const stmt = db.prepare(sql);
-  const res = stmt.run(typeOp, userId, timestamp);
+  const res = stmt.run(typeOp, userId, lecture, subjectId, timestamp);
 
   if (res !== undefined) return 0;
   return 1;
