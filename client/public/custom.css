@@ -55,3 +55,7 @@
 .LogChart{
     padding-top: 0px;
 }
+.tab-label{
+    font-size: 1.5rem;
+    color:black !important;
+}

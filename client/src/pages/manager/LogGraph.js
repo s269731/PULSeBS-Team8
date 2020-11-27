@@ -9,6 +9,7 @@ class LogGraph extends Component {
         const options = {
             backgroundColor: "#F8F9FA",
             animationEnabled: true,
+            exportEnabled: true,
             title: {
                 text: "Operations typologies"
             },
