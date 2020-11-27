@@ -1,8 +1,6 @@
-TEMPLATE FOR RETROSPECTIVE (Team 8)
+RETROSPECTIVE SPRINT 1 (Team 8)
 =====================================
 
-The retrospective should include _at least_ the following
-sections:
 
 - [process measures](#process-measures)
 - [quality measures](#quality-measures)
