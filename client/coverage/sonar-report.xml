@@ -1,248 +1,20 @@
 <testExecutions version="1">
-<file path="src/pages/logins/index.test.js">
-<testCase name="Input handle login with non-empty email and password" duration="688" />
-<testCase name="Input handle login with empty email and password" duration="341" />
+<file path="src\pages\logins\index.test.js">
+<testCase name="Input handle login with non-empty email and password" duration="325" />
+<testCase name="Input handle login with empty email and password" duration="114" />
 </file>
-<file path="src/Components/Teacher/TeacherPage.test.js">
-<testCase name="Teacher page rendering with lectures" duration="289" />
-<testCase name="Teacher page rendering with failing lectures api" duration="20" />
-<testCase name="LectureTable filter lectures button works" duration="174" />
-<testCase name="LectureTable cancel filter lectures button works" duration="110" />
-<testCase name="Cancel lecture button from Teacher Page works" duration="271" />
+<file path="src\Components\Student\LecturesCalendar.test.js">
+<testCase name="Calendar rendering with lectures list" duration="177" />
 </file>
-<file path="src/api/api.test.js">
-<testCase name="right login" duration="707" />
-<testCase name="wrong login" duration="438" />
-<testCase name="get auth user" duration="395" />
-<testCase name="get no auth user" duration="31" />
-<testCase name="logout" duration="35" />
-<testCase name="loads and displays lectures for teachers" duration="329" />
-<testCase name="handlers server error for teacher lectures" duration="24" />
-<testCase name="get student list with more some student" duration="136" />
-<testCase name="get student list with no students" duration="69" />
-<testCase name="teacher delete a lecture" duration="93" />
-<testCase name="show student lectures list" duration="29">
-<failure message="Error"><![CDATA[TypeError: Cannot read property &apos;map&apos; of undefined
-    at AvailableCourses (/home/daniele/Scrivania/PULSeBS-Team8/client/src/Components/Student/AvailableCourses.js:137:25)
-    at renderWithHooks (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:14985:18)
-    at mountIndeterminateComponent (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:17811:13)
-    at beginWork (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:19049:16)
-    at HTMLUnknownElement.callCallback (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:3945:14)
-    at HTMLUnknownElement.callTheUserObjectsOperation (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)
-    at innerInvokeEventListeners (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:318:25)
-    at invokeEventListeners (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:274:3)
-    at HTMLUnknownElementImpl._dispatch (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:221:9)
-    at HTMLUnknownElementImpl.dispatchEvent (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:94:17)
-    at HTMLUnknownElement.dispatchEvent (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:231:34)
-    at Object.invokeGuardedCallbackDev (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:3994:16)
-    at invokeGuardedCallback (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:4056:31)
-    at beginWork$1 (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:23964:7)
-    at performUnitOfWork (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:22779:12)
-    at workLoopSync (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:22707:5)
-    at renderRootSync (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:22670:7)
-    at performSyncWorkOnRoot (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:22293:18)
-    at scheduleUpdateOnFiber (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:21881:7)
-    at updateContainer (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:25482:3)
-    at /home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:26021:7
-    at unbatchedUpdates (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:22431:12)
-    at legacyRenderSubtreeIntoContainer (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:26020:5)
-    at Object.render (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:26103:10)
-    at /home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/@testing-library/react/dist/pure.js:99:25
-    at batchedUpdates$1 (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:22380:12)
-    at act (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom-test-utils.development.js:1042:14)
-    at render (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/@testing-library/react/dist/pure.js:95:26)
-    at Object.&lt;anonymous&gt; (/home/daniele/Scrivania/PULSeBS-Team8/client/src/api/api.test.js:163:5)
-    at Promise.then.completed (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/utils.js:276:28)
-    at new Promise (&lt;anonymous&gt;)
-    at callAsyncCircusFn (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/utils.js:216:10)
-    at _callCircusTest (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/run.js:212:40)
-    at _runTest (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/run.js:149:3)
-    at _runTestsForDescribeBlock (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/run.js:63:9)
-    at run (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/run.js:25:3)
-    at runAndTransformResultsToJestFormat (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:176:21)
-    at jestAdapter (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:109:19)
-    at runTestInternal (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-runner/build/runTest.js:380:16)
-    at runTest (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-runner/build/runTest.js:472:34)
-    at Object.worker (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-runner/build/testWorker.js:133:12)]]></failure>
-</testCase>
-<testCase name="show student lectures list for no auth user" duration="5">
-<failure message="Error"><![CDATA[TypeError: Cannot read property &apos;map&apos; of undefined
-    at AvailableCourses (/home/daniele/Scrivania/PULSeBS-Team8/client/src/Components/Student/AvailableCourses.js:137:25)
-    at renderWithHooks (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:14985:18)
-    at mountIndeterminateComponent (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:17811:13)
-    at beginWork (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:19049:16)
-    at HTMLUnknownElement.callCallback (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:3945:14)
-    at HTMLUnknownElement.callTheUserObjectsOperation (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)
-    at innerInvokeEventListeners (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:318:25)
-    at invokeEventListeners (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:274:3)
-    at HTMLUnknownElementImpl._dispatch (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:221:9)
-    at HTMLUnknownElementImpl.dispatchEvent (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:94:17)
-    at HTMLUnknownElement.dispatchEvent (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:231:34)
-    at Object.invokeGuardedCallbackDev (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:3994:16)
-    at invokeGuardedCallback (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:4056:31)
-    at beginWork$1 (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:23964:7)
-    at performUnitOfWork (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:22779:12)
-    at workLoopSync (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:22707:5)
-    at renderRootSync (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:22670:7)
-    at performSyncWorkOnRoot (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:22293:18)
-    at scheduleUpdateOnFiber (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:21881:7)
-    at updateContainer (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:25482:3)
-    at /home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:26021:7
-    at unbatchedUpdates (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:22431:12)
-    at legacyRenderSubtreeIntoContainer (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:26020:5)
-    at Object.render (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:26103:10)
-    at /home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/@testing-library/react/dist/pure.js:99:25
-    at batchedUpdates$1 (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:22380:12)
-    at act (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom-test-utils.development.js:1042:14)
-    at render (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/@testing-library/react/dist/pure.js:95:26)
-    at Object.&lt;anonymous&gt; (/home/daniele/Scrivania/PULSeBS-Team8/client/src/api/api.test.js:175:5)
-    at Promise.then.completed (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/utils.js:276:28)
-    at new Promise (&lt;anonymous&gt;)
-    at callAsyncCircusFn (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/utils.js:216:10)
-    at _callCircusTest (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/run.js:212:40)
-    at _runTest (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/run.js:149:3)
-    at _runTestsForDescribeBlock (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/run.js:63:9)
-    at run (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/run.js:25:3)
-    at runAndTransformResultsToJestFormat (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:176:21)
-    at jestAdapter (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:109:19)
-    at runTestInternal (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-runner/build/runTest.js:380:16)
-    at runTest (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-runner/build/runTest.js:472:34)
-    at Object.worker (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-runner/build/testWorker.js:133:12)]]></failure>
-</testCase>
-<testCase name="book a lecture" duration="8">
-<failure message="Error"><![CDATA[TypeError: Cannot read property &apos;map&apos; of undefined
-    at AvailableCourses (/home/daniele/Scrivania/PULSeBS-Team8/client/src/Components/Student/AvailableCourses.js:137:25)
-    at renderWithHooks (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:14985:18)
-    at mountIndeterminateComponent (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:17811:13)
-    at beginWork (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:19049:16)
-    at HTMLUnknownElement.callCallback (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:3945:14)
-    at HTMLUnknownElement.callTheUserObjectsOperation (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)
-    at innerInvokeEventListeners (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:318:25)
-    at invokeEventListeners (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:274:3)
-    at HTMLUnknownElementImpl._dispatch (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:221:9)
-    at HTMLUnknownElementImpl.dispatchEvent (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:94:17)
-    at HTMLUnknownElement.dispatchEvent (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:231:34)
-    at Object.invokeGuardedCallbackDev (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:3994:16)
-    at invokeGuardedCallback (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:4056:31)
-    at beginWork$1 (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:23964:7)
-    at performUnitOfWork (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:22779:12)
-    at workLoopSync (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:22707:5)
-    at renderRootSync (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:22670:7)
-    at performSyncWorkOnRoot (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:22293:18)
-    at scheduleUpdateOnFiber (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:21881:7)
-    at updateContainer (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:25482:3)
-    at /home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:26021:7
-    at unbatchedUpdates (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:22431:12)
-    at legacyRenderSubtreeIntoContainer (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:26020:5)
-    at Object.render (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:26103:10)
-    at /home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/@testing-library/react/dist/pure.js:99:25
-    at batchedUpdates$1 (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:22380:12)
-    at act (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom-test-utils.development.js:1042:14)
-    at render (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/@testing-library/react/dist/pure.js:95:26)
-    at Object.&lt;anonymous&gt; (/home/daniele/Scrivania/PULSeBS-Team8/client/src/api/api.test.js:181:5)
-    at Promise.then.completed (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/utils.js:276:28)
-    at new Promise (&lt;anonymous&gt;)
-    at callAsyncCircusFn (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/utils.js:216:10)
-    at _callCircusTest (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/run.js:212:40)
-    at _runTest (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/run.js:149:3)
-    at _runTestsForDescribeBlock (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/run.js:63:9)
-    at run (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/run.js:25:3)
-    at runAndTransformResultsToJestFormat (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:176:21)
-    at jestAdapter (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:109:19)
-    at runTestInternal (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-runner/build/runTest.js:380:16)
-    at runTest (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-runner/build/runTest.js:472:34)
-    at Object.worker (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-runner/build/testWorker.js:133:12)]]></failure>
-</testCase>
-<testCase name="student get his bookings" duration="1">
-<failure message="Error"><![CDATA[Error: Cannot spy the getBookedLectures property because it is not a function; undefined given instead
-    at ModuleMockerClass.spyOn (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-mock/build/index.js:792:15)
-    at Object.&lt;anonymous&gt; (/home/daniele/Scrivania/PULSeBS-Team8/client/src/api/api.test.js:189:23)
-    at Promise.then.completed (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/utils.js:276:28)
-    at new Promise (&lt;anonymous&gt;)
-    at callAsyncCircusFn (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/utils.js:216:10)
-    at _callCircusTest (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/run.js:212:40)
-    at _runTest (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/run.js:149:3)
-    at _runTestsForDescribeBlock (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/run.js:63:9)
-    at run (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/run.js:25:3)
-    at runAndTransformResultsToJestFormat (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:176:21)]]></failure>
-</testCase>
-<testCase name="student deletes a booking" duration="5">
-<failure message="Error"><![CDATA[TypeError: Cannot read property &apos;map&apos; of undefined
-    at AvailableCourses (/home/daniele/Scrivania/PULSeBS-Team8/client/src/Components/Student/AvailableCourses.js:137:25)
-    at renderWithHooks (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:14985:18)
-    at mountIndeterminateComponent (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:17811:13)
-    at beginWork (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:19049:16)
-    at HTMLUnknownElement.callCallback (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:3945:14)
-    at HTMLUnknownElement.callTheUserObjectsOperation (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)
-    at innerInvokeEventListeners (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:318:25)
-    at invokeEventListeners (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:274:3)
-    at HTMLUnknownElementImpl._dispatch (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:221:9)
-    at HTMLUnknownElementImpl.dispatchEvent (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:94:17)
-    at HTMLUnknownElement.dispatchEvent (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:231:34)
-    at Object.invokeGuardedCallbackDev (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:3994:16)
-    at invokeGuardedCallback (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:4056:31)
-    at beginWork$1 (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:23964:7)
-    at performUnitOfWork (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:22779:12)
-    at workLoopSync (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:22707:5)
-    at renderRootSync (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:22670:7)
-    at performSyncWorkOnRoot (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:22293:18)
-    at scheduleUpdateOnFiber (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:21881:7)
-    at updateContainer (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:25482:3)
-    at /home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:26021:7
-    at unbatchedUpdates (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:22431:12)
-    at legacyRenderSubtreeIntoContainer (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:26020:5)
-    at Object.render (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:26103:10)
-    at /home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/@testing-library/react/dist/pure.js:99:25
-    at batchedUpdates$1 (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom.development.js:22380:12)
-    at act (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/react-dom/cjs/react-dom-test-utils.development.js:1042:14)
-    at render (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/@testing-library/react/dist/pure.js:95:26)
-    at Object.&lt;anonymous&gt; (/home/daniele/Scrivania/PULSeBS-Team8/client/src/api/api.test.js:198:5)
-    at Promise.then.completed (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/utils.js:276:28)
-    at new Promise (&lt;anonymous&gt;)
-    at callAsyncCircusFn (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/utils.js:216:10)
-    at _callCircusTest (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/run.js:212:40)
-    at _runTest (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/run.js:149:3)
-    at _runTestsForDescribeBlock (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/run.js:63:9)
-    at run (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/run.js:25:3)
-    at runAndTransformResultsToJestFormat (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:176:21)
-    at jestAdapter (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:109:19)
-    at runTestInternal (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-runner/build/runTest.js:380:16)
-    at runTest (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-runner/build/runTest.js:472:34)
-    at Object.worker (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-runner/build/testWorker.js:133:12)]]></failure>
-</testCase>
-</file>
-<file path="src/App.test.js">
-<testCase name="full app rendering/navigating to login and logout" duration="2241" />
-<testCase name="fail when getting the current user" duration="29" />
-<testCase name="random routes redirect to home page" duration="26" />
-</file>
-<file path="src/Components/Student/LecturesCalendar.test.js">
-<testCase name="Calendar rendering with lectures list" duration="353" />
-</file>
-<file path="src/Components/Teacher/StudentList.test.js">
-<testCase name="StudentList modal rendering with student list" duration="171" />
-<testCase name="StudentList modal rendering without student list" duration="59" />
-</file>
-<file path="src/index.test.js">
-<testCase name="Application root should render without crashing" duration="17" />
-</file>
-<file path="src/Components/Teacher/CancelForm.test.js">
-<testCase name="Cancel lecture button works" duration="124" />
-</file>
-<file path="src/Components/Student/AvailableCourses.test.js">
-<testCase name="AvailableCourses page rendering with lectures list" duration="66" />
-<testCase name="Successfully book a lecture" duration="60" />
-<testCase name="Successfully cancel a lecture reservation" duration="51" />
-</file>
-<file path="src/Components/Student/StudentPage.test.js">
-<testCase name="Student page rendering/navigation" duration="738" />
-<testCase name="Student page rendering with lectures list" duration="996" />
-<testCase name="Student page rendering without lectures list" duration="341" />
-<testCase name="Successfully book a lecture" duration="762" />
-<testCase name="Should fail to book a lecture if not logged in" duration="465" />
-<testCase name="Successfully cancel a lecture reservation" duration="499" />
-<testCase name="Should fail to cancel a lecture reservation" duration="293" />
-<testCase name="Successfully cancel a reservation from calendar view" duration="295">
+<file path="src\Components\Student\StudentPage.test.js">
+<testCase name="Student page rendering/navigation" duration="263" />
+<testCase name="Student page rendering with lectures list" duration="985" />
+<testCase name="Student page rendering without lectures list" duration="242" />
+<testCase name="Successfully book a lecture" duration="416" />
+<testCase name="Should fail to book a lecture if not logged in" duration="252" />
+<testCase name="Successfully cancel a lecture reservation" duration="260" />
+<testCase name="Should fail to cancel a lecture reservation" duration="264" />
+<testCase name="Successfully cancel a reservation from calendar view" duration="209">
 <failure message="Error"><![CDATA[TestingLibraryElementError: Unable to find an element by: [data-testid=&quot;open-popover-cancel-reservation-button&quot;]
 
 &lt;body&gt;
@@ -416,19 +188,251 @@
                       Book Now
                     &lt;/button&gt;
    ...
-    at Object.getElementError (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/@testing-library/dom/dist/config.js:37:19)
-    at /home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/@testing-library/dom/dist/query-helpers.js:90:38
-    at getAllByTestId (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/@testing-library/dom/dist/query-helpers.js:125:15)
-    at Object.&lt;anonymous&gt; (/home/daniele/Scrivania/PULSeBS-Team8/client/src/Components/Student/StudentPage.test.js:199:14)
-    at _callCircusTest (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/run.js:212:5)
-    at _runTest (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/run.js:149:3)
-    at _runTestsForDescribeBlock (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/run.js:63:9)
-    at run (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/run.js:25:3)
-    at runAndTransformResultsToJestFormat (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:176:21)
-    at jestAdapter (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:109:19)
-    at runTestInternal (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-runner/build/runTest.js:380:16)
-    at runTest (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-runner/build/runTest.js:472:34)
-    at Object.worker (/home/daniele/Scrivania/PULSeBS-Team8/client/node_modules/jest-runner/build/testWorker.js:133:12)]]></failure>
+    at Object.getElementError (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\@testing-library\dom\dist\config.js:37:19)
+    at query (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\@testing-library\dom\dist\query-helpers.js:90:38)
+    at getAllByTestId (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\@testing-library\dom\dist\query-helpers.js:125:15)
+    at Object.&lt;anonymous&gt; (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\src\Components\Student\StudentPage.test.js:199:14)
+    at _callCircusTest (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\run.js:212:5)
+    at _runTest (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\run.js:149:3)
+    at _runTestsForDescribeBlock (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\run.js:63:9)
+    at run (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\run.js:25:3)
+    at runAndTransformResultsToJestFormat (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:176:21)
+    at jestAdapter (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:109:19)
+    at runTestInternal (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-runner\build\runTest.js:380:16)
+    at runTest (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-runner\build\runTest.js:472:34)
+    at Object.worker (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-runner\build\testWorker.js:133:12)]]></failure>
 </testCase>
+</file>
+<file path="src\Components\Student\AvailableCourses.test.js">
+<testCase name="AvailableCourses page rendering with lectures list" duration="358" />
+<testCase name="Successfully book a lecture" duration="56" />
+<testCase name="Successfully cancel a lecture reservation" duration="36" />
+</file>
+<file path="src\Components\Teacher\StudentList.test.js">
+<testCase name="StudentList modal rendering with student list" duration="102" />
+<testCase name="StudentList modal rendering without student list" duration="44" />
+</file>
+<file path="src\Components\Teacher\CancelForm.test.js">
+<testCase name="Cancel lecture button works" duration="96" />
+</file>
+<file path="src\Components\Teacher\ChangeModalityForm.test.js">
+<testCase name="Modify lecture button works" duration="70" />
+</file>
+<file path="src\Components\Teacher\TeacherPage.test.js">
+<testCase name="Teacher page rendering with lectures" duration="415" />
+<testCase name="Teacher page rendering with failing lectures api" duration="7" />
+<testCase name="LectureTable filter lectures button works" duration="142" />
+<testCase name="LectureTable cancel filter lectures button works" duration="112" />
+<testCase name="Cancel lecture button from Teacher Page works" duration="172" />
+</file>
+<file path="src\index.test.js">
+<testCase name="Application root should render without crashing" duration="32" />
+</file>
+<file path="src\api\api.test.js">
+<testCase name="right login" duration="207" />
+<testCase name="wrong login" duration="131" />
+<testCase name="get auth user" duration="442" />
+<testCase name="get no auth user" duration="11" />
+<testCase name="logout" duration="14" />
+<testCase name="loads and displays lectures for teachers" duration="147" />
+<testCase name="handlers server error for teacher lectures" duration="29" />
+<testCase name="get student list with more some student" duration="42" />
+<testCase name="get student list with no students" duration="55" />
+<testCase name="teacher delete a lecture" duration="47" />
+<testCase name="teacher modify a lecture" duration="37" />
+<testCase name="show student lectures list" duration="18">
+<failure message="Error"><![CDATA[TypeError: Cannot read property &apos;map&apos; of undefined
+    at Component (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\src\Components\Student\AvailableCourses.js:137:25)
+    at renderWithHooks (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:14985:18)
+    at mountIndeterminateComponent (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:17811:13)
+    at apply (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:19049:16)
+    at HTMLUnknownElement.callCallback (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:3945:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:318:25)
+    at invokeEventListeners (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:274:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:221:9)
+    at HTMLUnknownElementImpl.dispatchEvent (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:94:17)
+    at HTMLUnknownElement.dispatchEvent (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jsdom\lib\jsdom\living\generated\EventTarget.js:231:34)
+    at Object.apply (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:3994:16)
+    at invokeGuardedCallback (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:4056:31)
+    at beginWork$1 (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:23964:7)
+    at performUnitOfWork (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:22779:12)
+    at workLoopSync (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:22707:5)
+    at renderRootSync (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:22670:7)
+    at performSyncWorkOnRoot (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:22293:18)
+    at scheduleUpdateOnFiber (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:21881:7)
+    at updateContainer (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:25482:3)
+    at fn (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:26021:7)
+    at unbatchedUpdates (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:22431:12)
+    at legacyRenderSubtreeIntoContainer (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:26020:5)
+    at Object.render (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:26103:10)
+    at fn (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\@testing-library\react\dist\pure.js:99:25)
+    at batchedUpdates (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:22380:12)
+    at act (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom-test-utils.development.js:1042:14)
+    at render (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\@testing-library\react\dist\pure.js:95:3)
+    at Object.&lt;anonymous&gt; (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\src\api\api.test.js:192:5)
+    at Promise.then.completed (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\utils.js:276:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\utils.js:216:10)
+    at _callCircusTest (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\run.js:212:40)
+    at _runTest (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\run.js:149:3)
+    at _runTestsForDescribeBlock (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\run.js:63:9)
+    at run (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\run.js:25:3)
+    at runAndTransformResultsToJestFormat (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:176:21)
+    at jestAdapter (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:109:19)
+    at runTestInternal (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-runner\build\runTest.js:380:16)
+    at runTest (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-runner\build\runTest.js:472:34)
+    at Object.worker (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-runner\build\testWorker.js:133:12)]]></failure>
+</testCase>
+<testCase name="show student lectures list for no auth user" duration="3">
+<failure message="Error"><![CDATA[TypeError: Cannot read property &apos;map&apos; of undefined
+    at Component (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\src\Components\Student\AvailableCourses.js:137:25)
+    at renderWithHooks (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:14985:18)
+    at mountIndeterminateComponent (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:17811:13)
+    at apply (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:19049:16)
+    at HTMLUnknownElement.callCallback (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:3945:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:318:25)
+    at invokeEventListeners (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:274:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:221:9)
+    at HTMLUnknownElementImpl.dispatchEvent (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:94:17)
+    at HTMLUnknownElement.dispatchEvent (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jsdom\lib\jsdom\living\generated\EventTarget.js:231:34)
+    at Object.apply (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:3994:16)
+    at invokeGuardedCallback (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:4056:31)
+    at beginWork$1 (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:23964:7)
+    at performUnitOfWork (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:22779:12)
+    at workLoopSync (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:22707:5)
+    at renderRootSync (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:22670:7)
+    at performSyncWorkOnRoot (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:22293:18)
+    at scheduleUpdateOnFiber (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:21881:7)
+    at updateContainer (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:25482:3)
+    at fn (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:26021:7)
+    at unbatchedUpdates (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:22431:12)
+    at legacyRenderSubtreeIntoContainer (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:26020:5)
+    at Object.render (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:26103:10)
+    at fn (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\@testing-library\react\dist\pure.js:99:25)
+    at batchedUpdates (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:22380:12)
+    at act (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom-test-utils.development.js:1042:14)
+    at render (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\@testing-library\react\dist\pure.js:95:3)
+    at Object.&lt;anonymous&gt; (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\src\api\api.test.js:204:5)
+    at Promise.then.completed (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\utils.js:276:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\utils.js:216:10)
+    at _callCircusTest (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\run.js:212:40)
+    at _runTest (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\run.js:149:3)
+    at _runTestsForDescribeBlock (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\run.js:63:9)
+    at run (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\run.js:25:3)
+    at runAndTransformResultsToJestFormat (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:176:21)
+    at jestAdapter (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:109:19)
+    at runTestInternal (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-runner\build\runTest.js:380:16)
+    at runTest (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-runner\build\runTest.js:472:34)
+    at Object.worker (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-runner\build\testWorker.js:133:12)]]></failure>
+</testCase>
+<testCase name="book a lecture" duration="2">
+<failure message="Error"><![CDATA[TypeError: Cannot read property &apos;map&apos; of undefined
+    at Component (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\src\Components\Student\AvailableCourses.js:137:25)
+    at renderWithHooks (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:14985:18)
+    at mountIndeterminateComponent (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:17811:13)
+    at apply (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:19049:16)
+    at HTMLUnknownElement.callCallback (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:3945:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:318:25)
+    at invokeEventListeners (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:274:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:221:9)
+    at HTMLUnknownElementImpl.dispatchEvent (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:94:17)
+    at HTMLUnknownElement.dispatchEvent (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jsdom\lib\jsdom\living\generated\EventTarget.js:231:34)
+    at Object.apply (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:3994:16)
+    at invokeGuardedCallback (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:4056:31)
+    at beginWork$1 (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:23964:7)
+    at performUnitOfWork (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:22779:12)
+    at workLoopSync (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:22707:5)
+    at renderRootSync (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:22670:7)
+    at performSyncWorkOnRoot (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:22293:18)
+    at scheduleUpdateOnFiber (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:21881:7)
+    at updateContainer (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:25482:3)
+    at fn (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:26021:7)
+    at unbatchedUpdates (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:22431:12)
+    at legacyRenderSubtreeIntoContainer (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:26020:5)
+    at Object.render (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:26103:10)
+    at fn (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\@testing-library\react\dist\pure.js:99:25)
+    at batchedUpdates (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:22380:12)
+    at act (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom-test-utils.development.js:1042:14)
+    at render (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\@testing-library\react\dist\pure.js:95:3)
+    at Object.&lt;anonymous&gt; (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\src\api\api.test.js:210:5)
+    at Promise.then.completed (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\utils.js:276:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\utils.js:216:10)
+    at _callCircusTest (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\run.js:212:40)
+    at _runTest (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\run.js:149:3)
+    at _runTestsForDescribeBlock (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\run.js:63:9)
+    at run (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\run.js:25:3)
+    at runAndTransformResultsToJestFormat (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:176:21)
+    at jestAdapter (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:109:19)
+    at runTestInternal (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-runner\build\runTest.js:380:16)
+    at runTest (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-runner\build\runTest.js:472:34)
+    at Object.worker (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-runner\build\testWorker.js:133:12)]]></failure>
+</testCase>
+<testCase name="student get his bookings" duration="0">
+<failure message="Error"><![CDATA[Error: Cannot spy the getBookedLectures property because it is not a function; undefined given instead
+    at ModuleMockerClass.spyOn (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-mock\build\index.js:792:15)
+    at Object.&lt;anonymous&gt; (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\src\api\api.test.js:218:23)
+    at Promise.then.completed (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\utils.js:276:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\utils.js:216:10)
+    at _callCircusTest (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\run.js:212:40)
+    at _runTest (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\run.js:149:3)
+    at _runTestsForDescribeBlock (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\run.js:63:9)
+    at run (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\run.js:25:3)
+    at runAndTransformResultsToJestFormat (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:176:21)]]></failure>
+</testCase>
+<testCase name="student deletes a booking" duration="3">
+<failure message="Error"><![CDATA[TypeError: Cannot read property &apos;map&apos; of undefined
+    at Component (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\src\Components\Student\AvailableCourses.js:137:25)
+    at renderWithHooks (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:14985:18)
+    at mountIndeterminateComponent (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:17811:13)
+    at apply (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:19049:16)
+    at HTMLUnknownElement.callCallback (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:3945:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:318:25)
+    at invokeEventListeners (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:274:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:221:9)
+    at HTMLUnknownElementImpl.dispatchEvent (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:94:17)
+    at HTMLUnknownElement.dispatchEvent (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jsdom\lib\jsdom\living\generated\EventTarget.js:231:34)
+    at Object.apply (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:3994:16)
+    at invokeGuardedCallback (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:4056:31)
+    at beginWork$1 (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:23964:7)
+    at performUnitOfWork (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:22779:12)
+    at workLoopSync (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:22707:5)
+    at renderRootSync (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:22670:7)
+    at performSyncWorkOnRoot (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:22293:18)
+    at scheduleUpdateOnFiber (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:21881:7)
+    at updateContainer (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:25482:3)
+    at fn (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:26021:7)
+    at unbatchedUpdates (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:22431:12)
+    at legacyRenderSubtreeIntoContainer (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:26020:5)
+    at Object.render (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:26103:10)
+    at fn (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\@testing-library\react\dist\pure.js:99:25)
+    at batchedUpdates (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:22380:12)
+    at act (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom-test-utils.development.js:1042:14)
+    at render (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\@testing-library\react\dist\pure.js:95:3)
+    at Object.&lt;anonymous&gt; (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\src\api\api.test.js:227:5)
+    at Promise.then.completed (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\utils.js:276:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\utils.js:216:10)
+    at _callCircusTest (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\run.js:212:40)
+    at _runTest (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\run.js:149:3)
+    at _runTestsForDescribeBlock (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\run.js:63:9)
+    at run (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\run.js:25:3)
+    at runAndTransformResultsToJestFormat (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:176:21)
+    at jestAdapter (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:109:19)
+    at runTestInternal (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-runner\build\runTest.js:380:16)
+    at runTest (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-runner\build\runTest.js:472:34)
+    at Object.worker (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-runner\build\testWorker.js:133:12)]]></failure>
+</testCase>
+</file>
+<file path="src\App.test.js">
+<testCase name="full app rendering/navigating to login and logout" duration="1673" />
+<testCase name="fail when getting the current user" duration="25" />
+<testCase name="random routes redirect to home page" duration="25" />
 </file>
 </testExecutions>
