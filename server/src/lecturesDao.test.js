@@ -79,10 +79,10 @@ db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)').run(2, 7);
 
 // populate Logs table
 //db.prepare('DELETE FROM Logs').run();
-db.prepare('INSERT INTO Logs(TypeOp, UserId, LectDate, Timestamp) VALUES(?,?,?,?)').run(0, 2, '2020-11-29T17:30:00.000Z', '1606295135031.0');
-db.prepare('INSERT INTO Logs(TypeOp, UserId, LectDate, Timestamp) VALUES(?,?,?,?)').run(1, 3, '2020-11-29T17:30:00.000Z', '1606295137354.0');
-db.prepare('INSERT INTO Logs(TypeOp, UserId, LectDate, Timestamp) VALUES(?,?,?,?)').run(2, 1, '2020-11-29T17:30:00.000Z', '1606295180671.0');
-db.prepare('INSERT INTO Logs(TypeOp, UserId, LectDate, Timestamp) VALUES(?,?,?,?)').run(3, 1, '2020-11-29T17:30:00.000Z', '1606295191955.0');
+db.prepare('INSERT INTO Logs(TypeOp, UserId, LectDate, SubjectId, Timestamp) VALUES(?,?,?,?,?)').run(0, 2, '2020-11-29T17:30:00.000Z', 1, '1606295135031.0');
+db.prepare('INSERT INTO Logs(TypeOp, UserId, LectDate, SubjectId, Timestamp) VALUES(?,?,?,?,?)').run(1, 3, '2020-11-29T17:30:00.000Z', 1, '1606295137354.0');
+db.prepare('INSERT INTO Logs(TypeOp, UserId, LectDate, SubjectId, Timestamp) VALUES(?,?,?,?,?)').run(2, 1, '2020-11-29T17:30:00.000Z', 2, '1606295180671.0');
+db.prepare('INSERT INTO Logs(TypeOp, UserId, LectDate, SubjectId, Timestamp) VALUES(?,?,?,?,?)').run(3, 1, '2020-11-29T17:30:00.000Z', 2, '1606295191955.0');
 
 test('Should return an array of objects related to Lectures stats', async () => {
   const subjectId = 1;
@@ -369,16 +369,16 @@ test('Should return an error because a Virtual lecture can\'t be booked', async 
 test('Should insert the record into Logs table, lecture passed as id', async () => {
   const userId = 1;
   const typeOp = 3;
-  const lectDate = 4;
-  const res = await lecturesDao.insertLog(userId, typeOp, lectDate);
+  const lect = 4;
+  const res = await lecturesDao.insertLog(userId, typeOp, lect);
   expect(res).toBe(0);
 });
 
-test('Should insert the record into Logs table, lecture passed directly as date', async () => {
+test('Should insert the record into Logs table, lecture passed directly as object with 2 properties', async () => {
   const userId = 1;
   const typeOp = 2;
-  const lectDate = '2020-11-29T17:30:00.000Z';
-  const res = await lecturesDao.insertLog(userId, typeOp, lectDate);
+  const lect = {date_hour: '2020-11-29T17:30:00.000Z', subject: 'SoftwareEngineering II'};
+  const res = await lecturesDao.insertLog(userId, typeOp, lect);
   expect(res).toBe(0);
 });
 
