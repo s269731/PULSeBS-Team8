@@ -36,8 +36,7 @@ RETROSPECTIVE SPRINT 1 (Team 8)
 
 
 
-- Hours per task (average, standard deviation): average 2h 46m - standard deviation 10h 19m
-
+- Hours per task (average, standard deviation): average 2h 46m - standard deviation 5h 57m
 - Total task estimation error ratio: sum of total hours estimation / sum of total hours spent from previous table :66%
 
   
