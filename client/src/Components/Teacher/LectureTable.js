@@ -9,8 +9,7 @@ import {
   ButtonGroup,
 } from "react-bootstrap";
 import StudentList from "./StudentList";
-import CancelForm from "./CancelForm";
-import ChangeModalityForm from "./ChangeModalityForm";
+import ActionsForm from "./ActionsForm";
 
 const LectureItem = (props) => {
   let l = props.lecture;
@@ -72,10 +71,10 @@ const LectureItem = (props) => {
                           notLoggedUser={props.notLoggedUser}
                       />
                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      <CancelForm l={l} cancelLecture={props.cancelLecture} />
+                      <ActionsForm l={l} cancelLecture={props.cancelLecture} operation={'delete'}/>
                       {l.modality === "In person" && <>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <ChangeModalityForm l={l} changeModalityLecture={props.changeModalityLecture}/>
+                        <ActionsForm l={l} changeModalityLecture={props.changeModalityLecture} operation={'modify'}/>
                         </>
                       }
                     </Col>

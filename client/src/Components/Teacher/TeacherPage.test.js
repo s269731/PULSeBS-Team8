@@ -124,7 +124,7 @@ test("Cancel lecture button from Teacher Page works", async () => {
 
   userEvent.click(screen.getAllByTestId("cancel-lecture-button")[0], leftClick);
 
-  expect(screen.getByTestId("cancel-lecture-modal")).toBeInTheDocument();
+  expect(screen.getByTestId("modification-lecture-modal")).toBeInTheDocument();
 
   userEvent.click(
     screen.getByTestId("cancel-lecture-closemodal-button"),
