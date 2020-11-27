@@ -56,7 +56,7 @@ async function retrieveLectures(url){
                         let canModify= lectDay - now - 3600000/2 > 0;
                         let fields = l.dateHour.split("T");
                         let date = fields[0];
-                        let hour = date.getHours() + ":" + date.getMinutes();
+                        let hour = lectDay.getHours() + ":" + lectDay.getMinutes();
                             /*
                             fields[1].split(".")[0].split(":")[0] +
                             ":" +
