@@ -328,7 +328,7 @@ async function insertLog(userId, typeOp, obj) {
     subjectId = row1.SubjectId;
   }
   
-  const sql = 'INSERT INTO Logs(TypeOp, UserId, LectDate, SubjectId, Timestamp) VALUES (?, ?, ?, ?, ?)';
+  const sql = 'INSERT INTO Logs(TypeOp, UserId, LectDate, SubjectId, Timestamp) VALUES (?,?,?,?,?)';
   const stmt = db.prepare(sql);
   const res = stmt.run(typeOp, userId, lecture, subjectId, timestamp);
 
@@ -354,11 +354,14 @@ async function getLogs() {
       const user = await userDao.getUserById(row.UserId);
       const { name, surname, email } = user;
       const name_surname = `${name} ${surname}`;
+      const subjectName = await subjectDao.getSubjectName(row.SubjectId);
 
       obj = {
         name_surname,
         email,
         typeOp: row.TypeOp,
+        lectDate: row.LectDate,
+        subject: subjectName.SubjectName,
         timestamp: row.Timestamp,
       };
       logs.push(obj);

@@ -40,6 +40,8 @@ class Manager extends React.Component {
                                     <th>UserName</th>
                                     <th>Email</th>
                                     <th>TypeOp</th>
+                                    <th>Lecture date</th>
+                                    <th>Subject</th>
                                     <th>TimeStamp</th>
                                 </tr>
                             </thead>
@@ -50,6 +52,8 @@ class Manager extends React.Component {
                                             <td>{item.name_surname}</td>
                                             <td>{item.email}</td>
                                             <td>{typeOp[item.typeOp]}</td>
+                                            <td>{item.lectDate}</td>
+                                            <td>{item.subject}</td>
                                             <td>{new Date(parseInt(item.timestamp)).toLocaleString()}</td>
 
                                         </tr>
