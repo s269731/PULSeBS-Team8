@@ -47,7 +47,7 @@ RETROSPECTIVE SPRINT 1 (Team 8)
   - Total hours spent: 12h 16m
   - Nr of automated unit test cases: 53
   - Coverage (if available)
-  ![image](https://github.com/S274294/PULSeBS-Team8/blob/master/Retrospectives/coverageS1.png)
+  ![image](https://github.com/s269731/PULSeBS-Team8/blob/master/Retrospectives/coverageS1.png)
 - E2E testing:
   - Total hours estimated
   - Total hours spent
