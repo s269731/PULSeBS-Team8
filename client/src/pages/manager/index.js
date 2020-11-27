@@ -1,6 +1,5 @@
 import React from "react";
-import {Container, Row, Col, Card, Button, Table, ButtonGroup, Tabs, Tab} from "react-bootstrap";
-import {Link} from 'react-router-dom'
+import {Container, Row, Col, Button, Table, ButtonGroup, Tabs, Tab} from "react-bootstrap";
 import './manager.css'
 import API from "../../api/api";
 import LogGraph from './LogGraph'

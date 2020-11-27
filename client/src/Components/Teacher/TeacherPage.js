@@ -1,5 +1,5 @@
 import React from "react";
-import  {Row,Alert, Spinner, Container, Tabs, Tab} from "react-bootstrap";
+import  {Alert, Spinner, Container, Tabs, Tab} from "react-bootstrap";
 import LectureTable from "./LectureTable.js";
 import StatsPage from './StatsPage';
 import API from "../../api/api";
