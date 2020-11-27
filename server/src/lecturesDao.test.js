@@ -79,10 +79,10 @@ db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)').run(2, 7);
 
 // populate Logs table
 //db.prepare('DELETE FROM Logs').run();
-db.prepare('INSERT INTO Logs(TypeOp, UserId, Timestamp) VALUES(?,?,?)').run(0, 2, '1606295135031.0');
-db.prepare('INSERT INTO Logs(TypeOp, UserId, Timestamp) VALUES(?,?,?)').run(1, 3, '1606295137354.0');
-db.prepare('INSERT INTO Logs(TypeOp, UserId, Timestamp) VALUES(?,?,?)').run(2, 1, '1606295180671.0');
-db.prepare('INSERT INTO Logs(TypeOp, UserId, Timestamp) VALUES(?,?,?)').run(3, 1, '1606295191955.0');
+db.prepare('INSERT INTO Logs(TypeOp, UserId, LectDate, Timestamp) VALUES(?,?,?,?)').run(0, 2, '2020-11-29T17:30:00.000Z', '1606295135031.0');
+db.prepare('INSERT INTO Logs(TypeOp, UserId, LectDate, Timestamp) VALUES(?,?,?,?)').run(1, 3, '2020-11-29T17:30:00.000Z', '1606295137354.0');
+db.prepare('INSERT INTO Logs(TypeOp, UserId, LectDate, Timestamp) VALUES(?,?,?,?)').run(2, 1, '2020-11-29T17:30:00.000Z', '1606295180671.0');
+db.prepare('INSERT INTO Logs(TypeOp, UserId, LectDate, Timestamp) VALUES(?,?,?,?)').run(3, 1, '2020-11-29T17:30:00.000Z', '1606295191955.0');
 
 test('Should return an array of objects related to Lectures stats', async () => {
   const subjectId = 1;
@@ -366,10 +366,19 @@ test('Should return an error because a Virtual lecture can\'t be booked', async 
   }
 });
 
-test('Should insert the record into Logs table', async () => {
+test('Should insert the record into Logs table, lecture passed as id', async () => {
   const userId = 1;
   const typeOp = 3;
-  const res = await lecturesDao.insertLog(userId, typeOp);
+  const lectDate = 4;
+  const res = await lecturesDao.insertLog(userId, typeOp, lectDate);
+  expect(res).toBe(0);
+});
+
+test('Should insert the record into Logs table, lecture passed directly as date', async () => {
+  const userId = 1;
+  const typeOp = 2;
+  const lectDate = '2020-11-29T17:30:00.000Z';
+  const res = await lecturesDao.insertLog(userId, typeOp, lectDate);
   expect(res).toBe(0);
 });
 
@@ -378,7 +387,7 @@ test('Should return all the records of Logs table in descending order', async ()
   const info = logs.shift();
   expect(info.TypeOp0).toBe(1);
   expect(info.TypeOp1).toBe(1);
-  expect(info.TypeOp2).toBe(1);
+  expect(info.TypeOp2).toBe(2);
   expect(info.TypeOp3).toBe(2);
-  expect(logs.length).toBe(5);
+  expect(logs.length).toBe(6);
 });
