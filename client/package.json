@@ -28,7 +28,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --transformIgnorePatterns \\\"node_modules/(?!canvasjs-react-charts)/\\\" --env=jsdom",
     "test:coverage": "react-scripts test --coverage --reporters=default --reporters=jest-sonar --watchAll --silent",
     "eject": "react-scripts eject"
   },

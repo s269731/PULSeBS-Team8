@@ -110,7 +110,7 @@ class TeacherPage extends React.Component {
                         />
                     </Tab>
                     <Tab eventKey="stats" title="Statistics">
-                        <StatsPage  subjects={this.state.subjects} />
+                        <StatsPage  subjects={this.state.subjects} canShowGraphs={this.props.canShowGraphs}/>
                     </Tab>
 
 

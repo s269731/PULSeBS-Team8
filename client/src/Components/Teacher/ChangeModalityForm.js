@@ -32,7 +32,7 @@ function ChangeModalityForm(props) {
       <Modal
         show={show}
         onHide={handleClose}
-        data-testid="cancel-lecture-modal"
+        data-testid="modify-lecture-modal"
       >
         <Modal.Header closeButton>
           <Modal.Title>Warning</Modal.Title>

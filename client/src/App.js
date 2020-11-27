@@ -156,7 +156,7 @@ class App extends React.Component {
           </Route>
           <Route exact path="/teacher">
             {this.state.loggedUser && this.state.loggedUser.role === "D" ? (
-              <TeacherPage notLoggedUser={this.notLoggedUser} />
+              <TeacherPage notLoggedUser={this.notLoggedUser} canShowGraphs={!this.props.test}/>
             ) : (
               <Redirect to="/login" />
             )}

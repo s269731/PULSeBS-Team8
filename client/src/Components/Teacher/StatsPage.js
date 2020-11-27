@@ -101,7 +101,8 @@ class StatsPage extends Component {
                             <StatsTable/>
                         </Col>
                         <Col xs={6}>
-                            <LecturesGraph/>
+                            {this.props.canShowGraphs &&
+                            <LecturesGraph/>}
                         </Col>
                      </Row>
                    </Tab>
@@ -111,7 +112,8 @@ class StatsPage extends Component {
                                <StatsTable/>
                            </Col>
                            <Col xs={6}>
-                               <LecturesGraph/>
+                               {this.props.canShowGraphs &&
+                               <LecturesGraph/>}
                            </Col>
                        </Row>
                    </Tab>
@@ -121,7 +123,8 @@ class StatsPage extends Component {
                                <StatsTable/>
                            </Col>
                            <Col xs={6}>
-                               <LecturesGraph/>
+                               {this.props.canShowGraphs &&
+                               <LecturesGraph/>}
                            </Col>
                        </Row>
                    </Tab>

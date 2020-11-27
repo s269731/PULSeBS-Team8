@@ -16,6 +16,7 @@ import userEvent from "@testing-library/user-event";
 import CancelForm from "../Components/Teacher/CancelForm";
 import AvailableCourses from "../Components/Student/AvailableCourses";
 import RegisteredCourses from "../Components/Student/LecturesCalendar";
+import ChangeModalityForm from "../Components/Teacher/ChangeModalityForm";
 
 
 const leftClick = { button: 0 };
@@ -95,7 +96,7 @@ test('logout', async ()=>{
 
 
 test('loads and displays lectures for teachers', async () => {
-    render(<TeacherPage />)
+    render(<TeacherPage showgraphs={false}/>)
     await waitFor(() => screen.getByTestId('lecturetable'))
     expect(screen.getByTestId('lecturetable')).toHaveTextContent('Course')
 })
@@ -108,7 +109,7 @@ test('handlers server error for teacher lectures', async () => {
             return res(ctx.status(500))
         })
     )
-    render(<TeacherPage />)
+    render(<TeacherPage canShowGraphs={false}/>)
     await waitFor(() => screen.getByTestId('error-message'))}
 )
 test('get student list with more some student', async()=> {
@@ -157,6 +158,34 @@ test('teacher delete a lecture', async()=>{
         leftClick
     );
     await waitFor(() => expect(deleteSpy).toHaveBeenCalledTimes(1));
+})
+test('teacher modify a lecture', async()=>{
+    const modifySpy=jest.spyOn(API, "changeModalityLecture");
+    render( <ChangeModalityForm l={{
+        id: 4,
+        subject: "SoftwareEngineering II",
+        date: "2020-11-17",
+        hour: "17:26",
+        modality: "In person",
+        room: "12A",
+        capacity: 50,
+        bookedStudents: 100,
+        teacherName: "Franco yjtyjty",
+        lectureId: 4,
+        booked: false,
+        canDelete:true,
+        canModify:true,
+    }} changeModalityLecture={API.changeModalityLecture} />)
+
+    userEvent.click(screen.getByTestId("modify-lecture-button"), leftClick);
+
+    expect(screen.getByTestId("modify-lecture-modal")).toBeInTheDocument();
+
+    userEvent.click(
+        screen.getByTestId("modify-lecture-closemodal-button"),
+        leftClick
+    );
+    await waitFor(() => expect(modifySpy).toHaveBeenCalledTimes(1));
 })
 
 test('show student lectures list', async ()=>{
