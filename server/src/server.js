@@ -7,6 +7,7 @@ const schedule = require('node-schedule');
 const emailService = require('./services/email');
 const userDao = require('./userDao');
 const lecturesDao = require('./lecturesDao');
+const logsDao = require('./logsDao');
 
 const authErrorObj = { errors: [{ msg: 'Authorization error' }] };
 const lecturesErr = { errors: [{ msg: 'There was an error retrieving available lectures' }] };
@@ -90,7 +91,7 @@ app.post('/api/student/reserve', async (req, res) => {
   try {
     const result = await lecturesDao.insertReservation(lectureId, userId);
     // no need to wait
-    lecturesDao.insertLog(userId, 0, lectureId);
+    logsDao.insertLog(userId, 0, lectureId);
     emailService.sendBookingConfirmationEmail(lectureId, userId);
     res.json(result);
   } catch (error) {
@@ -112,7 +113,7 @@ app.delete('/api/student/lectures/:lectureId', async (req, res) => {
   const userId = req.user && req.user.user;
   try {
     const result = await lecturesDao.deleteBookingStudent(req.params.lectureId, userId);
-    lecturesDao.insertLog(userId, 1, req.params.lectureId);
+    logsDao.insertLog(userId, 1, req.params.lectureId);
     res.json(result);
   } catch {
     res.json(deleteBookingError);
@@ -146,7 +147,7 @@ app.delete('/api/teacher/lectures/:lectureId', async (req, res) => {
   try {
     const booked_students = await lecturesDao.getStudentsCancelledLecture(req.params.lectureId, userId);
     const result = await lecturesDao.deleteLectureTeacher(req.params.lectureId, userId);
-    lecturesDao.insertLog(userId, 2, booked_students[0]);
+    logsDao.insertLog(userId, 2, booked_students[0]);
     emailService.sendingEmailCancelledLecture(booked_students);
     res.json(result);
   } catch {
@@ -159,7 +160,7 @@ app.post('/api/teacher/changemodality', async (req, res) => {
   const { lectureId } = req.body;
   try {
     const newModality = await lecturesDao.changeLectureModality(lectureId);
-    lecturesDao.insertLog(userId, 3, lectureId);
+    logsDao.insertLog(userId, 3, lectureId);
     res.json(newModality);
   } catch (error) {
     if (error === 'Lecture Modality can\'t be changed within 30 minutes before its start') res.json(changeModalityTimeConstraintError);
@@ -175,7 +176,7 @@ app.get('/api/manager/logs', async (req, res) => {
   // 3 = lectures switched to virtual modality (only teachers)
 
   try {
-    const logs = await lecturesDao.getLogs();
+    const logs = await logsDao.getLogs();
     res.json(logs);
   } catch {
     res.json(logsErr);
