@@ -352,17 +352,14 @@ async function getLogs() {
     const sql2 = 'SELECT TypeOp, count(*) as count FROM Logs GROUP BY TypeOp ORDER BY TypeOp';
     const stmt2 = db.prepare(sql2);
     const records = stmt2.all();
-    let i=0;
-    let obj2 = {};
-    for (let r of records) {
-      obj2[`TypeOp${i}`] = r.count;
-      i = i+1;
+    let obj3 = {};
+
+    for (let i=0; i<4; i++) {
+      let obj2 = records.find(o => o.TypeOp === i);
+      if (obj2 === undefined) obj3[`TypeOp${i}`]=0;
+      else obj3[`TypeOp${i}`]=obj2.count;
     }
-    while(i<4){
-      obj2[`TypeOp${i}`]=0;
-      i=i+1;
-    }
-    logs.unshift(obj2);
+    logs.unshift(obj3);
   }
   return logs;
 }
