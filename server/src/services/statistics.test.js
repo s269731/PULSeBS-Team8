@@ -8,7 +8,7 @@ const lecturesDao = require('../lecturesDao');
 const statistics = require('./statistics');
 
 const d = new Date();
-const today = moment(d);
+let today = moment(d);
 // populate DB
 db.prepare('DELETE FROM Logs').run();
 db.prepare('DELETE FROM Users').run();
@@ -26,36 +26,46 @@ db.prepare('INSERT INTO Subjects(SubjectId, TeacherId,SubjName,Course) VALUES(?,
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
   [1, 1, 1, today.subtract(1, 'days').toISOString(), 'In person', '12A', 150, 6],
 );
+today = moment(d);
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
-  [2, 1, 1, today.add(2, 'hours').toISOString(), 'In person', '12A', 100, 6],
+  [2, 1, 1, today.add(5, 'hours').toISOString(), 'In person', '12A', 100, 6],
 );
+today = moment(d);
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
   [3, 1, 1, today.subtract(3, 'months').toISOString(), 'In person', '12A', 100, 50],
 );
+today = moment(d);
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
   [4, 1, 1, today.subtract(5, 'days').toISOString(), 'In person', '12A', 100, 50],
 );
+today = moment(d);
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
   [5, 1, 1, today.subtract(15, 'hours').toISOString(), 'In person', '12A', 100, 100],
 );
+today = moment(d);
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
   [6, 1, 2, today.subtract(1, 'months').toISOString(), 'In person', '12A', 150, 6],
 );
+today = moment(d);
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
   [7, 1, 2, today.add(2, 'hours').toISOString(), 'In person', '12A', 100, 6],
 );
+today = moment(d);
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
   [8, 1, 2, today.subtract(3, 'months').toISOString(), 'In person', '12A', 100, 50],
 );
+today = moment(d);
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
   [9, 1, 1, today.subtract(5, 'days').toISOString(), 'In person', '12A', 100, 50],
 );
+today = moment(d);
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
   [10, 1, 1, today.subtract(15, 'days').toISOString(), 'In person', '12A', 100, 100],
 );
 
 test('nothing', async () => {
   const teacherId = 1;
+  console.log(today.add(2, 'hours').toISOString());
   const obj = await statistics.computeTeacherStatistics(teacherId);
-
+  expect(obj).toBeTruthy();
 });

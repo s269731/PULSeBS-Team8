@@ -42,7 +42,7 @@ db.prepare('INSERT INTO Subjects(SubjectId,TeacherId,SubjName,Course) VALUES(?,?
 // delete all the lectures inserted
 db.prepare('DELETE from Lectures').run();
 // populate Lectures Table
-const today = moment(d); // .format('YYYY-MM-DD HH:MM:SS.SSS');
+let today = moment(d); // .format('YYYY-MM-DD HH:MM:SS.SSS');
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
   [1, 1, 1, today.add(1, 'days').toISOString(), 'In person', '12A', 150, 6],
 );
@@ -55,8 +55,9 @@ db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Moda
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
   [4, 1, 1, today.add(5, 'days').toISOString(), 'In person', '12A', 100, 50],
 );
+today = moment(d);
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
-  [5, 1, 1, today.add(15, 'minutes').toISOString(), 'In person', '12A', 100, 100],
+  [5, 1, 1, today.add(2, 'days').toISOString(), 'In person', '12A', 100, 100],
 );
 // populate Enrollments Table
 db.prepare('DELETE FROM Enrollments').run();
@@ -78,7 +79,7 @@ db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)').run(2, 6);
 db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)').run(2, 7);
 
 // populate Logs table
-//db.prepare('DELETE FROM Logs').run();
+// db.prepare('DELETE FROM Logs').run();
 db.prepare('INSERT INTO Logs(TypeOp, UserId, Timestamp) VALUES(?,?,?)').run(0, 2, '1606295135031.0');
 db.prepare('INSERT INTO Logs(TypeOp, UserId, Timestamp) VALUES(?,?,?)').run(1, 3, '1606295137354.0');
 db.prepare('INSERT INTO Logs(TypeOp, UserId, Timestamp) VALUES(?,?,?)').run(2, 1, '1606295180671.0');
