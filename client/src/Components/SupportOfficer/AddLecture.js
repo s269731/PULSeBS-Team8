@@ -1,69 +1,41 @@
 import React, {Component} from 'react';
-import {Button, Card, Form, Row, Col} from 'react-bootstrap'
-
+import { FileUpload } from 'primereact/fileupload';
+import { Toast } from 'primereact/toast';
+import 'primeicons/primeicons.css';
+import 'primereact/resources/themes/saga-blue/theme.css';
+import 'primereact/resources/primereact.css';
+import 'primeflex/primeflex.css';
 class AddLecture extends Component {
+  constructor(props) {
+    super(props);
+
+    this.onUpload = this.onUpload.bind(this);
+    this.onBasicUpload = this.onBasicUpload.bind(this);
+    this.onBasicUploadAuto = this.onBasicUploadAuto.bind(this);
+}
+
+onUpload() {
+    this.toast.show({severity: 'info', summary: 'Success', detail: 'File Uploaded'});
+}
+
+onBasicUpload() {
+    this.toast.show({severity: 'info', summary: 'Success', detail: 'File Uploaded with Basic Mode'});
+}
+
+onBasicUploadAuto() {
+    this.toast.show({severity: 'info', summary: 'Success', detail: 'File Uploaded with Auto Mode'});
+}
   render() {
     return (
       <div>
-        <Card>
-          <Card.Header>
-            <h4>Add New Lecture
-            </h4>
-          </Card.Header>
-          <Card.Body>
-            <Form>
-              <Row>
-                <Col>
-                <Form.Group controlId="exampleForm.ControlSelect1">
-                <h4>Choose Teacher</h4>
-                <Form.Control as="select">
-                  <option>Luca</option>
-                  <option>Nino</option>
-                  <option>Loredana</option>
-                  <option>Jinzhuo</option>
-                  <option>Daniele</option>
-                </Form.Control>
-              </Form.Group>
-                </Col>
-                <Col>
-                  <h5>Choose Subject</h5>
-                  <Form.Control placeholder="Subject"/>
-                </Col>
-              </Row>
-              <Row/>
-              <br/>
-              <Row>
-                <Col>
-                  <h5>Date</h5>
-                  <Form.Control placeholder="Date"/>
-                </Col>
-                <Col>
-                  <h5>Modality</h5>
-                  <Form.Control placeholder="Modality"/>
-                </Col>
-              </Row>
-              <br/>
-              <Row>
-                <Col>
-                  <h5>Class</h5>
-                  <Form.Control placeholder="Email"/>
-                </Col>
-                <Col>
-                  <h5>Capacity</h5>
-                  <Form.Control placeholder="Capacity"/>
-                </Col>
-              </Row>
-              <br/>
-            </Form>
+      <Toast ref={(el) => { this.toast = el; }}></Toast>
 
-          </Card.Body>
-          <Card.Footer className="text-muted">
-            <Button variant="success" size="lg">Save
-            </Button>
-          </Card.Footer>
-        </Card>
-
+      <div className="card">
+          <h3>Add Lecture List</h3>
+          <FileUpload name="demo[]" url="./upload.php" onUpload={this.onUpload} multiple accept="image/*" maxFileSize={10000000}
+              emptyTemplate={<p className="p-m-0">Drag and drop files to here to upload.</p>} />
       </div>
+  </div>
     );
   }
 }

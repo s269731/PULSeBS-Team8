@@ -1,59 +1,42 @@
 import React, { Component } from 'react';
-import {Button, Card, Form, Row, Col} from 'react-bootstrap'
-
+import { FileUpload } from 'primereact/fileupload';
+import { Toast } from 'primereact/toast';
+import 'primeicons/primeicons.css';
+import 'primereact/resources/themes/saga-blue/theme.css';
+import 'primereact/resources/primereact.css';
+import 'primeflex/primeflex.css';
 class AddTeacher extends Component {
-    render() {
-        return (
-            <div>
-                <Card>
-          <Card.Header>
-              <h4>Add New Teacher </h4></Card.Header>
-          <Card.Body>
-            <Form>
-              <Row>
-                <Col>
-                <h5>Teacher Name</h5>
-                  <Form.Control placeholder="First name"/>
-                </Col>
-                <Col>
-                <h5>Teacher Surname</h5>
-                  <Form.Control placeholder="Last name"/>
-                </Col>
-              </Row>
-              <Row/>
-              <br/>
-              <Row>
-                <Col>
-                <h5>Email address</h5>
-                  <Form.Control placeholder="Email"/>
-                </Col>
-                <Col>
-                <h5>Password</h5>
-                  <Form.Control placeholder="Last name"/>
-                </Col>
-              </Row>
-              <br/>
-              <Form.Group controlId="exampleForm.ControlSelect1">
-                <h4>Choose Course</h4>
-                <Form.Control as="select">
-                  <option>Computer Engineering</option>
-                  <option>Network</option>
-                  <option>Cloud Computing</option>
-                  <option>Artificial Intelegence</option>
-                  <option>Data Science</option>
-                </Form.Control>
-              </Form.Group>
-            </Form>
+  constructor(props) {
+    super(props);
 
-          </Card.Body>
-          <Card.Footer className="text-muted">
-            <Button variant="success" size="lg" >Save     </Button>
-          </Card.Footer>
-        </Card>
-
-            </div>
-        );
-    }
+    this.onUpload = this.onUpload.bind(this);
+    this.onBasicUpload = this.onBasicUpload.bind(this);
+    this.onBasicUploadAuto = this.onBasicUploadAuto.bind(this);
 }
 
+onUpload() {
+    this.toast.show({severity: 'info', summary: 'Success', detail: 'File Uploaded'});
+}
+
+onBasicUpload() {
+    this.toast.show({severity: 'info', summary: 'Success', detail: 'File Uploaded with Basic Mode'});
+}
+
+onBasicUploadAuto() {
+    this.toast.show({severity: 'info', summary: 'Success', detail: 'File Uploaded with Auto Mode'});
+}
+  render() {
+    return (
+      <div>
+      <Toast ref={(el) => { this.toast = el; }}></Toast>
+
+      <div className="card">
+          <h3>Add Teacher List</h3>
+          <FileUpload name="demo[]" url="./upload.php" onUpload={this.onUpload} multiple accept="image/*" maxFileSize={10000000}
+              emptyTemplate={<p className="p-m-0">Drag and drop files to here to upload.</p>} />
+      </div>
+  </div>
+    );
+  }
+}
 export default AddTeacher;

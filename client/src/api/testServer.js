@@ -134,6 +134,9 @@ const handlers=[
     rest.delete('http://localhost/api/teacher/lectures/:lectureId',((req,res,ctx)=>{
         return res(ctx.status(200),ctx.json({}))
     })),
+    rest.post('http://localhost/api/teacher/changemodality',(req,res,ctx)=>{
+        return res(ctx.status(200))
+    }),
     rest.get('http://localhost/api/student/lectures',((req,res,ctx)=>{
         return res(ctx.status(200), ctx.json(studentslectures))
     })),

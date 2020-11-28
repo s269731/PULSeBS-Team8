@@ -303,66 +303,6 @@ exports.changeLectureModality = (lectureId) => new Promise((resolve, reject) => 
   }
 });
 
-async function insertLog(userId, typeOp) {
-  // TypeOp is in the range [0, 3]
-  // 0 = insert reservation (only students)
-  // 1 = cancel reservation (only students)
-  // 2 = cancel lecture (only teachers)
-  // 3 = lectures switched to virtual modality (only teachers)
-
-  const date_hour = new Date();
-  const timestamp = date_hour.getTime();
-  // console.log(timestamp);
-  const sql = 'INSERT INTO Logs(TypeOp, UserId, Timestamp) VALUES (?, ?, ?)';
-  const stmt = db.prepare(sql);
-  const res = stmt.run(typeOp, userId, timestamp);
-
-  if (res !== undefined) return 0;
-  return 1;
-}
-
-async function getLogs() {
-  // TypeOp is in the range [0, 3]
-  // 0 = insert reservation (only students)
-  // 1 = cancel reservation (only students)
-  // 2 = cancel lecture (only teachers)
-  // 3 = lectures switched to virtual modality (only teachers)
-
-  const sql = 'SELECT * FROM Logs ORDER BY Id DESC';
-  const stmt = db.prepare(sql);
-  const rows = stmt.all();
-  const logs = [];
-  let obj = {};
-
-  if (rows.length > 0) {
-    await Promise.all(rows.map(async (row) => {
-      const user = await userDao.getUserById(row.UserId);
-      const { name, surname, email } = user;
-      const name_surname = `${name} ${surname}`;
-
-      obj = {
-        name_surname,
-        email,
-        typeOp: row.TypeOp,
-        timestamp: row.Timestamp,
-      };
-      logs.push(obj);
-    }));
-
-    const sql2 = 'SELECT TypeOp, count(*) as count FROM Logs GROUP BY TypeOp ORDER BY TypeOp';
-    const stmt2 = db.prepare(sql2);
-    const records = stmt2.all();
-    let obj2 = {
-      TypeOp0: records[0].count,
-      TypeOp1: records[1].count,
-      TypeOp2: records[2].count,
-      TypeOp3: records[3].count
-    };
-    logs.unshift(obj2);
-  }
-  return logs;
-}
-
 exports.getLecturesBySubjectId = (subjectId) => new Promise((resolve, reject) => {
   const sql = db.prepare("SELECT LectureId,DateHour,Capacity,BookedPeople FROM Lectures WHERE SubjectId=? AND DateHour < DateTime('now') ORDER BY DateHour");
   const rows = sql.all(subjectId);
@@ -376,5 +316,3 @@ exports.getInfoBookingConfirmation = getInfoBookingConfirmation;
 exports.getStudentsListByLectureId = getStudentsListByLectureId;
 exports.getBookingsByUserId = getBookingsByUserId;
 exports.getStudentsCancelledLecture = getStudentsCancelledLecture;
-exports.insertLog = insertLog;
-exports.getLogs = getLogs;

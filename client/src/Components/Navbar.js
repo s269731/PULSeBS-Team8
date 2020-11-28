@@ -86,6 +86,12 @@ class Navbars extends Component {
                   <span className="headerLinks">Booked Lectures</span>
                 </Link>
               )}
+              {(this.props.path === "/officer/addStudent" || this.props.path === "/officer/addTeacher"
+              || this.props.path === "/officer/addLecture" || this.props.path === "/officer/addCourse") && (
+              <Link to="/officer" className="headerLinks">
+                <span className="headerLinks">Setup System Page </span>
+              </Link>
+            )}
           </Navbar.Text>
         </Nav>
       </Navbar>

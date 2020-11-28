@@ -30,7 +30,7 @@ test("full app rendering/navigating to login and logout", async () => {
 
   render(
     <Router history={history}>
-      <App />
+      <App test={true}/>
     </Router>
   );
   // verify page content for expected route
@@ -84,7 +84,7 @@ test("fail when getting the current user", () => {
 
   render(
     <Router history={history}>
-      <App />
+      <App test={true}/>
     </Router>
   );
 
@@ -106,7 +106,7 @@ test("random routes redirect to home page", () => {
   history.push("/some/bad/route");
   render(
     <Router history={history}>
-      <App />
+      <App test={true}/>
     </Router>
   );
 

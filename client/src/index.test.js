@@ -14,7 +14,7 @@ describe("Application root", () => {
     expect(ReactDOM.render).toHaveBeenCalledWith(
       <React.StrictMode>
         <Router>
-          <App />
+          <App test={false}/>
         </Router>
       </React.StrictMode>,
       div
