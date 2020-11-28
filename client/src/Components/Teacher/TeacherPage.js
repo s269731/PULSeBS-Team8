@@ -3,19 +3,11 @@ import  {Alert, Spinner, Container, Tabs, Tab} from "react-bootstrap";
 import LectureTable from "./LectureTable.js";
 import StatsPage from './StatsPage';
 import API from "../../api/api";
-const subjects=[
-    {subjectId:1, subjectName: 'Software Engineering II'},
-    {subjectId:2, subjectName: 'Software Engineering I'},
-    {subjectId:3, subjectName: 'Web Applications I'},
-    {subjectId:4, subjectName: 'Web Applications II'},
-    {subjectId:5, subjectName: 'Computer Architectures'},
-    {subjectId:6, subjectName: 'Software Security'},
-    {subjectId:7, subjectName: 'Computer Networks'},
-]
+
 class TeacherPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { loading: true, serverErr: null , modality:"lectures"};
+    this.state = { loading: true, serverErr: null , modality:"lectures", noLect:false};
     this.cancelLecture = this.cancelLecture.bind(this);
     this.changeModalityLecture = this.changeModalityLecture.bind(this);
   }
@@ -52,12 +44,21 @@ class TeacherPage extends React.Component {
     API.getLecturesTeacher()
       .then((lects) => {
         API.getCourses().then((subs)=>{
-            this.setState({
-                subjects: subs,
-                lectures: lects,
-                loading: null,
-                serverErr: null,
-            });
+            console.log(lects.length)
+            if(lects.length>0) {
+                this.setState({
+                    subjects: subs,
+                    lectures: lects,
+                    loading: null,
+                    serverErr: null,
+                    noLect:false
+                });
+            }
+            else{
+                this.setState({ subjects: subs,
+                    lectures: [],loading: null,
+                    serverErr: null,noLect:true})
+            }
         })
       })
       .catch((err) => {
@@ -89,9 +90,10 @@ class TeacherPage extends React.Component {
               <Spinner animation="border" variant="primary" /> Loading ...
             </Alert>
           )}
+
           {this.state.serverErr === null &&
             this.state.loading === null &&
-            this.state.subjects && (
+            this.state.subjects &&  (
 
                 <Tabs
                     id="controlled-tab"
@@ -100,13 +102,14 @@ class TeacherPage extends React.Component {
 
                 >
                     <Tab eventKey="lectures" title="My Lectures">
-                        {this.state.subjects && <LectureTable
+                        {this.state.subjects && this.state.lectures.length>0 ? <LectureTable
                             subjects={this.state.subjects}
                             lectures={this.state.lectures}
                             cancelLecture={this.cancelLecture}
                             changeModalityLecture={this.changeModalityLecture}
                             notLoggedUser={this.props.notLoggedUser}
-                        />}
+                        />:  <Alert className={"alert"} variant={"info"}><h4>You have no programmed lectures</h4></Alert>
+                        }
                     </Tab>
                     <Tab eventKey="stats" title="Statistics">
                         {this.state.subjects && <StatsPage subjects={this.state.subjects} canShowGraphs={this.props.canShowGraphs}/>}

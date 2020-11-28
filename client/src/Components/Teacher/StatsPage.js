@@ -81,12 +81,17 @@ class StatsPage extends Component {
     componentDidMount() {
         API.getTeacherStats().then((res)=>{
             console.log(res[0])
-            for(let l of res[0].dailystatsarray){
-                let time=l.date
-                l.date=new Date(l.date).toLocaleDateString("en")
-                l.hour=new Date(time).getHours()
-                console.log(l.hour)
+            let i=0;
+            while (i<res.length) {
+                for (let l of res[i].dailystatsarray) {
+                    let time = l.date
+                    l.date = new Date(l.date).toLocaleDateString("en")
+                    l.hour = new Date(time).getHours()
+                    console.log(l.hour)
+                }
+                i++;
             }
+            console.log(res)
             this.setState({logs:res, subjectLogs:res[0]})
 
         }).catch((err)=>{
@@ -99,10 +104,31 @@ class StatsPage extends Component {
     }
 
     handleStats(id){
-        for(let item of this.state.logs){
-            if (item.subjectId===id ){
-                this.setState({subjectLogs:item});
-                break;
+        console.log(id)
+        console.log(id==='del')
+        if(id === "del"){
+            let res=this.state.logs
+            this.setState({subjectLogs:res[0]})
+        }
+        else {
+            for (let item of this.state.logs) {
+                let trovato = 0;
+                if (item.subjectId.SubjectName === id) {
+                    trovato = 1;
+
+                    this.setState({subjectLogs: item});
+                    break;
+                }
+                if (trovato == 0) {
+                    let subjectLogs = {
+                        subjectId: {SubjectId:-1,SubjectName:""},
+                        dailystatsarray: [],
+                        weeklystatsarray: [],
+                        monthlystatsarray: []
+
+                    }
+                    this.setState({subjectLogs: subjectLogs});
+                }
             }
         }
     }
@@ -110,7 +136,7 @@ class StatsPage extends Component {
         return <>
             <Container fluid  className={"statsLecture"}>
             <Row className="justify-content-md-center below-nav">
-                <h3 className={"headerLectureList"}>Statistics about your lectures
+                <h3 className={"headerLectureList"}>Statistics {this.state.subjectLogs && <> about <span className={"courseTitle"} >{this.state.subjectLogs.subjectId.SubjectName}</span></>} course
                     <br/><h6>Tables and charts are referring to a specific course</h6>
                 </h3>
             </Row>
@@ -128,7 +154,7 @@ class StatsPage extends Component {
                                                 <>
                                                     <Button
                                                         variant="primary"
-                                                        value={e.SubjectId}
+                                                        value={e.SubjectName}
                                                         key={e.SubjectId}
                                                         onClick={(ev) => {
                                                             this.handleStats(ev.target.value);
