@@ -43,7 +43,7 @@ async function computeTeacherStatistics(teacherId) {
   let monthlyunoccupiedseats = 0;
   // eslint-disable-next-line no-restricted-syntax
   await Promise.all(subjects.map(async (subject) => {
-    const lectures = await lecturesDao.getLecturesBySubjectId(subject);
+    const lectures = await lecturesDao.getLecturesBySubjectId(subject.SubjectId);
     let month;
     let dayofweekbefore = 0;
     let dayofweek;

@@ -29,12 +29,12 @@ exports.getSubjectName = (id) => new Promise((resolve, reject) => {
 });
 
 exports.getSubjectsByTeacherId = (teacherId) => new Promise((resolve, reject) => {
-  const sql = db.prepare('SELECT SubjectId FROM Subjects WHERE TeacherId=?');
+  const sql = db.prepare('SELECT SubjectId,SubjName FROM Subjects WHERE TeacherId=?');
   const rows = sql.all(teacherId);
   const subjects = [];
   if (rows.length > 0) {
     rows.forEach((row) => {
-      subjects.push(row.SubjectId);
+      subjects.push({ SubjectId: row.SubjectId, SubjectName: row.SubjName });
     });
     resolve(subjects);
   } else reject('No Subject assigned to that teacherId');

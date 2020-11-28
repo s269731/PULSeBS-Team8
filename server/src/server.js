@@ -9,6 +9,7 @@ const userDao = require('./userDao');
 const lecturesDao = require('./lecturesDao');
 const logsDao = require('./logsDao');
 const statistics = require('./services/statistics');
+const subjectsDao = require('./subjectsDao');
 
 const authErrorObj = { errors: [{ msg: 'Authorization error' }] };
 const lecturesErr = { errors: [{ msg: 'There was an error retrieving available lectures' }] };
@@ -189,6 +190,16 @@ app.get('/api/teacher/statistics', async (req, res) => {
   try {
     const stats = await statistics.computeTeacherStatistics(userId);
     res.json(stats);
+  } catch (error) {
+    res.json({ errors: [{ msg: error }] });
+  }
+});
+
+app.get('/api/teacher/subjects', async (req, res) => {
+  const userId = req.user && req.user.user;
+  try {
+    const subjects = await subjectsDao.getSubjectsByTeacherId(userId);
+    res.json(subjects);
   } catch (error) {
     res.json({ errors: [{ msg: error }] });
   }
