@@ -41,6 +41,7 @@ async function computeTeacherStatistics(teacherId) {
   let monthlybookedseats = 0;
   let weeklyunoccupiedseats = 0;
   let monthlyunoccupiedseats = 0;
+
   // eslint-disable-next-line no-restricted-syntax
   await Promise.all(subjects.map(async (subject) => {
     const lectures = await lecturesDao.getLecturesBySubjectId(subject.SubjectId);
@@ -48,6 +49,14 @@ async function computeTeacherStatistics(teacherId) {
     let dayofweekbefore = 0;
     let dayofweek;
     let daybefore;
+    let monthId;
+    let monthlyavgbookings;
+    let monthlyavgunoccupiedseats;
+    let year;
+    let actualmonth;
+    let weekId;
+    let weeklyavgbookings;
+    let weeklyavgunoccupiedplaces;
 
     if (subjectId === undefined) subjectId = subject;
 
@@ -55,8 +64,8 @@ async function computeTeacherStatistics(teacherId) {
       const date = lecture.DateHour;
       const d = new Date(date);
       const dstring = d.toString();
-      const actualmonth = dstring.split(' ')[1];
-      const year = dstring.split(' ')[3];
+      actualmonth = dstring.split(' ')[1];
+      year = dstring.split(' ')[3];
       const unoccupiedSeats = lecture.Capacity - lecture.BookedPeople;
       // console.log({ subjectId, lecture });
       dailystatsarray.push({ date, bookedSeats: lecture.BookedPeople, unoccupiedSeats });
@@ -67,35 +76,38 @@ async function computeTeacherStatistics(teacherId) {
         daybefore = d;
       }
       dayofweek = d.getDay();
-      // dayweekbefore<dayofweek and weeksbetween>=1
+      // dayweekbefore<dayofweek or weeksbetween>=1
       // eslint-disable-next-line max-len
       // if just the first constraint is left, for example if its Wednesday 11, Friday 27 will be counted as the same week
-      if (dayofweekbefore < dayofweek || weeksBetween(d, daybefore) >= 1) {
+      if (dayofweekbefore > dayofweek || weeksBetween(d, daybefore) >= 1) {
         // week ended, push the stats for this month in the weeklystatsarray
-        const weekId = getWeekId(daybefore, dayofweekbefore);
-        console.log(weekId);
-        const weeklyavgbookings = weeklybookedseats / weeklylesson;
-        const weeklyavgunoccupiedplaces = weeklyunoccupiedseats / weeklylesson;
+        weekId = getWeekId(daybefore, dayofweekbefore);
+        weeklyavgbookings = weeklybookedseats / weeklylesson;
+        weeklyavgunoccupiedplaces = weeklyunoccupiedseats / weeklylesson;
         weeklystatsarray.push({ weekId, weeklyavgbookings, weeklyavgunoccupiedplaces });
         weeklylesson = 0;
         weeklybookedseats = 0;
         weeklyunoccupiedseats = 0;
-        dayofweek = undefined;
+        // dayofweek = undefined;
       }
       dayofweekbefore = dayofweek;
       daybefore = d;
+      console.log(month);
+      console.log(actualmonth);
       if (month === undefined) month = actualmonth;
       if (month !== actualmonth) {
         // month ended, push the stats for this month in the monthlystatsarray
-        const monthId = `${month} - ${year}`;
-        const monthlyavgbookings = monthlybookedseats / monthlylesson;
-        const monthlyavgunoccupiedseats = monthlyunoccupiedseats / monthlylesson;
+        monthId = `${month}-${year}`.toUpperCase();
+        monthlyavgbookings = monthlybookedseats / monthlylesson;
+        monthlyavgunoccupiedseats = monthlyunoccupiedseats / monthlylesson;
         monthlystatsarray.push({ monthId, monthlyavgbookings, monthlyavgunoccupiedseats });
         monthlylesson = 0;
         monthlybookedseats = 0;
         monthlyunoccupiedseats = 0;
-        month = actualmonth;
+        // month = actualmonth;
+        month = undefined;
       }
+      month = actualmonth;
       // eslint-disable-next-line no-plusplus
       weeklylesson++;
       // eslint-disable-next-line no-plusplus
@@ -107,6 +119,22 @@ async function computeTeacherStatistics(teacherId) {
     });
     // eslint-disable-next-line max-len
     // Lectures for that subjectId ended, push subjectId, dailystatsarray, weeklystatsarray, monthlystatsarray in the statsArray
+    weekId = getWeekId(daybefore, dayofweekbefore);
+    weeklyavgbookings = weeklybookedseats / weeklylesson;
+    weeklyavgunoccupiedplaces = weeklyunoccupiedseats / weeklylesson;
+    weeklystatsarray.push({ weekId, weeklyavgbookings, weeklyavgunoccupiedplaces });
+    weeklylesson = 0;
+    weeklybookedseats = 0;
+    weeklyunoccupiedseats = 0;
+    dayofweek = undefined;
+
+    monthId = `${month}-${year}`.toUpperCase();
+    monthlyavgbookings = monthlybookedseats / monthlylesson;
+    monthlyavgunoccupiedseats = monthlyunoccupiedseats / monthlylesson;
+    monthlystatsarray.push({ monthId, monthlyavgbookings, monthlyavgunoccupiedseats });
+    monthlylesson = 0;
+    monthlybookedseats = 0;
+    monthlyunoccupiedseats = 0;
     statsArray.push({
       subjectId: subject, dailystatsarray, weeklystatsarray, monthlystatsarray,
     });
@@ -116,6 +144,7 @@ async function computeTeacherStatistics(teacherId) {
     subjectId = undefined;
   }));
   console.log(statsArray);
+  console.log(statsArray[0]);
   return statsArray;
 }
 
