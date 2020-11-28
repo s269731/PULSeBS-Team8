@@ -1,51 +1,76 @@
 import React,{Component} from 'react'
 import LecturesGraph from './Graphs/LecturesGraph.js'
-import {Row, Col, Button, ButtonGroup, Table, Container,Tabs,Tab} from 'react-bootstrap'
+import {Row, Col, Button, ButtonGroup, Table, Container, Tabs, Tab, Card, Accordion} from 'react-bootstrap'
 import API from '../../api/api.js'
 
-const  retrieveCourse=(list, id)=>{
-    for(let i of list){
-        if (i.SubjectId===id){
-            return i.SubjectName;
-        }
-    }
-}
+import { MDBDataTable } from 'mdbreact';
 
-
-const StatsTable = (props) => {
-    let {detail, logs}=props
-    return <Table responsive striped bordered hover >
-        <thead>
-        <tr>
-            {detail==='d' && <th>Date</th>}
-            {detail==='w' && <th>Week</th>}
-            {detail==='m' && <th>Month</th>}
-            <th>{detail!=='d' && <>Average </>}Booked Students</th>
-            <th>{detail!=='d' && <>Average </>}Free Seats</th>
-        </tr>
-        </thead>
-        <tbody>
-        {logs.map((l)=>{
-            return <>
-                <tr>
-                    {detail==='d' && <td>{new Date(l.date).toLocaleDateString("en")}</td>}
-                    {detail==='w' && <td>{l.weekId}</td>}
-                    {detail==='m' && <td>{l.monthId}</td>}
-
-                    {detail==='d' && <td>{l.bookedSeats}</td>}
-                    {detail==='w' && <td>{l.weeklyavgbookings}</td>}
-                    {detail==='m' && <td>{l.monthlyavgbookings}</td>}
-
-                    {detail==='d' && <td>{l.unoccupiedSeats}</td>}
-                    {detail==='w' && <td>{l.weeklyavgunoccupiedplaces}</td>}
-                    {detail==='m' && <td>{l.monthlyavgunoccupiedseats}</td>}
-                </tr>
-            </>
-        })}
-        </tbody>
-    </Table>
-}
-
+const colsDaily=[
+    {
+        label: 'Date',
+        field: 'date',
+        sort: 'asc',
+        width: 150
+    },
+    {
+        label: 'Hour',
+        field: 'hour',
+        sort: 'asc',
+        width: 150
+    },
+    {
+        label: 'Booked Students',
+        field: 'bookedSeats',
+        sort: 'asc',
+        width: 150
+    },
+    {
+        label: 'Free Seats',
+        field: 'unoccupiedSeats',
+        sort: 'asc',
+        width: 150
+    },
+]
+const colsWeekly=[
+    {
+        label: 'Week',
+        field: 'weekId',
+        sort: 'asc',
+        width: 150
+    },
+    {
+        label: 'Average Booked Students',
+        field: 'weeklyavgbookings',
+        sort: 'asc',
+        width: 150
+    },
+    {
+        label: 'Average Free Seats',
+        field: 'weeklyavgunoccupiedplaces',
+        sort: 'asc',
+        width: 150
+    },
+]
+const colsMonthly=[
+    {
+        label: 'Month',
+        field: 'monthId',
+        sort: 'asc',
+        width: 150
+    },
+    {
+        label: 'Average Booked Students',
+        field: 'monthlyavgbookings',
+        sort: 'asc',
+        width: 150
+    },
+    {
+        label: 'Average Free Seats',
+        field: 'monthlyavgunoccupiedseats',
+        sort: 'asc',
+        width: 150
+    },
+]
 
 class StatsPage extends Component {
     constructor() {
@@ -56,7 +81,14 @@ class StatsPage extends Component {
     componentDidMount() {
         API.getTeacherStats().then((res)=>{
             console.log(res[0])
+            for(let l of res[0].dailystatsarray){
+                let time=l.date
+                l.date=new Date(l.date).toLocaleDateString("en")
+                l.hour=new Date(time).getHours()
+                console.log(l.hour)
+            }
             this.setState({logs:res, subjectLogs:res[0]})
+
         }).catch((err)=>{
             console.log(err)
         })
@@ -79,42 +111,49 @@ class StatsPage extends Component {
             <Container fluid  className={"statsLecture"}>
             <Row className="justify-content-md-center below-nav">
                 <h3 className={"headerLectureList"}>Statistics about your lectures
-                    of {this.state.subjectLogs && <>{this.state.subjectLogs.subjectId.subjectName}</>}</h3>
+                    <br/><h6>Tables and charts are referring to a specific course</h6>
+                </h3>
             </Row>
+
+
+
             <Row className="justify-content-md-center">
                 <Col className="col-1 justify-content-md-center FiltersList" >
-                    <h5>Courses</h5>
-                    <ButtonGroup vertical>
-                        {this.props.subjects.map((e) => {
-                            return (
-                                <>
-                                    <Button
-                                        variant="primary"
-                                        value={e.SubjectId}
-                                        key={e.SubjectId}
-                                        onClick={(ev) => {
-                                            this.handleStats(ev.target.value);
-                                        }}
-                                        data-testid="handlelecture-button"
-                                    >
-                                        {e.SubjectName}
-                                    </Button>
-                                    <br />
-                                </>
-                            );
-                        })}
-                        <Button
-                            variant={"danger"}
-                            value={"del"}
-                            key={"del"}
-                            onClick={(e) => {
-                                this.handleStats(e.target.value);
-                            }}
-                            data-testid="handlelecture-del-button"
-                        >
-                            Cancel filters
-                        </Button>
-                    </ButtonGroup>
+                                <h5>Courses</h5>
+
+
+                                    <ButtonGroup vertical>
+                                        {this.props.subjects.map((e) => {
+                                            return (
+                                                <>
+                                                    <Button
+                                                        variant="primary"
+                                                        value={e.SubjectId}
+                                                        key={e.SubjectId}
+                                                        onClick={(ev) => {
+                                                            this.handleStats(ev.target.value);
+                                                        }}
+                                                        data-testid="handlelecture-button"
+                                                    >
+                                                        {e.SubjectName}
+                                                    </Button>
+                                                    <br />
+                                                </>
+                                            );
+                                        })}
+                                        <Button
+                                            variant={"danger"}
+                                            value={"del"}
+                                            key={"del"}
+                                            onClick={(e) => {
+                                                this.handleStats(e.target.value);
+                                            }}
+                                            data-testid="handlelecture-del-button"
+                                        >
+                                            Cancel filters
+                                        </Button>
+                                    </ButtonGroup>
+
                 </Col>
            <Col xs={10}>
                {this.state.subjectLogs && <><Tabs
@@ -125,7 +164,13 @@ class StatsPage extends Component {
                    <Tab eventKey="daily" title="Daily">
                        <Row className="justify-content-md-center below-nav">
                            <Col>
-                               <StatsTable detail={'d'} logs={this.state.subjectLogs.dailystatsarray}/>
+
+                               <MDBDataTable
+                                   striped
+                                   bordered
+                                   small
+                                   data={{columns: colsDaily, rows: this.state.subjectLogs.dailystatsarray}}
+                               />
                            </Col>
                            <Col xs={6}>
                                {this.props.canShowGraphs &&
@@ -136,7 +181,12 @@ class StatsPage extends Component {
                    <Tab eventKey="weekly" title="Weekly">
                        <Row className="justify-content-md-center below-nav">
                            <Col>
-                               <StatsTable detail={'w'} logs={this.state.subjectLogs.weeklystatsarray}/>
+                               <MDBDataTable
+                                   striped
+                                   bordered
+                                   small
+                                   data={{columns: colsWeekly, rows:this.state.subjectLogs.weeklystatsarray}}
+                               />
                            </Col>
                            <Col xs={6}>
                                {this.props.canShowGraphs &&
@@ -147,7 +197,12 @@ class StatsPage extends Component {
                    <Tab eventKey="monthly" title="Monthly">
                        <Row className="justify-content-md-center below-nav">
                            <Col>
-                               <StatsTable detail={'m'} logs={this.state.subjectLogs.monthlystatsarray}/>
+                               <MDBDataTable
+                                   striped
+                                   bordered
+                                   small
+                                   data={{columns: colsMonthly, rows:this.state.subjectLogs.monthlystatsarray}}
+                               />
                            </Col>
                            <Col xs={6}>
                                {this.props.canShowGraphs &&

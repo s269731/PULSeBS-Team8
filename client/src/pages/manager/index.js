@@ -123,7 +123,7 @@ class Manager extends React.Component {
                     {this.state.logs && this.state.subjects && <>
                         <Col xs={2} className="col-2 justify-content-md-left">
                             <h4>Filters</h4>
-                            <Accordion defaultActiveKey="0">
+                            <Accordion>
                             <Card>
 
                             <Accordion.Toggle className="filtersOp" as={Card.Header} eventKey={1}>

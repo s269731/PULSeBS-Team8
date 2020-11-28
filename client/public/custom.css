@@ -50,7 +50,7 @@
     font-size: 18px;
 }
 .FiltersList{
-    border-right: 1px solid black;
+    border-right: 0.5px solid black;
 }
 .LogChart{
     padding-top: 0px;

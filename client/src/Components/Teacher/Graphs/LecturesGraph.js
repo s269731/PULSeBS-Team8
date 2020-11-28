@@ -11,7 +11,8 @@ class LecturesGraph extends Component {
 	let pts=[]
 	if(this.props.detail==='d'){
         for(let l of this.props.logs){
-            pts.push({x: new Date(l.date), y:l.bookedSeats})
+
+            pts.push({x: new Date(l.date), y:l.bookedSeats, label:l.date})
         }
         console.log(pts)
         return pts;
@@ -29,7 +30,7 @@ class LecturesGraph extends Component {
     if(this.props.detail==='m'){
     let i=1
             for(let l of this.props.logs){
-                pts.push({x: i, y:l.monthlyavgbookings, label:l.weekId})
+                pts.push({x: i, y:l.monthlyavgbookings, label:l.monthId})
                 i=i+1
             }
             console.log(pts)

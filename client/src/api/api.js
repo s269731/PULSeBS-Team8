@@ -295,7 +295,7 @@ async function getTeacherStats(){
   const response = await fetch(baseURL + url);
   const stats = await response.json();
   if (response.ok) {
-    return stats;
+    return stats
   } else {
     let err = { status: response.status, errObj: stats};
     throw err;
