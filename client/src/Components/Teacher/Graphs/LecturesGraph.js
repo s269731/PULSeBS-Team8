@@ -4,10 +4,11 @@ import {CanvasJSChart} from 'canvasjs-react-charts'
 class LecturesGraph extends Component {
 	constructor() {
 		super();
-		this.generateDataPoints = this.generateDataPoints.bind(this);
+		this.generateBookedDataPoints = this.generateBookedDataPoints.bind(this);
+		this.generateBookedRateDataPoints = this.generateBookedRateDataPoints.bind(this);
 	}
 
-	generateDataPoints() {
+	generateBookedDataPoints() {
 	let pts=[]
 	if(this.props.detail==='d'){
         for(let l of this.props.logs){
@@ -39,6 +40,38 @@ class LecturesGraph extends Component {
 
 
 	}
+	generateBookedRateDataPoints() {
+    	let pts=[]
+    	if(this.props.detail==='d'){
+            for(let l of this.props.logs){
+
+                pts.push({x: new Date(l.date), y:l.bookedSeats/l.unoccupiedSeats, label:l.date})
+            }
+            console.log(pts)
+            return pts;
+        }
+
+        if(this.props.detail==='w'){
+        let i=1;
+                for(let l of this.props.logs){
+                    pts.push({x: i, y:l.weeklyavgbookings/l.weeklyavgunoccupiedplaces, label:l.weekId})
+                    i=i+1
+                }
+                console.log(pts)
+                return pts;
+            }
+        if(this.props.detail==='m'){
+        let i=1
+                for(let l of this.props.logs){
+                    pts.push({x: i, y:l.monthlyavgbookings/l.monthlyavgunoccupiedseats, label:l.monthId})
+                    i=i+1
+                }
+                console.log(pts)
+                return pts;
+            }
+
+
+    	}
 
 
 
@@ -48,8 +81,8 @@ class LecturesGraph extends Component {
 	        FormatString= "D MMM YYYY"
 	    }
 
-		const options = {
-			theme: "light2", // "light1", "dark1", "dark2"
+		const options1 = {
+			theme: "light1", // "light1", "dark1", "dark2"
 			animationEnabled: true,
 			zoomEnabled: true,
 			showInLegend:true,
@@ -58,21 +91,45 @@ class LecturesGraph extends Component {
 			},
 			xValueFormatString: FormatString,
 			title: {
-				text: "Bookings trend"
+				text: "Booked seats trend"
 			},
-			data: [{
-				type: "area",
-				dataPoints: this.generateDataPoints()
-			}]
-		}
+			data: [
+			        {
+                        type: "area",
+                        dataPoints: this.generateBookedDataPoints()
+                    },
 
-		return (
+
+             	]
+		}
+        const options2 = {
+        			theme: "light1", // "light1", "dark1", "dark2"
+        			animationEnabled: true,
+        			zoomEnabled: true,
+        			showInLegend:true,
+        			axisX:{
+        			    valueFormatString: FormatString
+        			},
+        			xValueFormatString: FormatString,
+        			title: {
+        				text: "Booking rate"
+        			},
+        			data: [
+        			        {
+                                type: "area",
+                                dataPoints: this.generateBookedRateDataPoints()
+                            },
+
+                     	]
+        		}
+		return (<>
 		<div>
-			<CanvasJSChart options = {options}
+			<CanvasJSChart options = {options1}
 				/* onRef={ref => this.chart = ref} */
 			/>
 			{/*You can get reference to the chart instance as shown above using onRef. This allows you to access all chart properties and methods*/}
 		</div>
+		</>
 		);
 	}
 }
