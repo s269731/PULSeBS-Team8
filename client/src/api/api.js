@@ -272,7 +272,29 @@ async function getLogs(){
     throw err;
   }
 }
-
+async function getTeacherStats(){
+  let url='/teacher/statistics';
+  const response = await fetch(baseURL + url);
+  const stats = await response.json();
+  if (response.ok) {
+    return stats;
+  } else {
+    let err = { status: response.status, errObj: stats};
+    throw err;
+  }
+}
+async function getCourses(){
+  let url = "/teacher/subjects";
+  const response = await fetch(baseURL + url);
+  const courses = await response.json();
+  if (response.ok) {
+    console.log(courses)
+    return courses;
+  } else {
+    let err = { status: response.status, errObj: courses};
+    throw err;
+  }
+}
 const API = {
   Login,
   getLectures,
@@ -284,6 +306,8 @@ const API = {
   deleteLectureByTeacher,
   cancelBookingByStudent,
   changeModalityLecture,
-  getLogs
+  getLogs,
+  getTeacherStats,
+  getCourses
 };
 export default API;

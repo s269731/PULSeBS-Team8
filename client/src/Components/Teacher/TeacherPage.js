@@ -3,7 +3,15 @@ import  {Alert, Spinner, Container, Tabs, Tab} from "react-bootstrap";
 import LectureTable from "./LectureTable.js";
 import StatsPage from './StatsPage';
 import API from "../../api/api";
-
+const subjects=[
+    {subjectId:1, subjectName: 'Software Engineering II'},
+    {subjectId:2, subjectName: 'Software Engineering I'},
+    {subjectId:3, subjectName: 'Web Applications I'},
+    {subjectId:4, subjectName: 'Web Applications II'},
+    {subjectId:5, subjectName: 'Computer Architectures'},
+    {subjectId:6, subjectName: 'Software Security'},
+    {subjectId:7, subjectName: 'Computer Networks'},
+]
 class TeacherPage extends React.Component {
   constructor(props) {
     super(props);
@@ -42,24 +50,15 @@ class TeacherPage extends React.Component {
   }
   getLectures() {
     API.getLecturesTeacher()
-      .then((res) => {
-
-        let subjects = [];
-        for (let l of res) {
-          subjects.push(l.subject);
-        }
-        subjects = subjects.filter(this.onlyUnique);
-        subjects = subjects.sort();
-        console.log("subj")
-        console.log(subjects)
-        console.log("lect")
-        console.log(res)
-        this.setState({
-          subjects: subjects,
-          lectures: res,
-          loading: null,
-          serverErr: null,
-        });
+      .then((lects) => {
+        API.getCourses().then((subs)=>{
+            this.setState({
+                subjects: subs,
+                lectures: lects,
+                loading: null,
+                serverErr: null,
+            });
+        })
       })
       .catch((err) => {
         console.log(err.status);
@@ -101,16 +100,16 @@ class TeacherPage extends React.Component {
 
                 >
                     <Tab eventKey="lectures" title="My Lectures">
-                        <LectureTable
+                        {this.state.subjects && <LectureTable
                             subjects={this.state.subjects}
                             lectures={this.state.lectures}
                             cancelLecture={this.cancelLecture}
                             changeModalityLecture={this.changeModalityLecture}
                             notLoggedUser={this.props.notLoggedUser}
-                        />
+                        />}
                     </Tab>
                     <Tab eventKey="stats" title="Statistics">
-                        <StatsPage  subjects={this.state.subjects} canShowGraphs={this.props.canShowGraphs}/>
+                        {this.state.subjects && <StatsPage subjects={this.state.subjects} canShowGraphs={this.props.canShowGraphs}/>}
                     </Tab>
 
 

@@ -126,18 +126,19 @@ class LectureTable extends React.Component {
               <h5>Courses</h5>
               <ButtonGroup vertical>
                 {this.props.subjects.map((e) => {
+                  console.log(e)
                   return (
                     <>
                       <Button
                         variant="primary"
-                        value={e}
-                        key={e}
+                        value={e.SubjectName}
+                        key={e.SubjectId}
                         onClick={(ev) => {
                           this.handleLectures(ev.target.value);
                         }}
                         data-testid="handlelecture-button"
                       >
-                        {e}
+                        {e.SubjectName}
                       </Button>
                       <br />
                     </>

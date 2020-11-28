@@ -7,28 +7,61 @@ class LecturesGraph extends Component {
 		this.generateDataPoints = this.generateDataPoints.bind(this);
 	}
 
-	generateDataPoints(noOfDps) {
-		var xVal = 1, yVal = 100;
-		var dps = [];
-		for(var i = 0; i < noOfDps; i++) {
-			yVal = yVal +  Math.round(5 + Math.random() *(-5-5));
-			dps.push({x: xVal,y: yVal});
-			xVal++;
-		}
-		return dps;
+	generateDataPoints() {
+	let pts=[]
+	if(this.props.detail==='d'){
+        for(let l of this.props.logs){
+            pts.push({x: new Date(l.date), y:l.bookedSeats})
+        }
+        console.log(pts)
+        return pts;
+    }
+
+    if(this.props.detail==='w'){
+    let i=1;
+            for(let l of this.props.logs){
+                pts.push({x: i, y:l.weeklyavgbookings, label:l.weekId})
+                i=i+1
+            }
+            console.log(pts)
+            return pts;
+        }
+    if(this.props.detail==='m'){
+    let i=1
+            for(let l of this.props.logs){
+                pts.push({x: i, y:l.monthlyavgbookings, label:l.weekId})
+                i=i+1
+            }
+            console.log(pts)
+            return pts;
+        }
+
+
 	}
 
+
+
 	render() {
+	    let FormatString: ""
+	    if(this.props.detail==='d'){
+	        FormatString= "D MMM YYYY"
+	    }
+
 		const options = {
 			theme: "light2", // "light1", "dark1", "dark2"
 			animationEnabled: true,
 			zoomEnabled: true,
+			showInLegend:true,
+			axisX:{
+			    valueFormatString: FormatString
+			},
+			xValueFormatString: FormatString,
 			title: {
 				text: "Bookings trend"
 			},
 			data: [{
 				type: "area",
-				dataPoints: this.generateDataPoints(500)
+				dataPoints: this.generateDataPoints()
 			}]
 		}
 
