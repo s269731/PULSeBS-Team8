@@ -76,7 +76,8 @@ async function computeTeacherStatistics(teacherId) {
         daybefore = d;
       }
       dayofweek = d.getDay();
-      // dayweekbefore<dayofweek or weeksbetween>=1
+      if (dayofweek === 0) dayofweek = 7;
+      // dayweekbefore>dayofweek or weeksbetween>=1
       // eslint-disable-next-line max-len
       // if just the first constraint is left, for example if its Wednesday 11, Friday 27 will be counted as the same week
       if (dayofweekbefore > dayofweek || weeksBetween(d, daybefore) >= 1) {
