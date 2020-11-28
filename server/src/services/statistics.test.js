@@ -62,6 +62,10 @@ today = moment(d);
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
   [10, 1, 1, today.subtract(15, 'days').toISOString(), 'In person', '12A', 100, 100],
 );
+const oct4 = new Date('4 October 2020');
+db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
+    [11, 1, 1, oct4.toISOString(), 'In person', '12A', 100, 100],
+);
 
 test('nothing', async () => {
   const teacherId = 1;
