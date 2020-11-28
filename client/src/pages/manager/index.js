@@ -1,16 +1,54 @@
 import React from "react";
-import {Container, Row, Col, Button, Table, ButtonGroup, Tabs, Tab} from "react-bootstrap";
+import {Container, Row, Col, Button, Table, ButtonGroup, Tabs, Tab, Accordion, Card} from "react-bootstrap";
 import './manager.css'
 import API from "../../api/api";
 import LogGraph from './LogGraph'
+import { MDBDataTable } from 'mdbreact';
 
 let typeOp = [
-	'insert reservation',
-	'cancel reservation',
-	'cancel lecture',
-	'lectures switched to virtual modality'
+	'Insert reservation',
+	'Cancel reservation',
+	'Cancel lecture',
+	'Lectures switched to virtual modality'
 ]
-
+const cols=[
+    {
+        label: 'Username',
+        field: 'username',
+        sort: 'asc',
+        width: 150
+    },
+    {
+        label: 'E-mail',
+        field: 'email',
+        sort: 'asc',
+        width: 270
+    },
+    {
+        label: 'Operation',
+        field: 'operation',
+        sort: 'asc',
+        width: 200
+    },
+    {
+        label: 'Course',
+        field: 'subject',
+        sort: 'asc',
+        width: 100
+    },
+    {
+        label: 'Lecture date',
+        field: 'lectDate',
+        sort: 'asc',
+        width: 150
+    },
+    {
+        label: 'Timestamp',
+        field: 'timestamp',
+        sort: 'asc',
+        width: 100
+    }
+]
 
 class Manager extends React.Component {
     constructor(){
@@ -23,19 +61,19 @@ class Manager extends React.Component {
     componentDidMount(){
         API.getLogs()
         .then(res=>{console.log(res)
-            let summaryOperations=res[0];
+            let summaryOperations=res["summary"];
             console.log(summaryOperations)
-            res.shift()
-            for(let r of res){
-                r["visible"]=true
-            }
+            let logs=res["logs"]
             let subjects = [];
-            for (let l of res) {
+            for (let l of logs) {
                 subjects.push(l.subject);
             }
             subjects = subjects.filter(this.onlyUnique);
             subjects = subjects.sort();
-            this.setState({summaryOperations:summaryOperations,logs:res, subjects:subjects})
+            console.log(logs)
+            let data={columns:cols ,rows:logs}
+
+            this.setState({summaryOperations:summaryOperations,logs:logs, data:data, subjects:subjects})
         })
     }
     onlyUnique(value, index, self) {
@@ -44,28 +82,35 @@ class Manager extends React.Component {
     handleLogs(id, type){
         console.log(id)
         let logs=this.state.logs
+        console.log(logs)
+        let newLogs=[]
         if(type==='reset') {
             for (let l of logs) {
-                l.visible = true;
+                newLogs=logs;
             }
         }
             else{
                 if(type==='course'){
                     for (let l of logs) {
-                        l.visible = l.subject === id;
+                        if(l.subject === id){
+                            newLogs.push(l)
+                        }
                     }
 
                 }
                 else{
                     if(type === 'operation'){
                         for (let l of logs) {
-                           l.visible = l.typeOp === id;
+                           if (l.operation === id){
+                               newLogs.push(l)
+                           }
                         }
-                        this.setState({ logs: logs });
                     }
                 }
             }
-        this.setState({ logs: logs });
+        let data={columns:cols,rows:newLogs}
+
+        this.setState({ data: data });
     }
 
     setModality(k){
@@ -77,96 +122,96 @@ class Manager extends React.Component {
                 <Row className="justify-content-md-center below-nav">
                     {this.state.logs && this.state.subjects && <>
                         <Col xs={2} className="col-2 justify-content-md-left">
+                            <h4>Filters</h4>
+                            <Accordion defaultActiveKey="0">
+                            <Card>
+
+                            <Accordion.Toggle className="filtersOp" as={Card.Header} eventKey={1}>
                             <h5>Operations</h5>
-                            <ButtonGroup vertical>
-                                {typeOp.map((e) => {
-                                    return (
-                                        <>
-                                            <Button
-                                                variant="info"
-                                                value={e}
-                                                key={e}
-                                                onClick={(ev) => {
-                                                    this.handleLogs(typeOp.indexOf(ev.target.value),'operation');
-                                                }}
-                                                data-testid="handlelecture-button"
-                                            >
-                                                {e}
-                                            </Button>
-                                            <br/>
-                                        </>
-                                    );
-                                })}
-                            </ButtonGroup>
-
+                            </Accordion.Toggle>
+                            <Accordion.Collapse eventKey={1}>
+                                <Card.Body>
+                                    <ButtonGroup vertical>
+                                        {typeOp.map((e) => {
+                                            return (
+                                                <>
+                                                    <Button
+                                                        variant="info"
+                                                        value={e}
+                                                        key={e}
+                                                        onClick={(ev) => {
+                                                            this.handleLogs(ev.target.value,'operation');
+                                                        }}
+                                                        data-testid="handlelecture-button"
+                                                    >
+                                                        {e}
+                                                    </Button>
+                                                    <br/>
+                                                </>
+                                            );
+                                        })}
+                                    </ButtonGroup>
+                                </Card.Body>
+                            </Accordion.Collapse>
+                            </Card>
+                            <Card>
+                            <Accordion.Toggle className="filtersCourse" as={Card.Header} eventKey={2}>
                                 <h5>Courses</h5>
-                            <ButtonGroup vertical>
-                                {this.state.subjects.map((e) => {
-                                    return (
-                                        <>
-                                            <Button
-                                                variant="primary"
-                                                value={e}
-                                                key={e}
-                                                onClick={(ev) => {
-                                                    this.handleLogs(ev.target.value, 'course');
-                                                }}
-                                                data-testid="handlelecture-button"
-                                            >
-                                                {e}
-                                            </Button>
-                                            <br/>
-                                        </>
-                                    );
-                                })}
+                            </Accordion.Toggle>
+                            <Accordion.Collapse eventKey={2}>
+                                <Card.Body>
+                                <ButtonGroup vertical>
+                                    {this.state.subjects.map((e) => {
+                                        return (
+                                            <>
+                                                <Button
+                                                    variant="primary"
+                                                    value={e}
+                                                    key={e}
+                                                    onClick={(ev) => {
+                                                        this.handleLogs(ev.target.value, 'course');
+                                                    }}
+                                                    data-testid="handlelecture-button"
+                                                >
+                                                    {e}
+                                                </Button>
+                                                <br/>
+                                            </>
+                                        );
+                                    })}
 
-                                <Button
-                                    variant={"danger"}
-                                    value={"del"}
-                                    key={"del"}
-                                    onClick={(e) => {
-                                        this.handleLogs(e.target.value, 'reset');
-                                    }}
-                                    data-testid="handlelecture-del-button"
-                                >
-                                    Cancel filters
-                                </Button>
-                            </ButtonGroup>
+                                    <Button
+                                        variant={"danger"}
+                                        value={"del"}
+                                        key={"del"}
+                                        onClick={(e) => {
+                                            this.handleLogs(e.target.value, 'reset');
+                                        }}
+                                        data-testid="handlelecture-del-button"
+                                    >
+                                        Cancel filters
+                                    </Button>
+                                </ButtonGroup>
+                                </Card.Body>
+                            </Accordion.Collapse>
+                            </Card>
+                            </Accordion>
                         </Col></>
                     }
                     <Col>
+
+
                         <Tabs id="manager-tab"
                               activeKey={this.state.modality}
                               onSelect={(k) => this.setModality(k)}>
                             <Tab eventKey="table" title="Table View" tabClassName={"tab-label"}>
-                                <Table striped bordered hover>
-                                    <thead>
-                                        <tr>
-                                            <th>Username</th>
-                                            <th>Email</th>
-                                            <th>Operation</th>
-                                            <th>Lecture date</th>
-                                            <th>Subject</th>
-                                            <th>Operation Time</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {
+                                <MDBDataTable
+                                    striped
+                                    bordered
+                                    small
+                                    data={this.state.data}
+                                />
 
-                                            this.state.logs.map((item,idx)=>{
-                                                return <>{item.visible ? <tr>
-                                                    <td>{item.name_surname}</td>
-                                                    <td>{item.email}</td>
-                                                    <td>{typeOp[item.typeOp]}</td>
-                                                    <td>{new Date(item.lectDate).toLocaleString("en")}</td>
-                                                    <td>{item.subject}</td>
-                                                    <td>{new Date(parseInt(item.timestamp)).toLocaleString("en")}</td>
-
-                                                </tr>:<></>}</>
-                                            })
-                                        }
-                                    </tbody>
-                                </Table>
                             </Tab>
                             <Tab eventKey="chart" title="Chart View" tabClassName={"tab-label"}>
                                 <Row className="justify-content-md-center">

@@ -261,12 +261,30 @@ async function changeModalityLecture(id){
 }
 
 async function getLogs(){
+  let typeOp = [
+    'Insert reservation',
+    'Cancel reservation',
+    'Cancel lecture',
+    'Lectures switched to virtual modality'
+  ]
   let url = "/manager/logs";
   const response = await fetch(baseURL + url);
   const logs = await response.json();
   if (response.ok) {
     console.log(logs)
-    return logs;
+    let summary=logs[0]
+    logs.shift();
+    let rows=logs.map((l)=>{
+      return ({
+          username:l.name_surname,
+          email:l.email,
+          operation:typeOp[l.typeOp],
+          lectDate:new Date(l.lectDate).toLocaleString("en"),
+          subject:l.subject,
+          timestamp:new Date(parseInt(l.timestamp)).toLocaleString("en")
+      })
+    });
+    return ({summary:summary, logs:rows})
   } else {
     let err = { status: response.status, errObj: logs};
     throw err;
