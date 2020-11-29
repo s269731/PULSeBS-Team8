@@ -23,13 +23,13 @@ const LectureItem = (props) => {
             <Row className="justify-content-md-center">
               <Col className="align-content-start date">
                 <h6 className="pt-3">
-                  Lecture Date: {l.date} at {l.hour}
+                  <b>Lecture Date:</b> {l.date} at {l.hour}
                 </h6>
               </Col>
             </Row>
             <Row className="justify-content-md-center">
               <Col className="align-content-start date">
-                <h6>Teacher Name: {l.teacherName}</h6>
+                <h6><b>Teacher Name:</b>{l.teacherName}</h6>
               </Col>
               <Col></Col>
               <Col></Col>
@@ -40,7 +40,7 @@ const LectureItem = (props) => {
             </Row>
             <Row className="justify-content-md-center">
               <Col className="align-content-start date">
-                <h6>Lecture Modality: {l.modality}</h6>
+                <h6><b>Lecture Modality:</b> {l.modality}</h6>
               </Col>
               <Col></Col>
               <Col></Col>
@@ -48,26 +48,26 @@ const LectureItem = (props) => {
                 l.booked === true &&
                 l.bookedStudents < l.capacity && (
                   <Col>
-                    <h5 data-testid="confirm-message">You already booked</h5>
+                    <h5 data-testid="confirm-message"><i>You already booked</i></h5>
                   </Col>
                 )}
               {l.modality === "In person" &&
                 l.booked === true &&
                 l.bookedStudents > l.capacity && (
                   <Col>
-                    <h5 data-testid="confirm-message">You are in waiting list</h5>
+                    <h5 data-testid="confirm-message"><i>You are in waiting list</i></h5>
                   </Col>
                 )}
             </Row>
             <Row>
               <Col xs={20} md={3} className="align-content-start">
-                <h6>Room: {l.room}</h6>
+                <h6><b>Room:</b> {l.room}</h6>
               </Col>
               <Col xs={20} md={3} className="align-content-end">
-                <h6>Booked students: {l.bookedStudents}</h6>
+                <h6><b>Booked students:</b> {l.bookedStudents}</h6>
               </Col>
               <Col xs={20} md={3} className="align-content-end">
-                <h6>Class Capacity: {l.capacity}</h6>
+                <h6><b>Class Capacity:</b> {l.capacity}</h6>
               </Col>
 
               {l.modality !== "In person" && (
@@ -92,7 +92,7 @@ const LectureItem = (props) => {
                 )}
               {l.modality === "In person" &&
                 l.booked === false &&
-                l.bookedStudents > l.capacity && (
+                l.bookedStudents >= l.capacity && (
                   <Col>
                     <Button
                       data-testid="course-wait-button"

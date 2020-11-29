@@ -32,7 +32,7 @@ onBasicUploadAuto() {
 
       <div className="card">
           <h3>Add Course List</h3>
-          <FileUpload name="demo[]" url="./upload.php" onUpload={this.onUpload} multiple accept="image/*" maxFileSize={10000000}
+          <FileUpload name="demo[]" url="./upload.php" onUpload={this.onUpload} multiple accept="all/*" maxFileSize={10000000}
               emptyTemplate={<p className="p-m-0">Drag and drop files to here to upload.</p>} />
       </div>
   </div>

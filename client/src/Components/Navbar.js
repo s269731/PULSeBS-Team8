@@ -61,17 +61,6 @@ class Navbars extends Component {
                 </Link>
               </>
             )}
-            {this.props.loggedUser && this.props.loggedUser.role === "S" && (
-              <Link to="/student" className="headerLinks">
-                <span className="headerLinks">Personal Area </span>
-              </Link>
-            )}
-            {this.props.loggedUser && this.props.loggedUser.role === "D" && (
-              <Link to="/teacher" className="headerLinks">
-                <span className="headerLinks">Personal Area </span>
-              </Link>
-            )}
-
             {this.props.loggedUser &&
               this.props.path === "/registeredCourses" &&
               this.props.loggedUser.role === "S" && (
@@ -87,7 +76,7 @@ class Navbars extends Component {
                 </Link>
               )}
               {(this.props.path === "/officer/addStudent" || this.props.path === "/officer/addTeacher"
-              || this.props.path === "/officer/addLecture" || this.props.path === "/officer/addCourse") && (
+              || this.props.path === "/officer/addLecture" || this.props.path === "/officer/addClassroom" || this.props.path === "/officer/addCourse") && (
               <Link to="/officer" className="headerLinks">
                 <span className="headerLinks">Setup System Page </span>
               </Link>

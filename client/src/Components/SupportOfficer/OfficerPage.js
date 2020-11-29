@@ -11,6 +11,8 @@ import Jumbotron from "../../assets/graduated.png";
 import Jumbotron1 from "../../assets/teacher.png";
 import Jumbotron2 from "../../assets/education.png";
 import Jumbotron3 from "../../assets/language.png";
+import Jumbotron4 from "../../assets/classroom.png";
+
 import { withRouter } from "react-router-dom";
 
 
@@ -29,6 +31,10 @@ class OfficerPage extends Component {
   };
   routeAddCor = () => {
     let path = `/officer/addCourse`;
+    this.props.history.push(path);
+  };
+  routeAddClass = () => {
+    let path = `/officer/addClassroom`;
     this.props.history.push(path);
   };
   render() {
@@ -88,6 +94,18 @@ class OfficerPage extends Component {
             alt="my image"
             onClick={this.routeAddCor}/>
              <h4>Add Course</h4></Button>
+
+        <Button variant="light">
+          <img
+            style={{
+            height: "10rem",
+            float: "left",
+            margin: "20px"
+          }}
+            src={Jumbotron4}
+            alt="my image"
+            onClick={this.routeAddClass}/>
+             <h4>Add Classroom</h4></Button>
 
             </Row>
 
