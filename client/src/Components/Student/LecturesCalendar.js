@@ -27,14 +27,14 @@ export default function LecturesCalendar(props) {
 
   const popover = (event) => (
     <Popover id="popover-basic">
-      <Popover.Title as="h3">Cancel reservation</Popover.Title>
+      <Popover.Title as="h3"><h5>Cancel reservation</h5></Popover.Title>
       <Popover.Content>
-        for <strong>canceling</strong> course. Click here:
         <Button
+          size="sm"
+          block
           data-testid="cancel-reservation-button"
           onClick={() => props.cancelBooking(event.id)}
-          variant="danger"
-        >
+          variant="danger">
           Cancel
         </Button>
       </Popover.Content>
@@ -43,8 +43,10 @@ export default function LecturesCalendar(props) {
 
   const Event = ({ event }) => (
     <OverlayTrigger
-      trigger="focus"
-      placement="top"
+
+      trigger='focus'
+      placement='top-start'
+      delay={{ show: 250, hide: 400 }}
       overlay={popover(event)}
     >
       <Button
@@ -54,11 +56,11 @@ export default function LecturesCalendar(props) {
           border: "none",
         }}
       >
-        {event.title}
+        <b>{event.title}</b>
         <br />
-        Lecture Room:{event.room}
+        Lecture Room: <b>{event.room}</b>
         <br />
-        Teacher: {event.instructor}
+        Teacher: <b>{event.instructor}</b>
       </Button>
     </OverlayTrigger>
   );
