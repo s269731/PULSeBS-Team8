@@ -44,7 +44,6 @@ class StudentPage extends Component {
     API.bookLeacture(id)
         .then((res) => {
           this.componentDidMount();
-          alert("hello");
           let a = JSON.stringify(res.errors[0].msg);
 
           const err = this.state.lectures.map((i, key) => {
