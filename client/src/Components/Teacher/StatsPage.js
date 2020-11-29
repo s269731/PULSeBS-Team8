@@ -80,20 +80,31 @@ class StatsPage extends Component {
     }
     componentDidMount() {
         API.getTeacherStats().then((res)=>{
-            console.log(res[0])
-            let i=0;
-            while (i<res.length) {
-                for (let l of res[i].dailystatsarray) {
-                    let time = l.date
-                    l.date = new Date(l.date).toLocaleDateString("en")
-                    l.hour = new Date(time).getHours()
-                    console.log(l.hour)
-                }
-                i++;
-            }
             console.log(res)
-            this.setState({logs:res, subjectLogs:res[0]})
+            if(res.errors){
+                let subjectLogs = {
+                    subjectId: {SubjectId:-1,SubjectName:""},
+                    dailystatsarray: [],
+                    weeklystatsarray: [],
+                    monthlystatsarray: []
 
+                }
+                this.setState({subjectLogs: subjectLogs, logs:[]});
+            }
+            else {
+                let i = 0;
+                while (i < res.length) {
+                    for (let l of res[i].dailystatsarray) {
+                        let time = l.date
+                        l.date = new Date(l.date).toLocaleDateString("en")
+                        l.hour = new Date(time).getHours()
+                        console.log(l.hour)
+                    }
+                    i++;
+                }
+                console.log(res)
+                this.setState({logs: res, subjectLogs: res[0]})
+            }
         }).catch((err)=>{
             console.log(err)
         })
@@ -107,8 +118,10 @@ class StatsPage extends Component {
         console.log(id)
         console.log(id==='del')
         if(id === "del"){
-            let res=this.state.logs
-            this.setState({subjectLogs:res[0]})
+            let res = this.state.logs
+            if(res.length>0) {
+                this.setState({subjectLogs: res[0]})
+            }
         }
         else {
             for (let item of this.state.logs) {
