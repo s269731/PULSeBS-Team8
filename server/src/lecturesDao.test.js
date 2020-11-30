@@ -77,6 +77,7 @@ db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)').run(2, 4);
 db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)').run(2, 5);
 db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)').run(2, 6);
 db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)').run(2, 7);
+db.prepare('INSERT INTO Bookings(LectureId,StudentId,Status) VALUES(?,?,?)').run(4, 7, 1);
 
 test('Should return an array of objects related to Lectures stats', async () => {
   const subjectId = 1;
@@ -360,3 +361,19 @@ test('Should return an error because a Virtual lecture can\'t be booked', async 
   }
 });
 
+test('Should update the status of the student', async () => {
+  const lectureId = 4;
+
+  const mockInsertRes = jest.spyOn(lecturesDao, "insertReservation");
+  mockInsertRes.mockReturnValue(new Promise((resolve) => resolve(7)));
+
+  const newStudentId = await lecturesDao.checkWaitingList(lectureId);
+  expect(newStudentId).toBe(7);
+});
+
+test('Should not update the status of any student', async () => {
+  const lectureId = 2;
+
+  const newStudentId = await lecturesDao.checkWaitingList(lectureId);
+  expect(newStudentId).toBe(undefined);
+});
