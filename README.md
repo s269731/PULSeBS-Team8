@@ -13,6 +13,14 @@
 
 # How to run docker images
 (if you are on windows, you must avoid "sudo")
+
 ## Version v1
 - sudo docker pull se2team8/pulsebs-team8:v1
 - sudo docker run -p 3000:3000 -p 3001:3001 se2team8/pulsebs-team8:v1
+
+## Version v0
+For this very first version, we used docker-compose.
+So, you need to:
+- download the code of this repository with **tag v0**
+- in the folder of the code, execute: *docker-compose pull*
+- then execute: *docker-compose run*
