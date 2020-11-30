@@ -10,3 +10,9 @@
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=s269731_PULSeBS-Team8&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=s269731_PULSeBS-Team8)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=s269731_PULSeBS-Team8&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=s269731_PULSeBS-Team8)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=s269731_PULSeBS-Team8&metric=bugs)](https://sonarcloud.io/dashboard?id=s269731_PULSeBS-Team8)
+
+# How to run docker images
+(if you are on windows, you must avoid "sudo")
+## Version v1
+- sudo docker pull se2team8/pulsebs-team8:v1
+- sudo docker run -p 3000:3000 -p 3001:3001 se2team8/pulsebs-team8:v1
