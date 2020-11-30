@@ -142,6 +142,8 @@ async function computeTeacherStatistics(teacherId) {
     monthlystatsarray = [];
     subjectId = undefined;
   }));
+  console.log(statsArray);
+  console.log(statsArray[0]);
   return statsArray;
 }
 

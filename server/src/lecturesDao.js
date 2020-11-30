@@ -73,6 +73,9 @@ exports.insertReservation = (lectureId, studentId) => new Promise((resolve, reje
   const insertbookings = db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)');
   const updatelecture = db.prepare('UPDATE Lectures SET BookedPeople=BookedPeople+1 WHERE LectureId=? AND BookedPeople<Capacity');
   const modalitychecksql = db.prepare('SELECT Modality FROM Lectures WHERE LectureId=?');
+  const checkclasspace = db.prepare('SELECT * FROM Lectures WHERE LectureId=? AND Capacity=BookedPeople');
+  const fullclassroom = checkclasspace.get(lectureId);
+
   const stmt = db.prepare(sql);
   const row = stmt.get(lectureId, studentId);
   const todayDateHour = new Date();
@@ -83,19 +86,45 @@ exports.insertReservation = (lectureId, studentId) => new Promise((resolve, reje
   if (timeconstraint === undefined) reject('No lecture for the specified id');
   if (todayDateHour < timeconstraint) {
     if (row !== undefined) {
-      reject('The Student has already booked a seat for that Lecture');
+      // 2 cases:
+      // a) the row picked has Status=0 and so it's a duplicate, a reject should be thrown
+      // b) the row picked has Status=1 and so it should be update and become an effective Booking
+      if (row.Status === 0) reject('The Student has already booked a seat for that Lecture');
+      if (row.Status === 1) {
+        const updatebooking = db.prepare('UPDATE Bookings SET Status=0 WHERE LectureId=? AND StudentId=?');
+        const transaction = db.transaction(() => {
+          if (fullclassroom === undefined) {
+            const updatebookingres = updatebooking.run(lectureId, studentId);
+            const updatelectureres = updatelecture.run(lectureId);
+            return updatebookingres.changes === 1 && updatebookingres.changes === updatelectureres.changes;
+          }
+          return false;
+        });
+
+        const transactionresult = transaction();
+        if (transactionresult === true) resolve({ movedfromwaiting: 1 });
+        reject('The classroom is still full');
+      }
     }
 
-    const transaction = db.transaction(() => {
-      const insertres = insertbookings.run(lectureId, studentId);
-      const updateres = updatelecture.run(lectureId);
-      return insertres.changes === 1 && updateres.changes === insertres.changes;
-    });
-    const transactionresult = transaction();
+    if (fullclassroom === undefined) {
+      const transaction = db.transaction(() => {
+        const insertres = insertbookings.run(lectureId, studentId);
+        const updateres = updatelecture.run(lectureId);
+        return insertres.changes === 1 && updateres.changes === insertres.changes;
+      });
+      const transactionresult = transaction();
 
-    if (transactionresult === true) resolve({ result: 1 });
-    reject('The classroom capacity has been exceeded');
-  } reject('Booking is closed for that Lecture'); // throw
+      if (transactionresult === true) resolve({ result: 1 });
+      reject('There was an error while inserting the reservation');
+    } else {
+      const insertinwaitinglist = db.prepare('INSERT INTO Bookings(LectureId,StudentId,Status) VALUES(?,?,1)');
+      const insertres = insertinwaitinglist.run(lectureId, studentId);
+      if (insertres.changes === 1) resolve({ insertedinwaiting: 1 });
+      else reject('There was an error inserting the student in the waiting List for that lecture');
+    }
+  }
+  reject('Booking is closed for that Lecture'); // throw
 });
 
 async function getTeachersForEmail() {
@@ -202,7 +231,7 @@ exports.deleteLectureTeacher = (lectureId, teacherId) => new Promise((resolve, r
   } else {
     const d1 = new Date();
     const d2 = new Date(row.DateHour);
-    //d1.setHours(d1.getHours() + 1);
+    // d1.setHours(d1.getHours() + 1);
     if (d2.getTime() - d1.getTime() < 3.6e+6) { // milliseconds in 1 hour
       reject('Deletion fails: time constraint is not satisfied');
     } else {
@@ -314,16 +343,15 @@ async function checkWaitingList(lectureId) {
   const sql = 'SELECT StudentId FROM Bookings WHERE LectureId=? AND Status=1 ORDER BY ROWID ASC LIMIT 1';
   const stmt = db.prepare(sql);
   const row = stmt.get(lectureId);
-  //console.log(row);
-  let studentId = undefined;
+  // console.log(row);
+  let studentId;
 
   if (row !== undefined) {
     studentId = row.StudentId;
     try {
       await this.insertReservation(lectureId, studentId);
-    }
-    catch (err) {
-      console.log("There was an error in updating row");
+    } catch (err) {
+      console.log('There was an error in updating row');
     }
   }
   return studentId;

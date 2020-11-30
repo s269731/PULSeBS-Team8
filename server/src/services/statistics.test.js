@@ -40,7 +40,7 @@ db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Moda
 );
 today = moment(d);
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
-  [5, 1, 1, today.subtract(15, 'hours').toISOString(), 'In person', '12A', 100, 100],
+  [5, 1, 1, today.subtract(1, 'days').toISOString(), 'In person', '12A', 100, 100],
 );
 today = moment(d);
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(

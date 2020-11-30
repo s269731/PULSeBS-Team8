@@ -146,14 +146,20 @@ test('Should return a message indicating lectureId bookings are closed ', async 
   }
 });
 
-test('Should return a message indicating that the capacity for the classroom is exceeded ', async () => {
+test('Should insert the reservation in the waiting list because of the classroom capacity has been exceeded ', async () => {
   const lectureId = 5;
   const studentId = 1;
-  try {
-    await lecturesDao.insertReservation(lectureId, studentId);
-  } catch (err) {
-    expect(err).toBe('The classroom capacity has been exceeded');
-  }
+
+  const obj = await lecturesDao.insertReservation(lectureId, studentId);
+  expect(obj.insertedinwaiting).toBe(1);
+});
+
+test('Should move a reservation from the waiting list into the bookings because a seat has become available', async () => {
+  const lectureId = 5;
+  const studentId = 1;
+  db.prepare('UPDATE Lectures SET BookedPeople=BookedPeople-1 WHERE LectureId=5').run();
+  const obj = await lecturesDao.insertReservation(lectureId, studentId);
+  expect(obj.movedfromwaiting).toBe(1);
 });
 
 test('Second reservation should return a message showing that a seat for that lectureId is already booked', async () => {
@@ -364,7 +370,7 @@ test('Should return an error because a Virtual lecture can\'t be booked', async 
 test('Should update the status of the student', async () => {
   const lectureId = 4;
 
-  const mockInsertRes = jest.spyOn(lecturesDao, "insertReservation");
+  const mockInsertRes = jest.spyOn(lecturesDao, 'insertReservation');
   mockInsertRes.mockReturnValue(new Promise((resolve) => resolve(7)));
 
   const newStudentId = await lecturesDao.checkWaitingList(lectureId);
