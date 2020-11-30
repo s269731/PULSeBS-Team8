@@ -93,8 +93,6 @@ async function computeTeacherStatistics(teacherId) {
       }
       dayofweekbefore = dayofweek;
       daybefore = d;
-      console.log(month);
-      console.log(actualmonth);
       if (month === undefined) month = actualmonth;
       if (month !== actualmonth) {
         // month ended, push the stats for this month in the monthlystatsarray
@@ -144,8 +142,6 @@ async function computeTeacherStatistics(teacherId) {
     monthlystatsarray = [];
     subjectId = undefined;
   }));
-  console.log(statsArray);
-  console.log(statsArray[0]);
   return statsArray;
 }
 
