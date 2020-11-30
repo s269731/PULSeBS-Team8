@@ -96,8 +96,12 @@ class StatsPage extends Component {
                 while (i < res.length) {
                     for (let l of res[i].dailystatsarray) {
                         let time = l.date
+                        let mins=new Date(time).getMinutes().toString()
+                        if(mins==='0'){
+                            mins='00'
+                        }
                         l.date = new Date(l.date).toLocaleDateString("en")
-                        l.hour = new Date(time).getHours()
+                        l.hour = new Date(time).getHours()+":"+mins
                         console.log(l.hour)
                     }
                     i++;
@@ -149,7 +153,7 @@ class StatsPage extends Component {
         return <>
             <Container fluid  className={"statsLecture"}>
             <Row className="justify-content-md-center below-nav">
-                {this.state.emptyLogs ? <Alert variant={"danger"} className={"headerLectureList"}><h3>No statistics available for your courses</h3></Alert>: <h3 className={"headerLectureList"}>Statistics {this.state.subjectLogs && <> about <span
+                {this.state.emptyLogs ? <Alert variant={"danger"} className={"headerLectureList"}><h3>No statistics available</h3></Alert>: <h3 className={"headerLectureList"}>Statistics {this.state.subjectLogs && <> about <span
                     className={"courseTitle"}>{this.state.subjectLogs.subjectId.SubjectName}</span></>} course
                     <br/><h6>Tables and charts are referring to a specific course</h6>
                 </h3>}
@@ -211,7 +215,7 @@ class StatsPage extends Component {
                                             data={{columns: colsDaily, rows: this.state.subjectLogs.dailystatsarray}
                                             }
                                             data-testid={"logs-daily-table"}
-                                        />: <Alert variant={"danger"} data-testid={"no-logs-warning"}>No statistics for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
+                                        />: <Alert variant={"danger"} data-testid={"no-logs-warning"}>No statistics available for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
                                     </Col>
                                     <Col xs={6}>
                                         {this.props.canShowGraphs &&
@@ -229,7 +233,7 @@ class StatsPage extends Component {
                                             small
                                             data={{columns: colsWeekly, rows: this.state.subjectLogs.weeklystatsarray}}
                                             data-testid={"logs-weekly-table"}
-                                        />: <Alert variant={"danger"} data-testid={"no-logs-warning"}>No statistics for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
+                                        />: <Alert variant={"danger"} data-testid={"no-logs-warning"}>No statistics available for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
 
                                     </Col>
                                     <Col xs={6}>
@@ -251,7 +255,7 @@ class StatsPage extends Component {
                                                 rows: this.state.subjectLogs.monthlystatsarray
                                             }}
                                             data-testid={"logs-monthly-table"}
-                                        />: <Alert variant={"danger"} data-testid={"no-logs-warning"}>No statistics for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
+                                        />: <Alert variant={"danger"} data-testid={"no-logs-warning"}>No statistics available for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
 
                                     </Col>
                                     <Col xs={6}>
