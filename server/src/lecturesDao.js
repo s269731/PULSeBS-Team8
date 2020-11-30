@@ -306,7 +306,7 @@ exports.changeLectureModality = (lectureId) => new Promise((resolve, reject) => 
 exports.getLecturesBySubjectId = (subjectId) => new Promise((resolve, reject) => {
   const sql = db.prepare("SELECT LectureId,DateHour,Capacity,BookedPeople FROM Lectures WHERE SubjectId=? AND DateHour < DateTime('now') ORDER BY DateHour");
   const rows = sql.all(subjectId);
-  if (rows.length > 0) resolve(rows);
+  if (rows.length >= 0) resolve(rows);
   else reject('There aren\'t lectures for this subjectId');
 });
 
