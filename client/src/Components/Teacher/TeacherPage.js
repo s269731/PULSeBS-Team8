@@ -1,5 +1,5 @@
 import React from "react";
-import  {Alert, Spinner, Container, Tabs, Tab} from "react-bootstrap";
+import  {Alert, Spinner, Container, Tabs, Tab, Row} from "react-bootstrap";
 import LectureTable from "./LectureTable.js";
 import StatsPage from './StatsPage';
 import API from "../../api/api";
@@ -7,7 +7,7 @@ import API from "../../api/api";
 class TeacherPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { loading: true, serverErr: null , modality:"lectures", noLect:false};
+    this.state = { loading: true, serverErr: null , modality:"lectures", noLect:false, noSubj:false};
     this.cancelLecture = this.cancelLecture.bind(this);
     this.changeModalityLecture = this.changeModalityLecture.bind(this);
   }
@@ -43,21 +43,35 @@ class TeacherPage extends React.Component {
   getLectures() {
     API.getLecturesTeacher()
       .then((lects) => {
+          console.log(lects)
         API.getCourses().then((subs)=>{
+            console.log(subs)
             console.log(lects.length)
-            if(lects.length>0) {
+            console.log(subs)
+            if(subs.errors){
                 this.setState({
-                    subjects: subs,
-                    lectures: lects,
-                    loading: null,
-                    serverErr: null,
-                    noLect:false
-                });
+                    subjects: [],
+                    lectures: [], loading: null,
+                    serverErr: null, noLect: false, noSubj:true
+                })
             }
-            else{
-                this.setState({ subjects: subs,
-                    lectures: [],loading: null,
-                    serverErr: null,noLect:true})
+            else {
+                if (lects.length > 0) {
+                    this.setState({
+                        subjects: subs,
+                        lectures: lects,
+                        loading: null,
+                        serverErr: null,
+                        noLect: false,
+                        noSubj:false
+                    });
+                } else {
+                    this.setState({
+                        subjects: subs,
+                        lectures: [], loading: null,
+                        serverErr: null, noLect: true, noSubj:false
+                    })
+                }
             }
         })
       })
@@ -66,7 +80,7 @@ class TeacherPage extends React.Component {
         if (err.status === 401) {
           this.props.notLoggedUser();
         }
-        this.setState({ serverErr: true, loading: null });
+        this.setState({ serverErr: true, loading: null , noLect:false, noSubj:false});
       });
   }
   componentDidMount() {
@@ -102,14 +116,19 @@ class TeacherPage extends React.Component {
 
                 >
                     <Tab eventKey="lectures" title="My Lectures">
-                        {this.state.subjects && this.state.lectures.length>0 ? <LectureTable
+                        {this.state.subjects && this.state.lectures.length>0 && !this.state.noSubj ? <LectureTable
                             subjects={this.state.subjects}
                             lectures={this.state.lectures}
                             cancelLecture={this.cancelLecture}
                             changeModalityLecture={this.changeModalityLecture}
                             notLoggedUser={this.props.notLoggedUser}
-                        />:  <Alert className={"alert"} variant={"info"}><h4>You have no programmed lectures</h4></Alert>
-                        }
+                        />: <>
+                            {this.state.noSubj ? <Row className="justify-content-md-center below-nav"><Alert className={"alert"} variant={"info"} data-testid={"no-courses-message"}><h4>No courses assigned to you</h4></Alert></Row>:
+                            <Row className="justify-content-md-center below-nav"><Alert className={"alert"} variant={"info"} data-testid={"no-lectures-message"}><h4>You have not programmed lectures</h4></Alert></Row>
+                            }
+                                </>
+                            }
+
                     </Tab>
                     <Tab eventKey="stats" title="Statistics">
                         {this.state.subjects && <StatsPage subjects={this.state.subjects} canShowGraphs={this.props.canShowGraphs}/>}

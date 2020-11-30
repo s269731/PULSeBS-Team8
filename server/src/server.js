@@ -116,6 +116,11 @@ app.delete('/api/student/lectures/:lectureId', async (req, res) => {
   try {
     const result = await lecturesDao.deleteBookingStudent(req.params.lectureId, userId);
     logsDao.insertLog(userId, 1, req.params.lectureId);
+    const studentId = await lecturesDao.checkWaitingList(req.params.lectureId);
+    if(studentId !== undefined) {
+      emailService.sendBookingConfirmationEmail(req.params.lectureId, studentId);
+      logsDao.insertLog(studentId, 0, req.params.lectureId);
+    }
     res.json(result);
   } catch {
     res.json(deleteBookingError);

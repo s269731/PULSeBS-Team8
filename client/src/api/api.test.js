@@ -111,6 +111,67 @@ test('handlers server error for teacher lectures', async () => {
     render(<TeacherPage canShowGraphs={false}/>)
     await waitFor(() => screen.getByTestId('error-message'))}
 )
+test('handlers message for no lectures (teacher)', async () => {
+    server.use(
+        // override the initial "GET /greeting" request handler
+        // to return a 500 Server Error
+        rest.get("*/api/teacher/lectures", (req, res, ctx) => {
+            return res(ctx.status(200),ctx.json([]))
+        })
+    )
+    render(<TeacherPage canShowGraphs={false}/>)
+    await waitFor(() => screen.getByTestId('no-lectures-message'))}
+)
+test('handlers message for no courses (teacher)', async () => {
+    server.use(
+        // override the initial "GET /greeting" request handler
+        // to return a 500 Server Error
+        rest.get("*/api/teacher/subjects", (req, res, ctx) => {
+            return res(ctx.status(200),ctx.json({errors:"empty"}))
+        })
+    )
+    render(<TeacherPage canShowGraphs={false}/>)
+    await waitFor(() => screen.getByTestId('no-courses-message'))}
+)
+
+test('loads and displays logs for teachers', async () => {
+    render(<TeacherPage showgraphs={false}/>)
+    await waitFor(() => screen.getByTestId("logs-daily-table"))
+    expect(screen.getAllByTestId("logs-daily-table")).toHaveLength(1)
+    expect(screen.getAllByTestId("logs-weekly-table")).toHaveLength(1)
+    expect(screen.getAllByTestId("logs-monthly-table")).toHaveLength(1)
+})
+test('handle no logs error for teachers', async () => {
+    server.use(
+        // override the initial "GET /greeting" request handler
+        // to return a 500 Server Error
+        rest.get("*/api/teacher/statistics", (req, res, ctx) => {
+            return res(ctx.status(200), ctx.json([{
+                subjectId:{SubjectId:1, SubjectName:"SoftwareEngineering II"},
+                dailystatsarray:[],
+                weeklystatsarray:[
+                    {
+                        weekId:'23-28 NOV 2020',
+                        weeklyavgbookings:null,
+                        weeklyavgunoccupiedplaces:null
+                    }
+                ],
+                monthlystatsarray:[
+                    {
+                        monthId: 'NOV-2020',
+                        monthlyavgbookings:null ,
+                        monthlyavgunoccupiedseats: null
+                    }
+
+                ]
+            }]))
+        })
+    )
+    render(<TeacherPage showgraphs={false}/>)
+    await waitFor(() => screen.getAllByTestId('no-logs-warning'))
+    expect( screen.getAllByTestId('no-logs-warning')).toHaveLength(3)
+})
+
 test('get student list with more some student', async()=> {
      render(<StudentList
         id={1}

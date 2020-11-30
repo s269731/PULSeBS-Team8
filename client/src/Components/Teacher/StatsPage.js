@@ -1,6 +1,6 @@
 import React,{Component} from 'react'
 import LecturesGraph from './Graphs/LecturesGraph.js'
-import {Row, Col, Button, ButtonGroup, Table, Container, Tabs, Tab, Card, Accordion} from 'react-bootstrap'
+import {Row, Col, Button, ButtonGroup, Table, Container, Tabs, Tab, Card, Alert} from 'react-bootstrap'
 import API from '../../api/api.js'
 
 import { MDBDataTable } from 'mdbreact';
@@ -75,7 +75,7 @@ const colsMonthly=[
 class StatsPage extends Component {
     constructor() {
         super();
-        this.state={modality:'daily', stats:[]}
+        this.state={modality:'daily', stats:[],emptyLogs:false}
 
     }
     componentDidMount() {
@@ -89,21 +89,25 @@ class StatsPage extends Component {
                     monthlystatsarray: []
 
                 }
-                this.setState({subjectLogs: subjectLogs, logs:[]});
+                this.setState({subjectLogs: subjectLogs, logs:[], emptyLogs:true});
             }
             else {
                 let i = 0;
                 while (i < res.length) {
                     for (let l of res[i].dailystatsarray) {
                         let time = l.date
+                        let mins=new Date(time).getMinutes().toString()
+                        if(mins==='0'){
+                            mins='00'
+                        }
                         l.date = new Date(l.date).toLocaleDateString("en")
-                        l.hour = new Date(time).getHours()
+                        l.hour = new Date(time).getHours()+":"+mins
                         console.log(l.hour)
                     }
                     i++;
                 }
                 console.log(res)
-                this.setState({logs: res, subjectLogs: res[0]})
+                this.setState({logs: res, subjectLogs: res[0],emptyLogs:false})
             }
         }).catch((err)=>{
             console.log(err)
@@ -149,109 +153,120 @@ class StatsPage extends Component {
         return <>
             <Container fluid  className={"statsLecture"}>
             <Row className="justify-content-md-center below-nav">
-                <h3 className={"headerLectureList"}>Statistics {this.state.subjectLogs && <> about <span className={"courseTitle"} >{this.state.subjectLogs.subjectId.SubjectName}</span></>} course
+                {this.state.emptyLogs ? <Alert variant={"danger"} className={"headerLectureList"}><h3>No statistics available</h3></Alert>: <h3 className={"headerLectureList"}>Statistics {this.state.subjectLogs && <> about <span
+                    className={"courseTitle"}>{this.state.subjectLogs.subjectId.SubjectName}</span></>} course
                     <br/><h6>Tables and charts are referring to a specific course</h6>
-                </h3>
+                </h3>}
             </Row>
 
 
+                {!this.state.emptyLogs && <Row className="justify-content-md-center">
+                    <Col className="col-1 justify-content-md-center FiltersList">
+                        <h5>Courses</h5>
 
-            <Row className="justify-content-md-center">
-                <Col className="col-1 justify-content-md-center FiltersList" >
-                                <h5>Courses</h5>
 
-
-                                    <ButtonGroup vertical>
-                                        {this.props.subjects.map((e) => {
-                                            return (
-                                                <>
-                                                    <Button
-                                                        variant="primary"
-                                                        value={e.SubjectName}
-                                                        key={e.SubjectId}
-                                                        onClick={(ev) => {
-                                                            this.handleStats(ev.target.value);
-                                                        }}
-                                                        data-testid="handlelecture-button"
-                                                    >
-                                                        {e.SubjectName}
-                                                    </Button>
-                                                    <br />
-                                                </>
-                                            );
-                                        })}
+                        <ButtonGroup vertical>
+                            {this.props.subjects.map((e) => {
+                                return (
+                                    <>
                                         <Button
-                                            variant={"danger"}
-                                            value={"del"}
-                                            key={"del"}
-                                            onClick={(e) => {
-                                                this.handleStats(e.target.value);
+                                            variant="primary"
+                                            value={e.SubjectName}
+                                            key={e.SubjectId}
+                                            onClick={(ev) => {
+                                                this.handleStats(ev.target.value);
                                             }}
-                                            data-testid="handlelecture-del-button"
+                                            data-testid="handlelecture-button"
                                         >
-                                            Cancel filters
+                                            {e.SubjectName}
                                         </Button>
-                                    </ButtonGroup>
+                                        <br/>
+                                    </>
+                                );
+                            })}
+                            <Button
+                                variant={"danger"}
+                                value={"del"}
+                                key={"del"}
+                                onClick={(e) => {
+                                    this.handleStats(e.target.value);
+                                }}
+                                data-testid="handlelecture-del-button"
+                            >
+                                Cancel filters
+                            </Button>
+                        </ButtonGroup>
 
-                </Col>
-           <Col xs={10}>
-               {this.state.subjectLogs && <><Tabs
-                   id="controlled-tab"
-                   activeKey={this.state.modality}
-                   onSelect={(k) => this.setModality(k)}
-               >
-                   <Tab eventKey="daily" title="Daily">
-                       <Row className="justify-content-md-center below-nav">
-                           <Col>
+                    </Col>
+                    <Col xs={10}>
+                        {this.state.subjectLogs && <><Tabs
+                            id="controlled-tab"
+                            activeKey={this.state.modality}
+                            onSelect={(k) => this.setModality(k)}
+                        >
+                            <Tab eventKey="daily" title="Daily">
+                                <Row className="justify-content-md-center below-nav">
+                                    <Col>
+                                        { this.state.subjectLogs.dailystatsarray.length!==0 ?
+                                        <MDBDataTable
+                                            striped
+                                            bordered
+                                            small
+                                            data={{columns: colsDaily, rows: this.state.subjectLogs.dailystatsarray}
+                                            }
+                                            data-testid={"logs-daily-table"}
+                                        />: <Alert variant={"danger"} data-testid={"no-logs-warning"}>No statistics available for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
+                                    </Col>
+                                    <Col xs={6}>
+                                        {this.props.canShowGraphs &&
+                                        <LecturesGraph detail={'d'} logs={this.state.subjectLogs.dailystatsarray}/>}
+                                    </Col>
+                                </Row>
+                            </Tab>
+                            <Tab eventKey="weekly" title="Weekly">
+                                <Row className="justify-content-md-center below-nav">
+                                    <Col>
+                                        { this.state.subjectLogs.dailystatsarray.length!==0 ?
+                                        <MDBDataTable
+                                            striped
+                                            bordered
+                                            small
+                                            data={{columns: colsWeekly, rows: this.state.subjectLogs.weeklystatsarray}}
+                                            data-testid={"logs-weekly-table"}
+                                        />: <Alert variant={"danger"} data-testid={"no-logs-warning"}>No statistics available for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
 
-                               <MDBDataTable
-                                   striped
-                                   bordered
-                                   small
-                                   data={{columns: colsDaily, rows: this.state.subjectLogs.dailystatsarray}}
-                               />
-                           </Col>
-                           <Col xs={6}>
-                               {this.props.canShowGraphs &&
-                               <LecturesGraph detail={'d'} logs={this.state.subjectLogs.dailystatsarray}/>}
-                           </Col>
-                       </Row>
-                   </Tab>
-                   <Tab eventKey="weekly" title="Weekly">
-                       <Row className="justify-content-md-center below-nav">
-                           <Col>
-                               <MDBDataTable
-                                   striped
-                                   bordered
-                                   small
-                                   data={{columns: colsWeekly, rows:this.state.subjectLogs.weeklystatsarray}}
-                               />
-                           </Col>
-                           <Col xs={6}>
-                               {this.props.canShowGraphs &&
-                               <LecturesGraph detail={'w'} logs={this.state.subjectLogs.weeklystatsarray}/>}
-                           </Col>
-                       </Row>
-                   </Tab>
-                   <Tab eventKey="monthly" title="Monthly">
-                       <Row className="justify-content-md-center below-nav">
-                           <Col>
-                               <MDBDataTable
-                                   striped
-                                   bordered
-                                   small
-                                   data={{columns: colsMonthly, rows:this.state.subjectLogs.monthlystatsarray}}
-                               />
-                           </Col>
-                           <Col xs={6}>
-                               {this.props.canShowGraphs &&
-                               <LecturesGraph detail={'m'} logs={this.state.subjectLogs.monthlystatsarray}/>}
-                           </Col>
-                       </Row>
-                   </Tab>
-               </Tabs></>}
-            </Col>
-        </Row>
+                                    </Col>
+                                    <Col xs={6}>
+                                        {this.props.canShowGraphs &&
+                                        <LecturesGraph detail={'w'} logs={this.state.subjectLogs.weeklystatsarray}/>}
+                                    </Col>
+                                </Row>
+                            </Tab>
+                            <Tab eventKey="monthly" title="Monthly">
+                                <Row className="justify-content-md-center below-nav">
+                                    <Col>
+
+                                        { this.state.subjectLogs.dailystatsarray.length!==0 ? <MDBDataTable
+                                            striped
+                                            bordered
+                                            small
+                                            data={{
+                                                columns: colsMonthly,
+                                                rows: this.state.subjectLogs.monthlystatsarray
+                                            }}
+                                            data-testid={"logs-monthly-table"}
+                                        />: <Alert variant={"danger"} data-testid={"no-logs-warning"}>No statistics available for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
+
+                                    </Col>
+                                    <Col xs={6}>
+                                        {this.props.canShowGraphs &&
+                                        <LecturesGraph detail={'m'} logs={this.state.subjectLogs.monthlystatsarray}/>}
+                                    </Col>
+                                </Row>
+                            </Tab>
+                        </Tabs></>}
+                    </Col>
+                </Row>}
             </Container>
             </>
     }

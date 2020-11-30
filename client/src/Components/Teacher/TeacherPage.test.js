@@ -7,11 +7,18 @@ import API from "../../api/api";
 
 const mockNotLoggedUser = jest.fn();
 const leftClick = { button: 0 };
+
+const subjects=[
+  {SubjectId:1,SubjectName:"SoftwareEngineering II"},
+  {SubjectId:2,SubjectName:"SoftwareEngineering I"}
+
+]
+
 const lectures = [
   {
     id: 1,
     subject: "SoftwareEngineering I",
-    date: "2020-11-20",
+    date: "2020-12-20",
     hour: "15:26",
     modality: "In person",
     room: "12A",
@@ -21,11 +28,12 @@ const lectures = [
     lectureId: 1,
     booked: false,
     canDelete: true,
+    canModify:true,
   },
   {
     id: 2,
     subject: "SoftwareEngineering II",
-    date: "2020-11-28",
+    date: "2020-12-28",
     hour: "17:26",
     modality: "Remote",
     room: "12A",
@@ -35,6 +43,7 @@ const lectures = [
     lectureId: 2,
     booked: false,
     canDelete: true,
+    canModify:true
   },
   {
     id: 4,
@@ -48,14 +57,16 @@ const lectures = [
     teacherName: "Franco yjtyjty",
     lectureId: 4,
     booked: false,
-    canDelete: true,
+    canDelete: false,
+    canModify: false
   },
 ];
 
 test("Teacher page rendering with lectures", async () => {
   const mockGetLectures = jest.spyOn(API, "getLecturesTeacher");
   mockGetLectures.mockReturnValue(new Promise((resolve) => resolve(lectures)));
-
+  const mockGetSubjects=jest.spyOn(API, "getCourses");
+  mockGetSubjects.mockReturnValue(new Promise((resolve) => resolve(subjects)));
   render(<TeacherPage notLoggedUser={mockNotLoggedUser} />);
 
   expect(screen.getByTestId("teacher-page")).toBeInTheDocument();
@@ -72,6 +83,8 @@ test("Teacher page rendering with failing lectures api", async () => {
       reject({ status: 401 });
     })
   );
+  const mockGetSubjects=jest.spyOn(API, "getCourses");
+  mockGetSubjects.mockReturnValue(new Promise((resolve) => resolve(subjects)));
 
   render(<TeacherPage notLoggedUser={mockNotLoggedUser} />);
 
@@ -85,7 +98,8 @@ test("Teacher page rendering with failing lectures api", async () => {
 test("LectureTable filter lectures button works", async () => {
   const mockGetLectures = jest.spyOn(API, "getLecturesTeacher");
   mockGetLectures.mockReturnValue(new Promise((resolve) => resolve(lectures)));
-
+  const mockGetSubjects=jest.spyOn(API, "getCourses");
+  mockGetSubjects.mockReturnValue(new Promise((resolve) => resolve(subjects)));
   render(<TeacherPage />);
 
   await waitFor(() => expect(mockGetLectures).toHaveBeenCalledTimes(1));
@@ -101,7 +115,8 @@ test("LectureTable filter lectures button works", async () => {
 test("LectureTable cancel filter lectures button works", async () => {
   const mockGetLectures = jest.spyOn(API, "getLecturesTeacher");
   mockGetLectures.mockReturnValue(new Promise((resolve) => resolve(lectures)));
-
+  const mockGetSubjects=jest.spyOn(API, "getCourses");
+  mockGetSubjects.mockReturnValue(new Promise((resolve) => resolve(subjects)));
   render(<TeacherPage />);
 
   await waitFor(() => expect(mockGetLectures).toHaveBeenCalledTimes(1));
@@ -117,7 +132,8 @@ test("Cancel lecture button from Teacher Page works", async () => {
   mockDeleteLectureByTeacher.mockReturnValue(new Promise((resolve) => resolve(lectures)));
   const mockGetLectures = jest.spyOn(API, "getLecturesTeacher");
   mockGetLectures.mockReturnValue(new Promise((resolve) => resolve(lectures)));
-
+  const mockGetSubjects=jest.spyOn(API, "getCourses");
+  mockGetSubjects.mockReturnValue(new Promise((resolve) => resolve(subjects)));
   render(<TeacherPage notLoggedUser={mockNotLoggedUser} />);
 
   await waitFor(() => expect(mockNotLoggedUser).toHaveBeenCalledTimes(0));
@@ -132,6 +148,29 @@ test("Cancel lecture button from Teacher Page works", async () => {
   );
 
   await waitFor(() => expect(mockDeleteLectureByTeacher).toHaveBeenCalledTimes(1));
+});
+test("Modify lecture button from Teacher Page works", async () => {
+  const mockGetLectures = jest.spyOn(API, "getLecturesTeacher");
+  mockGetLectures.mockReturnValue(new Promise((resolve) => resolve(lectures)));
+  const mockModifyLectureByTeacher = jest.spyOn(API, "changeModalityLecture");
+  mockModifyLectureByTeacher.mockReturnValue(new Promise((resolve) => resolve(lectures)));
+  const mockGetSubjects=jest.spyOn(API, "getCourses");
+  mockGetSubjects.mockReturnValue(new Promise((resolve) => resolve(subjects)));
+
+  render(<TeacherPage notLoggedUser={mockNotLoggedUser} canShowGraphs={false}/>);
+
+  await waitFor(() => expect(mockNotLoggedUser).toHaveBeenCalledTimes(0));
+
+  userEvent.click(screen.getAllByTestId("modify-lecture-button")[0], leftClick);
+
+  expect(screen.getByTestId("modification-lecture-modal")).toBeInTheDocument();
+
+  userEvent.click(
+      screen.getByTestId("modify-lecture-closemodal-button"),
+      leftClick
+  );
+
+  await waitFor(() => expect(mockModifyLectureByTeacher).toHaveBeenCalledTimes(1));
 });
 
 /*FIXME
