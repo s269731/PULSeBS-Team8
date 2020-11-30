@@ -202,7 +202,7 @@ exports.deleteLectureTeacher = (lectureId, teacherId) => new Promise((resolve, r
   } else {
     const d1 = new Date();
     const d2 = new Date(row.DateHour);
-    d1.setHours(d1.getHours() + 1);
+    //d1.setHours(d1.getHours() + 1);
     if (d2.getTime() - d1.getTime() < 3.6e+6) { // milliseconds in 1 hour
       reject('Deletion fails: time constraint is not satisfied');
     } else {
@@ -310,9 +310,29 @@ exports.getLecturesBySubjectId = (subjectId) => new Promise((resolve, reject) =>
   else reject('There aren\'t lectures for this subjectId');
 });
 
+async function checkWaitingList(lectureId) {
+  const sql = 'SELECT StudentId FROM Bookings WHERE LectureId=? AND Status=1 ORDER BY ROWID ASC LIMIT 1';
+  const stmt = db.prepare(sql);
+  const row = stmt.get(lectureId);
+  //console.log(row);
+  let studentId = undefined;
+
+  if (row !== undefined) {
+    studentId = row.StudentId;
+    try {
+      await this.insertReservation(lectureId, studentId);
+    }
+    catch (err) {
+      console.log("There was an error in updating row");
+    }
+  }
+  return studentId;
+}
+
 exports.getLecturesByUserId = getLecturesByUserId;
 exports.getTeachersForEmail = getTeachersForEmail;
 exports.getInfoBookingConfirmation = getInfoBookingConfirmation;
 exports.getStudentsListByLectureId = getStudentsListByLectureId;
 exports.getBookingsByUserId = getBookingsByUserId;
 exports.getStudentsCancelledLecture = getStudentsCancelledLecture;
+exports.checkWaitingList = checkWaitingList;
