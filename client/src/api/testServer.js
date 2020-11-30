@@ -18,7 +18,34 @@ const students=[
             email: "pluto@topolino.com"
         }
     ]
+const subjects=[
+    {SubjectId:1,SubjectName:"SoftwareEngineering II"},
+    {SubjectId:2,SubjectName:"SoftwareEngineering I"}
 
+]
+const stats=[{
+    subjectId:{SubjectId:1, SubjectName:"SoftwareEngineering II"},
+    dailystatsarray:[{
+        date:"2020-11-28T17:26:00.029Z",
+        bookedSeats:100,
+        unoccupiedSeats:50
+    }],
+    weeklystatsarray:[
+        {
+            weekId:'23-28 NOV 2020',
+            weeklyavgbookings:100,
+            weeklyavgunoccupiedplaces:50
+        }
+    ],
+    monthlystatsarray:[
+        {
+            monthId: 'NOV-2020',
+            monthlyavgbookings: 100,
+            monthlyavgunoccupiedseats: 50
+        }
+
+    ]
+}]
 const lectures=[
         {
             lectureId: 1,
@@ -43,7 +70,7 @@ const lectures=[
         {
             lectureId: 4,
             subjectName: "SoftwareEngineering II",
-            dateHour: "2020-11-17T17:26:00.029Z",
+            dateHour: "2020-12-17T17:26:00.029Z",
             modality: "In person",
             room: "12A",
             capacity: 50,
@@ -103,7 +130,7 @@ const studentsbookings=[
         {
             lectureId: 4,
             subjectName: "SoftwareEngineering II",
-            dateHour: "2020-11-17T17:26:00.029Z",
+            dateHour: "2020-12-01T17:26:00.029Z",
             modality: "In person",
             room: "12A",
             capacity: 50,
@@ -146,6 +173,13 @@ const handlers=[
     rest.get('http://localhost/api/student/bookings',((req,res,ctx)=>{
         return res(ctx.status(200), ctx.json(studentsbookings))
     })),
+    rest.get('http://localhost/api/teacher/subjects',((req,res,ctx)=>{
+        return res(ctx.status(200), ctx.json(subjects))
+    })),
+    rest.get('http://localhost/api/teacher/statistics',((req,res,ctx)=>{
+        return res(ctx.status(200), ctx.json(stats))
+    })),
+
 
 ]
 // declare which API requests to mock

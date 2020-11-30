@@ -208,8 +208,10 @@ class StatsPage extends Component {
                                             striped
                                             bordered
                                             small
-                                            data={{columns: colsDaily, rows: this.state.subjectLogs.dailystatsarray}}
-                                        />: <Alert variant={"danger"}>No statistics for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
+                                            data={{columns: colsDaily, rows: this.state.subjectLogs.dailystatsarray}
+                                            }
+                                            data-testid={"logs-daily-table"}
+                                        />: <Alert variant={"danger"} data-testid={"no-logs-warning"}>No statistics for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
                                     </Col>
                                     <Col xs={6}>
                                         {this.props.canShowGraphs &&
@@ -226,7 +228,8 @@ class StatsPage extends Component {
                                             bordered
                                             small
                                             data={{columns: colsWeekly, rows: this.state.subjectLogs.weeklystatsarray}}
-                                        />: <Alert variant={"danger"}>No statistics for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
+                                            data-testid={"logs-weekly-table"}
+                                        />: <Alert variant={"danger"} data-testid={"no-logs-warning"}>No statistics for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
 
                                     </Col>
                                     <Col xs={6}>
@@ -247,7 +250,8 @@ class StatsPage extends Component {
                                                 columns: colsMonthly,
                                                 rows: this.state.subjectLogs.monthlystatsarray
                                             }}
-                                        />: <Alert variant={"danger"}>No statistics for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
+                                            data-testid={"logs-monthly-table"}
+                                        />: <Alert variant={"danger"} data-testid={"no-logs-warning"}>No statistics for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
 
                                     </Col>
                                     <Col xs={6}>

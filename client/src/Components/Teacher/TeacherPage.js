@@ -43,7 +43,9 @@ class TeacherPage extends React.Component {
   getLectures() {
     API.getLecturesTeacher()
       .then((lects) => {
+          console.log(lects)
         API.getCourses().then((subs)=>{
+            console.log(subs)
             console.log(lects.length)
             console.log(subs)
             if(subs.errors){
@@ -121,8 +123,8 @@ class TeacherPage extends React.Component {
                             changeModalityLecture={this.changeModalityLecture}
                             notLoggedUser={this.props.notLoggedUser}
                         />: <>
-                            {this.state.noSubj ? <Row className="justify-content-md-center below-nav"><Alert className={"alert"} variant={"info"}><h4>No courses assigned to you</h4></Alert></Row>:
-                            <Row className="justify-content-md-center below-nav"><Alert className={"alert"} variant={"info"}><h4>You have not programmed lectures</h4></Alert></Row>
+                            {this.state.noSubj ? <Row className="justify-content-md-center below-nav"><Alert className={"alert"} variant={"info"} data-testid={"no-courses-message"}><h4>No courses assigned to you</h4></Alert></Row>:
+                            <Row className="justify-content-md-center below-nav"><Alert className={"alert"} variant={"info"} data-testid={"no-lectures-message"}><h4>You have not programmed lectures</h4></Alert></Row>
                             }
                                 </>
                             }

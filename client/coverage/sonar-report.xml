@@ -1,13 +1,13 @@
 <testExecutions version="1">
 <file path="src\Components\Student\StudentPage.test.js">
-<testCase name="Student page rendering/navigation" duration="268" />
-<testCase name="Student page rendering with lectures list" duration="1057" />
-<testCase name="Student page rendering without lectures list" duration="193" />
-<testCase name="Successfully book a lecture" duration="411" />
-<testCase name="Should fail to book a lecture if not logged in" duration="274" />
-<testCase name="Successfully cancel a lecture reservation" duration="253" />
-<testCase name="Should fail to cancel a lecture reservation" duration="221" />
-<testCase name="Successfully cancel a reservation from calendar view" duration="199">
+<testCase name="Student page rendering/navigation" duration="247" />
+<testCase name="Student page rendering with lectures list" duration="915" />
+<testCase name="Student page rendering without lectures list" duration="255" />
+<testCase name="Successfully book a lecture" duration="394" />
+<testCase name="Should fail to book a lecture if not logged in" duration="266" />
+<testCase name="Successfully cancel a lecture reservation" duration="282" />
+<testCase name="Should fail to cancel a lecture reservation" duration="231" />
+<testCase name="Successfully cancel a reservation from calendar view" duration="241">
 <failure message="Error"><![CDATA[TestingLibraryElementError: Unable to find an element by: [data-testid=&quot;open-popover-cancel-reservation-button&quot;]
 
 &lt;body&gt;
@@ -95,7 +95,10 @@
                     &lt;h6
                       class=&quot;pt-3&quot;
                     &gt;
-                      Lecture Date: 
+                      &lt;b&gt;
+                        Lecture Date:
+                      &lt;/b&gt;
+                       
                       2020-11-20
                        at 
                       15:26
@@ -109,7 +112,9 @@
                     class=&quot;align-content-start date col&quot;
                   &gt;
                     &lt;h6&gt;
-                      Teacher Name: 
+                      &lt;b&gt;
+                        Teacher Name:
+                      &lt;/b&gt;
                       Franco yjtyjty
                     &lt;/h6&gt;
                   &lt;/div&gt;
@@ -132,7 +137,10 @@
                     class=&quot;align-content-start date col&quot;
                   &gt;
                     &lt;h6&gt;
-                      Lecture Modality: 
+                      &lt;b&gt;
+                        Lecture Modality:
+                      &lt;/b&gt;
+                       
                       In person
                     &lt;/h6&gt;
                   &lt;/div&gt;
@@ -150,7 +158,10 @@
                     class=&quot;align-content-start col-md-3 col-20&quot;
                   &gt;
                     &lt;h6&gt;
-                      Room: 
+                      &lt;b&gt;
+                        Room:
+                      &lt;/b&gt;
+                       
                       12A
                     &lt;/h6&gt;
                   &lt;/div&gt;
@@ -158,7 +169,10 @@
                     class=&quot;align-content-end col-md-3 col-20&quot;
                   &gt;
                     &lt;h6&gt;
-                      Booked students: 
+                      &lt;b&gt;
+                        Booked students:
+                      &lt;/b&gt;
+                       
                       100
                     &lt;/h6&gt;
                   &lt;/div&gt;
@@ -166,21 +180,10 @@
                     class=&quot;align-content-end col-md-3 col-20&quot;
                   &gt;
                     &lt;h6&gt;
-                      Class Capacity: 
-                      150
-                    &lt;/h6&gt;
-                  &lt;/div&gt;
-                  &lt;div
-                    class=&quot;col&quot;
-                  &gt;
-                    &lt;button
-                      class=&quot;btn btn-success btn-block btn-sm&quot;
-                      data-testid=&quot;course-book-button&quot;
-                      type=&quot;button&quot;
-                    &gt;
-                      Book Now
-                    &lt;/button&gt;
-   ...
+                      &lt;b&gt;
+                        Class Capacity:
+                      &lt;/b&gt;
+              ...
     at Object.getElementError (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\@testing-library\dom\dist\config.js:37:19)
     at query (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\@testing-library\dom\dist\query-helpers.js:90:38)
     at getAllByTestId (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\@testing-library\dom\dist\query-helpers.js:125:15)
@@ -197,18 +200,22 @@
 </testCase>
 </file>
 <file path="src\api\api.test.js">
-<testCase name="right login" duration="265" />
-<testCase name="wrong login" duration="188" />
-<testCase name="get auth user" duration="792" />
-<testCase name="get no auth user" duration="20" />
-<testCase name="logout" duration="26" />
-<testCase name="loads and displays lectures for teachers" duration="224" />
-<testCase name="handlers server error for teacher lectures" duration="34" />
-<testCase name="get student list with more some student" duration="61" />
-<testCase name="get student list with no students" duration="65" />
-<testCase name="teacher delete a lecture" duration="49" />
-<testCase name="teacher modify a lecture" duration="55" />
-<testCase name="show student lectures list" duration="25">
+<testCase name="right login" duration="270" />
+<testCase name="wrong login" duration="134" />
+<testCase name="get auth user" duration="826" />
+<testCase name="get no auth user" duration="14" />
+<testCase name="logout" duration="20" />
+<testCase name="loads and displays lectures for teachers" duration="288" />
+<testCase name="handlers server error for teacher lectures" duration="18" />
+<testCase name="handlers message for no lectures (teacher)" duration="93" />
+<testCase name="handlers message for no courses (teacher)" duration="76" />
+<testCase name="loads and displays logs for teachers" duration="299" />
+<testCase name="handle no logs error for teachers" duration="171" />
+<testCase name="get student list with more some student" duration="80" />
+<testCase name="get student list with no students" duration="43" />
+<testCase name="teacher delete a lecture" duration="55" />
+<testCase name="teacher modify a lecture" duration="48" />
+<testCase name="show student lectures list" duration="26">
 <failure message="Error"><![CDATA[TypeError: Cannot read property &apos;map&apos; of undefined
     at Component (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\src\Components\Student\AvailableCourses.js:137:25)
     at renderWithHooks (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:14985:18)
@@ -238,7 +245,7 @@
     at batchedUpdates (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:22380:12)
     at act (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom-test-utils.development.js:1042:14)
     at render (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\@testing-library\react\dist\pure.js:95:3)
-    at Object.&lt;anonymous&gt; (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\src\api\api.test.js:191:5)
+    at Object.&lt;anonymous&gt; (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\src\api\api.test.js:252:5)
     at Promise.then.completed (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\utils.js:276:28)
     at new Promise (&lt;anonymous&gt;)
     at callAsyncCircusFn (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\utils.js:216:10)
@@ -252,7 +259,7 @@
     at runTest (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-runner\build\runTest.js:472:34)
     at Object.worker (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-runner\build\testWorker.js:133:12)]]></failure>
 </testCase>
-<testCase name="show student lectures list for no auth user" duration="4">
+<testCase name="show student lectures list for no auth user" duration="5">
 <failure message="Error"><![CDATA[TypeError: Cannot read property &apos;map&apos; of undefined
     at Component (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\src\Components\Student\AvailableCourses.js:137:25)
     at renderWithHooks (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:14985:18)
@@ -282,7 +289,7 @@
     at batchedUpdates (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:22380:12)
     at act (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom-test-utils.development.js:1042:14)
     at render (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\@testing-library\react\dist\pure.js:95:3)
-    at Object.&lt;anonymous&gt; (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\src\api\api.test.js:203:5)
+    at Object.&lt;anonymous&gt; (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\src\api\api.test.js:264:5)
     at Promise.then.completed (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\utils.js:276:28)
     at new Promise (&lt;anonymous&gt;)
     at callAsyncCircusFn (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\utils.js:216:10)
@@ -326,7 +333,7 @@
     at batchedUpdates (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:22380:12)
     at act (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom-test-utils.development.js:1042:14)
     at render (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\@testing-library\react\dist\pure.js:95:3)
-    at Object.&lt;anonymous&gt; (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\src\api\api.test.js:209:5)
+    at Object.&lt;anonymous&gt; (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\src\api\api.test.js:270:5)
     at Promise.then.completed (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\utils.js:276:28)
     at new Promise (&lt;anonymous&gt;)
     at callAsyncCircusFn (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\utils.js:216:10)
@@ -340,10 +347,10 @@
     at runTest (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-runner\build\runTest.js:472:34)
     at Object.worker (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-runner\build\testWorker.js:133:12)]]></failure>
 </testCase>
-<testCase name="student get his bookings" duration="1">
+<testCase name="student get his bookings" duration="0">
 <failure message="Error"><![CDATA[Error: Cannot spy the getBookedLectures property because it is not a function; undefined given instead
     at ModuleMockerClass.spyOn (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-mock\build\index.js:792:15)
-    at Object.&lt;anonymous&gt; (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\src\api\api.test.js:217:23)
+    at Object.&lt;anonymous&gt; (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\src\api\api.test.js:278:23)
     at Promise.then.completed (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\utils.js:276:28)
     at new Promise (&lt;anonymous&gt;)
     at callAsyncCircusFn (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\utils.js:216:10)
@@ -383,7 +390,7 @@
     at batchedUpdates (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom.development.js:22380:12)
     at act (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\react-dom\cjs\react-dom-test-utils.development.js:1042:14)
     at render (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\@testing-library\react\dist\pure.js:95:3)
-    at Object.&lt;anonymous&gt; (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\src\api\api.test.js:226:5)
+    at Object.&lt;anonymous&gt; (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\src\api\api.test.js:287:5)
     at Promise.then.completed (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\utils.js:276:28)
     at new Promise (&lt;anonymous&gt;)
     at callAsyncCircusFn (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-circus\build\utils.js:216:10)
@@ -398,39 +405,40 @@
     at Object.worker (C:\Users\Utente\IdeaProjects\PULSeBS-Team8\client\node_modules\jest-runner\build\testWorker.js:133:12)]]></failure>
 </testCase>
 </file>
-<file path="src\Components\Teacher\TeacherPage.test.js">
-<testCase name="Teacher page rendering with lectures" duration="404" />
-<testCase name="Teacher page rendering with failing lectures api" duration="9" />
-<testCase name="LectureTable filter lectures button works" duration="96" />
-<testCase name="LectureTable cancel filter lectures button works" duration="84" />
-<testCase name="Cancel lecture button from Teacher Page works" duration="141" />
-</file>
 <file path="src\App.test.js">
-<testCase name="full app rendering/navigating to login and logout" duration="1714" />
-<testCase name="fail when getting the current user" duration="19" />
-<testCase name="random routes redirect to home page" duration="23" />
-</file>
-<file path="src\pages\logins\index.test.js">
-<testCase name="Input handle login with non-empty email and password" duration="140" />
-<testCase name="Input handle login with empty email and password" duration="96" />
-</file>
-<file path="src\Components\Student\AvailableCourses.test.js">
-<testCase name="AvailableCourses page rendering with lectures list" duration="44" />
-<testCase name="Successfully book a lecture" duration="45" />
-<testCase name="Successfully cancel a lecture reservation" duration="33" />
+<testCase name="full app rendering/navigating to login and logout" duration="1876" />
+<testCase name="fail when getting the current user" duration="21" />
+<testCase name="random routes redirect to home page" duration="16" />
 </file>
 <file path="src\index.test.js">
-<testCase name="Application root should render without crashing" duration="15" />
+<testCase name="Application root should render without crashing" duration="18" />
 </file>
-<file path="src\Components\Teacher\ActionsForm.test.js">
-<testCase name="Cancel lecture button works" duration="55" />
-<testCase name="Modify lecture button works" duration="42" />
+<file path="src\Components\Teacher\TeacherPage.test.js">
+<testCase name="Teacher page rendering with lectures" duration="369" />
+<testCase name="Teacher page rendering with failing lectures api" duration="9" />
+<testCase name="LectureTable filter lectures button works" duration="101" />
+<testCase name="LectureTable cancel filter lectures button works" duration="90" />
+<testCase name="Cancel lecture button from Teacher Page works" duration="321" />
+<testCase name="Modify lecture button from Teacher Page works" duration="308" />
 </file>
 <file path="src\Components\Student\LecturesCalendar.test.js">
-<testCase name="Calendar rendering with lectures list" duration="140" />
+<testCase name="Calendar rendering with lectures list" duration="196" />
+</file>
+<file path="src\pages\logins\index.test.js">
+<testCase name="Input handle login with non-empty email and password" duration="204" />
+<testCase name="Input handle login with empty email and password" duration="130" />
+</file>
+<file path="src\Components\Student\AvailableCourses.test.js">
+<testCase name="AvailableCourses page rendering with lectures list" duration="64" />
+<testCase name="Successfully book a lecture" duration="47" />
+<testCase name="Successfully cancel a lecture reservation" duration="41" />
+</file>
+<file path="src\Components\Teacher\ActionsForm.test.js">
+<testCase name="Cancel lecture button works" duration="73" />
+<testCase name="Modify lecture button works" duration="39" />
 </file>
 <file path="src\Components\Teacher\StudentList.test.js">
-<testCase name="StudentList modal rendering with student list" duration="46" />
-<testCase name="StudentList modal rendering without student list" duration="25" />
+<testCase name="StudentList modal rendering with student list" duration="45" />
+<testCase name="StudentList modal rendering without student list" duration="29" />
 </file>
 </testExecutions>
