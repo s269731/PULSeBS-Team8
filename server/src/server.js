@@ -77,6 +77,13 @@ app.get('/api/user', async (req, res) => {
   }
 });
 
+app.use('/api/student', (req, res, next) => {
+  const studentId = req.user && req.user.user;
+  userDao.isStudent(studentId)
+    .then(() => next())
+    .catch(() => res.status(401).json(authErrorObj));
+});
+
 app.get('/api/student/lectures', async (req, res) => {
   const studentId = req.user && req.user.user;
   try {
@@ -117,7 +124,7 @@ app.delete('/api/student/lectures/:lectureId', async (req, res) => {
     const result = await lecturesDao.deleteBookingStudent(req.params.lectureId, userId);
     logsDao.insertLog(userId, 1, req.params.lectureId);
     const studentId = await lecturesDao.checkWaitingList(req.params.lectureId);
-    if(studentId !== undefined) {
+    if (studentId !== undefined) {
       emailService.sendBookingConfirmationEmail(req.params.lectureId, studentId);
       logsDao.insertLog(studentId, 0, req.params.lectureId);
     }
@@ -125,6 +132,13 @@ app.delete('/api/student/lectures/:lectureId', async (req, res) => {
   } catch {
     res.json(deleteBookingError);
   }
+});
+
+app.use('/api/teacher', (req, res, next) => {
+  const teacherId = req.user && req.user.user;
+  userDao.isTeacher(teacherId)
+    .then(() => next())
+    .catch(() => res.status(401).json(authErrorObj));
 });
 
 app.get('/api/teacher/lectures', async (req, res) => {
@@ -175,21 +189,6 @@ app.post('/api/teacher/changemodality', async (req, res) => {
   }
 });
 
-app.get('/api/manager/logs', async (req, res) => {
-  // TypeOp is in the range [0, 3]
-  // 0 = insert reservation (only students)
-  // 1 = cancel reservation (only students)
-  // 2 = cancel lecture (only teachers)
-  // 3 = lectures switched to virtual modality (only teachers)
-
-  try {
-    const logs = await logsDao.getLogs();
-    res.json(logs);
-  } catch {
-    res.json(logsErr);
-  }
-});
-
 app.get('/api/teacher/statistics', async (req, res) => {
   const userId = req.user && req.user.user;
   try {
@@ -207,6 +206,28 @@ app.get('/api/teacher/subjects', async (req, res) => {
     res.json(subjects);
   } catch (error) {
     res.json({ errors: [{ msg: error }] });
+  }
+});
+
+app.use('/api/manager', (req, res, next) => {
+  const managerId = req.user && req.user.user;
+  userDao.isManager(managerId)
+    .then(() => next())
+    .catch(() => res.status(401).json(authErrorObj));
+});
+
+app.get('/api/manager/logs', async (req, res) => {
+  // TypeOp is in the range [0, 3]
+  // 0 = insert reservation (only students)
+  // 1 = cancel reservation (only students)
+  // 2 = cancel lecture (only teachers)
+  // 3 = lectures switched to virtual modality (only teachers)
+
+  try {
+    const logs = await logsDao.getLogs();
+    res.json(logs);
+  } catch {
+    res.json(logsErr);
   }
 });
 

@@ -45,4 +45,38 @@ exports.getUserById = (id) => new Promise((resolve, reject) => {
   }
 });
 
+exports.isStudent = (id) => new Promise((resolve, reject) => {
+  const row = db.prepare('SELECT Role FROM users WHERE id = ?').get(id);
+  if (!row || !row.Role || row.Role !== 'S') {
+    reject("not a student");
+  }
+  else {
+    resolve(true);
+  }
+});
+
+exports.isTeacher = (id) => new Promise((resolve, reject) => {
+  const row = db.prepare('SELECT Role FROM users WHERE id = ?').get(id);
+  if (!row || !row.Role || row.Role !== 'D') reject("not a teacher");
+  else {
+    resolve(true);
+  }
+});
+
+exports.isManager = (id) => new Promise((resolve, reject) => {
+  const row = db.prepare('SELECT Role FROM users WHERE id = ?').get(id);
+  if (!row || !row.Role || row.Role !== 'M') reject("not a manager");
+  else {
+    resolve(true);
+  }
+});
+
+exports.isOfficer = (id) => new Promise((resolve, reject) => {
+  const row = db.prepare('SELECT Role FROM users WHERE id = ?').get(id);
+  if (!row || !row.Role || row.Role !== 'O') reject("not an officer");
+  else {
+    resolve(true);
+  }
+});
+
 exports.checkPassword = (user, password) => bcrypt.compareSync(password, user.password);

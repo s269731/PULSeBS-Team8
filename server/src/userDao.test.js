@@ -4,18 +4,26 @@ const db = require('./db');
 const userDao = require('./userDao');
 
 // delete all the users previously inserted
-db.prepare('DELETE FROM Logs').run();
 db.prepare('DELETE from Users').run();
 db.prepare('INSERT INTO Users(Id, Role, Name, Surname, Email, Password, Course) VALUES(?,?,?,?,?,?,?)').run(
-  [1, 'D', 'nome1', 'cognome1', 'd0001@prof.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'corso4'],
+  [1, 'S', 'nome1', 'cognome1', 'd0001@stud.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'corso4'],
+);
+db.prepare('INSERT INTO Users(Id, Role, Name, Surname, Email, Password, Course) VALUES(?,?,?,?,?,?,?)').run(
+  [2, 'D', 'nome1', 'cognome1', 'd0001@prof.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'corso4'],
+);
+db.prepare('INSERT INTO Users(Id, Role, Name, Surname, Email, Password, Course) VALUES(?,?,?,?,?,?,?)').run(
+  [3, 'M', 'nome1', 'cognome1', 'd0001@man.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'corso4'],
+);
+db.prepare('INSERT INTO Users(Id, Role, Name, Surname, Email, Password, Course) VALUES(?,?,?,?,?,?,?)').run(
+  [4, 'O', 'nome1', 'cognome1', 'd0001@off.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'corso4'],
 );
 
 test('Should return correctly user by his email', async () => {
-  const email = 'd0001@prof.com';
+  const email = 'd0001@stud.com';
   const obj = await userDao.getUser(email);
   expect(obj).toBeTruthy();
   expect(obj.id).toBe(1);
-  expect(obj.role).toBe('D');
+  expect(obj.role).toBe('S');
   expect(obj.name).toBeTruthy();
   expect(obj.surname).toBeTruthy();
   expect(obj.email).toBe(email);
@@ -28,7 +36,7 @@ test('Should return correctly user by his id', async () => {
   const obj = await userDao.getUserById(id);
   expect(obj).toBeTruthy();
   expect(obj.id).toBe(id);
-  expect(obj.role).toBe('D');
+  expect(obj.role).toBe('S');
   expect(obj.name).toBeTruthy();
   expect(obj.surname).toBeTruthy();
   expect(obj.email).toBeTruthy();
@@ -44,6 +52,62 @@ test('Should not return users with an email that does not exist', async () => {
 test('Should not return users with an id that does not exist', async () => {
   const obj = await userDao.getUserById(12332);
   expect(obj).toBeUndefined();
+});
+
+test('isStudent should resolve true if provided the correct id type', async () => {
+  const obj = await userDao.isStudent(1);
+  expect(obj).toBeTruthy();
+});
+
+test('isStudent should reject if provided the wrong id type', async () => {
+  try {
+    const obj = await userDao.isStudent(2);
+    expect(obj).toBeUndefined();
+  } catch (err) {
+    expect(err).toBe('not a student');
+  }
+});
+
+test('isTeacher should resolve true if provided the correct id type', async () => {
+  const obj = await userDao.isTeacher(2);
+  expect(obj).toBeTruthy();
+});
+
+test('isTeacher should reject if provided the wrong id type', async () => {
+  try {
+    const obj = await userDao.isTeacher(1);
+    expect(obj).toBeUndefined();
+  } catch (err) {
+    expect(err).toBe('not a teacher');
+  }
+});
+
+test('isManager should resolve true if provided the correct id type', async () => {
+  const obj = await userDao.isManager(3);
+  expect(obj).toBeTruthy();
+});
+
+test('isManager should reject if provided the wrong id type', async () => {
+  try {
+    const obj = await userDao.isManager(4);
+    expect(obj).toBeUndefined();
+  } catch (err) {
+    expect(err).toBe('not a manager');
+  }
+});
+
+test('isOfficer should resolve true if provided the correct id type', async () => {
+  const obj = await userDao.isOfficer(4);
+  expect(obj).toBeTruthy();
+});
+
+test('isOfficer should reject if provided the wrong id type', async () => {
+  try {
+    const obj = await userDao.isOfficer(3);
+    expect(obj).toBeUndefined();
+  } catch (err) {
+    expect(err).toBe('not an officer');
+  }
 });
 
 test('Hashed password should match with the provided plaintext one', async () => {
