@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Row, Col, Alert, Button } from "react-bootstrap";
+import { Row, Col, Alert, Button } from "react-bootstrap";
 
 const LectureItem = (props) => {
   let l = props.lecture;
