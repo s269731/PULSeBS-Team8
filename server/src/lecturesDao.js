@@ -21,8 +21,9 @@ function getReservation(studentId, lectureId) {
   const sql = 'SELECT * FROM Bookings WHERE StudentId=? AND LectureId=?';
   const stmt = db.prepare(sql);
   const row = stmt.get(studentId, lectureId);
-  if (row === undefined) return false;
-  return true;
+  if (row === undefined) return 2;
+  if (row.Status === 0) return 0;
+  if (row.Status === 1) return 1;
 }
 
 /* function getBookedPeople(lectureId) {
@@ -180,7 +181,7 @@ async function getInfoBookingConfirmation(lectureId, studentId) {
 }
 
 async function getStudentsListByLectureId(lectureId) {
-  const sql = 'SELECT StudentId FROM Bookings WHERE LectureId=?';
+  const sql = 'SELECT StudentId FROM Bookings WHERE LectureId=? AND Status=0';
   const stmt = db.prepare(sql);
   const rows = stmt.all(lectureId);
   const studentlist = [];
@@ -273,7 +274,7 @@ async function getStudentsCancelledLecture(lectureId, teacherId) {
   const stud_emails = [];
   let info = {};
   let obj = {};
-  
+
   const sql2 = 'SELECT SubjectId, DateHour FROM Lectures WHERE LectureId=? AND TeacherId=?';
   const stmt2 = db.prepare(sql2);
   const row = stmt2.get(lectureId, teacherId);
@@ -291,7 +292,7 @@ async function getStudentsCancelledLecture(lectureId, teacherId) {
     };
     stud_emails.push(info);
 
-  if (rows.length > 0) {
+    if (rows.length > 0) {
       await Promise.all(rows.map(async (rawlecture) => {
         obj = {
           email_addr: rawlecture.Email,

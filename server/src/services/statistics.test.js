@@ -23,44 +23,43 @@ db.prepare('INSERT INTO Users(Id, Role, Name, Surname, Email, Password, Course) 
 db.prepare('INSERT INTO Subjects(SubjectId, TeacherId,SubjName,Course) VALUES(?,?,?,?)').run([1, 1, 'SoftwareEngineering II', 'Computer Engineering']);
 db.prepare('INSERT INTO Subjects(SubjectId, TeacherId,SubjName,Course) VALUES(?,?,?,?)').run([2, 1, 'SoftwareEngineering I', 'Computer Engineering']);
 
+const nov30 = new Date('30 November 2020');
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
-  [1, 1, 1, today.subtract(1, 'days').toISOString(), 'In person', '12A', 150, 6],
+  [1, 1, 1, nov30.toISOString(), 'In person', '12A', 150, 6],
 );
 today = moment(d);
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
   [2, 1, 1, today.add(5, 'hours').toISOString(), 'In person', '12A', 100, 6],
 );
-today = moment(d);
+const sept1 = new Date('1 September 2020');
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
-  [3, 1, 1, today.subtract(3, 'months').toISOString(), 'In person', '12A', 100, 50],
+  [3, 1, 1, sept1.toISOString(), 'In person', '12A', 100, 50],
 );
-today = moment(d);
+const nov26 = new Date('26 November 2020');
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
-  [4, 1, 1, today.subtract(5, 'days').toISOString(), 'In person', '12A', 100, 50],
+  [4, 1, 1, nov26.toISOString(), 'In person', '12A', 100, 50],
 );
-today = moment(d);
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
-  [5, 1, 1, today.subtract(1, 'days').toISOString(), 'In person', '12A', 100, 100],
+  [5, 1, 1, nov30.toISOString(), 'In person', '12A', 100, 100],
 );
-today = moment(d);
+const nov1 = new Date('1 November 2020');
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
-  [6, 1, 2, today.subtract(1, 'months').toISOString(), 'In person', '12A', 150, 6],
+  [6, 1, 2, nov1.toISOString(), 'In person', '12A', 150, 6],
 );
 today = moment(d);
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
   [7, 1, 2, today.add(2, 'hours').toISOString(), 'In person', '12A', 100, 6],
 );
-today = moment(d);
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
-  [8, 1, 2, today.subtract(3, 'months').toISOString(), 'In person', '12A', 100, 50],
+  [8, 1, 2, sept1.toISOString(), 'In person', '12A', 100, 50],
 );
 today = moment(d);
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
-  [9, 1, 1, today.subtract(5, 'days').toISOString(), 'In person', '12A', 100, 50],
+  [9, 1, 1, nov26.toISOString(), 'In person', '12A', 100, 50],
 );
-today = moment(d);
+const nov16 = new Date('16 November 2020');
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
-  [10, 1, 1, today.subtract(15, 'days').toISOString(), 'In person', '12A', 100, 100],
+  [10, 1, 1, nov16.toISOString(), 'In person', '12A', 100, 100],
 );
 const oct4 = new Date('4 October 2020');
 db.prepare('INSERT INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)').run(
@@ -87,13 +86,10 @@ test('Test the correct computing of statistics', async () => {
   expect(obj[0].subjectId.SubjectId).toBe(1);
   expect(obj[1].subjectId.SubjectId).toBe(2);
   expect(obj[0].dailystatsarray[9]).toBeTruthy();
-  expect(obj[0].weeklystatsarray[0].weekId).toBe('24-30 AUG 2020');
+  expect(obj[0].weeklystatsarray[0].weekId).toBe('31 AUG-06 SEP 2020');
   expect(obj[0].weeklystatsarray[0].weeklyavgbookings).toBe(50);
   expect(obj[0].weeklystatsarray[0].weeklyavgunoccupiedplaces).toBe(50);
   expect(obj[0].weeklystatsarray[1].weekId).toBe('28 SEP-04 OCT 2020');
-  expect(obj[0].weeklystatsarray[3].weeklyavgbookings).toBe(51.5);
-  expect(obj[0].weeklystatsarray[3].weeklyavgunoccupiedplaces).toBe(61);
-  expect(obj[0].monthlystatsarray[3].monthId).toBe('NOV-2020');
-  expect(obj[0].monthlystatsarray[3].monthlyavgbookings).toBe(61.2);
-  expect(obj[0].monthlystatsarray[3].monthlyavgunoccupiedseats).toBe(48.8);
+  expect(obj[0].weeklystatsarray[3].weeklyavgbookings).toBe(50);
+  expect(obj[0].weeklystatsarray[3].weeklyavgunoccupiedplaces).toBe(50);
 });
