@@ -297,11 +297,11 @@ test('Should return Bookings for a certain student', async () => {
   expect(obj[0].bookedPeople).toBeTruthy();
 });
 
-test('Should return an empty array since nobody was booked for that cancelled lecture', async () => {
+test('Should return an  array with only info element since nobody was booked for that cancelled lecture', async () => {
   const lectureId = 3;
   const teacherId = 1;
   const empty = await lecturesDao.getStudentsCancelledLecture(lectureId, teacherId);
-  expect(empty.length).toBe(0);
+  expect(empty.length).toBe(1);
 });
 
 test('Should return an array of info and emails', async () => {

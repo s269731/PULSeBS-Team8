@@ -9,7 +9,7 @@ let typeOp = [
 	'Insert reservation',
 	'Cancel reservation',
 	'Cancel lecture',
-	'Lectures switched to virtual modality'
+	'Switch lecture to Virtual modality'
 ]
 const cols=[
     {
