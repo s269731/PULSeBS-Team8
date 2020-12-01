@@ -2,9 +2,7 @@
   import "./App.css";
   import Navbars from "./Components/Navbar.js";
   import TeacherPage from "./Components/Teacher/TeacherPage";
-  import StudentPage from "./Components/Student/StudentPage";
-  import AvailableCourses from "./Components/Student/AvailableCourses";
-  import RegisteredCourses from "./Components/Student/LecturesCalendar";
+  import StudentPage from "./Components/Student/StudentPage"
   import { Switch } from "react-router";
   import { withRouter, Redirect, Route, Link } from "react-router-dom";
   import { Row, Col, Container, Alert } from "react-bootstrap";
