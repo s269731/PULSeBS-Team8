@@ -1,5 +1,5 @@
 import React from "react";
-import {Container, Row, Col, Button, Table, ButtonGroup, Tabs, Tab, Accordion, Card} from "react-bootstrap";
+import {Container, Row, Col, Button,ButtonGroup, Tabs, Tab, Accordion, Card} from "react-bootstrap";
 import './manager.css'
 import API from "../../api/api";
 import LogGraph from './LogGraph'
