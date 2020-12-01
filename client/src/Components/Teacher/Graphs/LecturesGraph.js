@@ -102,7 +102,7 @@ class LecturesGraph extends Component {
 
              	]
 		}
-         {
+		const options2 = {
         			theme: "light1", // "light1", "dark1", "dark2"
         			animationEnabled: true,
         			zoomEnabled: true,
