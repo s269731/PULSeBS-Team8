@@ -1,6 +1,6 @@
 import React,{Component} from 'react'
 import LecturesGraph from './Graphs/LecturesGraph.js'
-import {Row, Col, Button, ButtonGroup, Table, Container, Tabs, Tab, Card, Alert} from 'react-bootstrap'
+import {Row, Col, Button, ButtonGroup,Container, Tabs, Tab,Alert} from 'react-bootstrap'
 import API from '../../api/api.js'
 
 import { MDBDataTable } from 'mdbreact';
