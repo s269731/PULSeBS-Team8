@@ -1,12 +1,9 @@
 import React, {Component} from 'react';
 import Navbar from '../Navbar'
 import {
-  Container,
   Row,
-  Col,
-  Image,
   Button,
-  Card} from 'react-bootstrap'
+  } from 'react-bootstrap'
 import Jumbotron from "../../assets/graduated.png";
 import Jumbotron1 from "../../assets/teacher.png";
 import Jumbotron2 from "../../assets/education.png";
