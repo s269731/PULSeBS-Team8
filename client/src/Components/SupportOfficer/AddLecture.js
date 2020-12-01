@@ -5,6 +5,8 @@ import 'primeicons/primeicons.css';
 import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.css';
 import 'primeflex/primeflex.css';
+import API from '../../api/api';
+
 class AddLecture extends Component {
   constructor(props) {
     super(props);
@@ -14,8 +16,13 @@ class AddLecture extends Component {
     this.onBasicUploadAuto = this.onBasicUploadAuto.bind(this);
 }
 
-onUpload() {
-    this.toast.show({severity: 'info', summary: 'Success', detail: 'File Uploaded'});
+onUpload(ev) {
+  ev.preventDefault();
+  console.log(ev.target.files[0]);
+  API.doUpload(ev.target.files[0]).then((res) => {
+    console.log("OK")
+  })
+    //this.toast.show({severity: 'info', summary: 'Success', detail: 'File Uploaded'});
 }
 
 onBasicUpload() {
@@ -28,12 +35,11 @@ onBasicUploadAuto() {
   render() {
     return (
       <div>
-      <Toast ref={(el) => { this.toast = el; }}></Toast>
+      <Toast ref={(el) => { this.toast = el; }} />
 
       <div className="card">
           <h3>Add Lecture List</h3>
-          <FileUpload name="demo[]" url="./upload.php" onUpload={this.onUpload} multiple accept="all/*" maxFileSize={10000000}
-              emptyTemplate={<p className="p-m-0">Drag and drop files to here to upload.</p>} />
+        <FileUpload name="sampleFile" url={API.getUploadUrl()} />
       </div>
   </div>
     );

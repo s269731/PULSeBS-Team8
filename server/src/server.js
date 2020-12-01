@@ -3,8 +3,10 @@ const config = require('config');
 const jwt = require('express-jwt');
 const jsonwebtoken = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
+const fileUpload = require('express-fileupload');
 const schedule = require('node-schedule');
 const emailService = require('./services/email');
+const importerService = require('./services/importer');
 const userDao = require('./userDao');
 const lecturesDao = require('./lecturesDao');
 const logsDao = require('./logsDao');
@@ -19,6 +21,7 @@ const deleteLectureError = { errors: [{ msg: 'There was an error in deleting the
 const changeModalityTimeConstraintError = { errors: [{ msg: 'Lecture Modality can\'t be changed within 30 minutes before its start' }] };
 const changeModalityQueryError = { errors: [{ msg: 'error in changing the modality of the Lecture' }] };
 const logsErr = { errors: [{ msg: 'There was an error in retrieving log records' }] };
+const uploadErr = { errors: [{ msg: 'There was an error in uploading the file' }] };
 
 const app = express();
 app.disable('x-powered-by');
@@ -76,14 +79,14 @@ app.get('/api/user', async (req, res) => {
     res.status(401).json(authErrorObj);
   }
 });
-
+/*
 app.use('/api/student', (req, res, next) => {
   const studentId = req.user && req.user.user;
   userDao.isStudent(studentId)
     .then(() => next())
     .catch(() => res.status(401).json(authErrorObj));
 });
-
+*/
 app.get('/api/student/lectures', async (req, res) => {
   const studentId = req.user && req.user.user;
   try {
@@ -133,14 +136,14 @@ app.delete('/api/student/lectures/:lectureId', async (req, res) => {
     res.json(deleteBookingError);
   }
 });
-
+/*
 app.use('/api/teacher', (req, res, next) => {
   const teacherId = req.user && req.user.user;
   userDao.isTeacher(teacherId)
     .then(() => next())
     .catch(() => res.status(401).json(authErrorObj));
 });
-
+*/
 app.get('/api/teacher/lectures', async (req, res) => {
   const teacherId = req.user && req.user.user;
   try {
@@ -208,14 +211,14 @@ app.get('/api/teacher/subjects', async (req, res) => {
     res.json({ errors: [{ msg: error }] });
   }
 });
-
+/*
 app.use('/api/manager', (req, res, next) => {
   const managerId = req.user && req.user.user;
   userDao.isManager(managerId)
     .then(() => next())
     .catch(() => res.status(401).json(authErrorObj));
 });
-
+*/
 app.get('/api/manager/logs', async (req, res) => {
   // TypeOp is in the range [0, 3]
   // 0 = insert reservation (only students)
@@ -228,6 +231,28 @@ app.get('/api/manager/logs', async (req, res) => {
     res.json(logs);
   } catch {
     res.json(logsErr);
+  }
+});
+/*
+app.use('/api/officer', (req, res, next) => {
+  const officerId = req.user && req.user.user;
+  userDao.isOfficer(officerId)
+    .then(() => next())
+    .catch(() => res.status(401).json(authErrorObj));
+});
+*/
+
+app.use(fileUpload());
+
+app.post('/api/officer/upload', (req, res) => {
+  try {
+    console.log(req.body);
+    console.log(req.body.files);
+    console.log(req.files.sampleFile);
+    importerService.importFile(req.files.sampleFile);
+    res.json({ success: true });
+  } catch {
+    res.json(uploadErr);
   }
 });
 

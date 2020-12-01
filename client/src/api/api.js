@@ -2,6 +2,10 @@ const baseURL = "/api";
 const parseErr={errors: [{ param: "Application", msg: "Cannot parse server response" }, ],}
 const commErr={ errors: [{ param: "Server", msg: "Cannot communicate" }] }
 
+function getUploadUrl() {
+  return baseURL + "/officer/upload";
+}
+
 async function Login(params) {
   let username = params.email;
   let password = params.password;
@@ -320,6 +324,7 @@ async function getCourses(){
   }
 }
 const API = {
+  getUploadUrl,
   Login,
   getLectures,
   getUser,
