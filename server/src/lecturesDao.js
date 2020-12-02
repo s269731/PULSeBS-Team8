@@ -210,7 +210,7 @@ exports.deleteBookingStudent = (lectureId, studentId) => new Promise((resolve, r
   if (todayDateHour < timeconstraint) {
     if (row === undefined) {
       reject('Deletion fails: selected lecture not available among the bookings of the student');
-    } else {
+    } else if (row.Status === 0) {
       const transaction = db.transaction(() => {
         const deleteres = deletesql.run(lectureId, studentId);
         const updateres = updatesql.run(lectureId);
@@ -219,6 +219,9 @@ exports.deleteBookingStudent = (lectureId, studentId) => new Promise((resolve, r
       const transactionresult = transaction();
       if (transactionresult === true) resolve({ result: '1 1' });
       reject('Error in deleting row or updating BookedPeople number');
+    } else if (row.Status === 1) {
+      const res = deletesql.run(lectureId, studentId);
+      if (res.changes === 1) { resolve({ result: res.changes }); } else { reject('Error in deleting row'); }
     }
   }
 });

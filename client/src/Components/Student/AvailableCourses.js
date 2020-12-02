@@ -3,7 +3,7 @@ import { Row, Col, Alert, Button } from "react-bootstrap";
 
 const LectureItem = (props) => {
 
-  let  curTime = new Date().toLocaleString();
+  
   
   let l = props.lecture;
   let bookLecture = props.bookLecture;

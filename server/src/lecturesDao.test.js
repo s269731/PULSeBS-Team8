@@ -78,6 +78,7 @@ db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)').run(2, 5);
 db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)').run(2, 6);
 db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)').run(2, 7);
 db.prepare('INSERT INTO Bookings(LectureId,StudentId,Status) VALUES(?,?,?)').run(4, 7, 1);
+db.prepare('INSERT INTO Bookings(LectureId,StudentId,Status) VALUES(?,?,?)').run(4, 6, 1);
 
 test('Should return an array of objects related to Lectures stats', async () => {
   const subjectId = 1;
@@ -251,6 +252,14 @@ test('Should reject the request of deletion of booking by the student because hi
     console.log(err);
     expect(err).toBe('Deletion fails: selected lecture not available among the bookings of the student');
   }
+});
+
+test('Should permit the deletion of the booking by the student that was in waiting list (no update of BookedPeople number)', async () => {
+  const lectureId = 4;
+  const studentId = 6;
+  const obj = await lecturesDao.deleteBookingStudent(lectureId, studentId);
+  expect(obj).toBeTruthy();
+  expect(obj.result).toBe(1);
 });
 
 test('Should permit the deletion of lecture by the teacher since the time constraint is satisfied', async () => {

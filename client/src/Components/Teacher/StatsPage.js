@@ -128,15 +128,15 @@ class StatsPage extends Component {
             }
         }
         else {
+            let trovato = 0;
             for (let item of this.state.logs) {
-                let trovato = 0;
                 if (item.subjectId.SubjectName === id) {
-                    trovato = 1;
-
+                    trovato = 1
                     this.setState({subjectLogs: item});
                     break;
                 }
-                if (trovato == 0) {
+            }
+                if (trovato === 0) {
                     let subjectLogs = {
                         subjectId: {SubjectId:-1,SubjectName:""},
                         dailystatsarray: [],
@@ -147,7 +147,7 @@ class StatsPage extends Component {
                     this.setState({subjectLogs: subjectLogs});
                 }
             }
-        }
+
     }
     render() {
         return <>

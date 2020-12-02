@@ -20,7 +20,7 @@
   class App extends React.Component {
     constructor(props) {
       super(props);
-      this.state = { authErr: null };
+      this.state = { authErr: null , loggedUser: {}};
       this.login = this.login.bind(this);
       this.logout = this.logout.bind(this);
       this.getUser = this.getUser.bind(this);
@@ -75,22 +75,22 @@
           />
           <Switch>
           <Route exact path="/officer">
-                <OfficerPage/>
+            {this.state.loggedUser && this.state.loggedUser.role === "O" ? <OfficerPage/>:<Redirect to="/login" />}
           </Route>
             <Route exact path="/officer/addStudent">
-                <AddStudent/>
+              {this.state.loggedUser && this.state.loggedUser.role === "O" ?<AddStudent/>:<Redirect to="/login" />}
             </Route>
             <Route exact path="/officer/addTeacher">
-                <AddTeacher/>
+                {this.state.loggedUser && this.state.loggedUser.role === "O" ?<AddTeacher/>:<Redirect to="/login" />}
             </Route>
             <Route exact path="/officer/addLecture">
-                <AddLecture/>
+                {this.state.loggedUser && this.state.loggedUser.role === "O" ? <AddLecture/>:<Redirect to="/login" />}
             </Route>
             <Route exact path="/officer/addCourse">
-                <AddCourse/>
+                {this.state.loggedUser && this.state.loggedUser.role === "O" ? <AddCourse/>:<Redirect to="/login" />}
             </Route>
           <Route exact path="/officer/addClassroom">
-              <AddClassroom/>
+                {this.state.loggedUser && this.state.loggedUser.role === "O" ?<AddClassroom/>:<Redirect to="/login" />}
           </Route>
             <Route exact path="/home">
               <Container data-testid="home-page">
@@ -105,8 +105,6 @@
                   </Row>
                   <Row className="justify-content-md-center below-nav">
                     <h3>
-                    <h5>For switiching Officer page:  /officer</h5>
-                    <br></br>
                       This is a tool to manage bookings of lectures during this
                       pandemic period
                       <br />
@@ -147,6 +145,12 @@
               {this.state.loggedUser && this.state.loggedUser.role === "S" && (
                 <Redirect to="/student" />
               )}
+              {this.state.loggedUser && this.state.loggedUser.role === "M" && (
+                  <Redirect to="/manager" />
+              )}
+              {this.state.loggedUser && this.state.loggedUser.role === "O" && (
+                  <Redirect to="/officer" />
+              )}
               {!this.state.loggedUser && (
                 <Login
                   login={this.login}
@@ -171,7 +175,7 @@
               )}
             </Route>
             <Route exact path="/manager">
-                <Manager />
+              {this.state.loggedUser && this.state.loggedUser.role === "M" ? <Manager />:<Redirect to="/login" />}
             </Route> <Route>
               <Redirect to="/home" />
             </Route>
