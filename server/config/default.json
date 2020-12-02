@@ -5,11 +5,11 @@
 	"jwtSecret": "'BçFDJDLKSAJOIFBHNI$48tgopW$ITHW$TBL",
 	"tokenExpireTime": 3600,
 	"mailer": {
-	  "service": "mail.ee",
-	  "host": "smtp.mail.ee",
-	  "port": 587,
-	  "user": "pulsebs@mail.ee",
-	  "pass": "Y!6HVraaJ3"
+	  "service": "Yahoo",
+	  "host": "smtp.mail.yahoo.com",
+	  "port": 465,
+	  "user": "pulsebs@yahoo.com",
+	  "pass": "rutxzlnipgiticku"
 	}
 
 }
