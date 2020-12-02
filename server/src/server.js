@@ -79,14 +79,14 @@ app.get('/api/user', async (req, res) => {
     res.status(401).json(authErrorObj);
   }
 });
-/*
+
 app.use('/api/student', (req, res, next) => {
   const studentId = req.user && req.user.user;
   userDao.isStudent(studentId)
     .then(() => next())
     .catch(() => res.status(401).json(authErrorObj));
 });
-*/
+
 app.get('/api/student/lectures', async (req, res) => {
   const studentId = req.user && req.user.user;
   try {
@@ -136,14 +136,14 @@ app.delete('/api/student/lectures/:lectureId', async (req, res) => {
     res.json(deleteBookingError);
   }
 });
-/*
+
 app.use('/api/teacher', (req, res, next) => {
   const teacherId = req.user && req.user.user;
   userDao.isTeacher(teacherId)
     .then(() => next())
     .catch(() => res.status(401).json(authErrorObj));
 });
-*/
+
 app.get('/api/teacher/lectures', async (req, res) => {
   const teacherId = req.user && req.user.user;
   try {
@@ -211,14 +211,14 @@ app.get('/api/teacher/subjects', async (req, res) => {
     res.json({ errors: [{ msg: error }] });
   }
 });
-/*
+
 app.use('/api/manager', (req, res, next) => {
   const managerId = req.user && req.user.user;
   userDao.isManager(managerId)
     .then(() => next())
     .catch(() => res.status(401).json(authErrorObj));
 });
-*/
+
 app.get('/api/manager/logs', async (req, res) => {
   // TypeOp is in the range [0, 3]
   // 0 = insert reservation (only students)
@@ -233,25 +233,24 @@ app.get('/api/manager/logs', async (req, res) => {
     res.json(logsErr);
   }
 });
-/*
+
 app.use('/api/officer', (req, res, next) => {
   const officerId = req.user && req.user.user;
   userDao.isOfficer(officerId)
     .then(() => next())
     .catch(() => res.status(401).json(authErrorObj));
 });
-*/
 
-app.use(fileUpload());
+app.use(fileUpload({
+  useTempFiles: true,
+}));
 
-app.post('/api/officer/upload', (req, res) => {
+app.post('/api/officer/upload/:table', async (req, res) => {
   try {
-    console.log(req.body);
-    console.log(req.body.files);
-    console.log(req.files.sampleFile);
-    importerService.importFile(req.files.sampleFile);
+    await importerService.importFile(req.files.sampleFile, req.params.table);
     res.json({ success: true });
-  } catch {
+  } catch (err) {
+    console.log(err);
     res.json(uploadErr);
   }
 });

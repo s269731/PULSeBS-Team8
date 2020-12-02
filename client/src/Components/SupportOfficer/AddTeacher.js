@@ -5,6 +5,7 @@ import 'primeicons/primeicons.css';
 import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.css';
 import 'primeflex/primeflex.css';
+import API from "../../api/api";
 class AddTeacher extends Component {
   constructor(props) {
     super(props);
@@ -32,8 +33,7 @@ onBasicUploadAuto() {
 
       <div className="card">
           <h3>Add Teacher List</h3>
-          <FileUpload name="demo[]" url="./upload.php" onUpload={this.onUpload} multiple accept="all/*" maxFileSize={10000000}
-              emptyTemplate={<p className="p-m-0">Drag and drop files to here to upload.</p>} />
+        <FileUpload name="sampleFile" url={API.getUploadUrl() + "/teachers"} />
       </div>
   </div>
     );

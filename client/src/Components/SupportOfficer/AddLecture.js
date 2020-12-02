@@ -39,7 +39,7 @@ onBasicUploadAuto() {
 
       <div className="card">
           <h3>Add Lecture List</h3>
-        <FileUpload name="sampleFile" url={API.getUploadUrl()} />
+        <FileUpload name="sampleFile" url={API.getUploadUrl() + "/lectures"} />
       </div>
   </div>
     );

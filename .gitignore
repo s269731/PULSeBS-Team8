@@ -12,6 +12,9 @@ coverage/
 !coverage/lcov.info
 !coverage/sonar-report.xml
 
+# tmp file uploads
+tmp/
+
 # Compiled Java class files
 *.class
 
