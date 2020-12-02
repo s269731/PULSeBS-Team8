@@ -131,7 +131,7 @@ class StatsPage extends Component {
             for (let item of this.state.logs) {
                 let trovato = 0;
                 if (item.subjectId.SubjectName === id) {
-                    trovato = 1;
+                    
 
                     this.setState({subjectLogs: item});
                     break;
