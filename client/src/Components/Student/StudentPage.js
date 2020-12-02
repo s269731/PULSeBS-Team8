@@ -81,7 +81,7 @@ class StudentPage extends Component {
                 cancelBookingByStudent={this.cancelBookingByStudent}
             />
           </Tab>
-          <Tab eventKey="calendar" title="Calendar">
+          <Tab data-testid="calendar-tab-button" eventKey="calendar" title="Calendar">
             <LecturesCalendar
                 bookedLectures={this.state.lectures.filter((lecture) => lecture.booked===0)}
                 cancelBooking={this.cancelBookingByStudent}

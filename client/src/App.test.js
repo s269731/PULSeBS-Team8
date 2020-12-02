@@ -35,9 +35,9 @@ test("full app rendering/navigating to login and logout", async () => {
   );
   // verify page content for expected route
   // often you'd use a data-testid or role query, but this is also possible
-  expect(screen.getByText(/Login/i)).toBeInTheDocument();
+  expect(screen.getByTestId('login-link')).toBeInTheDocument();
 
-  userEvent.click(screen.getByText(/Login/i), leftClick);
+  userEvent.click(screen.getByTestId('login-link'), leftClick);
 
   // check that the content changed to the login page
   expect(screen.getByTestId("login-page")).toBeInTheDocument();
@@ -88,7 +88,7 @@ test("fail when getting the current user", () => {
     </Router>
   );
 
-  expect(screen.getByText(/Login/i)).toBeInTheDocument();
+  expect(screen.getByTestId('login-link')).toBeInTheDocument();
 
   API.getUser.mockRestore();
 });

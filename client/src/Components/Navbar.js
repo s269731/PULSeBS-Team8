@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Nav, Navbar, Col, Row } from "react-bootstrap";
+import {Nav, Navbar, Col, Row, Tab} from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "../App.css";
 //import {Link} from 'react-router-dom'
@@ -35,7 +35,7 @@ class Navbars extends Component {
         <Nav className="ml-md-auto">
           <Navbar.Text>
             {!this.props.loggedUser && this.props.path === "/home" && (
-              <Link to="/login" className="headerLinks">
+              <Link data-testid="login-link" to="/login" className="headerLinks">
                 <span className="headerLinks">Login </span>
               </Link>
             )}
