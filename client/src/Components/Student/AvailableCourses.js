@@ -56,8 +56,8 @@ const LectureItem = (props) => {
                   </Col>
                 )}
               {l.modality === "In person" &&
-                l.booked === 0 &&
-                 l.bookedStudents > l.capacity && 
+                l.booked === 1 &&
+                 l.bookedStudents >= l.capacity && 
                 (
                   <Col>
                     <h5 data-testid="confirm-message"><i>You are in waiting list</i></h5>
