@@ -11,12 +11,6 @@ const LectureItem = (props) => {
   let errMsg = props.errMsg;
   let key = props.k;
    
-
-  // const 
-  // const diff = timeEnd.diff(startDate);
-  // const diffDuration = moment.duration(diff);
-  // console.log(diffDuration);
-
   return (
     <>
       <Row data-testid="lecture-s-row">
@@ -55,7 +49,7 @@ const LectureItem = (props) => {
               <Col></Col>
               {l.modality === "In person" &&
                 l.booked === 0 &&
-                 l.bookedStudents < l.capacity &&
+                 l.bookedStudents <= l.capacity &&
                  (
                   <Col>
                     <h5 data-testid="confirm-message"><i>You already booked</i></h5>
@@ -63,7 +57,7 @@ const LectureItem = (props) => {
                 )}
               {l.modality === "In person" &&
                 l.booked === 0 &&
-                 l.bookedStudents >= l.capacity && 
+                 l.bookedStudents > l.capacity && 
                 (
                   <Col>
                     <h5 data-testid="confirm-message"><i>You are in waiting list</i></h5>
