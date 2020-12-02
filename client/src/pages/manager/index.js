@@ -85,7 +85,7 @@ class Manager extends React.Component {
         console.log(logs)
         let newLogs=[]
         if(type==='reset') {
-            for (let l of logs) {
+            {
                 newLogs=logs;
             }
         }
