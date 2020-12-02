@@ -36,7 +36,7 @@ async function importFile(file, table) {
   });
   for await (const line of rl) {
     const values = line.split(',');
-    const res = stmtExists.all(line[0]);
+    const res = stmtExists.all(values[0]);
     if (res.length === 0) stmt.run(values);
   }
   return true;
