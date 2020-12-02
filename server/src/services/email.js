@@ -4,15 +4,22 @@ const lecturesDao = require('../lecturesDao');
 
 const mail = nodemailer.createTransport({
   service: config.mailer.service,
+  host: config.mailer.host,
+  port: config.mailer.port,
+  secure: false,
   auth: {
     user: config.mailer.user,
     pass: config.mailer.pass,
   },
+  tls: {
+    // do not fail on invalid certs
+    rejectUnauthorized: false
+  }
 });
 
 function sendEmail(to, subject, text) {
   const mailOptions = {
-    from: config.mailer.email,
+    from: config.mailer.user,
     to,
     subject,
     text,
