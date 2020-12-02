@@ -2,11 +2,20 @@ import React from "react";
 import { Row, Col, Alert, Button } from "react-bootstrap";
 
 const LectureItem = (props) => {
+
+  let  curTime = new Date().toLocaleString();
+  
   let l = props.lecture;
   let bookLecture = props.bookLecture;
   let cancelBooking=props.cancelBooking;
   let errMsg = props.errMsg;
   let key = props.k;
+   
+
+  // const 
+  // const diff = timeEnd.diff(startDate);
+  // const diffDuration = moment.duration(diff);
+  // console.log(diffDuration);
 
   return (
     <>
@@ -45,15 +54,17 @@ const LectureItem = (props) => {
               <Col></Col>
               <Col></Col>
               {l.modality === "In person" &&
-                l.booked === true &&
-                l.bookedStudents < l.capacity && (
+                l.booked === 0 &&
+                 l.bookedStudents < l.capacity &&
+                 (
                   <Col>
                     <h5 data-testid="confirm-message"><i>You already booked</i></h5>
                   </Col>
                 )}
               {l.modality === "In person" &&
-                l.booked === true &&
-                l.bookedStudents > l.capacity && (
+                l.booked === 0 &&
+                 l.bookedStudents >= l.capacity && 
+                (
                   <Col>
                     <h5 data-testid="confirm-message"><i>You are in waiting list</i></h5>
                   </Col>
@@ -76,7 +87,8 @@ const LectureItem = (props) => {
                 </Col>
               )}
               {l.modality === "In person" &&
-                l.booked === false &&
+
+                l.booked === 2 &&
                 l.bookedStudents < l.capacity && (
                   <Col>
                     <Button
@@ -91,7 +103,7 @@ const LectureItem = (props) => {
                   </Col>
                 )}
               {l.modality === "In person" &&
-                l.booked === false &&
+                l.booked === 2 &&
                 l.bookedStudents >= l.capacity && (
                   <Col>
                     <Button
@@ -106,7 +118,8 @@ const LectureItem = (props) => {
                   </Col>
                 )}
                 {l.modality === "In person" &&
-                l.booked === true &&
+                (l.booked === 0 || l.booked==1) &&
+                // l.canModify===true &&
                  (
                   <Col>
                     <Button
