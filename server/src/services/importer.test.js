@@ -7,10 +7,10 @@ afterAll(() => {
 });
 
 beforeAll(() => {
-  db.prepare('DELETE FROM Users').run();
+  db.prepare('DELETE FROM Classes').run();
   db.prepare('DELETE FROM Subjects').run();
   db.prepare('DELETE FROM Lectures').run();
-  db.prepare('DELETE FROM Classes').run();
+  db.prepare('DELETE FROM Users').run();
 });
 
 test('Should import students successfully', async () => {

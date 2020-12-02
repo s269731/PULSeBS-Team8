@@ -103,8 +103,10 @@ app.post('/api/student/reserve', async (req, res) => {
   try {
     const result = await lecturesDao.insertReservation(lectureId, userId);
     // no need to wait
-    logsDao.insertLog(userId, 0, lectureId);
-    emailService.sendBookingConfirmationEmail(lectureId, userId);
+    if(!result.insertedinwaiting) {
+      logsDao.insertLog(userId, 0, lectureId);
+      emailService.sendBookingConfirmationEmail(lectureId, userId);
+    }
     res.json(result);
   } catch (error) {
     res.json({ errors: [{ msg: error }] });
@@ -125,7 +127,9 @@ app.delete('/api/student/lectures/:lectureId', async (req, res) => {
   const userId = req.user && req.user.user;
   try {
     const result = await lecturesDao.deleteBookingStudent(req.params.lectureId, userId);
-    logsDao.insertLog(userId, 1, req.params.lectureId);
+    if(!result.removeWait) {
+      logsDao.insertLog(userId, 1, req.params.lectureId);
+    }
     const studentId = await lecturesDao.checkWaitingList(req.params.lectureId);
     if (studentId !== undefined) {
       emailService.sendBookingConfirmationEmail(req.params.lectureId, studentId);

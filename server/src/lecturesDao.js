@@ -221,7 +221,7 @@ exports.deleteBookingStudent = (lectureId, studentId) => new Promise((resolve, r
       reject('Error in deleting row or updating BookedPeople number');
     } else if (row.Status === 1) {
       const res = deletesql.run(lectureId, studentId);
-      if (res.changes === 1) { resolve({ result: res.changes }); } else { reject('Error in deleting row'); }
+      if (res.changes === 1) { resolve({ removeWait: res.changes }); } else { reject('Error in deleting row'); }
     }
   }
 });

@@ -259,7 +259,7 @@ test('Should permit the deletion of the booking by the student that was in waiti
   const studentId = 6;
   const obj = await lecturesDao.deleteBookingStudent(lectureId, studentId);
   expect(obj).toBeTruthy();
-  expect(obj.result).toBe(1);
+  expect(obj.removeWait).toBe(1);
 });
 
 test('Should permit the deletion of lecture by the teacher since the time constraint is satisfied', async () => {
