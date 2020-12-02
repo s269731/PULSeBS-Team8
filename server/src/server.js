@@ -233,14 +233,14 @@ app.get('/api/manager/logs', async (req, res) => {
     res.json(logsErr);
   }
 });
-
+/*
 app.use('/api/officer', (req, res, next) => {
   const officerId = req.user && req.user.user;
   userDao.isOfficer(officerId)
     .then(() => next())
     .catch(() => res.status(401).json(authErrorObj));
 });
-
+*/
 app.use(fileUpload({
   useTempFiles: true,
 }));
