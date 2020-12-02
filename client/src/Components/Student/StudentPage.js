@@ -83,7 +83,7 @@ class StudentPage extends Component {
           </Tab>
           <Tab eventKey="calendar" title="Calendar">
             <LecturesCalendar
-                bookedLectures={this.state.lectures.filter((lecture) => lecture.booked===true)}
+                bookedLectures={this.state.lectures.filter((lecture) => lecture.booked===0)}
                 cancelBooking={this.cancelBookingByStudent}
                 notLoggedUser={this.props.notLoggedUser}
             />
