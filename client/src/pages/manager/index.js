@@ -116,7 +116,7 @@ class Manager extends React.Component {
     }
     render() {
         return (
-            <Container className='manager' data-testid="courses-page" style={{padding:5}}>
+            <Container className='manager' data-testid="manager-page" style={{padding:5}}>
                 <Row className="justify-content-md-center below-nav">
                     {this.state.logs && this.state.subjects && <>
                         <Col xs={2} className="col-2 justify-content-md-left">
