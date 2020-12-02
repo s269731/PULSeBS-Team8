@@ -147,7 +147,7 @@ const AvailableCourses = (props) => {
         <Row data-testid="courses-page" className="justify-content-md-center below-nav">
           <h3>Available Courses: </h3>
         </Row>
-        {props.lectures && props.lectures.map((e, key) => {
+        {props.lectures.map((e, key) => {
           return (
             <LectureItem
               errMsg={props.errMsg}

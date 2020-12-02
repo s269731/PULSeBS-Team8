@@ -8,11 +8,13 @@ import '@testing-library/jest-dom/extend-expect'
 
 const students=[
         {
+            role:"S",
             name:"Luca",
             surname:"Barco",
             email:"pippo@topolino.com"
         },
         {
+            role:"S",
             name: "Matteo",
             surname: "Berri",
             email: "pluto@topolino.com"
@@ -50,7 +52,7 @@ const lectures=[
         {
             lectureId: 1,
             subjectName: "SoftwareEngineering I",
-            dateHour: "2020-11-20T15:26:00.029Z",
+            dateHour: new Date(Date.now() + 2 * 24*60*60*1000).toISOString(),
             modality: "In person",
             className: "12A",
             capacity: 150,
@@ -60,7 +62,7 @@ const lectures=[
         {
             lectureId: 2,
             subjectName: "SoftwareEngineering II",
-            dateHour: "2020-11-28T17:26:00.029Z",
+            dateHour: new Date(Date.now() + 2 * 24*60*60*1000).toISOString(),
             modality: "Remote",
             room: "12A",
             capacity: 50,
@@ -70,7 +72,7 @@ const lectures=[
         {
             lectureId: 4,
             subjectName: "SoftwareEngineering II",
-            dateHour: "2020-12-17T17:26:00.029Z",
+            dateHour: new Date(Date.now() + 2 * 24*60*60*1000).toISOString(),
             modality: "In person",
             room: "12A",
             capacity: 50,
@@ -83,60 +85,36 @@ const studentslectures=[
         {
             lectureId: 1,
             subjectName: "SoftwareEngineering I",
-            dateHour: "2020-11-20T15:26:00.029Z",
+            dateHour: new Date(Date.now() + 2 * 24*60*60*1000).toISOString(),
             modality: "In person",
             className: "12A",
             capacity: 150,
             bookedPeople: 100,
             teacherName: "Franco yjtyjty",
-            booked:false
+            booked:0
 
         },
         {
             lectureId: 2,
             subjectName: "SoftwareEngineering II",
-            dateHour: "2020-11-28T17:26:00.029Z",
+            dateHour: new Date(Date.now() + 2 * 24*60*60*1000).toISOString(),
             modality: "In person",
             room: "12A",
             capacity: 50,
             bookedPeople: 100,
             teacherName: "Franco yjtyjty",
-            booked:true
+            booked:0
         },
         {
             lectureId: 4,
             subjectName: "SoftwareEngineering II",
-            dateHour: "2020-11-17T17:26:00.029Z",
+            dateHour: new Date(Date.now() + 2 * 24*60*60*1000).toISOString(),
             modality: "In person",
             room: "12A",
             capacity: 50,
             bookedPeople: 100,
             teacherName: "Franco yjtyjty",
-            booked:true
-        }
-    ]
-const studentsbookings=[
-        {
-            lectureId: 2,
-            subjectName: "SoftwareEngineering II",
-            dateHour: "2020-11-28T17:26:00.029Z",
-            modality: "In person",
-            room: "12A",
-            capacity: 50,
-            bookedPeople: 100,
-            teacherName: "Franco yjtyjty",
-            booked:true
-        },
-        {
-            lectureId: 4,
-            subjectName: "SoftwareEngineering II",
-            dateHour: "2020-12-01T17:26:00.029Z",
-            modality: "In person",
-            room: "12A",
-            capacity: 50,
-            bookedPeople: 100,
-            teacherName: "Franco yjtyjty",
-            booked:true
+            booked:2
         }
     ]
 
@@ -170,9 +148,6 @@ const handlers=[
     rest.post('http://localhost/api/student/reserve',(req,res,ctx)=>{
         return res(ctx.status(200))
     }),
-    rest.get('http://localhost/api/student/bookings',((req,res,ctx)=>{
-        return res(ctx.status(200), ctx.json(studentsbookings))
-    })),
     rest.get('http://localhost/api/teacher/subjects',((req,res,ctx)=>{
         return res(ctx.status(200), ctx.json(subjects))
     })),

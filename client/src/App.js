@@ -20,7 +20,7 @@
   class App extends React.Component {
     constructor(props) {
       super(props);
-      this.state = { authErr: null , loggedUser: {}};
+      this.state = { authErr: null , loggedUser: null};
       this.login = this.login.bind(this);
       this.logout = this.logout.bind(this);
       this.getUser = this.getUser.bind(this);
