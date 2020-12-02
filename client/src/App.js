@@ -10,10 +10,6 @@
   import API from "./api/api";
   import OfficerPage from "./Components/SupportOfficer/OfficerPage";
   import AddStudent from "./Components/SupportOfficer/AddStudent";
-  import AddTeacher from "./Components/SupportOfficer/AddTeacher";
-  import AddLecture from "./Components/SupportOfficer/AddLecture";
-  import AddCourse from "./Components/SupportOfficer/AddCourse";
-  import AddClassroom from "./Components/SupportOfficer/AddClassroom";
   import Manager from "./pages/manager";
 
 
@@ -80,18 +76,8 @@
             <Route exact path="/officer/addStudent">
               {this.state.loggedUser && this.state.loggedUser.role === "O" ?<AddStudent/>:<Redirect to="/login" />}
             </Route>
-            <Route exact path="/officer/addTeacher">
-                {this.state.loggedUser && this.state.loggedUser.role === "O" ?<AddTeacher/>:<Redirect to="/login" />}
-            </Route>
-            <Route exact path="/officer/addLecture">
-                {this.state.loggedUser && this.state.loggedUser.role === "O" ? <AddLecture/>:<Redirect to="/login" />}
-            </Route>
-            <Route exact path="/officer/addCourse">
-                {this.state.loggedUser && this.state.loggedUser.role === "O" ? <AddCourse/>:<Redirect to="/login" />}
-            </Route>
-          <Route exact path="/officer/addClassroom">
-                {this.state.loggedUser && this.state.loggedUser.role === "O" ?<AddClassroom/>:<Redirect to="/login" />}
-          </Route>
+           
+
             <Route exact path="/home">
               <Container data-testid="home-page">
                 <Col>
