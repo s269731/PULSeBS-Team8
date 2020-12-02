@@ -147,6 +147,12 @@
               {this.state.loggedUser && this.state.loggedUser.role === "S" && (
                 <Redirect to="/student" />
               )}
+              {this.state.loggedUser && this.state.loggedUser.role === "M" && (
+                  <Redirect to="/manager" />
+              )}
+              {this.state.loggedUser && this.state.loggedUser.role === "O" && (
+                  <Redirect to="/officer" />
+              )}
               {!this.state.loggedUser && (
                 <Login
                   login={this.login}

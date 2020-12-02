@@ -150,6 +150,17 @@ class Manager extends React.Component {
                                                 </>
                                             );
                                         })}
+                                        <Button
+                                            variant={"danger"}
+                                            value={"del"}
+                                            key={"del"}
+                                            onClick={(e) => {
+                                                this.handleLogs(e.target.value, 'reset');
+                                            }}
+                                            data-testid="handlelecture-del-button"
+                                        >
+                                            Cancel filters
+                                        </Button>
                                     </ButtonGroup>
                                 </Card.Body>
                             </Accordion.Collapse>

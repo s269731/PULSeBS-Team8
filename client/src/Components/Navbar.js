@@ -48,6 +48,8 @@ class Navbars extends Component {
                     <span className={"badgeText"}>
                       {this.props.loggedUser.role === "S" && <>STUDENT</>}
                       {this.props.loggedUser.role === "D" && <>TEACHER</>}
+                      {this.props.loggedUser.role === "M" && <>MANAGER</>}
+                      {this.props.loggedUser.role === "O" && <>OFFICER</>}
                     </span>{" "}
                   </span>{" "}
                 </span>
