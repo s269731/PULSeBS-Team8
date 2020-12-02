@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {Nav, Navbar, Col, Row, Tab} from "react-bootstrap";
+import {Nav, Navbar, Col, Row} from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "../App.css";
 //import {Link} from 'react-router-dom'
