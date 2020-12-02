@@ -85,9 +85,7 @@ class Manager extends React.Component {
         console.log(logs)
         let newLogs=[]
         if(type==='reset') {
-            {
                 newLogs=logs;
-            }
         }
             else{
                 if(type==='course'){

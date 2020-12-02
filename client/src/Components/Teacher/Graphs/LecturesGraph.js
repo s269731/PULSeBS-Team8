@@ -102,7 +102,7 @@ class LecturesGraph extends Component {
 
              	]
 		}
-		 {
+		/*const options1 = {
         			theme: "light1", // "light1", "dark1", "dark2"
         			animationEnabled: true,
         			zoomEnabled: true,
@@ -121,7 +121,7 @@ class LecturesGraph extends Component {
                             },
 
                      	]
-        		}
+        		}*/
 		return (<>
 		<div>
 			<CanvasJSChart options = {options1}
