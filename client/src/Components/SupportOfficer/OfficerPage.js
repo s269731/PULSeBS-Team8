@@ -1,39 +1,68 @@
 import React, {Component} from 'react';
 import {
   Row,
-  Button,
+  Button
   } from 'react-bootstrap'
+import {Link} from 'react-router-dom'
 import Jumbotron from "../../assets/graduated.png";
 import Jumbotron1 from "../../assets/teacher.png";
 import Jumbotron2 from "../../assets/education.png";
 import Jumbotron3 from "../../assets/language.png";
 import Jumbotron4 from "../../assets/classroom.png";
+import AddStudent from "./AddStudent";
+
 
 import { withRouter } from "react-router-dom";
 
 
 class OfficerPage extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state={
+      routeChange: null
+    }
+}
   routeAddSt = () => {
-    let path = `/officer/addStudent`;
-    this.props.history.push(path);
+    this.setState({
+      routeChange: "S",
+    })
+
   };
   routeAddTec = () => {
-    let path = `/officer/addTeacher`;
-    this.props.history.push(path);
+    this.setState({
+      routeChange: "T"
+    })
+
   };
   routeAddLec = () => {
-    let path = `/officer/addLecture`;
-    this.props.history.push(path);
+    this.setState({
+      routeChange: "L"
+    })
+
   };
   routeAddCor = () => {
-    let path = `/officer/addCourse`;
-    this.props.history.push(path);
+    this.setState({
+      routeChange: "C"
+    })
+
   };
   routeAddClass = () => {
-    let path = `/officer/addClassroom`;
-    this.props.history.push(path);
+    this.setState({
+      routeChange: "Cl"
+    })
+
   };
   render() {
+    if(this.state.routeChange==="S" || this.state.routeChange==="T" ||
+    this.state.routeChange==="L" || this.state.routeChange==="C" ||
+    this.state.routeChange==="Cl"){ 
+    return(
+      <>
+      <AddStudent routeChange={this.state.routeChange}/>  
+      </>
+    )
+    }
     return (
       <div>
           <Row className="justify-content-md-center below-nav">
@@ -104,6 +133,10 @@ class OfficerPage extends Component {
              <h4>Add Classroom</h4></Button>
 
             </Row>
+            {(this.state.routeChange==="S" || this.state.routeChange==="T" || 
+            this.state.routeChange==="L" || this.state.routeChange==="C" ||
+            this.state.routeChange==="Cl") &&
+            <AddStudent routeChange={this.state.routeChange}/>}
 
       </div>
     );

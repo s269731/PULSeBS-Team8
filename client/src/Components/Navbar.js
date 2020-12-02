@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {Nav, Navbar, Col, Row, Tab} from "react-bootstrap";
+import {Nav, Navbar, Col, Row} from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "../App.css";
 //import {Link} from 'react-router-dom'
@@ -77,12 +77,6 @@ class Navbars extends Component {
                   <span className="headerLinks">Booked Lectures</span>
                 </Link>
               )}
-              {(this.props.path === "/officer/addStudent" || this.props.path === "/officer/addTeacher"
-              || this.props.path === "/officer/addLecture" || this.props.path === "/officer/addClassroom" || this.props.path === "/officer/addCourse") && (
-              <Link to="/officer" className="headerLinks">
-                <span className="headerLinks">Setup System Page </span>
-              </Link>
-            )}
           </Navbar.Text>
         </Nav>
       </Navbar>
