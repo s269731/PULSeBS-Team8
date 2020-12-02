@@ -134,6 +134,30 @@
                           </Alert>
                         </>
                       )}
+                    {this.state.loggedUser &&
+                    this.state.loggedUser.role &&
+                    this.state.loggedUser.role === "O" && (
+                        <>
+                          <Alert variant={"info"}>
+                            <Link to="/officer">
+                              {" "}
+                              ACCESS TO YOUR PERSONAL PAGE{" "}
+                            </Link>
+                          </Alert>
+                        </>
+                    )}
+                    {this.state.loggedUser &&
+                    this.state.loggedUser.role &&
+                    this.state.loggedUser.role === "M" && (
+                        <>
+                          <Alert variant={"info"}>
+                            <Link to="/manager">
+                              {" "}
+                              ACCESS TO YOUR PERSONAL PAGE{" "}
+                            </Link>
+                          </Alert>
+                        </>
+                    )}
                   </Row>
                 </Col>
               </Container>
