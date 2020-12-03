@@ -48,7 +48,7 @@ class AddStudent extends Component {
   }
   render() {
     return (
-      <div >
+      <div data-testid="upload-page">
         <Toast ref={(el) => {
           this.toast = el;
         }}></Toast>
