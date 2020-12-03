@@ -76,7 +76,7 @@ So, you need to:
 ### Officers
 | Email | Password |
 | -----|---------|
-| pulsebs8-m0001@yahoo.com | pass2 |
+| pulsebs8-o0001@yahoo.com | pass2 |
 
 ### Managers
 | Email | Password |
