@@ -45,9 +45,9 @@ N.B.: actually, at the first Demo, we've shown also story 7, even if not complet
 ## QUALITY MEASURES 
 
 - Unit Testing:
-  - Total hours estimated: 12h
+  - Total hours estimated: 
   - Total hours spent: 12h 16m
-  - Nr of automated unit test cases: 53
+  - Nr of automated unit test cases: 
   - Coverage (if available)
   ![image](https://github.com/s269731/PULSeBS-Team8/blob/master/Retrospectives/coverageS1.png)
 - E2E testing:
