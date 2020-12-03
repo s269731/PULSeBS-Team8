@@ -39,7 +39,7 @@
 - sudo docker run -p 3000:3000 -p 3001:3001 se2team8/pulsebs-team8:v1
 
 ## Version v0
-For the very first version, we used docker-compose.
+For only the very first version, we used docker-compose.
 So, you need to:
 - download the code of this repository with **tag v0**
 - in the folder of the code, execute: *docker-compose pull*
@@ -59,7 +59,7 @@ So, you need to:
 | ... | ... |
 | pulsebs8-s0023@yahoo.com | pass1 |
 
-Notice: for version v0, use the emails s0001@stud.com,s0002@stud.com 
+**Notice**: for version *v0*, use the emails s0001@stud.com,s0002@stud.com 
 
  ### Teachers
 
@@ -71,7 +71,7 @@ Notice: for version v0, use the emails s0001@stud.com,s0002@stud.com
 | ... | ... |
 | pulsebs8-d0007@yahoo.com | pass2 |
 
-Notice: for version v0, use the emails d0001@prof.com, d0002@prof.com
+**Notice**: for version *v0*, use the emails d0001@prof.com, d0002@prof.com
 
 ### Officers
 | Email | Password |
