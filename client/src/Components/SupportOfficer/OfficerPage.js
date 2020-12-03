@@ -3,7 +3,7 @@ import {
   Row,
   Button
   } from 'react-bootstrap'
-import {Link} from 'react-router-dom'
+
 import Jumbotron from "../../assets/graduated.png";
 import Jumbotron1 from "../../assets/teacher.png";
 import Jumbotron2 from "../../assets/education.png";
