@@ -7,7 +7,7 @@ import 'primereact/resources/primereact.css';
 import 'primeflex/primeflex.css';
 import API from "../../api/api";
 import {Button} from "react-bootstrap";
-import {Link} from "react-router-dom";
+
 
 class AddStudent extends Component {
   constructor(props) {
