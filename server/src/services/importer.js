@@ -13,7 +13,7 @@ async function importFile(file, table) {
       sqlExists = 'SELECT * FROM Users WHERE Id=?';
       break;
     case 'lectures':
-      sql = 'INSERT INTO Lectures(LectureId, TeacherId,SubjectId,DateHour,Modality,Class,BookedPeople,Capacity) VALUES(?, ?, ?, ?, ?, ?, ?, ?)';
+      sql = 'INSERT INTO Lectures(LectureId, TeacherId,SubjectId,DateHour,Modality,Class,Capacity,BookedPeople) VALUES(?, ?, ?, ?, ?, ?, ?, ?)';
       sqlExists = 'SELECT * FROM Lectures WHERE LectureId=?';
       break;
     case 'courses':
