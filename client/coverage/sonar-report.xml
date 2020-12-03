@@ -1,66 +1,69 @@
 <testExecutions version="1">
+<file path="src/pages/logins/index.test.js">
+<testCase name="Input handle login with non-empty email and password" duration="569" />
+<testCase name="Input handle login with empty email and password" duration="268" />
+</file>
 <file path="src/Components/Teacher/TeacherPage.test.js">
-<testCase name="Teacher page rendering with lectures" duration="1210" />
-<testCase name="Teacher page rendering with failing lectures api" duration="49" />
-<testCase name="LectureTable filter lectures button works" duration="226" />
-<testCase name="LectureTable cancel filter lectures button works" duration="184" />
-<testCase name="Cancel lecture button from Teacher Page works" duration="664" />
-<testCase name="Modify lecture button from Teacher Page works" duration="462" />
+<testCase name="Teacher page rendering with lectures" duration="1347" />
+<testCase name="Teacher page rendering with failing lectures api" duration="64" />
+<testCase name="LectureTable filter lectures button works" duration="251" />
+<testCase name="LectureTable cancel filter lectures button works" duration="134" />
+<testCase name="Cancel lecture button from Teacher Page works" duration="595" />
+<testCase name="Modify lecture button from Teacher Page works" duration="455" />
+</file>
+<file path="src/pages/manager/index.test.js">
+<testCase name="Manager page rendering" duration="253" />
 </file>
 <file path="src/Components/Student/StudentPage.test.js">
-<testCase name="Student page rendering/navigation" duration="382" />
-<testCase name="Student page rendering with lectures list" duration="1638" />
-<testCase name="Student page rendering without lectures list" duration="303" />
-<testCase name="Successfully book a lecture" duration="799" />
-<testCase name="Should fail to book a lecture if not logged in" duration="555" />
-<testCase name="Successfully cancel a lecture reservation" duration="506" />
-<testCase name="Should fail to cancel a lecture reservation" duration="397" />
-</file>
-<file path="src/index.test.js">
-<testCase name="Application root should render without crashing" duration="14" />
+<testCase name="Student page rendering/navigation" duration="512" />
+<testCase name="Student page rendering with lectures list" duration="1596" />
+<testCase name="Student page rendering without lectures list" duration="442" />
+<testCase name="Successfully book a lecture" duration="853" />
+<testCase name="Should fail to book a lecture if not logged in" duration="485" />
+<testCase name="Successfully cancel a lecture reservation" duration="487" />
+<testCase name="Should fail to cancel a lecture reservation" duration="336" />
 </file>
 <file path="src/App.test.js">
-<testCase name="full app rendering/navigating to login and logout" duration="2335" />
-<testCase name="fail when getting the current user" duration="28" />
-<testCase name="random routes redirect to home page" duration="25" />
+<testCase name="full app rendering/navigating to login and logout" duration="2190" />
+<testCase name="fail when getting the current user" duration="22" />
+<testCase name="random routes redirect to home page" duration="28" />
 </file>
 <file path="src/Components/Student/AvailableCourses.test.js">
-<testCase name="AvailableCourses page rendering with lectures list" duration="158" />
-<testCase name="Successfully book a lecture" duration="70" />
-<testCase name="Successfully cancel a lecture reservation" duration="70" />
-</file>
-<file path="src/pages/logins/index.test.js">
-<testCase name="Input handle login with non-empty email and password" duration="511" />
-<testCase name="Input handle login with empty email and password" duration="273" />
-</file>
-<file path="src/Components/Student/LecturesCalendar.test.js">
-<testCase name="Calendar rendering with lectures list" duration="354" />
-</file>
-<file path="src/Components/Teacher/StudentList.test.js">
-<testCase name="StudentList modal rendering with student list" duration="176" />
-<testCase name="StudentList modal rendering without student list" duration="84" />
+<testCase name="AvailableCourses page rendering with lectures list" duration="498" />
+<testCase name="Successfully book a lecture" duration="145" />
+<testCase name="Successfully cancel a lecture reservation" duration="76" />
 </file>
 <file path="src/Components/Teacher/ActionsForm.test.js">
-<testCase name="Cancel lecture button works" duration="185" />
-<testCase name="Modify lecture button works" duration="110" />
+<testCase name="Cancel lecture button works" duration="177" />
+<testCase name="Modify lecture button works" duration="74" />
+</file>
+<file path="src/Components/Student/LecturesCalendar.test.js">
+<testCase name="Calendar rendering with lectures list" duration="289" />
+</file>
+<file path="src/Components/Teacher/StudentList.test.js">
+<testCase name="StudentList modal rendering with student list" duration="166" />
+<testCase name="StudentList modal rendering without student list" duration="61" />
+</file>
+<file path="src/index.test.js">
+<testCase name="Application root should render without crashing" duration="10" />
 </file>
 <file path="src/api/api.test.js">
-<testCase name="right login" duration="444" />
-<testCase name="wrong login" duration="289" />
-<testCase name="get auth user" duration="154" />
-<testCase name="get no auth user" duration="31" />
-<testCase name="logout" duration="36" />
-<testCase name="loads and displays lectures for teachers" duration="1121" />
-<testCase name="handlers server error for teacher lectures" duration="23" />
-<testCase name="handlers message for no lectures (teacher)" duration="65" />
-<testCase name="handlers message for no courses (teacher)" duration="91" />
-<testCase name="loads and displays logs for teachers" duration="546" />
-<testCase name="handle no logs error for teachers" duration="252" />
-<testCase name="get student list with more some student" duration="110" />
-<testCase name="get student list with no students" duration="69" />
-<testCase name="teacher delete a lecture" duration="121" />
-<testCase name="teacher modify a lecture" duration="93" />
-<testCase name="show student lectures list" duration="331" />
-<testCase name="show student lectures list for no auth user" duration="251" />
+<testCase name="right login" duration="234" />
+<testCase name="wrong login" duration="162" />
+<testCase name="get auth user" duration="64" />
+<testCase name="get no auth user" duration="20" />
+<testCase name="logout" duration="26" />
+<testCase name="loads and displays lectures for teachers" duration="574" />
+<testCase name="handlers server error for teacher lectures" duration="15" />
+<testCase name="handlers message for no lectures (teacher)" duration="39" />
+<testCase name="handlers message for no courses (teacher)" duration="43" />
+<testCase name="loads and displays logs for teachers" duration="270" />
+<testCase name="handle no logs error for teachers" duration="145" />
+<testCase name="get student list with more some student" duration="72" />
+<testCase name="get student list with no students" duration="54" />
+<testCase name="teacher delete a lecture" duration="65" />
+<testCase name="teacher modify a lecture" duration="62" />
+<testCase name="show student lectures list" duration="173" />
+<testCase name="show student lectures list for no auth user" duration="148" />
 </file>
 </testExecutions>

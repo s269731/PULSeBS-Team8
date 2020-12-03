@@ -10,7 +10,7 @@ import TeacherPage from "../Components/Teacher/TeacherPage";
 import App from "../App";
 import API from "./api";
 import Login from "../pages/logins/index";
-import Navbar from "../Components/Navbar.js";
+import Header from "../Components/Header.js";
 import StudentList from "../Components/Teacher/StudentList";
 import userEvent from "@testing-library/user-event";
 import AvailableCourses from "../Components/Student/AvailableCourses";
@@ -84,7 +84,7 @@ test('get no auth user', async () => {
 test('logout', async ()=>{
     const logoutSpy=jest.spyOn(API, "userLogout");
     let {container}= render(
-        <Router><Navbar
+        <Router><Header
         path="/home"
         loggedUser={{id: 1, role: "D", name: "Matteo", surname: "Bianchi"}}
         logout={API.userLogout}

@@ -1,6 +1,6 @@
   import React from "react";
   import "./App.css";
-  import Navbars from "./Components/Navbar.js";
+  import Header from "./Components/Header.js";
   import TeacherPage from "./Components/Teacher/TeacherPage";
   import StudentPage from "./Components/Student/StudentPage"
   import { Switch } from "react-router";
@@ -64,7 +64,7 @@
     render() {
       return (
         <>
-          <Navbars
+          <Header
             path={this.props.location.pathname}
             loggedUser={this.state.loggedUser}
             logout={this.logout}

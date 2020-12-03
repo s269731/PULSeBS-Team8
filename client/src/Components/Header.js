@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import "../App.css";
 //import {Link} from 'react-router-dom'
 
-class Navbars extends Component {
+class Header extends Component {
   constructor(props) {
     super(props);
   }
@@ -84,4 +84,4 @@ class Navbars extends Component {
   }
 }
 
-export default Navbars;
+export default Header;
