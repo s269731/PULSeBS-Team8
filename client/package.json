@@ -32,8 +32,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --transformIgnorePatterns \\\"node_modules/(?!canvasjs-react-charts)/\\\" --env=jsdom",
-    "test:coverage": "react-scripts test --coverage --reporters=default --reporters=jest-sonar --watchAll --silent --transformIgnorePatterns \"node_modules/(?!canvasjs-react-charts)/\" --env=jsdom",
+    "test": "react-scripts test --env=jsdom",
+    "test:coverage": "react-scripts test --coverage --reporters=default --reporters=jest-sonar --watchAll --silent --env=jsdom",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -62,9 +62,13 @@
   "devDependencies": {
     "jest-sonar": "^0.2.11",
     "prettier": "^2.1.2",
+    "puppeteer": "^5.5.0",
     "react-test-renderer": "^17.0.1"
   },
   "jest": {
+    "transformIgnorePatterns": [
+      "node_modules/(?!canvasjs-react-charts)/"
+    ],
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}",
       "!src/reportWebVitals.js",
