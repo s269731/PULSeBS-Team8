@@ -6,36 +6,10 @@ import { Router } from "react-router-dom";
 import "@testing-library/jest-dom/extend-expect";
 import App from "./App";
 import API from "./api/api";
-const puppeteer = require('puppeteer');
 
 const leftClick = { button: 0 };
 const fakeUser = { id: 1, role: "D", name:"user1", surname:"test", email: "dfdf@sdf.com" };
 
-describe('Login', () => {
-  test('The user can login', async () => {
-    let browser = await puppeteer.launch({
-      headless: false,
-      devtools: false,
-      //slowMo: 250
-    });
-    let page = await browser.newPage();
-
-    await page.goto('http://localhost:3000/');
-    await page.waitForSelector('[data-testid="home-page"]')
-    await page.click('[data-testid="login-link"]');
-
-    await page.waitForSelector('[data-testid="login-page"]')
-    await page.type("input[name=email]", "pulsebs-s0001@yahoo.com");
-    await page.type("input[name=password]", "pass1");
-    await page.click('[data-testid="login-button"]');
-
-    expect(screen.getByTestId("logout-link")).toBeInTheDocument();
-
-    browser.close();
-  }, 9000000);
-});
-
-/*
 test("full app rendering/navigating to login and logout", async () => {
   const history = createMemoryHistory();
 
@@ -140,4 +114,3 @@ test("random routes redirect to home page", () => {
 
   API.getUser.mockRestore();
 });
-*/

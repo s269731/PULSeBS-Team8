@@ -64,14 +64,14 @@ class OfficerPage extends Component {
     )
     }
     return (
-      <div>
+      <div data-testid="officer-page">
           <Row className="justify-content-md-center below-nav">
                   <h1>
                     Setup System
                   </h1>
                   </Row>
                   <Row className="justify-content-md-center below-nav">
-        <Button variant="light"
+        <Button data-testid="student-upload-button" variant="light"
        >
           <img
             style={{
@@ -84,7 +84,7 @@ class OfficerPage extends Component {
             onClick={this.routeAddSt}/>
             <h4>Add Student</h4></Button>
 
-        <Button variant="light">
+        <Button data-testid="teacher-upload-button" variant="light">
           <img
             style={{
             height: "10rem",
@@ -96,7 +96,7 @@ class OfficerPage extends Component {
             onClick={this.routeAddTec}/>
              <h4>Add Teacher</h4></Button>
 
-        <Button variant="light">
+        <Button data-testid="lecture-upload-button" variant="light">
           <img
             style={{
             height: "10rem",
@@ -108,7 +108,7 @@ class OfficerPage extends Component {
             onClick={this.routeAddLec}/>
              <h4>Add Lecture</h4></Button>
 
-        <Button variant="light">
+        <Button data-testid="course-upload-button" variant="light">
           <img
             style={{
             height: "10rem",
@@ -120,7 +120,7 @@ class OfficerPage extends Component {
             onClick={this.routeAddCor}/>
              <h4>Add Course</h4></Button>
 
-        <Button variant="light">
+        <Button data-testid="subject-upload-button" variant="light">
           <img
             style={{
             height: "10rem",

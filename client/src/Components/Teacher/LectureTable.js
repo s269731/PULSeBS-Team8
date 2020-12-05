@@ -17,7 +17,7 @@ const LectureItem = (props) => {
   return (
     <>
       {l.visible && (
-        <Card>
+        <Card data-testid="card-toggle">
           <Accordion.Toggle className="subjectName" as={Card.Header} eventKey={props.eId}>
             <Row>
               <Col>

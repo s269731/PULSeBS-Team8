@@ -5,7 +5,7 @@
 import "@testing-library/jest-dom";
 import {server} from "./api/testServer.js"
 // establish API mocking before all tests
-/*
+
 beforeAll(() => server.listen({
     onUnhandledRequest(req) {
         console.error(
@@ -20,4 +20,3 @@ beforeAll(() => server.listen({
 afterEach(() => server.resetHandlers())
 // clean up once the tests are done
 afterAll(() => server.close())
- */

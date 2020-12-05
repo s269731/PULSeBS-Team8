@@ -32,8 +32,9 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "test:coverage": "react-scripts test --coverage --reporters=default --reporters=jest-sonar --watchAll --silent --env=jsdom",
+    "test": "react-scripts test",
+    "test:coverage": "react-scripts test --coverage --reporters=default --reporters=jest-sonar --watchAll --silent",
+    "test:e2e": "jest --testMatch=\"**/?(*.)+(e2e).[tj]s?(x)\" App.e2e.js",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -71,6 +72,7 @@
     ],
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}",
+      "!src/**/*e2e*.js",
       "!src/reportWebVitals.js",
       "!src/**/*Graph.js"
     ]
