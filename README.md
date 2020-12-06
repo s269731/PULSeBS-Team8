@@ -28,6 +28,7 @@
         - [Courses](#courses)
         - [Classes](#classes)
         - [Lectures](#lectures)
+- [How to run E2E automated tests](#how-to-run-e2e-automated-tests)
 
 
 
@@ -112,7 +113,7 @@ Integer ID, Teacher ID, Subject ID, DateHour (in the format YYYY-MM-DDTHH:MM:SS.
 
 ex. 121,28,7,2020-12-10T11:30:00.000Z,In person,14,30,21
 
-## E2E tests
+## How to run E2E automated tests
 To run end-to-end tests, run these configurations:
 - on the server
     - `npm start:test`
