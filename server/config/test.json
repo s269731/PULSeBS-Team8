@@ -1,4 +1,5 @@
 {
 	"DBSOURCE": "./db/database.test.db",
+	"PORT": 3002,
 	"verbose": false
 }

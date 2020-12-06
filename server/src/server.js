@@ -5,6 +5,7 @@ const jsonwebtoken = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const fileUpload = require('express-fileupload');
 const schedule = require('node-schedule');
+const setupTestDB = require('./setupTestDB');
 const emailService = require('./services/email');
 const importerService = require('./services/importer');
 const userDao = require('./userDao');
@@ -25,6 +26,8 @@ const uploadErr = { errors: [{ msg: 'There was an error in uploading the file' }
 
 const app = express();
 app.disable('x-powered-by');
+
+if (process.env.NODE_ENV === 'test') setupTestDB.initTestDB();
 
 schedule.scheduleJob('0 23 * * *', () => {
   emailService.sendingEmailBookedPeople();

@@ -6,6 +6,7 @@
   "scripts": {
     "linter": "eslint . --fix",
     "start": "nodemon src/server.js",
+    "start:test": "NODE_ENV=test node src/server.js",
     "test": "jest --runInBand",
     "test:coverage": "jest --runInBand --coverage --silent"
   },
@@ -36,6 +37,9 @@
     "nodemon": "^2.0.6"
   },
   "jest": {
+    "setupFilesAfterEnv": [
+      "<rootDir>/src/setupTests.js"
+    ],
     "collectCoverage": true,
     "reporters": [
       "default",

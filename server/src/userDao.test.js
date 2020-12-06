@@ -3,26 +3,11 @@ process.env.NODE_ENV = 'test';
 const db = require('./db');
 const userDao = require('./userDao');
 
-// delete all the users previously inserted
-db.prepare('DELETE from Users').run();
-db.prepare('INSERT INTO Users(Id, Role, Name, Surname, Email, Password, Course) VALUES(?,?,?,?,?,?,?)').run(
-  [1, 'S', 'nome1', 'cognome1', 'd0001@stud.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'corso4'],
-);
-db.prepare('INSERT INTO Users(Id, Role, Name, Surname, Email, Password, Course) VALUES(?,?,?,?,?,?,?)').run(
-  [2, 'D', 'nome1', 'cognome1', 'd0001@prof.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'corso4'],
-);
-db.prepare('INSERT INTO Users(Id, Role, Name, Surname, Email, Password, Course) VALUES(?,?,?,?,?,?,?)').run(
-  [3, 'M', 'nome1', 'cognome1', 'd0001@man.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'corso4'],
-);
-db.prepare('INSERT INTO Users(Id, Role, Name, Surname, Email, Password, Course) VALUES(?,?,?,?,?,?,?)').run(
-  [4, 'O', 'nome1', 'cognome1', 'd0001@off.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'corso4'],
-);
-
 test('Should return correctly user by his email', async () => {
-  const email = 'd0001@stud.com';
+  const email = 's0002@student.com';
   const obj = await userDao.getUser(email);
   expect(obj).toBeTruthy();
-  expect(obj.id).toBe(1);
+  expect(obj.id).toBe(2);
   expect(obj.role).toBe('S');
   expect(obj.name).toBeTruthy();
   expect(obj.surname).toBeTruthy();
@@ -32,7 +17,7 @@ test('Should return correctly user by his email', async () => {
 });
 
 test('Should return correctly user by his id', async () => {
-  const id = 1;
+  const id = 2;
   const obj = await userDao.getUserById(id);
   expect(obj).toBeTruthy();
   expect(obj.id).toBe(id);
@@ -55,13 +40,13 @@ test('Should not return users with an id that does not exist', async () => {
 });
 
 test('isStudent should resolve true if provided the correct id type', async () => {
-  const obj = await userDao.isStudent(1);
+  const obj = await userDao.isStudent(2);
   expect(obj).toBeTruthy();
 });
 
 test('isStudent should reject if provided the wrong id type', async () => {
   try {
-    const obj = await userDao.isStudent(2);
+    const obj = await userDao.isStudent(1);
     expect(obj).toBeUndefined();
   } catch (err) {
     expect(err).toBe('not a student');
@@ -69,13 +54,13 @@ test('isStudent should reject if provided the wrong id type', async () => {
 });
 
 test('isTeacher should resolve true if provided the correct id type', async () => {
-  const obj = await userDao.isTeacher(2);
+  const obj = await userDao.isTeacher(1);
   expect(obj).toBeTruthy();
 });
 
 test('isTeacher should reject if provided the wrong id type', async () => {
   try {
-    const obj = await userDao.isTeacher(1);
+    const obj = await userDao.isTeacher(2);
     expect(obj).toBeUndefined();
   } catch (err) {
     expect(err).toBe('not a teacher');
@@ -83,13 +68,13 @@ test('isTeacher should reject if provided the wrong id type', async () => {
 });
 
 test('isManager should resolve true if provided the correct id type', async () => {
-  const obj = await userDao.isManager(3);
+  const obj = await userDao.isManager(8);
   expect(obj).toBeTruthy();
 });
 
 test('isManager should reject if provided the wrong id type', async () => {
   try {
-    const obj = await userDao.isManager(4);
+    const obj = await userDao.isManager(9);
     expect(obj).toBeUndefined();
   } catch (err) {
     expect(err).toBe('not a manager');
@@ -97,13 +82,13 @@ test('isManager should reject if provided the wrong id type', async () => {
 });
 
 test('isOfficer should resolve true if provided the correct id type', async () => {
-  const obj = await userDao.isOfficer(4);
+  const obj = await userDao.isOfficer(9);
   expect(obj).toBeTruthy();
 });
 
 test('isOfficer should reject if provided the wrong id type', async () => {
   try {
-    const obj = await userDao.isOfficer(3);
+    const obj = await userDao.isOfficer(8);
     expect(obj).toBeUndefined();
   } catch (err) {
     expect(err).toBe('not an officer');
