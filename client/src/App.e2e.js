@@ -4,20 +4,20 @@ let browser
 let page
 const baseUrl = 'http://localhost:3000/'
 const student = {
-  email: 'pulsebs8-s0001@yahoo.com',
+  email: 's0002@student.com',
   password: 'pass1',
 }
 const teacher = {
-  email: 'pulsebs8-d0001@yahoo.com',
-  password: 'pass2',
+  email: 'd0001@prof.com',
+  password: 'pass1',
 }
 const manager = {
-  email: 'pulsebs8-m0001@yahoo.com',
-  password: 'pass2',
+  email: 'm0001@manager.com',
+  password: 'pass1',
 }
 const officer = {
-  email: 'pulsebs8-o0001@yahoo.com',
-  password: 'pass2',
+  email: 'o0001@officer.com',
+  password: 'pass1',
 }
 
 beforeAll(async () => {

@@ -112,5 +112,10 @@ Integer ID, Teacher ID, Subject ID, DateHour (in the format YYYY-MM-DDTHH:MM:SS.
 
 ex. 121,28,7,2020-12-10T11:30:00.000Z,In person,14,30,21
 
-
-
+## E2E tests
+To run end-to-end tests, run these configurations:
+- on the server
+    - `npm start:test`
+- on the client
+    - `npm start`
+    - `npm test:e2e`
