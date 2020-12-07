@@ -93,8 +93,8 @@ class AddStudent extends Component {
             right: "35px"
           }}
             onClick={this.renderPage}>Main Setup Page</Button>
-          <h1>Add Lecture List</h1>
-          <FileUpload name="sampleFile" url={API.getUploadUrl() + "/lectures"}/>
+          <h1>Add Schedules List</h1>
+          <FileUpload name="sampleFile" url={API.getUploadUrl() + "/schedules"}/>
         </div>
 }
         {this.props.routeChange === "C" &&  <div style={{
@@ -123,8 +123,8 @@ class AddStudent extends Component {
             right: "35px"
           }}
             onClick={this.renderPage}>Main Setup Page</Button>
-          <h1>Add Class List</h1>
-          <FileUpload name="sampleFile" url={API.getUploadUrl() + "/classes"}/>
+          <h1>Add Enrollments List</h1>
+          <FileUpload name="sampleFile" url={API.getUploadUrl() + "/enrollments"}/>
         </div>
 }
       </div>

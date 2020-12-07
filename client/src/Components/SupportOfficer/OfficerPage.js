@@ -82,7 +82,7 @@ class OfficerPage extends Component {
             src={Jumbotron}
             alt="my image"
             onClick={this.routeAddSt}/>
-            <h4>Add Student</h4></Button>
+            <h4>Add Students</h4></Button>
 
         <Button data-testid="teacher-upload-button" variant="light">
           <img
@@ -94,7 +94,7 @@ class OfficerPage extends Component {
             src={Jumbotron1}
             alt="my image"
             onClick={this.routeAddTec}/>
-             <h4>Add Teacher</h4></Button>
+             <h4>Add Teachers</h4></Button>
 
         <Button data-testid="lecture-upload-button" variant="light">
           <img
@@ -106,7 +106,7 @@ class OfficerPage extends Component {
             src={Jumbotron2}
             alt="my image"
             onClick={this.routeAddLec}/>
-             <h4>Add Lecture</h4></Button>
+             <h4>Add Schedules</h4></Button>
 
         <Button data-testid="course-upload-button" variant="light">
           <img
@@ -118,7 +118,7 @@ class OfficerPage extends Component {
             src={Jumbotron3}
             alt="my image"
             onClick={this.routeAddCor}/>
-             <h4>Add Course</h4></Button>
+             <h4>Add Courses</h4></Button>
 
         <Button data-testid="subject-upload-button" variant="light">
           <img
@@ -130,7 +130,7 @@ class OfficerPage extends Component {
             src={Jumbotron4}
             alt="my image"
             onClick={this.routeAddClass}/>
-             <h4>Add Classroom</h4></Button>
+             <h4>Add Enrollments</h4></Button>
 
             </Row>
             {(this.state.routeChange==="S" || this.state.routeChange==="T" || 

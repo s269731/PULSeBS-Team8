@@ -2,14 +2,16 @@ const bcrypt = require('bcrypt');
 const db = require('./db');
 
 class User {
-  constructor(id, role, name, surname, email, password, course) {
+  constructor(id, role, name, surname, city, email, password, birthday, ssn) {
     this.id = id;
     this.role = role;
     this.name = name;
     this.surname = surname;
+    this.city = city;
     this.email = email;
     this.password = password;
-    this.course = course;
+    this.birthday = birthday;
+    this.ssn = ssn;
   }
 }
 
@@ -18,9 +20,11 @@ const createUser = (row) => new User(
   row.Role,
   row.Name,
   row.Surname,
+  row.City,
   row.Email,
   row.Password,
-  row.Course,
+  row.Birthday,
+  row.SSN,
 );
 
 exports.getUser = (email) => new Promise((resolve, reject) => {
@@ -79,4 +83,11 @@ exports.isOfficer = (id) => new Promise((resolve, reject) => {
   }
 });
 
-exports.checkPassword = (user, password) => bcrypt.compareSync(password, user.password);
+exports.checkPassword = (user, password) => {
+  // if no password is stored (e.g. after an import) set it
+  if (!user.password) {
+    const res = db.prepare('UPDATE Users SET Password=? WHERE Id=?').run([bcrypt.hashSync(password, 10), user.id]);
+    return res.changes === 1;
+  }
+  return bcrypt.compareSync(password, user.password);
+};
