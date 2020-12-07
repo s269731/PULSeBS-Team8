@@ -18,6 +18,8 @@ function initTestDB() {
   usersStmt.run([8, 'M', 'aaaaa', 'bbbb', 'm0001@manager.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'Computer Engineering']);
   usersStmt.run([9, 'O', 'cccc', 'ddddd', 'o0001@officer.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'Computer Engineering']);
   usersStmt.run([10, 'D', 'Mario', 'Rossi', 'd0002@prof.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'Computer Engineering']);
+  usersStmt.run([11, 'D', 'Maria', 'Balducci', 'd0003@prof.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'Computer Engineering']);
+  usersStmt.run([12, 'D', 'Paolino', 'Garzetta', 'd0004@prof.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'Computer Engineering']);
 
   /** ********************* */
   /*    SUBJECTS TABLE      */
@@ -28,6 +30,8 @@ function initTestDB() {
   subjStmt.run([3, 10, 'Web Applications I', 'Computer Engineering']);
   subjStmt.run([4, 10, 'Web Applications II', 'Computer Engineering']);
   subjStmt.run([5, 10, 'Security', 'Computer Engineering']);
+  subjStmt.run([6, 11, 'Computer Network Technologies', 'Computer Engineering']);
+  subjStmt.run([7, 12, 'Big Data', 'Computer Engineering']);
 
   /** ********************* */
   /*    LECTURES TABLE      */
@@ -64,6 +68,9 @@ function initTestDB() {
   lectStmt.run([18, 10, 3, oct2.toISOString(), 'In person', '12A', 100, 100]);
   const sep28 = new Date('28 September 2020');
   lectStmt.run([19, 10, 3, sep28.toISOString(), 'In person', '12A', 100, 100]);
+  lectStmt.run([20, 11, 6, moment(global.now).subtract(2, 'days').toISOString(), 'In person', '12A', 100, 6]);
+  lectStmt.run([21, 12, 7, moment(global.now).subtract(4, 'days').toISOString(), 'In person', '12A', 100, 6]);
+  lectStmt.run([22, 11, 6, moment(global.now).subtract(1, 'days').toISOString(), 'In person', '12A', 100, 6]);
 
   /** ********************* */
   /*    ENROLLMENTS TABLE   */
@@ -88,6 +95,18 @@ function initTestDB() {
   bookStmt.run(2, 7, 0);
   bookStmt.run(4, 7, 1);
   bookStmt.run(4, 6, 1);
+  bookStmt.run(20, 7, 0);
+  bookStmt.run(21, 7, 0);
+  bookStmt.run(22, 7, 0);
+  bookStmt.run(20, 4, 0);
+  bookStmt.run(21, 2, 0);
+  bookStmt.run(22, 3, 0);
+  bookStmt.run(20, 5, 0);
+  bookStmt.run(21, 6, 0);
+  bookStmt.run(22, 2, 0);
+  bookStmt.run(20, 6, 0);
+  bookStmt.run(21, 5, 0);
+  bookStmt.run(22, 8, 0);
 
   /** ********************* */
   /*      LOGS TABLE        */

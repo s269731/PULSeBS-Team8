@@ -13,6 +13,7 @@ const lecturesDao = require('./lecturesDao');
 const logsDao = require('./logsDao');
 const statistics = require('./services/statistics');
 const subjectsDao = require('./subjectsDao');
+const contactTracing = require('./services/contactTracing');
 
 const authErrorObj = { errors: [{ msg: 'Authorization error' }] };
 const lecturesErr = { errors: [{ msg: 'There was an error retrieving available lectures' }] };
@@ -23,6 +24,7 @@ const changeModalityTimeConstraintError = { errors: [{ msg: 'Lecture Modality ca
 const changeModalityQueryError = { errors: [{ msg: 'error in changing the modality of the Lecture' }] };
 const logsErr = { errors: [{ msg: 'There was an error in retrieving log records' }] };
 const uploadErr = { errors: [{ msg: 'There was an error in uploading the file' }] };
+const contactTracingErr = { errors: [{ msg: 'There was an error in the contact tracing' }] };
 
 const app = express();
 app.disable('x-powered-by');
@@ -106,7 +108,7 @@ app.post('/api/student/reserve', async (req, res) => {
   try {
     const result = await lecturesDao.insertReservation(lectureId, userId);
     // no need to wait
-    if(!result.insertedinwaiting) {
+    if (!result.insertedinwaiting) {
       logsDao.insertLog(userId, 0, lectureId);
       emailService.sendBookingConfirmationEmail(lectureId, userId);
     }
@@ -130,7 +132,7 @@ app.delete('/api/student/lectures/:lectureId', async (req, res) => {
   const userId = req.user && req.user.user;
   try {
     const result = await lecturesDao.deleteBookingStudent(req.params.lectureId, userId);
-    if(!result.removeWait) {
+    if (!result.removeWait) {
       logsDao.insertLog(userId, 1, req.params.lectureId);
     }
     const studentId = await lecturesDao.checkWaitingList(req.params.lectureId);
@@ -259,6 +261,16 @@ app.post('/api/officer/upload/:table', async (req, res) => {
   } catch (err) {
     console.log(err);
     res.json(uploadErr);
+  }
+});
+
+app.get('/api/manager/contactTracing', async (req, res) => {
+  const { studentId } = req.body;
+  try {
+    const trackReport = await contactTracing.trackStudentContacts(studentId);
+    res.json(trackReport);
+  } catch (error) {
+    res.json({ errors: [{ msg: error }] });
   }
 });
 

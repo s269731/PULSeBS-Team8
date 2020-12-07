@@ -361,6 +361,47 @@ async function checkWaitingList(lectureId) {
   return studentId;
 }
 
+// TO BE TESTED
+// async function getLecturesForStudentContactTracing(studentId) {
+exports.getLecturesForStudentContactTracing = (studentId) => new Promise((resolve, reject) => {
+  const sql = db.prepare('SELECT LectureId FROM Bookings WHERE StudentId=? AND Status=0');
+  const bookings = sql.all(studentId);
+  const sql1 = db.prepare('SELECT LectureId,TeacherId,DateHour,SubjectId FROM Lectures WHERE LectureId=?');
+  const lectures = [];
+  const now = new Date();
+  const oneweekago = moment(now).subtract('7', 'days');
+
+  if (bookings.length > 0) {
+    bookings.forEach((row) => {
+      const lecture = sql1.get(row.LectureId);
+      if (lecture !== undefined) {
+        const lecturedate = new Date(lecture.DateHour);
+        if (lecturedate > oneweekago && lecturedate < now) {
+          lectures.push(lecture);
+        }
+      }
+    });
+    // console.log(`lectures for contact tracing:${lectures}`);
+    resolve(lectures);
+  }
+  resolve(undefined);
+});
+
+// TO BE TESTED
+//exports.getTeacherByLectureId = (lectureId) => new Promise((resolve, reject) => {
+async function getTeacherByLectureId(lectureId) {
+  const sql = db.prepare('SELECT TeacherId FROM Lectures WHERE LectureId=?');
+  const teacherId = sql.get(lectureId);
+  let teacher;
+  if (teacherId !== undefined) {
+    teacher = await userDao.getUserById(teacherId.TeacherId);
+  }
+  console.log(teacher);
+  return teacher;
+}
+
+exports.getTeacherByLectureId = getTeacherByLectureId;
+// exports.getLecturesForStudentContactTracing = getLecturesForStudentContactTracing;
 exports.getLecturesByUserId = getLecturesByUserId;
 exports.getTeachersForEmail = getTeachersForEmail;
 exports.getInfoBookingConfirmation = getInfoBookingConfirmation;
