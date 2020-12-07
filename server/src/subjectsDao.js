@@ -40,4 +40,13 @@ exports.getSubjectsByTeacherId = (teacherId) => new Promise((resolve, reject) =>
   } else reject('No Subject assigned to that teacherId');
 });
 
+exports.getTeacherIdBySubjectId = (subjectId) => new Promise((resolve, reject) => {
+  const sql = db.prepare('SELECT TeacherId FROM Subjects WHERE SubjectId=?');
+  const row = sql.get(subjectId);
+  if (row !== undefined) {
+    resolve ({ TeacherId: row.TeacherId });
+  }
+  else { reject("No professor found for that SubjectId"); }
+});
+
 // exports.getSubjectName = getSubjectName;

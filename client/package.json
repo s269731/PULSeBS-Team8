@@ -12,7 +12,7 @@
     "axios": "^0.21.0",
     "bootstrap": "^4.5.3",
     "canvasjs-react-charts": "^1.0.5",
-    "mdbreact": "^4.27.0",
+    "mdbreact": "^4.6.1",
     "moment": "^2.29.1",
     "msw": "^0.22.0",
     "node-sass": "^4.14.1",
