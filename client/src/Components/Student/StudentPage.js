@@ -8,14 +8,20 @@ class StudentPage extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { lectures: [], refresh: false, errMsg: [], modality:"lectures" };
+    this.state = { lectures: [], subjects:[], refresh: false, errMsg: [], modality:"lectures" };
+    this.handleLectures=this.handleLectures.bind(this);
   }
-
+  onlyUnique(value, index, self) {
+    return self.indexOf(value) === index;
+    }
   componentDidMount() {
     API.getLectures()
         .then((res) => {
+            let subjects=[]
+            subjects=res.map((l)=>{return l.subject}).filter(this.onlyUnique)
+            console.log(subjects)
           console.log(res)
-          this.setState({ lectures: res });
+          this.setState({ lectures: res, subjects:subjects });
           this.setState({refresh: false})
         })
         .catch((err) => {
@@ -25,7 +31,22 @@ class StudentPage extends Component {
           this.setState({ serverErr: true, loading: null });
         });
   }
-
+    handleLectures(id) {
+      console.log(id)
+        if (id === "del") {
+            let lects = this.state.lectures;
+            for (let l of lects) {
+                l.visible = true;
+            }
+            this.setState({ lectures: lects });
+        } else {
+            let lects = this.state.lectures;
+            for (let l of lects) {
+                l.visible = l.subject === id;
+            }
+            this.setState({ lectures: lects });
+        }
+    }
   cancelBookingByStudent=(id)=> {
     API.cancelBookingByStudent(id)
         .then(() => {
@@ -74,11 +95,13 @@ class StudentPage extends Component {
         >
           <Tab eventKey="lectures" title="My Lectures">
             <AvailableCourses
+                subjects={this.state.subjects}
                 lectures={this.state.lectures}
                 errMsg={this.state.errMsg}
                 refresh={this.state.refresh}
                 bookLecture={this.bookLecture}
                 cancelBookingByStudent={this.cancelBookingByStudent}
+                handleLectures={this.handleLectures}
             />
           </Tab>
           <Tab data-testid="calendar-tab-button" eventKey="calendar" title="Calendar">

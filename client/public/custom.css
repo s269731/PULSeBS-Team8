@@ -71,3 +71,11 @@
 .courseTitle{
     color:red;
 }
+.buttonStudent{
+    font-size:20px;
+}
+.confirm{
+    font-size:20px;
+    color:green;
+    font-weight: bold;
+}
