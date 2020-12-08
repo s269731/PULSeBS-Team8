@@ -52,7 +52,7 @@ const LectureItem = (props) => {
                  l.bookedStudents <= l.capacity &&
                  (
                   <Col>
-                    <h5 data-testid="confirm-message"><i>You already booked</i></h5>
+                    <h5 data-testid="confirm-message"><i>You are already booked</i></h5>
                   </Col>
                 )}
               {l.modality === "In person" &&
@@ -107,7 +107,7 @@ const LectureItem = (props) => {
                       variant="warning"
                       block
                     >
-                      Wait
+                      Put me on the waiting list
                     </Button>
                   </Col>
                 )}
