@@ -14,6 +14,7 @@ const logsDao = require('./logsDao');
 const statistics = require('./services/statistics');
 const subjectsDao = require('./subjectsDao');
 const contactTracing = require('./services/contactTracing');
+const scheduleDao = require('./scheduleDao');
 
 const authErrorObj = { errors: [{ msg: 'Authorization error' }] };
 const lecturesErr = { errors: [{ msg: 'There was an error retrieving available lectures' }] };
@@ -25,6 +26,7 @@ const changeModalityQueryError = { errors: [{ msg: 'error in changing the modali
 const logsErr = { errors: [{ msg: 'There was an error in retrieving log records' }] };
 const uploadErr = { errors: [{ msg: 'There was an error in uploading the file' }] };
 const contactTracingErr = { errors: [{ msg: 'There was an error in the contact tracing' }] };
+const scheduleErr = { errors: [{ msg: 'There was an error in retrieving schedule' }] };
 
 const app = express();
 app.disable('x-powered-by');
@@ -271,6 +273,15 @@ app.get('/api/manager/contactTracing', async (req, res) => {
     res.json(trackReport);
   } catch (error) {
     res.json({ errors: [{ msg: error }] });
+  }
+});
+
+app.get('/api/officer/schedule', async (req, res) => {
+  try {
+    const schedule = await scheduleDao.getSchedule();
+    res.json(schedule);
+  } catch (error) {
+    res.json(scheduleErr);
   }
 });
 
