@@ -395,6 +395,14 @@ async function getTeacherByLectureId(lectureId) {
   return teacher;
 }
 
+async function getModalityBySubjectId(subjectId) {
+  const sql = 'SELECT Modality FROM Lectures WHERE SubjectId = ? LIMIT 1'
+  const stmt = db.prepare(sql);
+  const res = stmt.get(subjectId);
+
+  return res;
+}
+
 exports.getTeacherByLectureId = getTeacherByLectureId;
 // exports.getLecturesForStudentContactTracing = getLecturesForStudentContactTracing;
 exports.getLecturesByUserId = getLecturesByUserId;
@@ -404,3 +412,4 @@ exports.getStudentsListByLectureId = getStudentsListByLectureId;
 exports.getBookingsByUserId = getBookingsByUserId;
 exports.getStudentsCancelledLecture = getStudentsCancelledLecture;
 exports.checkWaitingList = checkWaitingList;
+exports.getModalityBySubjectId = getModalityBySubjectId;

@@ -10,10 +10,13 @@ async function getSchedule() {
     let schedules = [];
 
     if (rows.length > 0) {
-        rows.forEach(async (row) => {
+        await Promise.all(rows.map(async (row) => {
+            let res = await lecturesDao.getModalityBySubjectId(row.SubjectId);
+            row['Modality'] = res.Modality;
             const sql2 = 'SELECT Class, Day, Capacity, Hour FROM Schedule WHERE SubjectId = ?';
             const stmt2 = db.prepare(sql2);
             const results = stmt2.all(row.SubjectId);
+
 
             if (results.length > 0) {
                 results.forEach(async (res) => {
@@ -22,7 +25,7 @@ async function getSchedule() {
                 row['schedules'] = schedules;
             }
             schedules = [];
-        });
+        }));
         return rows;
     } else {
         rows = [];
