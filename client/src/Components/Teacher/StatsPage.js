@@ -207,6 +207,12 @@ class StatsPage extends Component {
                             <Tab eventKey="daily" title="Daily">
                                 <Row className="justify-content-md-center below-nav">
                                     <Col>
+                                        {this.props.canShowGraphs &&
+                                        <LecturesGraph detail={'d'} logs={this.state.subjectLogs.dailystatsarray}/>}
+                                    </Col>
+                                </Row>
+                                <Row className="justify-content-md-center below-nav">
+                                    <Col>
                                         { this.state.subjectLogs.dailystatsarray.length!==0 ?
                                         <MDBDataTable
                                             striped
@@ -217,13 +223,16 @@ class StatsPage extends Component {
                                             data-testid={"logs-daily-table"}
                                         />: <Alert variant={"danger"} data-testid={"no-logs-warning"}>No statistics available for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
                                     </Col>
-                                    <Col xs={6}>
-                                        {this.props.canShowGraphs &&
-                                        <LecturesGraph detail={'d'} logs={this.state.subjectLogs.dailystatsarray}/>}
-                                    </Col>
                                 </Row>
+
                             </Tab>
                             <Tab eventKey="weekly" title="Weekly">
+                                <Row className="justify-content-md-center below-nav">
+                                    <Col>
+                                        {this.props.canShowGraphs &&
+                                        <LecturesGraph detail={'w'} logs={this.state.subjectLogs.weeklystatsarray}/>}
+                                    </Col>
+                                </Row>
                                 <Row className="justify-content-md-center below-nav">
                                     <Col>
                                         { this.state.subjectLogs.dailystatsarray.length!==0 ?
@@ -236,13 +245,16 @@ class StatsPage extends Component {
                                         />: <Alert variant={"danger"} data-testid={"no-logs-warning"}>No statistics available for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
 
                                     </Col>
-                                    <Col xs={6}>
-                                        {this.props.canShowGraphs &&
-                                        <LecturesGraph detail={'w'} logs={this.state.subjectLogs.weeklystatsarray}/>}
-                                    </Col>
                                 </Row>
+
                             </Tab>
                             <Tab eventKey="monthly" title="Monthly">
+                                <Row className="justify-content-md-center below-nav">
+                                    <Col>
+                                        {this.props.canShowGraphs &&
+                                        <LecturesGraph detail={'m'} logs={this.state.subjectLogs.monthlystatsarray}/>}
+                                    </Col>
+                                </Row>
                                 <Row className="justify-content-md-center below-nav">
                                     <Col>
 
@@ -258,11 +270,8 @@ class StatsPage extends Component {
                                         />: <Alert variant={"danger"} data-testid={"no-logs-warning"}>No statistics available for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
 
                                     </Col>
-                                    <Col xs={6}>
-                                        {this.props.canShowGraphs &&
-                                        <LecturesGraph detail={'m'} logs={this.state.subjectLogs.monthlystatsarray}/>}
-                                    </Col>
                                 </Row>
+
                             </Tab>
                         </Tabs></>}
                     </Col>
