@@ -5,8 +5,8 @@ test('Test the correct computing of statistics', async () => {
   const obj = await statistics.computeTeacherStatistics(teacherId);
   expect(obj[0]).toBeTruthy();
   expect(obj[1]).toBeTruthy();
-  expect(obj[0].subjectId.SubjectId).toBe(3);
-  expect(obj[1].subjectId.SubjectId).toBe(4);
+  expect(obj[0].subjectId.SubjectId).toBe('3.0');
+  expect(obj[1].subjectId.SubjectId).toBe('4.0');
   expect(obj[0].dailystatsarray[8]).toBeTruthy();
   expect(obj[0].weeklystatsarray[0].weekId).toBe('31 AUG-06 SEP 2020');
   expect(obj[0].weeklystatsarray[0].weeklyavgbookings).toBe(50);

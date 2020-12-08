@@ -100,12 +100,12 @@ test('Should return list of student booked for a certain lectureId', async () =>
   const lectureId = 1;
   const obj = await lecturesDao.getStudentsListByLectureId(lectureId);
   expect(obj).toBeTruthy();
-  expect(obj[1].id).toBe(2);
-  expect(obj[2].id).toBe(3);
-  expect(obj[3].id).toBe(4);
-  expect(obj[4].id).toBe(5);
-  expect(obj[5].id).toBe(6);
-  expect(obj[6].id).toBe(7);
+  expect(obj[1].id).toBe('2.0');
+  expect(obj[2].id).toBe('3.0');
+  expect(obj[3].id).toBe('4.0');
+  expect(obj[4].id).toBe('5.0');
+  expect(obj[5].id).toBe('6.0');
+  expect(obj[6].id).toBe('7.0');
 });
 
 test('Should not return list of student but undefined because of wrong lectureId', async () => {
@@ -228,7 +228,7 @@ test('Should return Bookings for a certain student', async () => {
   expect(obj[0].bookedPeople).toBeTruthy();
 });
 
-test('Should return an  array with only info element since nobody was booked for that cancelled lecture', async () => {
+test('Should return an array with only info element since nobody was booked for that cancelled lecture', async () => {
   const lectureId = 3;
   const teacherId = 1;
   const empty = await lecturesDao.getStudentsCancelledLecture(lectureId, teacherId);
@@ -305,7 +305,7 @@ test('Should update the status of the student', async () => {
   mockInsertRes.mockReturnValue(new Promise((resolve) => resolve(7)));
 
   const newStudentId = await lecturesDao.checkWaitingList(lectureId);
-  expect(newStudentId).toBe(7);
+  expect(newStudentId).toBe('7.0');
 });
 
 test('Should not update the status of any student', async () => {
@@ -334,7 +334,7 @@ test('Should return undefined because of the student didn\'t follow any lesson l
 test('Should return the Teacher related to a certain lectureId', async () => {
   const lectureId = 15;
   const obj = await lecturesDao.getTeacherByLectureId(lectureId);
-  expect(obj.id).toBe(10);
+  expect(obj.id).toBe('10.0');
 });
 
 test('Should return undefined because the lectureId is not related to a teacher', async () => {

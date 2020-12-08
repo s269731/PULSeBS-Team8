@@ -46,7 +46,7 @@ exports.getTeacherIdBySubjectId = (subjectId) => new Promise((resolve, reject) =
   if (row !== undefined) {
     resolve ({ TeacherId: row.TeacherId });
   }
-  else { reject("No professor found for that SubjectId"); }
+  else { reject('That SubjectId doesn\'t exist'); }
 });
 
 // exports.getSubjectName = getSubjectName;

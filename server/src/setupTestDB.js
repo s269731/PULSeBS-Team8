@@ -7,31 +7,31 @@ function initTestDB() {
   /** ********************* */
   /*       USERS TABLE      */
   /** ********************* */
-  const usersStmt = db.prepare('INSERT OR IGNORE INTO Users(Id, Role, Name, Surname, Email, Password, Course) VALUES(?,?,?,?,?,?,?)');
-  usersStmt.run([1, 'D', 'Marco', 'Torchiano', 'd0001@prof.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'Computer Engineering']);
-  usersStmt.run([2, 'S', 'Jinzhuo', 'dghfg', 's0002@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'Computer Engineering']);
-  usersStmt.run([3, 'S', 'Daniele', 'fhghf', 's0003@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'Computer Engineering']);
-  usersStmt.run([4, 'S', 'Luca', 'asdfdasd', 's0004@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'Computer Engineering']);
-  usersStmt.run([5, 'S', 'Loredana', 'dffg', 's0005@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'Computer Engineering']);
-  usersStmt.run([6, 'S', 'Elchin', 'fgngfg', 's0006@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'Computer Engineering']);
-  usersStmt.run([7, 'S', 'Nino', 'Sasa', 's0007@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'Computer Engineering']);
-  usersStmt.run([8, 'M', 'aaaaa', 'bbbb', 'm0001@manager.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'Computer Engineering']);
-  usersStmt.run([9, 'O', 'cccc', 'ddddd', 'o0001@officer.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'Computer Engineering']);
-  usersStmt.run([10, 'D', 'Mario', 'Rossi', 'd0002@prof.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'Computer Engineering']);
-  usersStmt.run([11, 'D', 'Maria', 'Balducci', 'd0003@prof.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'Computer Engineering']);
-  usersStmt.run([12, 'D', 'Paolino', 'Garzetta', 'd0004@prof.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'Computer Engineering']);
+  const usersStmt = db.prepare('INSERT OR IGNORE INTO Users(Id, Role, Name, Surname, Email, Password, SSN) VALUES(?,?,?,?,?,?,?)');
+  usersStmt.run([1, 'D', 'Marco', 'Torchiano', 'd0001@prof.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141393']);
+  usersStmt.run([2, 'S', 'Jinzhuo', 'dghfg', 's0002@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141393']);
+  usersStmt.run([3, 'S', 'Daniele', 'fhghf', 's0003@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141393']);
+  usersStmt.run([4, 'S', 'Luca', 'asdfdasd', 's0004@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141393']);
+  usersStmt.run([5, 'S', 'Loredana', 'dffg', 's0005@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141393']);
+  usersStmt.run([6, 'S', 'Elchin', 'fgngfg', 's0006@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141393']);
+  usersStmt.run([7, 'S', 'Nino', 'Sasa', 's0007@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141393']);
+  usersStmt.run([8, 'M', 'aaaaa', 'bbbb', 'm0001@manager.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141393']);
+  usersStmt.run([9, 'O', 'cccc', 'ddddd', 'o0001@officer.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141393']);
+  usersStmt.run([10, 'D', 'Mario', 'Rossi', 'd0002@prof.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141393']);
+  usersStmt.run([11, 'D', 'Maria', 'Balducci', 'd0003@prof.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141393']);
+  usersStmt.run([12, 'D', 'Paolino', 'Garzetta', 'd0004@prof.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141393']);
 
   /** ********************* */
   /*    SUBJECTS TABLE      */
   /** ********************* */
-  const subjStmt = db.prepare('INSERT OR IGNORE INTO Subjects(SubjectId,TeacherId,SubjName,Course) VALUES(?,?,?,?)');
-  subjStmt.run([1, 1, 'SoftwareEngineering II', 'Computer Engineering']);
-  subjStmt.run([2, 1, 'SoftwareEngineering I', 'Computer Engineering']);
-  subjStmt.run([3, 10, 'Web Applications I', 'Computer Engineering']);
-  subjStmt.run([4, 10, 'Web Applications II', 'Computer Engineering']);
-  subjStmt.run([5, 10, 'Security', 'Computer Engineering']);
-  subjStmt.run([6, 11, 'Computer Network Technologies', 'Computer Engineering']);
-  subjStmt.run([7, 12, 'Big Data', 'Computer Engineering']);
+  const subjStmt = db.prepare('INSERT OR IGNORE INTO Subjects(SubjectId,Year,Semester,TeacherId,SubjName) VALUES(?,?,?,?,?)');
+  subjStmt.run([1, 1, 1, 1, 'SoftwareEngineering II']);
+  subjStmt.run([2, 1, 1, 1, 'SoftwareEngineering I']);
+  subjStmt.run([3, 1, 1, 10, 'Web Applications I']);
+  subjStmt.run([4, 1, 1, 10, 'Web Applications II']);
+  subjStmt.run([5, 1, 1, 10, 'Security']);
+  subjStmt.run([6, 1, 1, 11, 'Computer Network Technologies']);
+  subjStmt.run([7, 1, 1, 12, 'Big Data']);
 
   /** ********************* */
   /*    LECTURES TABLE      */
@@ -120,11 +120,11 @@ function initTestDB() {
 
 function cleanupTestDB() {
   db.prepare('DELETE FROM Logs').run();
-  db.prepare('DELETE FROM Users').run();
-  db.prepare('DELETE FROM Subjects').run();
-  db.prepare('DELETE from Lectures').run();
   db.prepare('DELETE FROM Enrollments').run();
   db.prepare('DELETE FROM Bookings').run();
+  db.prepare('DELETE from Lectures').run();
+  db.prepare('DELETE FROM Subjects').run();
+  db.prepare('DELETE FROM Users').run();
 }
 
 exports.initTestDB = initTestDB;
