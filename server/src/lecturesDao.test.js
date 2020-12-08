@@ -314,3 +314,31 @@ test('Should not update the status of any student', async () => {
   const newStudentId = await lecturesDao.checkWaitingList(lectureId);
   expect(newStudentId).toBe(undefined);
 });
+
+test('Should return all the lectures of the last week for a certain studentId', async () => {
+  const studentId = 7;
+  const obj = await lecturesDao.getLecturesForStudentContactTracing(studentId);
+  expect(obj).toBeTruthy();
+  expect(obj.length).toBe(3);
+  expect(obj[0].LectureId).toBe(20);
+  expect(obj[1].LectureId).toBe(21);
+  expect(obj[2].LectureId).toBe(22);
+});
+
+test('Should return undefined because of the student didn\'t follow any lesson last week', async () => {
+  const studentId = 9;
+  const obj = await lecturesDao.getLecturesForStudentContactTracing(studentId);
+  expect(obj).toBe(undefined);
+});
+
+test('Should return the Teacher related to a certain lectureId', async () => {
+  const lectureId = 15;
+  const obj = await lecturesDao.getTeacherByLectureId(lectureId);
+  expect(obj.id).toBe(10);
+});
+
+test('Should return undefined because the lectureId is not related to a teacher', async () => {
+  const lectureId = 50;
+  const obj = await lecturesDao.getTeacherByLectureId(lectureId);
+  expect(obj).toBe(undefined);
+});

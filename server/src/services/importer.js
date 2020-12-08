@@ -3,57 +3,57 @@ const fs = require('fs');
 const db = require('../db');
 const subjectDao = require('../subjectsDao');
 
-const days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
+const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
 
 async function populateLectures() {
-    const sql = 'SELECT * FROM Lectures';
-    const stmt = db.prepare(sql);
-    const lectures = stmt.all();
+  const sql = 'SELECT * FROM Lectures';
+  const stmt = db.prepare(sql);
+  const lectures = stmt.all();
 
-    if (lectures.length === 0) {        // If Lectures is empty, we need to populate it with the Schedule of the current Semester
-        const sql1 = 'SELECT * FROM Schedule';
-        const stmt1 = db.prepare(sql1);
-        const rows = stmt1.all();
+  if (lectures.length === 0) { // If Lectures is empty, we need to populate it with the Schedule of the current Semester
+    const sql1 = 'SELECT * FROM Schedule';
+    const stmt1 = db.prepare(sql1);
+    const rows = stmt1.all();
 
-        if (rows.length > 0) {
-            let current = new Date();     // get current date    
-            let weekStart = current.getDate() - current.getDay() + 1;    
-            const day_week = new Date(current.setDate(weekStart)); // get Monday of the current week
-            let endSemester = new Date();   // Suppose the first semester ends on 15th Jan
-            endSemester.setDate(16);
-            endSemester.setMonth(0);
-            endSemester.setYear(2021);
-            let dates = [];
-            let d = {};
+    if (rows.length > 0) {
+      const current = new Date(); // get current date
+      const weekStart = current.getDate() - current.getDay() + 1;
+      const day_week = new Date(current.setDate(weekStart)); // get Monday of the current week
+      const endSemester = new Date(); // Suppose the first semester ends on 15th Jan
+      endSemester.setDate(16);
+      endSemester.setMonth(0);
+      endSemester.setYear(2021);
+      let dates = [];
+      let d = {};
 
-            // iterate for each day of the week, from Mon to Fri
-            days.forEach((day) => {
-                let lect_dayOfWeek = rows.filter(r => { return r.Day === day });   // Array of all the lectures held in a specific day of the week
-                if (lect_dayOfWeek.length > 0) {
-                    d = new Date(day_week);    
-                    while (d < endSemester) {   // iterate until we don't overcome the semester limit
-                        dates.push(new Date(d)); 
-                        d.setDate(d.getDate() + 7); 
-                    }
-                    lect_dayOfWeek.forEach(async (lect) => {
-                        let startHour = lect.Hour.split('-')[0];
-                        let hour = startHour.split(':');        // hour[0] = hour, hour[1] = minutes
+      // iterate for each day of the week, from Mon to Fri
+      days.forEach((day) => {
+        let lect_dayOfWeek = rows.filter((r) => r.Day === day); // Array of all the lectures held in a specific day of the week
+        if (lect_dayOfWeek.length > 0) {
+          d = new Date(day_week);
+          while (d < endSemester) { // iterate until we don't overcome the semester limit
+            dates.push(new Date(d));
+            d.setDate(d.getDate() + 7);
+          }
+          lect_dayOfWeek.forEach(async (lect) => {
+            const startHour = lect.Hour.split('-')[0];
+            const hour = startHour.split(':'); // hour[0] = hour, hour[1] = minutes
 
-                        await Promise.all(dates.map(async (dt) => {
-                            let date_hour = new Date(dt.setHours(hour[0], hour[1], 0, 0));
-                            let teacherId = await subjectDao.getTeacherIdBySubjectId(lect.SubjectId);
-                            let sql2 = 'INSERT INTO Lectures(TeacherId, SubjectId, DateHour, Class, Capacity) VALUES (?,?,?,?,?)';
-                            let stmt2 = db.prepare(sql2);
-                            let res = stmt2.run(teacherId.TeacherId, lect.SubjectId, date_hour.toISOString(), lect.Class, lect.Capacity);
-                        }));
-                    });
-                }
-                day_week.setDate(day_week.getDate() + 1);
-                dates = [];
-                lect_dayOfWeek = [];
-            });
+            await Promise.all(dates.map(async (dt) => {
+              const date_hour = new Date(dt.setHours(hour[0], hour[1], 0, 0));
+              const teacherId = await subjectDao.getTeacherIdBySubjectId(lect.SubjectId);
+              const sql2 = 'INSERT INTO Lectures(TeacherId, SubjectId, DateHour, Class, Capacity) VALUES (?,?,?,?,?)';
+              const stmt2 = db.prepare(sql2);
+              const res = stmt2.run(teacherId.TeacherId, lect.SubjectId, date_hour.toISOString(), lect.Class, lect.Capacity);
+            }));
+          });
         }
+        day_week.setDate(day_week.getDate() + 1);
+        dates = [];
+        lect_dayOfWeek = [];
+      });
     }
+  }
 }
 
 async function importFile(file, table) {
@@ -94,9 +94,8 @@ async function importFile(file, table) {
       }
     })
     .on('end', () => {
-      if (lectures === 1)
-        populateLectures();
-        lectures = 0;
+      if (lectures === 1) { populateLectures(); }
+      lectures = 0;
     });
   return true;
 }
