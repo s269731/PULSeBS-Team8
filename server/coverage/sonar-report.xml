@@ -1,4 +1,11 @@
 <testExecutions version="1">
-<file path="src\subjectsDao.test.js">
+<file path="src\scheduleDao.test.js">
+<testCase name="Should populate Lectures" duration="36" />
+<testCase name="Should populate Lectures after making the table empty" duration="29" />
+<testCase name="Should get the Schedule" duration="17" />
+<testCase name="Should change the modality to Virtual all the lectures related to that SubjectId" duration="35" />
+<testCase name="Should change the modality to In person all the lectures related to that SubjectId" duration="2" />
+<testCase name="Should change the modality to In person all the lectures related to that SubjectId" duration="1" />
+<testCase name="Should change the modality to In person all the lectures related to that SubjectId" duration="0" />
 </file>
 </testExecutions>

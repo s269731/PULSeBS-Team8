@@ -64,11 +64,14 @@ async function getSchedule() {
     const stmt = db.prepare(sql);
     const rows = stmt.all();
     let schedules = [];
+    let list = [];
 
     if (rows.length > 0) {
         await Promise.all(rows.map(async (row) => {
             let res = await lecturesDao.getModalityBySubjectId(row.SubjectId);
-            row['Modality'] = res.Modality;
+            if (res !== undefined) {
+              row['Modality'] = res.Modality;
+            }
             const sql2 = 'SELECT ScheduleId, Class, Day, Capacity, Hour FROM Schedule WHERE SubjectId=?';
             const stmt2 = db.prepare(sql2);
             const results = stmt2.all(row.SubjectId);
@@ -77,15 +80,14 @@ async function getSchedule() {
                 results.forEach(async (res) => {
                     schedules.push(res);
                 });
-                row['schedules'] = schedules;
+              row['schedules'] = schedules;
+              list.push(row);
             }
             schedules = [];
         }));
-        return rows;
-    } else {
-        rows = [];
+        return list;
     }
-    return rows;
+    return list;
 }
 
 exports.changeModalitySchedule = (array) => new Promise((resolve, reject) => {
