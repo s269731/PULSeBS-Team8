@@ -42,9 +42,9 @@ async function populateLectures() {
             await Promise.all(dates.map(async (dt) => {
               const date_hour = new Date(dt.setHours(hour[0], hour[1], 0, 0));
               const teacherId = await subjectDao.getTeacherIdBySubjectId(lect.SubjectId);
-              const sql2 = 'INSERT INTO Lectures(TeacherId, SubjectId, DateHour, Class, Capacity) VALUES (?,?,?,?,?)';
+              const sql2 = 'INSERT INTO Lectures(TeacherId, SubjectId, ScheduleId, DateHour, Class, Capacity) VALUES (?,?,?,?,?,?)';
               const stmt2 = db.prepare(sql2);
-              const res = stmt2.run(teacherId.TeacherId, lect.SubjectId, date_hour.toISOString(), lect.Class, lect.Capacity);
+              const res = stmt2.run(teacherId.TeacherId, lect.SubjectId, lect.ScheduleId, date_hour.toISOString(), lect.Class, lect.Capacity);
             }));
           });
         }
