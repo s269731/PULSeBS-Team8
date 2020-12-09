@@ -287,9 +287,9 @@ app.get('/api/officer/schedule', async (req, res) => {
 });
 
 app.post('/api/officer/changemodalitysched', async (req, res) => {
-  const { SubjectId_Modality } = req.body;  // it is an array of objects with SubjectId and Modality as properties
+  const SubjectId_Modality = req.body;  // it is an array of objects with SubjectId and Modality as properties
   try {
-    const result = await lecturesDao.changeLectureModality(SubjectId_Modality);
+    const result = await scheduleDao.changeModalitySchedule(SubjectId_Modality);
     res.json(result);
   } catch (error) {
     res.json(changeModalitySchedError);

@@ -77,9 +77,9 @@ async function getSchedule() {
             const results = stmt2.all(row.SubjectId);
 
             if (results.length > 0) {
-                results.forEach(async (res) => {
-                    schedules.push(res);
-                });
+              results.forEach(async (res) => {
+                  schedules.push(res);
+              });
               row['schedules'] = schedules;
               list.push(row);
             }
