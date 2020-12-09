@@ -342,3 +342,15 @@ test('Should return undefined because the lectureId is not related to a teacher'
   const obj = await lecturesDao.getTeacherByLectureId(lectureId);
   expect(obj).toBe(undefined);
 });
+
+test('Should return undefined because the SubjectId doesn\'t exist', async () => {
+  const subjectId = 20;
+  const modality = await lecturesDao.getModalityBySubjectId(subjectId);
+  expect(modality).toBe(undefined);
+});
+
+test('Should return undefined because the SubjectId doesn\'t exist', async () => {
+  const subjectId = 3;
+  const modality = await lecturesDao.getModalityBySubjectId(subjectId);
+  expect(modality.Modality).toBe('In person');
+});
