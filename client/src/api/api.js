@@ -323,6 +323,20 @@ async function getCourses(){
     throw err;
   }
 }
+
+async function getOfficerSchedule(){
+  let url = "/officer/schedule";
+  const response = await fetch(baseURL + url);
+  const courses = await response.json();
+  if (response.ok) {
+    console.log(courses)
+    return courses;
+  } else {
+    let err = { status: response.status, errObj: courses};
+    throw err;
+  }
+}
+
 const API = {
   getUploadUrl,
   Login,
@@ -337,6 +351,7 @@ const API = {
   changeModalityLecture,
   getLogs,
   getTeacherStats,
-  getCourses
+  getCourses,
+  getOfficerSchedule
 };
 export default API;
