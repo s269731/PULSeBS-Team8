@@ -323,6 +323,45 @@ async function getCourses(){
     throw err;
   }
 }
+
+async function getOfficerSchedule(){
+  let url = "/officer/schedule";
+  const response = await fetch(baseURL + url);
+  const courses = await response.json();
+  if (response.ok) {
+    console.log(courses)
+    return courses;
+  } else {
+    let err = { status: response.status, errObj: courses};
+    throw err;
+  }
+}
+
+
+
+async function changeModalityCourse(list){
+  console.log(list);
+  return new Promise((resolve, reject) => {
+    fetch('/api/officer/changemodalitysched', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: list
+    }).then((response) => {
+        if (response.ok) {
+                 resolve(response);
+                 console.log("aaa")
+        } else {
+            // analyze the cause of error
+            response.json()
+                .then((obj) => {  reject(obj); }) // error msg in the response body
+                .catch((err) => { reject({ errors: [{ param: "Application", msg: "Cannot parse server response" }] }) }); // something else
+            }
+    }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] }) }); // connection errors
+});
+}
+
 const API = {
   getUploadUrl,
   Login,
@@ -337,6 +376,8 @@ const API = {
   changeModalityLecture,
   getLogs,
   getTeacherStats,
-  getCourses
+  getCourses,
+  getOfficerSchedule,
+  changeModalityCourse
 };
 export default API;

@@ -27,6 +27,7 @@ const logsErr = { errors: [{ msg: 'There was an error in retrieving log records'
 const uploadErr = { errors: [{ msg: 'There was an error in uploading the file' }] };
 const contactTracingErr = { errors: [{ msg: 'There was an error in the contact tracing' }] };
 const scheduleErr = { errors: [{ msg: 'There was an error in retrieving schedule' }] };
+const changeModalitySchedError = { errors: [{ msg: 'There was an error in changing the modality from Schedule view' }] };
 
 const app = express();
 app.disable('x-powered-by');
@@ -282,6 +283,16 @@ app.get('/api/officer/schedule', async (req, res) => {
     res.json(schedule);
   } catch (error) {
     res.json(scheduleErr);
+  }
+});
+
+app.post('/api/officer/changemodalitysched', async (req, res) => {
+  const SubjectId_Modality = req.body;  // it is an array of objects with SubjectId and Modality as properties
+  try {
+    const result = await scheduleDao.changeModalitySchedule(SubjectId_Modality);
+    res.json(result);
+  } catch (error) {
+    res.json(changeModalitySchedError);
   }
 });
 
