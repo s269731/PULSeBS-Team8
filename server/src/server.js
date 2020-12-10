@@ -266,10 +266,10 @@ app.post('/api/officer/upload/:table', async (req, res) => {
   }
 });
 
-app.get('/api/manager/contactTracing', async (req, res) => {
-  const { studentId } = req.body;
+app.get('/api/manager/contactTracing/:studentSSN', async (req, res) => {
+  // const { studentId } = req.body;
   try {
-    const trackReport = await contactTracing.trackStudentContacts(studentId);
+    const trackReport = await contactTracing.trackStudentContacts(req.params.studentSSN);
     res.json(trackReport);
   } catch (error) {
     res.json({ errors: [{ msg: error }] });
