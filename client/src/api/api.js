@@ -337,6 +337,31 @@ async function getOfficerSchedule(){
   }
 }
 
+
+
+async function changeModalityCourse(list){
+  console.log(list);
+  return new Promise((resolve, reject) => {
+    fetch('/api/officer/changemodalitysched', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: list
+    }).then((response) => {
+        if (response.ok) {
+                 resolve(response);
+                 console.log("aaa")
+        } else {
+            // analyze the cause of error
+            response.json()
+                .then((obj) => {  reject(obj); }) // error msg in the response body
+                .catch((err) => { reject({ errors: [{ param: "Application", msg: "Cannot parse server response" }] }) }); // something else
+            }
+    }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] }) }); // connection errors
+});
+}
+
 const API = {
   getUploadUrl,
   Login,
@@ -352,6 +377,7 @@ const API = {
   getLogs,
   getTeacherStats,
   getCourses,
-  getOfficerSchedule
+  getOfficerSchedule,
+  changeModalityCourse
 };
 export default API;

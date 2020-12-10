@@ -10,13 +10,15 @@ import {
   Form
 } from "react-bootstrap";
 import API from "../../api/api";
+import Jumbotron from "../../assets/edit.jpg";
+
 
 
 class ModifyLecture extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      subjects: [
+      Years: [
         {
           SubjectId: 1,
           SubjectName: "1st Year"
@@ -58,7 +60,6 @@ class ModifyLecture extends React.Component {
         .then((res) => {
           this.setState({ lectures: res});
           this.setState({filteredLec2: res})
-
         })
         .catch((err) => {
           if (err.status === 401) {
@@ -74,7 +75,6 @@ class ModifyLecture extends React.Component {
       this.setState({lectures: this.state.filteredLec2});
     }
     else{ 
-    
     this.setState({filteredLec2: this.state.filteredLec2})
     let filteredLec = this.state.filteredLec2.filter(item => 
       {return item.Year === id});
@@ -82,18 +82,34 @@ class ModifyLecture extends React.Component {
   }
 }
 
-  chooseCourse(event, id) {
+  chooseCourse(event, id, subjId, modality) {
     const isChecked = event.target.checked;
+    let test={
+      id: id,
+      SubjectId: subjId,
+      Modality: modality
+    }
     if (isChecked) {
-
-      let courses = [...this.state.checkedCourses,id];
+      let courses = [...this.state.checkedCourses,test];
       this.setState({checkedCourses: courses});
     } else {
-
       let courses = this.state.checkedCourses.filter(courses => 
-        {return courses !== id});
+        {return courses.id !== test.id});
       this.setState({checkedCourses: courses});
     }
+  }
+
+
+  changeModality=(courses)=>{
+    API.changeModalityCourse(courses)
+    .then(() => {
+      console.log("helloSuccess")
+      // this.componentDidMount();
+    }).catch((err) => {
+  console.log(err);
+  if (err.status === 401) {
+    this.props.notLoggedUser();
+  }});
   }
 
   render() {
@@ -107,8 +123,8 @@ class ModifyLecture extends React.Component {
         <Col className="col-2 justify-content-md-center">
           <h3>Years</h3>
           <ButtonGroup vertical>
-            {this.state.subjects.map((e) => {
-                console.log(e)
+            {this.state.Years.map((e) => {
+                // console.log(e)
                 return ( <> 
                 <Button
                   variant="primary"
@@ -136,21 +152,11 @@ class ModifyLecture extends React.Component {
           <h4>Change Modality</h4>
           }
           {this.state.checkedCourses.length > 0 && 
-          <Button block  variant="info" data-testid="handlelecture-button1">
-            Change to Virtual
+          <Button block  variant="info" data-testid="handlelecture-button14"
+          onClick={() => this.changeModality(this.state.checkedCourses)}>
+            Change Modality
           </Button>
            }
-          <br></br>
-           {this.state.checkedCourses.length > 0 && 
-          <Button block variant="info" data-testid="handlelecture-button1">
-            Change to InPerson
-          </Button>
-           }
-           <br></br>
-           {this.state.checkedCourses.length > 0 && 
-          <Button block variant="danger" data-testid="handlelecture-button">
-            Delete Selected Courses
-          </Button> }
          
         </Col>
         < Col className="col-8">
@@ -166,7 +172,7 @@ class ModifyLecture extends React.Component {
                         <Form.Check
                           key={id + 1}
                           type="checkbox"
-                          onChange={event => this.chooseCourse(event, id)}/>
+                          onChange={event => this.chooseCourse(event, id, e.SubjectId, e.Modality)}/>
                         <h5>{id + 1}.</h5>
                         <Col className="subjectName">
                           <h5 >
@@ -182,9 +188,17 @@ class ModifyLecture extends React.Component {
                             <b>Days of Week</b>
                             {e.schedules.map((sc, id) => {
                 return (  <>
-                            <h5>{sc.Day}</h5>
+                      <select name="Todays_Day">
+                          <option value="Mon">Monday</option>
+                          <option value="Tue">Tuesday</option>
+                          <option value="Wed">Wednesday</option>
+                          <option value="Thu">Thursday</option>
+                          <option value="Fri">Friday</option>
+                          <option value="Sat">Saturday</option>
+                          <option value="Sun">Sunday</option>
+                      </select>
+                      <h5></h5>
                             <h5>{sc.Hour}</h5>
-
                            </>
               )})}
                           </h5>
@@ -196,7 +210,22 @@ class ModifyLecture extends React.Component {
                 <Row><h5><b>Teacher:</b> {e.Tname} {e.Tsurname}</h5></Row>
                 <Row><h5><b>Modality:</b> {e.Modality}</h5> </Row>
                 </Col>
+                {/* <Col>
+                
+                </Col> */}
+                <Button data-testid="course-upload-button" variant="light">
+          <img
+            style={{
+            height: "2rem",
+            float: "left",
+            margin: "2px"
+          }}
+            src={Jumbotron}
+            alt="my image"
+            onClick={this.routeAddCor}/>
+             </Button>
                       </Row>
+                      
                     </Form.Group>
                   </Form>
                 );
