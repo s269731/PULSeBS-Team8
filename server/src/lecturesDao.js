@@ -400,12 +400,20 @@ async function getTeacherByLectureId(lectureId) {
 }
 
 async function getModalityBySubjectId(subjectId) {
-  const sql = 'SELECT MAX(Modality) AS Modality FROM Lectures WHERE SubjectId=?'
+  const sql = 'SELECT MAX(Modality) AS Modality FROM Lectures WHERE SubjectId=?';
   const stmt = db.prepare(sql);
   const res = stmt.get(subjectId);
 
   return res;
 }
+
+exports.updatePresentPeople = (lectureId, presentPeople) => new Promise((resolve, reject) => {
+  if (Number.isInteger(presentPeople) === false) reject('The value inserted is not correct, please insert an Integer');
+  const sql = db.prepare("UPDATE Lectures SET PresentPeople=? WHERE LectureId=? AND DateHour < DateTime('now')");
+  const res = sql.run(lectureId, presentPeople);
+  if (res.changes === 1) resolve({ result: 1 });
+  else reject('Error in updating number of Present People');
+});
 
 exports.getTeacherByLectureId = getTeacherByLectureId;
 // exports.getLecturesForStudentContactTracing = getLecturesForStudentContactTracing;

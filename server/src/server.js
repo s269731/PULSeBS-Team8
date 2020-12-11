@@ -287,13 +287,18 @@ app.get('/api/officer/schedule', async (req, res) => {
 });
 
 app.post('/api/officer/changemodalitysched', async (req, res) => {
-  const SubjectId_Modality = req.body;  // it is an array of objects with SubjectId and Modality as properties
+  const SubjectId_Modality = req.body; // it is an array of objects with SubjectId and Modality as properties
   try {
     const result = await scheduleDao.changeModalitySchedule(SubjectId_Modality);
     res.json(result);
   } catch (error) {
     res.json(changeModalitySchedError);
   }
+});
+
+app.post('/api/teacher/insertPresence', async (req, res) => {
+  const { lectureId, presentPeople } = req.body;
+
 });
 
 app.listen(config.PORT, () => console.log(`Server running on http://localhost:${config.PORT}/`));
