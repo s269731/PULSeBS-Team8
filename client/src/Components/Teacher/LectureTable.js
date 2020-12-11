@@ -62,7 +62,7 @@ const LectureItem = (props) => {
                         <h5> {l.bookedStudents}</h5>
                       </Col>
                       {l.hasAttendance===true && <Col xs={6} md={4} className="align-content-end">
-                        <h6 className="tableHeader">Present students</h6>
+                        <h6 className="tableHeader" data-testid={"present-students-number"}>Present students</h6>
                         <h5> {l.presentStudents}</h5>
                       </Col>}
                     </Row>
