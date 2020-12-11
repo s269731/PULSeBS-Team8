@@ -409,8 +409,8 @@ async function getModalityBySubjectId(subjectId) {
 
 exports.updatePresentPeople = (lectureId, presentPeople) => new Promise((resolve, reject) => {
   if (Number.isInteger(presentPeople) === false) reject('The value inserted is not correct, please insert an Integer');
-  const sql = db.prepare("UPDATE Lectures SET PresentPeople=? WHERE LectureId=? AND DateHour < DateTime('now')");
-  const res = sql.run(lectureId, presentPeople);
+  const sql = db.prepare("UPDATE Lectures SET PresentPeople=? WHERE LectureId=? AND DateHour < DateTime('now') AND Capacity>=PresentPeople AND BookedPeople>=?");
+  const res = sql.run(presentPeople, lectureId, presentPeople);
   if (res.changes === 1) resolve({ result: 1 });
   else reject('Error in updating number of Present People');
 });

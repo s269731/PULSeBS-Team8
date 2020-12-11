@@ -354,3 +354,31 @@ test('Should return undefined because the SubjectId doesn\'t exist', async () =>
   const modality = await lecturesDao.getModalityBySubjectId(subjectId);
   expect(modality.Modality).toBe('In person');
 });
+
+test('Should return 1 to indicate that the presentPerson', async () => {
+  const lectureId = 3;
+  const presentPeople = 50;
+  const result = await lecturesDao.updatePresentPeople(lectureId, presentPeople);
+  expect(result.result).toBe(1);
+});
+
+test('Should return error because presentPeople isn\'t a correct value', async () => {
+  const lectureId = 3;
+  const presentPeople = 4.5;
+  try {
+    const result = await lecturesDao.updatePresentPeople(lectureId, presentPeople);
+  } catch (error) {
+    expect(error).toBe('The value inserted is not correct, please insert an Integer');
+  }
+});
+
+test('Should return error because values about update are not correct', async () => {
+  const lectureId = 3;
+  const presentPeople = 101;
+  try {
+    const result = await lecturesDao.updatePresentPeople(lectureId, presentPeople);
+  } catch (error) {
+    expect(error).toBe('Error in updating number of Present People');
+  }
+});
+
