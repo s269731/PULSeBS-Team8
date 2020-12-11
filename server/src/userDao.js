@@ -49,6 +49,17 @@ exports.getUserById = (id) => new Promise((resolve, reject) => {
   }
 });
 
+exports.getUserBySSN = (ssn) => new Promise((resolve, reject) => {
+  const sql = 'SELECT * FROM users WHERE ssn = ?';
+  const stmt = db.prepare(sql);
+  const rows = stmt.all(ssn);
+
+  if (rows.length === 0) resolve(undefined);
+  else {
+    resolve(createUser(rows[0]));
+  }
+});
+
 exports.isStudent = (id) => new Promise((resolve, reject) => {
   const row = db.prepare('SELECT Role FROM users WHERE id = ?').get(id);
   if (!row || !row.Role || row.Role !== 'S') {

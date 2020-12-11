@@ -13,7 +13,7 @@ test('Should return correctly user by his email', async () => {
   expect(obj.surname).toBeTruthy();
   expect(obj.email).toBe(email);
   expect(obj.password).toBeTruthy();
-  //expect(obj.course).toBeTruthy();
+  // expect(obj.course).toBeTruthy();
 });
 
 test('Should return correctly user by his id', async () => {
@@ -26,7 +26,7 @@ test('Should return correctly user by his id', async () => {
   expect(obj.surname).toBeTruthy();
   expect(obj.email).toBeTruthy();
   expect(obj.password).toBeTruthy();
-  //expect(obj.course).toBeTruthy();
+  // expect(obj.course).toBeTruthy();
 });
 
 test('Should not return users with an email that does not exist', async () => {
@@ -98,4 +98,11 @@ test('isOfficer should reject if provided the wrong id type', async () => {
 test('Hashed password should match with the provided plaintext one', async () => {
   const user = await userDao.getUserById(1);
   expect(userDao.checkPassword(user, 'pass1')).toBe(true);
+});
+
+test('Return an User by his/her SSN', async () => {
+  const ssn = 'XT6141390';
+  const user = await userDao.getUserBySSN(ssn);
+  expect(user.name).toBe('Marco');
+  expect(user.surname).toBe('Torchiano');
 });

@@ -370,12 +370,16 @@ exports.getLecturesForStudentContactTracing = (studentId) => new Promise((resolv
   const oneweekago = moment(now).subtract('7', 'days');
 
   if (bookings.length > 0) {
-    bookings.forEach((row) => {
+    bookings.forEach(async (row) => {
       const lecture = sql1.get(row.LectureId);
       if (lecture !== undefined) {
         const lecturedate = new Date(lecture.DateHour);
         if (lecturedate > oneweekago && lecturedate < now) {
-          lectures.push(lecture);
+          const subjName = await subjectDao.getSubjectName(lecture.SubjectId);
+          lectures.push({
+            // eslint-disable-next-line max-len
+            LectureId: lecture.LectureId, TeacherId: lecture.TeacherId, DateHour: lecture.DateHour, SubjectName: subjName.SubjectName,
+          });
         }
       }
     });

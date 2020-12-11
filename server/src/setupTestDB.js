@@ -8,18 +8,19 @@ function initTestDB() {
   /*       USERS TABLE      */
   /** ********************* */
   const usersStmt = db.prepare('INSERT OR IGNORE INTO Users(Id, Role, Name, Surname, Email, Password, SSN) VALUES(?,?,?,?,?,?,?)');
-  usersStmt.run([1, 'D', 'Marco', 'Torchiano', 'd0001@prof.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141393']);
-  usersStmt.run([2, 'S', 'Jinzhuo', 'dghfg', 's0002@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141393']);
-  usersStmt.run([3, 'S', 'Daniele', 'fhghf', 's0003@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141393']);
+  usersStmt.run([1, 'D', 'Marco', 'Torchiano', 'd0001@prof.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141390']);
+  usersStmt.run([2, 'S', 'Jinzhuo', 'dghfg', 's0002@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141391']);
+  usersStmt.run([3, 'S', 'Daniele', 'fhghf', 's0003@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141392']);
   usersStmt.run([4, 'S', 'Luca', 'asdfdasd', 's0004@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141393']);
-  usersStmt.run([5, 'S', 'Loredana', 'dffg', 's0005@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141393']);
-  usersStmt.run([6, 'S', 'Elchin', 'fgngfg', 's0006@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141393']);
-  usersStmt.run([7, 'S', 'Nino', 'Sasa', 's0007@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141393']);
-  usersStmt.run([8, 'M', 'aaaaa', 'bbbb', 'm0001@manager.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141393']);
-  usersStmt.run([9, 'O', 'cccc', 'ddddd', 'o0001@officer.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141393']);
-  usersStmt.run([10, 'D', 'Mario', 'Rossi', 'd0002@prof.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141393']);
-  usersStmt.run([11, 'D', 'Maria', 'Balducci', 'd0003@prof.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141393']);
-  usersStmt.run([12, 'D', 'Paolino', 'Garzetta', 'd0004@prof.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141393']);
+  usersStmt.run([5, 'S', 'Loredana', 'dffg', 's0005@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141394']);
+  usersStmt.run([6, 'S', 'Elchin', 'fgngfg', 's0006@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141395']);
+  usersStmt.run([7, 'S', 'Nino', 'Sasa', 's0007@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141396']);
+  usersStmt.run([8, 'M', 'aaaaa', 'bbbb', 'm0001@manager.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141397']);
+  usersStmt.run([9, 'O', 'cccc', 'ddddd', 'o0001@officer.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141398']);
+  usersStmt.run([10, 'D', 'Mario', 'Rossi', 'd0002@prof.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141399']);
+  usersStmt.run([11, 'D', 'Maria', 'Balducci', 'd0003@prof.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141340']);
+  usersStmt.run([12, 'D', 'Paolino', 'Garzetta', 'd0004@prof.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141341']);
+  usersStmt.run([13, 'S', 'Alvaro', 'Vitale', 's0007@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141342']);
 
   /** ********************* */
   /*    SUBJECTS TABLE      */
