@@ -7,6 +7,9 @@
 .below-nav {
     padding-top: 3rem;
 }
+.below-tab {
+    padding-top: 2rem;
+}
 .headerLinks{
     color: white !important;
     padding-right: 30px;
@@ -84,4 +87,8 @@
 }
 .actionsAlarm, .actionsInfo{
     margin-top:0px;
+}
+#controlled-main-tab-tab-bookings, #controlled-main-tab-tab-attendance {
+
+    font-size: large;
 }

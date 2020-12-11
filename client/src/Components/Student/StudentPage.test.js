@@ -19,6 +19,7 @@ const lecturesList = [
     teacherName: "Franco yjtyjty",
     lectureId: 1,
     booked: 2,
+    visible:true
   },
   {
     id: 2,
@@ -31,7 +32,8 @@ const lecturesList = [
     bookedStudents: 151,
     teacherName: "Franco yjtyjty",
     lectureId: 1,
-    booked: 2,
+    booked: 1,
+    visible:true
   },
   {
     id: 3,
@@ -45,19 +47,21 @@ const lecturesList = [
     teacherName: "Franco yjtyjty",
     lectureId: 1,
     booked: 1,
+    visible:true
   },
   {
     id: 4,
     subject: "SoftwareEngineering II",
     date: new Date(Date.now() + 3 * 24*60*60*1000).toISOString().split('T')[0],
     hour: "15:26",
-    modality: "Virtual",
+    modality: "In person",
     room: "12A",
     capacity: 150,
     bookedStudents: 151,
     teacherName: "Franco yjtyjty",
     lectureId: 1,
-    booked: 1,
+    booked: 2,
+    visible:true
   },
 ];
 
@@ -113,7 +117,10 @@ test("Successfully book a lecture", async () => {
   render(<StudentPage />);
 
   await waitFor(() => expect(mockGetLectures).toHaveBeenCalledTimes(1));
-
+  userEvent.click(screen.getAllByTestId("lectures-tab-button")[0], leftClick);
+  await waitFor(() => expect(screen.getAllByTestId("card-toggle")).not.toBeNull());
+  userEvent.click(screen.getAllByTestId("card-toggle")[0], leftClick);
+  await waitFor(() => expect(screen.getAllByTestId("course-book-button")).not.toBeNull());
   userEvent.click(screen.getAllByTestId("course-book-button")[0], leftClick);
   userEvent.click(screen.getAllByTestId("course-wait-button")[0], leftClick);
 

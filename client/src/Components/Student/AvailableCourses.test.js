@@ -19,6 +19,7 @@ const lecturesList = [
     teacherName: "Franco yjtyjty",
     lectureId: 1,
     booked: 2,
+    visible:true
   },
   {
     id: 2,
@@ -32,6 +33,7 @@ const lecturesList = [
     teacherName: "Franco yjtyjty",
     lectureId: 1,
     booked: 2,
+    visible:true
   },
   {
     id: 3,
@@ -45,6 +47,7 @@ const lecturesList = [
     teacherName: "Franco yjtyjty",
     lectureId: 1,
     booked: 1,
+    visible:true
   },
   {
     id: 4,
@@ -58,11 +61,14 @@ const lecturesList = [
     teacherName: "Franco yjtyjty",
     lectureId: 1,
     booked: 1,
+    visible:true
   },
 ];
+const subjects=["SoftwareEngineering II"]
 
 test("AvailableCourses page rendering with lectures list", async () => {
   render(<AvailableCourses
+      subjects={subjects}
       lectures={lecturesList}
       errMsg={[]}
   />);
@@ -77,6 +83,7 @@ test("Successfully book a lecture", async () => {
   const mockCancelBookingByStudent = jest.fn();
 
   render(<AvailableCourses
+      subjects={subjects}
       lectures={lecturesList}
       errMsg={[]}
       bookLecture={mockBookLecture}
@@ -96,6 +103,7 @@ test("Successfully cancel a lecture reservation", async () => {
   const mockCancelBookingByStudent = jest.fn();
 
   render(<AvailableCourses
+      subjects={subjects}
       lectures={lecturesList}
       errMsg={[]}
       cancelBookingByStudent={mockCancelBookingByStudent}

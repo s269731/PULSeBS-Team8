@@ -111,7 +111,7 @@ function ActionsForm(props) {
                         <Form.Row>
                             <Col xs={3}>
                                 <Form.Group controlId="description">
-                                     <Form.Control type="number" name="Number of present students" placeholder="Type a number" value = {attendanceNum} onChange={(ev) => setAttendanceNum(Number(ev.target.value))} required autoFocus/>
+                                     <Form.Control data-testid={"insert-attendance-field"} type="number" name="Number of present students" placeholder="Type a number" value = {attendanceNum} onChange={(ev) => setAttendanceNum(Number(ev.target.value))} required autoFocus/>
                                 </Form.Group>
                             </Col>
                             <Col xs={9}>

@@ -75,7 +75,7 @@ const colsMonthly=[
 class StatsPage extends Component {
     constructor() {
         super();
-        this.state={modality:'daily', stats:[],emptyLogs:false}
+        this.state={mainModality:'bookings', modality:'daily-bookings', stats:[],emptyLogs:false}
 
     }
     componentDidMount() {
@@ -116,6 +116,16 @@ class StatsPage extends Component {
 
     setModality(modality){
         this.setState({modality:modality})
+    }
+    setMainModality(modality){
+        let show;
+        if(modality==='bookings'){
+            show='daily-bookings'
+        }
+        else{
+            show='daily-attendance'
+        }
+        this.setState({mainModality:modality, modality:show})
     }
 
     handleStats(id){
@@ -160,8 +170,11 @@ class StatsPage extends Component {
             </Row>
 
 
-                {!this.state.emptyLogs && <Row className="justify-content-md-center">
-                    <Col className="col-1 justify-content-md-center FiltersList">
+                {!this.state.emptyLogs &&
+
+                <Row className="justify-content-md-center">
+
+                    <Col className=" justify-content-md-center FiltersList">
                         <h5>Courses</h5>
 
 
@@ -199,81 +212,178 @@ class StatsPage extends Component {
 
                     </Col>
                     <Col xs={10}>
-                        {this.state.subjectLogs && <><Tabs
-                            id="controlled-tab"
-                            activeKey={this.state.modality}
-                            onSelect={(k) => this.setModality(k)}
+                        {this.state.subjectLogs && <>
+                        <Tabs
+                            id="controlled-main-tab"
+                            activeKey={this.state.mainModality}
+                            onSelect={(k) => this.setMainModality(k)}
+                            variant={"pills"}
                         >
-                            <Tab eventKey="daily" title="Daily">
-                                <Row className="justify-content-md-center below-nav">
-                                    <Col>
-                                        {this.props.canShowGraphs &&
-                                        <LecturesGraph detail={'d'} logs={this.state.subjectLogs.dailystatsarray}/>}
-                                    </Col>
-                                </Row>
-                                <Row className="justify-content-md-center below-nav">
-                                    <Col>
-                                        { this.state.subjectLogs.dailystatsarray.length!==0 ?
-                                        <MDBDataTable
-                                            striped
-                                            bordered
-                                            small
-                                            data={{columns: colsDaily, rows: this.state.subjectLogs.dailystatsarray}
-                                            }
-                                            data-testid={"logs-daily-table"}
-                                        />: <Alert variant={"danger"} data-testid={"no-logs-warning"}>No statistics available for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
-                                    </Col>
-                                </Row>
 
+
+                            <Tab eventKey="bookings" title="Bookings Statistics">
+
+                                <Tabs
+                                id="controlled-main-bookings-tab"
+                                activeKey={this.state.modality}
+                                onSelect={(k) => this.setModality(k)}
+                                className={"below-tab"}
+                            >
+                                <Tab eventKey="daily-bookings" title="Daily">
+                                    <Row className="justify-content-md-center below-nav">
+                                        <Col>
+                                            {this.props.canShowGraphs &&
+                                            <LecturesGraph mode={'b'} detail={'d'} logs={this.state.subjectLogs.dailystatsarray}/>}
+                                        </Col>
+                                    </Row>
+                                    <Row className="justify-content-md-center below-nav">
+                                        <Col>
+                                            { this.state.subjectLogs.dailystatsarray.length!==0 ?
+                                            <MDBDataTable
+                                                striped
+                                                bordered
+                                                small
+                                                data={{columns: colsDaily, rows: this.state.subjectLogs.dailystatsarray}
+                                                }
+                                                data-testid={"logs-daily-table"}
+                                            />: <Alert variant={"danger"} data-testid={"no-logs-warning"}>No statistics available for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
+                                        </Col>
+                                    </Row>
+
+                                </Tab>
+                                <Tab eventKey="weekly-bookings" title="Weekly">
+                                    <Row className="justify-content-md-center below-nav">
+                                        <Col>
+                                            {this.props.canShowGraphs &&
+                                            <LecturesGraph mode={'b'} detail={'w'} logs={this.state.subjectLogs.weeklystatsarray}/>}
+                                        </Col>
+                                    </Row>
+                                    <Row className="justify-content-md-center below-nav">
+                                        <Col>
+                                            { this.state.subjectLogs.dailystatsarray.length!==0 ?
+                                            <MDBDataTable
+                                                striped
+                                                bordered
+                                                small
+                                                data={{columns: colsWeekly, rows: this.state.subjectLogs.weeklystatsarray}}
+                                                data-testid={"logs-weekly-table"}
+                                            />: <Alert variant={"danger"} data-testid={"no-logs-warning"}>No statistics available for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
+
+                                        </Col>
+                                    </Row>
+
+                                </Tab>
+                                <Tab eventKey="monthly-bookings" title="Monthly">
+                                    <Row className="justify-content-md-center below-nav">
+                                        <Col>
+                                            {this.props.canShowGraphs &&
+                                            <LecturesGraph mode={'b'} detail={'m'} logs={this.state.subjectLogs.monthlystatsarray}/>}
+                                        </Col>
+                                    </Row>
+                                    <Row className="justify-content-md-center below-nav">
+                                        <Col>
+
+                                            { this.state.subjectLogs.dailystatsarray.length!==0 ? <MDBDataTable
+                                                striped
+                                                bordered
+                                                small
+                                                data={{
+                                                    columns: colsMonthly,
+                                                    rows: this.state.subjectLogs.monthlystatsarray
+                                                }}
+                                                data-testid={"logs-monthly-table"}
+                                            />: <Alert variant={"danger"} data-testid={"no-logs-warning"}>No statistics available for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
+
+                                        </Col>
+                                    </Row>
+
+                                </Tab>
+                            </Tabs>
                             </Tab>
-                            <Tab eventKey="weekly" title="Weekly">
-                                <Row className="justify-content-md-center below-nav">
-                                    <Col>
-                                        {this.props.canShowGraphs &&
-                                        <LecturesGraph detail={'w'} logs={this.state.subjectLogs.weeklystatsarray}/>}
-                                    </Col>
-                                </Row>
-                                <Row className="justify-content-md-center below-nav">
-                                    <Col>
-                                        { this.state.subjectLogs.dailystatsarray.length!==0 ?
-                                        <MDBDataTable
-                                            striped
-                                            bordered
-                                            small
-                                            data={{columns: colsWeekly, rows: this.state.subjectLogs.weeklystatsarray}}
-                                            data-testid={"logs-weekly-table"}
-                                        />: <Alert variant={"danger"} data-testid={"no-logs-warning"}>No statistics available for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
 
-                                    </Col>
-                                </Row>
 
+
+                            <Tab eventKey="attendance" title="Attendance Statistics">
+                                <Tabs
+                                    id="controlled-main-attendance-tab"
+                                    activeKey={this.state.modality}
+                                    onSelect={(k) => this.setModality(k)}
+                                    className={"below-tab"}
+                                >
+                                    <Tab eventKey="daily-attendance" title="Daily">
+                                        <Row className="justify-content-md-center below-nav">
+                                            <Col>
+                                                {this.props.canShowGraphs &&
+                                                <LecturesGraph mode={'a'} detail={'d'} logs={this.state.subjectLogs.dailystatsarray}/>}
+                                            </Col>
+                                        </Row>
+                                        <Row className="justify-content-md-center below-nav">
+                                            <Col>
+                                                { this.state.subjectLogs.dailystatsarray.length!==0 ?
+                                                    <MDBDataTable
+                                                        striped
+                                                        bordered
+                                                        small
+                                                        data={{columns: colsDaily, rows: this.state.subjectLogs.dailystatsarray}
+                                                        }
+                                                        data-testid={"logs-daily-attendance-table"}
+                                                    />: <Alert variant={"danger"} data-testid={"no-logs-attendance-warning"}>No statistics available for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
+                                            </Col>
+                                        </Row>
+
+                                    </Tab>
+                                    <Tab eventKey="weekly-attendance" title="Weekly">
+                                        <Row className="justify-content-md-center below-nav">
+                                            <Col>
+                                                {this.props.canShowGraphs &&
+                                                <LecturesGraph mode={'a'} detail={'w'} logs={this.state.subjectLogs.weeklystatsarray}/>}
+                                            </Col>
+                                        </Row>
+                                        <Row className="justify-content-md-center below-nav">
+                                            <Col>
+                                                { this.state.subjectLogs.dailystatsarray.length!==0 ?
+                                                    <MDBDataTable
+                                                        striped
+                                                        bordered
+                                                        small
+                                                        data={{columns: colsWeekly, rows: this.state.subjectLogs.weeklystatsarray}}
+                                                        data-testid={"logs-weekly-attendance-table"}
+                                                    />: <Alert variant={"danger"} data-testid={"no-logs-attendance-warning"}>No statistics available for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
+
+                                            </Col>
+                                        </Row>
+
+                                    </Tab>
+                                    <Tab eventKey="monthly-attendance" title="Monthly">
+                                        <Row className="justify-content-md-center below-nav">
+                                            <Col>
+                                                {this.props.canShowGraphs &&
+                                                <LecturesGraph mode={'a'} detail={'m'} logs={this.state.subjectLogs.monthlystatsarray}/>}
+                                            </Col>
+                                        </Row>
+                                        <Row className="justify-content-md-center below-nav">
+                                            <Col>
+
+                                                { this.state.subjectLogs.dailystatsarray.length!==0 ? <MDBDataTable
+                                                    striped
+                                                    bordered
+                                                    small
+                                                    data={{
+                                                        columns: colsMonthly,
+                                                        rows: this.state.subjectLogs.monthlystatsarray
+                                                    }}
+                                                    data-testid={"logs-monthly-attendance-table"}
+                                                />: <Alert variant={"danger"} data-testid={"no-logs-attendance-warning"}>No statistics available for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
+
+                                            </Col>
+                                        </Row>
+
+                                    </Tab>
+                                </Tabs>
                             </Tab>
-                            <Tab eventKey="monthly" title="Monthly">
-                                <Row className="justify-content-md-center below-nav">
-                                    <Col>
-                                        {this.props.canShowGraphs &&
-                                        <LecturesGraph detail={'m'} logs={this.state.subjectLogs.monthlystatsarray}/>}
-                                    </Col>
-                                </Row>
-                                <Row className="justify-content-md-center below-nav">
-                                    <Col>
 
-                                        { this.state.subjectLogs.dailystatsarray.length!==0 ? <MDBDataTable
-                                            striped
-                                            bordered
-                                            small
-                                            data={{
-                                                columns: colsMonthly,
-                                                rows: this.state.subjectLogs.monthlystatsarray
-                                            }}
-                                            data-testid={"logs-monthly-table"}
-                                        />: <Alert variant={"danger"} data-testid={"no-logs-warning"}>No statistics available for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
-
-                                    </Col>
-                                </Row>
-
-                            </Tab>
-                        </Tabs></>}
+                        </Tabs>
+                        </>}
                     </Col>
                 </Row>}
             </Container>

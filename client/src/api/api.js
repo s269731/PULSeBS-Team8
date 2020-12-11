@@ -350,6 +350,51 @@ async function getOfficerSchedule(){
   }
 }
 
+async function changeModalityCourse(list){
+  console.log(list);
+  return new Promise((resolve, reject) => {
+    fetch('/api/officer/changemodalitysched', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(list)
+    }).then((response) => {
+      if (response.ok) {
+        resolve(response);
+      } else {
+        // analyze the cause of error
+        response.json()
+            .then((obj) => {  reject(obj); }) // error msg in the response body
+            .catch((err) => { reject({ errors: [{ param: "Application", msg: "Cannot parse server response" }] }) }); // something else
+      }
+    }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] }) }); // connection errors
+  });
+}
+
+
+async function insertAttendanceInfo(id, value){
+  console.log(id);
+  console.log(value)
+  return new Promise((resolve, reject) => {
+    fetch('/api/teacher/insertPresence', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({lectureId:id,presentPeople:value})
+    }).then((response) => {
+      if (response.ok) {
+        resolve(response);
+      } else {
+        // analyze the cause of error
+        response.json()
+            .then((obj) => {  reject(obj); }) // error msg in the response body
+            .catch((err) => { reject({ errors: [{ param: "Application", msg: "Cannot parse server response" }] }) }); // something else
+      }
+    }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] }) }); // connection errors
+  });
+}
 const API = {
   getUploadUrl,
   Login,
@@ -366,6 +411,8 @@ const API = {
   getTeacherStats,
   getCourses,
   getContactTracing,
-  getOfficerSchedule
+  getOfficerSchedule,
+  changeModalityCourse,
+  insertAttendanceInfo
 };
 export default API;

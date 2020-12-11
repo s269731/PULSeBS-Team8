@@ -147,6 +147,26 @@ test("Cancel lecture button from Teacher Page works", async () => {
     leftClick
   );
 
+ /* test("Insert attendance form button from Teacher Page works", async () => {
+    const mockInsertAttendanceByTeacher = jest.spyOn(API, "");
+    mockDeleteLectureByTeacher.mockReturnValue(new Promise((resolve) => resolve(lectures)));
+    const mockGetLectures = jest.spyOn(API, "getLecturesTeacher");
+    mockGetLectures.mockReturnValue(new Promise((resolve) => resolve(lectures)));
+    const mockGetSubjects=jest.spyOn(API, "getCourses");
+    mockGetSubjects.mockReturnValue(new Promise((resolve) => resolve(subjects)));
+    render(<TeacherPage notLoggedUser={mockNotLoggedUser} />);
+
+    await waitFor(() => expect(mockNotLoggedUser).toHaveBeenCalledTimes(0));
+
+    userEvent.click(screen.getAllByTestId("cancel-lecture-button")[0], leftClick);
+
+    expect(screen.getByTestId("modification-lecture-modal")).toBeInTheDocument();
+
+    userEvent.click(
+        screen.getByTestId("cancel-lecture-closemodal-button"),
+        leftClick
+    );*/
+
   await waitFor(() => expect(mockDeleteLectureByTeacher).toHaveBeenCalledTimes(1));
 });
 test("Modify lecture button from Teacher Page works", async () => {
