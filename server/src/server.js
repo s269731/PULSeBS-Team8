@@ -298,7 +298,12 @@ app.post('/api/officer/changemodalitysched', async (req, res) => {
 
 app.post('/api/teacher/insertPresence', async (req, res) => {
   const { lectureId, presentPeople } = req.body;
-
+  try {
+    const result = await lecturesDao.updatePresentPeople(lectureId, presentPeople);
+    res.json(result);
+  } catch (error) {
+    res.json({ errors: [{ msg: error }] });
+  }
 });
 
 app.listen(config.PORT, () => console.log(`Server running on http://localhost:${config.PORT}/`));
