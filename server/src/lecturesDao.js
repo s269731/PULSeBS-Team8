@@ -344,6 +344,14 @@ exports.getLecturesBySubjectId = (subjectId) => new Promise((resolve, reject) =>
   else reject('There aren\'t lectures for this subjectId');
 });
 
+// TODO: TO BE TESTED
+exports.getLecturesForPresenceStatisticsBySubjectId = (subjectId) => new Promise((resolve, reject) => {
+  const sql = db.prepare("SELECT LectureId,DateHour,Capacity,BookedPeople,PresentPeople FROM Lectures WHERE SubjectId=? AND ReportPresence=1 AND DateHour < DateTime('now') ORDER BY DateHour");
+  const rows = sql.all(subjectId);
+  if (rows.length >= 0) resolve(rows);
+  else reject('There aren\'t lectures for this subjectId');
+});
+
 async function checkWaitingList(lectureId) {
   const sql = 'SELECT StudentId FROM Bookings WHERE LectureId=? AND Status=1 ORDER BY ROWID ASC LIMIT 1';
   const stmt = db.prepare(sql);
@@ -411,19 +419,44 @@ async function getModalityBySubjectId(subjectId) {
 exports.updatePresentPeople = (lectureId, presentPeople) => new Promise((resolve, reject) => {
   const now = new Date();
   const sql1 = db.prepare('SELECT DateHour FROM Lectures WHERE LectureId=?');
-  const res1= sql1.get(lectureId)
+  const res1 = sql1.get(lectureId);
   const lectureTime = new Date(res1.DateHour);
   if (Number.isInteger(presentPeople) === false) reject('The value inserted is not correct, please insert an Integer');
   if (lectureTime < now) {
-    const sql = db.prepare('UPDATE Lectures SET PresentPeople=? WHERE LectureId=? AND Capacity>=PresentPeople AND BookedPeople>=?');
+    const sql = db.prepare('UPDATE Lectures SET PresentPeople=?, ReportPresence=1 WHERE LectureId=? AND Capacity>=PresentPeople AND BookedPeople>=?');
     const res = sql.run(presentPeople, lectureId, presentPeople);
     if (res.changes === 1) resolve({ result: 1 });
     else reject('Error in updating number of Present People');
   } else reject('Lecture is still in program');
 });
 
+// TODO: TO BE TESTED
+async function getPastLectures(teacherId) { //= > new Promise((resolve, reject) => {
+  const sql = db.prepare('SELECT * FROM Lectures WHERE TeacherId = ?');
+  const lectures = [];
+  const now = new Date();
+  const oneweekago = moment(now).subtract('7', 'days');
+  const rows = sql.all(teacherId);
+
+  if (rows.length > 0) {
+    await Promise.all(rows.map(async (rawlecture) => {
+      const lecturedate = new Date(rawlecture.DateHour);
+      if (lecturedate > oneweekago && lecturedate < now) {
+        const subjectName = await subjectDao.getSubjectName(rawlecture.SubjectId);
+        const teacher = await userDao.getUserById(rawlecture.TeacherId);
+        const teacherName = `${teacher.name} ${teacher.surname}`;
+        const reservation = getReservation(id, rawlecture.LectureId);
+        const lecture = new Lecture(rawlecture.LectureId, subjectName.SubjectName, teacherName, rawlecture.DateHour, rawlecture.Modality, rawlecture.Class, rawlecture.Capacity, rawlecture.BookedPeople, reservation, rawlecture.PresentPeople);
+
+        lectures.push(lecture);
+      }
+    }));
+  }
+  return lectures;
+} // ));
+
 exports.getTeacherByLectureId = getTeacherByLectureId;
-// exports.getLecturesForStudentContactTracing = getLecturesForStudentContactTracing;
+exports.getPastLectures = getPastLectures;
 exports.getLecturesByUserId = getLecturesByUserId;
 exports.getTeachersForEmail = getTeachersForEmail;
 exports.getInfoBookingConfirmation = getInfoBookingConfirmation;

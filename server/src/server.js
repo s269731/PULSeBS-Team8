@@ -306,4 +306,24 @@ app.post('/api/teacher/insertPresence', async (req, res) => {
   }
 });
 
+app.get('/api/teacher/presencestatistics', async (req, res) => {
+  const userId = req.user && req.user.user;
+  try {
+    const stats = await statistics.computeTeacherPresencesStatistics(userId);
+    res.json(stats);
+  } catch (error) {
+    res.json({ errors: [{ msg: error }] });
+  }
+});
+
+app.get('/api/teacher/pastlectures', async (req, res) => {
+  const teacherId = req.user && req.user.user;
+  try {
+    const lectures = await lecturesDao.getPastLectures(teacherId);
+    res.json(lectures);
+  } catch {
+    res.json(lecturesErr);
+  }
+});
+
 app.listen(config.PORT, () => console.log(`Server running on http://localhost:${config.PORT}/`));
