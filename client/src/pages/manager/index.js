@@ -4,6 +4,14 @@ import './manager.css'
 import API from "../../api/api";
 import LogGraph from './LogGraph'
 import { MDBDataTable } from 'mdbreact';
+import { CSVLink, CSVDownload } from "react-csv";
+ 
+const csvData = [
+  ["firstname", "lastname", "email"],
+  ["Ahmed", "Tomi", "ah@smthing.co.com"],
+  ["Raed", "Labes", "rl@smthing.co.com"],
+  ["Yezzi", "Min l3b", "ymin@cocococo.com"]
+];
 
 let typeOp = [
 	'Insert reservation',
@@ -114,6 +122,17 @@ class Manager extends React.Component {
     setModality(k){
         this.setState({modality:k})
     }
+    onSearch = (val)=>{
+        if(!val){
+            this.setState({
+                data:{columns:cols,rows:this.state.logs}
+            })
+            return
+        }
+        this.setState({
+            data:{columns:cols,rows:[this.state.logs.filter(item=>item.email.includes(val))[0]]}
+        })
+    }
     render() {
         return (
             <Container className='manager' data-testid="manager-page" style={{padding:5}}>
@@ -217,6 +236,7 @@ class Manager extends React.Component {
                                 <MDBDataTable
                                     striped
                                     bordered
+                                    onSearch={this.onSearch}
                                     small
                                     data={this.state.data}
                                 />
