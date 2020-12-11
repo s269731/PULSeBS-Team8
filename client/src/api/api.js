@@ -54,13 +54,10 @@ async function retrieveLectures(url){
                         return new Date(l1.dateHour) - new Date(l2.dateHour);
                       })
                       .map((l) => {
-                        console.log(l)
-                        let hasAttendance= l.presentPeople && l.presentPeople !==0
                         let now = new Date();
                         let lectDay = new Date(l.dateHour);
                         let canDelete = lectDay - now - 3600000 > 0;
                         let canModify= lectDay - now - 3600000/2 > 0;
-                        let canRecordAttendance= !hasAttendance && lectDay - now < 0;
                         let fields = l.dateHour.split("T");
                         let date = fields[0];
                        let min=lectDay.getMinutes().toString()
@@ -82,15 +79,12 @@ async function retrieveLectures(url){
                           room: l.className,
                           capacity: l.capacity,
                           bookedStudents: l.bookedPeople,
-                          presentStudents:l.presentPeople,
                           teacherName: l.teacherName,
                           lectureId: l.lectureId,
                           booked: l.booked,
                           visible: true,
                           canDelete: canDelete,
-                          canModify:canModify,
-                          canRecordAttendance : canRecordAttendance,
-                          hasAttendance: hasAttendance
+                          canModify:canModify
                         };
                       })
               );
@@ -304,6 +298,19 @@ async function getLogs(){
     throw err;
   }
 }
+async function getContactTracing(ssn){
+  let url='/manager/contactTracing/'+ssn;
+  const response = await fetch(baseURL + url);
+  const stats = await response.json();
+  if (response.ok) {
+    console.log(stats)
+    return stats
+  } else {
+    console.log(stats)
+    let err = { status: response.status, errObj: stats};
+    throw err;
+  }
+}
 async function getTeacherStats(){
   let url='/teacher/statistics';
   const response = await fetch(baseURL + url);
@@ -343,54 +350,6 @@ async function getOfficerSchedule(){
   }
 }
 
-
-
-async function changeModalityCourse(list){
-  console.log(list);
-  return new Promise((resolve, reject) => {
-    fetch('/api/officer/changemodalitysched', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(list) 
-    }).then((response) => {
-        if (response.ok) {
-                 resolve(response);
-        } else {
-            // analyze the cause of error
-            response.json()
-                .then((obj) => {  reject(obj); }) // error msg in the response body
-                .catch((err) => { reject({ errors: [{ param: "Application", msg: "Cannot parse server response" }] }) }); // something else
-            }
-    }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] }) }); // connection errors
-});
-}
-
-
-async function insertAttendanceInfo(id, value){
-  console.log(id);
-  console.log(value)
-  return new Promise((resolve, reject) => {
-    fetch('/api/teacher/insertPresence', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({lectureId:id,presentPeople:value})
-    }).then((response) => {
-      if (response.ok) {
-        resolve(response);
-      } else {
-        // analyze the cause of error
-        response.json()
-            .then((obj) => {  reject(obj); }) // error msg in the response body
-            .catch((err) => { reject({ errors: [{ param: "Application", msg: "Cannot parse server response" }] }) }); // something else
-      }
-    }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] }) }); // connection errors
-  });
-}
-
 const API = {
   getUploadUrl,
   Login,
@@ -406,8 +365,7 @@ const API = {
   getLogs,
   getTeacherStats,
   getCourses,
-  getOfficerSchedule,
-  changeModalityCourse,
-  insertAttendanceInfo
+  getContactTracing,
+  getOfficerSchedule
 };
 export default API;

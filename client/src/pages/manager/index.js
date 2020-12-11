@@ -1,25 +1,25 @@
 import React from "react";
-import {Container, Row, Col, Button,ButtonGroup, Tabs, Tab, Accordion, Card} from "react-bootstrap";
+import { Container, Row, Col, Button, ButtonGroup, Tabs, Tab, Form, Accordion, Card } from "react-bootstrap";
 import './manager.css'
 import API from "../../api/api";
 import LogGraph from './LogGraph'
-import { MDBDataTable,MDBDataTableV5  } from 'mdbreact';
+import { MDBDataTable } from 'mdbreact';
 import { CSVLink } from "react-csv";
- 
+
 const csvData = [
-  ["firstname", "lastname", "email"],
-  ["Ahmed", "Tomi", "ah@smthing.co.com"],
-  ["Raed", "Labes", "rl@smthing.co.com"],
-  ["Yezzi", "Min l3b", "ymin@cocococo.com"]
+    ["firstname", "lastname", "email"],
+    ["Ahmed", "Tomi", "ah@smthing.co.com"],
+    ["Raed", "Labes", "rl@smthing.co.com"],
+    ["Yezzi", "Min l3b", "ymin@cocococo.com"]
 ];
 
 let typeOp = [
-	'Insert reservation',
-	'Cancel reservation',
-	'Cancel lecture',
-	'Switch lecture to Virtual modality'
+    'Insert reservation',
+    'Cancel reservation',
+    'Cancel lecture',
+    'Switch lecture to Virtual modality'
 ]
-const cols=[
+const cols = [
     {
         label: 'Username',
         field: 'username',
@@ -59,172 +59,180 @@ const cols=[
 ]
 
 class Manager extends React.Component {
-    constructor(){
+    constructor() {
         super();
         this.state = {
-            logs:[],
-            modality:'table'
+            logs: [],
+            modality: 'search'
         }
     }
-    componentDidMount(){
+    componentDidMount() {
         API.getLogs()
-        .then(res=>{console.log(res)
-            let summaryOperations=res["summary"];
-            console.log(summaryOperations)
-            let logs=res["logs"]
-            let subjects = [];
-            for (let l of logs) {
-                subjects.push(l.subject);
-            }
-            subjects = subjects.filter(this.onlyUnique);
-            subjects = subjects.sort();
-            console.log(logs)
-            let data={columns:cols ,rows:logs}
+            .then(res => {
+                console.log(res)
+                let summaryOperations = res["summary"];
+                console.log(summaryOperations)
+                let logs = res["logs"]
+                let subjects = [];
+                for (let l of logs) {
+                    subjects.push(l.subject);
+                }
+                subjects = subjects.filter(this.onlyUnique);
+                subjects = subjects.sort();
+                console.log(logs)
+                let data = { columns: cols, rows: logs }
 
-            this.setState({summaryOperations:summaryOperations,logs:logs, data:data, subjects:subjects})
-        })
+                this.setState({ summaryOperations: summaryOperations, logs: logs, data: data, subjects: subjects })
+            })
     }
     onlyUnique(value, index, self) {
         return self.indexOf(value) === index;
     }
-    handleLogs(id, type){
+    handleLogs(id, type) {
         console.log(id)
-        let logs=this.state.logs
+        let logs = this.state.logs
         console.log(logs)
-        let newLogs=[]
-        if(type==='reset') {
-                newLogs=logs;
+        let newLogs = []
+        if (type === 'reset') {
+            newLogs = logs;
         }
-            else{
-                if(type==='course'){
-                    for (let l of logs) {
-                        if(l.subject === id){
-                            newLogs.push(l)
-                        }
+        else {
+            if (type === 'course') {
+                for (let l of logs) {
+                    if (l.subject === id) {
+                        newLogs.push(l)
                     }
-
                 }
-                else{
-                    if(type === 'operation'){
-                        for (let l of logs) {
-                           if (l.operation === id){
-                               newLogs.push(l)
-                           }
+
+            }
+            else {
+                if (type === 'operation') {
+                    for (let l of logs) {
+                        if (l.operation === id) {
+                            newLogs.push(l)
                         }
                     }
                 }
             }
-        let data={columns:cols,rows:newLogs}
+        }
+        let data = { columns: cols, rows: newLogs }
 
         this.setState({ data: data });
     }
 
-    setModality(k){
-        this.setState({modality:k})
+    setModality(k) {
+        console.log(k);
+        this.setState({ modality: k })
     }
-    onSearch = (val)=>{
-        if(!val){
+    onSearch = (val) => {
+        if (!val) {
             this.setState({
-                data:{columns:cols,rows:this.state.logs}
+                data: { columns: cols, rows: this.state.logs }
             })
             return
         }
-        let fil = {...this.state.logs.filter(item=>item.email.includes(val))[0]}
-        fil.username = <CSVLink style={{color:'#000',textDecoration:'underline'}} data={csvData}>{fil.username}</CSVLink>
+        let fil = { ...this.state.logs.filter(item => item.email.includes(val))[0] }
+        fil.username = <CSVLink style={ { color: '#000', textDecoration: 'underline' } } data={ csvData }>{ fil.username }</CSVLink>
         this.setState({
-            data:{columns:cols,rows:[fil]}
+            data: { columns: cols, rows: [fil] }
+        })
+    }
+    onSearchSsn = (v)=>{
+        API.getContactTracing(v.target.value)
+        .then(res=>{
+            console.log(res);
         })
     }
     render() {
         return (
-            <Container className='manager' data-testid="manager-page" style={{padding:5}}>
+            <Container className='manager' data-testid="manager-page" style={ { padding: 5 } }>
                 <Row className="justify-content-md-center below-nav">
-                    {this.state.logs && this.state.subjects && <>
-                        <Col xs={2} className="col-2 justify-content-md-left">
+                    { this.state.logs && this.state.subjects && <>
+                        <Col xs={ 2 } className="col-2 justify-content-md-left">
                             <h4>Filters</h4>
                             <Accordion>
-                            <Card>
+                                <Card>
 
-                            <Accordion.Toggle className="filtersOp" as={Card.Header} eventKey={1}>
-                            <h5>Operations</h5>
-                            </Accordion.Toggle>
-                            <Accordion.Collapse eventKey={1}>
-                                <Card.Body>
-                                    <ButtonGroup vertical>
-                                        {typeOp.map((e) => {
-                                            return (
-                                                <>
-                                                    <Button
-                                                        variant="info"
-                                                        value={e}
-                                                        key={e}
-                                                        onClick={(ev) => {
-                                                            this.handleLogs(ev.target.value,'operation');
-                                                        }}
-                                                        data-testid="handlelecture-button"
-                                                    >
-                                                        {e}
-                                                    </Button>
-                                                    <br/>
-                                                </>
-                                            );
-                                        })}
-                                        <Button
-                                            variant={"danger"}
-                                            value={"del"}
-                                            key={"del"}
-                                            onClick={(e) => {
-                                                this.handleLogs(e.target.value, 'reset');
-                                            }}
-                                            data-testid="handlelecture-del-button"
-                                        >
-                                            Cancel filters
-                                        </Button>
-                                    </ButtonGroup>
-                                </Card.Body>
-                            </Accordion.Collapse>
-                            </Card>
-                            <Card>
-                            <Accordion.Toggle className="filtersCourse" as={Card.Header} eventKey={2}>
-                                <h5>Courses</h5>
-                            </Accordion.Toggle>
-                            <Accordion.Collapse eventKey={2}>
-                                <Card.Body>
-                                <ButtonGroup vertical>
-                                    {this.state.subjects.map((e) => {
-                                        return (
-                                            <>
+                                    <Accordion.Toggle className="filtersOp" as={ Card.Header } eventKey={ 1 }>
+                                        <h5>Operations</h5>
+                                    </Accordion.Toggle>
+                                    <Accordion.Collapse eventKey={ 1 }>
+                                        <Card.Body>
+                                            <ButtonGroup vertical>
+                                                { typeOp.map((e) => {
+                                                    return (
+                                                        <>
+                                                            <Button
+                                                                variant="info"
+                                                                value={ e }
+                                                                key={ e }
+                                                                onClick={ (ev) => {
+                                                                    this.handleLogs(ev.target.value, 'operation');
+                                                                } }
+                                                                data-testid="handlelecture-button"
+                                                            >
+                                                                { e }
+                                                            </Button>
+                                                            <br />
+                                                        </>
+                                                    );
+                                                }) }
                                                 <Button
-                                                    variant="primary"
-                                                    value={e}
-                                                    key={e}
-                                                    onClick={(ev) => {
-                                                        this.handleLogs(ev.target.value, 'course');
-                                                    }}
-                                                    data-testid="handlelecture-button"
+                                                    variant={ "danger" }
+                                                    value={ "del" }
+                                                    key={ "del" }
+                                                    onClick={ (e) => {
+                                                        this.handleLogs(e.target.value, 'reset');
+                                                    } }
+                                                    data-testid="handlelecture-del-button"
                                                 >
-                                                    {e}
-                                                </Button>
-                                                <br/>
-                                            </>
-                                        );
-                                    })}
+                                                    Cancel filters
+                                        </Button>
+                                            </ButtonGroup>
+                                        </Card.Body>
+                                    </Accordion.Collapse>
+                                </Card>
+                                <Card>
+                                    <Accordion.Toggle className="filtersCourse" as={ Card.Header } eventKey={ 2 }>
+                                        <h5>Courses</h5>
+                                    </Accordion.Toggle>
+                                    <Accordion.Collapse eventKey={ 2 }>
+                                        <Card.Body>
+                                            <ButtonGroup vertical>
+                                                { this.state.subjects.map((e) => {
+                                                    return (
+                                                        <>
+                                                            <Button
+                                                                variant="primary"
+                                                                value={ e }
+                                                                key={ e }
+                                                                onClick={ (ev) => {
+                                                                    this.handleLogs(ev.target.value, 'course');
+                                                                } }
+                                                                data-testid="handlelecture-button"
+                                                            >
+                                                                { e }
+                                                            </Button>
+                                                            <br />
+                                                        </>
+                                                    );
+                                                }) }
 
-                                    <Button
-                                        variant={"danger"}
-                                        value={"del"}
-                                        key={"del"}
-                                        onClick={(e) => {
-                                            this.handleLogs(e.target.value, 'reset');
-                                        }}
-                                        data-testid="handlelecture-del-button"
-                                    >
-                                        Cancel filters
+                                                <Button
+                                                    variant={ "danger" }
+                                                    value={ "del" }
+                                                    key={ "del" }
+                                                    onClick={ (e) => {
+                                                        this.handleLogs(e.target.value, 'reset');
+                                                    } }
+                                                    data-testid="handlelecture-del-button"
+                                                >
+                                                    Cancel filters
                                     </Button>
-                                </ButtonGroup>
-                                </Card.Body>
-                            </Accordion.Collapse>
-                            </Card>
+                                            </ButtonGroup>
+                                        </Card.Body>
+                                    </Accordion.Collapse>
+                                </Card>
                             </Accordion>
                         </Col></>
                     }
@@ -232,22 +240,42 @@ class Manager extends React.Component {
 
 
                         <Tabs id="manager-tab"
-                              activeKey={this.state.modality}
-                              onSelect={(k) => this.setModality(k)}>
-                            <Tab eventKey="table" title="Table View" tabClassName={"tab-label"}>
+                            activeKey={ this.state.modality }
+                            onSelect={ (k) => {
+                                this.setModality(k);
+                            } }>
+                            <Tab eventKey="table" title="Table View" tabClassName={ "tab-label" }>
                                 <MDBDataTable
                                     striped
                                     bordered
-                                    onSearch={this.onSearch}
+                                    onSearch={ this.onSearch }
                                     small
-                                    data={this.state.data}
+                                    data={ this.state.data }
                                 />
 
                             </Tab>
-                            <Tab eventKey="chart" title="Chart View" tabClassName={"tab-label"}>
+                            <Tab eventKey="chart" title="Chart View" tabClassName={ "tab-label" }>
                                 <Row className="justify-content-md-center">
                                     <Col className="LogChart" >
-                                        {this.state.summaryOperations && <LogGraph summary={this.state.summaryOperations}/>}
+                                        { this.state.summaryOperations && <LogGraph summary={ this.state.summaryOperations } /> }
+                                    </Col>
+                                </Row>
+                            </Tab>
+                            <Tab eventKey="search" title="Search View" tabClassName={ "tab-label" }>
+                                <Row className="justify-content-md-center">
+                                    <Col className="LogChart" lg={6} >
+                                        <Form>
+                                            <Form.Group controlId="formBasicEmail">
+                                                <Form.Label>Search with SSN</Form.Label>
+                                                <Form.Control onChange={this.onSearchSsn} type="email" placeholder="Enter SSN" />
+                                            </Form.Group>
+                                            <Button>
+                                            <CSVLink style={{color: '#000'}} data={csvData} variant="primary">
+                                                Download CSV
+                                            </CSVLink>
+                                            </Button>
+                                        </Form>
+
                                     </Col>
                                 </Row>
                             </Tab>
