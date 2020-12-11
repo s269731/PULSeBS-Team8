@@ -3,8 +3,8 @@ import {Container, Row, Col, Button,ButtonGroup, Tabs, Tab, Accordion, Card} fro
 import './manager.css'
 import API from "../../api/api";
 import LogGraph from './LogGraph'
-import { MDBDataTable } from 'mdbreact';
-import { CSVLink, CSVDownload } from "react-csv";
+import { MDBDataTable,MDBDataTableV5  } from 'mdbreact';
+import { CSVLink } from "react-csv";
  
 const csvData = [
   ["firstname", "lastname", "email"],
@@ -129,8 +129,10 @@ class Manager extends React.Component {
             })
             return
         }
+        let fil = {...this.state.logs.filter(item=>item.email.includes(val))[0]}
+        fil.username = <CSVLink style={{color:'#000',textDecoration:'underline'}} data={csvData}>{fil.username}</CSVLink>
         this.setState({
-            data:{columns:cols,rows:[this.state.logs.filter(item=>item.email.includes(val))[0]]}
+            data:{columns:cols,rows:[fil]}
         })
     }
     render() {
