@@ -326,8 +326,8 @@ class StatsPage extends Component {
                                                         small
                                                         data={{columns: colsDaily, rows: this.state.subjectLogs.dailystatsarray}
                                                         }
-                                                        data-testid={"logs-daily-table"}
-                                                    />: <Alert variant={"danger"} data-testid={"no-logs-warning"}>No statistics available for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
+                                                        data-testid={"logs-daily-attendance-table"}
+                                                    />: <Alert variant={"danger"} data-testid={"no-logs-attendance-warning"}>No statistics available for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
                                             </Col>
                                         </Row>
 
@@ -347,8 +347,8 @@ class StatsPage extends Component {
                                                         bordered
                                                         small
                                                         data={{columns: colsWeekly, rows: this.state.subjectLogs.weeklystatsarray}}
-                                                        data-testid={"logs-weekly-table"}
-                                                    />: <Alert variant={"danger"} data-testid={"no-logs-warning"}>No statistics available for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
+                                                        data-testid={"logs-weekly-attendance-table"}
+                                                    />: <Alert variant={"danger"} data-testid={"no-logs-attendance-warning"}>No statistics available for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
 
                                             </Col>
                                         </Row>
@@ -372,8 +372,8 @@ class StatsPage extends Component {
                                                         columns: colsMonthly,
                                                         rows: this.state.subjectLogs.monthlystatsarray
                                                     }}
-                                                    data-testid={"logs-monthly-table"}
-                                                />: <Alert variant={"danger"} data-testid={"no-logs-warning"}>No statistics available for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
+                                                    data-testid={"logs-monthly-attendance-table"}
+                                                />: <Alert variant={"danger"} data-testid={"no-logs-attendance-warning"}>No statistics available for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
 
                                             </Col>
                                         </Row>

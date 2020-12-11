@@ -93,7 +93,7 @@ class StudentPage extends Component {
             onSelect={(k) => this.setState({modality:k})}
 
         >
-          <Tab eventKey="lectures" title="My Lectures">
+          <Tab eventKey="lectures" title="My Lectures" data-testid="lectures-tab-button">
             <AvailableCourses
                 subjects={this.state.subjects}
                 lectures={this.state.lectures}
