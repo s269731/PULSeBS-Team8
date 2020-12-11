@@ -382,3 +382,12 @@ test('Should return error because values about update are not correct', async ()
   }
 });
 
+test('Should return an error because the lecture is still in program', async () => {
+  const lectureId = 2;
+  const presentPeople = 6;
+  try {
+    const result = await lecturesDao.updatePresentPeople(lectureId, presentPeople);
+  } catch (error) {
+    expect(error).toBe('Lecture is still in program');
+  }
+});
