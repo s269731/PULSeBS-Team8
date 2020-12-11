@@ -37,15 +37,14 @@ class ModifyLecture extends React.Component {
           SubjectName: "5th Year"
         }
       ],
-      years: "1st",
       delete: "del",
       checkedCourses: [],
       students: [],
       loading: true,
       serverErr: false,
-      changeYear: "1",
       lectures: [],
-      filteredLec2: []
+      filteredLec2: [],
+      allChecked: false
     };
   }
 
@@ -82,6 +81,19 @@ class ModifyLecture extends React.Component {
   }
 }
 
+selectAll(event){
+  const isChecked = event.target.checked;
+  if (isChecked) {
+    let courses = [...this.state.checkedCourses,test];
+    this.setState=({allChecked: true})
+    this.setState({checkedCourses: courses});
+  } else {
+    let courses = this.state.checkedCourses.filter(courses => 
+      {return courses.id !== test.id});
+    this.setState({checkedCourses: courses});
+  }
+}
+
   chooseCourse(event, id, subjId, modality) {
     const isChecked = event.target.checked;
     let test={
@@ -106,7 +118,7 @@ class ModifyLecture extends React.Component {
       console.log("helloSuccess")
       // this.componentDidMount();
     }).catch((err) => {
-  console.log(err);
+  console.log(err+"");
   if (err.status === 401) {
     this.props.notLoggedUser();
   }});
@@ -159,12 +171,21 @@ class ModifyLecture extends React.Component {
            }
          
         </Col>
+        <Row>
+          <Row></Row>
+          <Row></Row>
+
+        <Form.Check     
+                          className="my-1 mr-sm-2"
+                          label="Check All"
+                          key={1}
+                          type="checkbox"
+                         />
+        </Row>
+        
         < Col className="col-8">
           <Accordion className="box-shadow" defaultActiveKey="0">
-            {this
-              .state
-              .lectures
-              .map((e, id) => {
+            {this.state.lectures.map((e, id) => {
                 return (
                   <Form>
                     <Form.Group controlId="formBasicCheckbox">

@@ -396,7 +396,7 @@ async function getTeacherByLectureId(lectureId) {
 }
 
 async function getModalityBySubjectId(subjectId) {
-  const sql = 'SELECT Modality FROM Lectures WHERE SubjectId=? LIMIT 1'
+  const sql = 'SELECT MAX(Modality) AS Modality FROM Lectures WHERE SubjectId=?'
   const stmt = db.prepare(sql);
   const res = stmt.get(subjectId);
 

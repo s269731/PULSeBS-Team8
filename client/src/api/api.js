@@ -347,11 +347,10 @@ async function changeModalityCourse(list){
         headers: {
             'Content-Type': 'application/json',
         },
-        body: list
+        body: JSON.stringify(list) 
     }).then((response) => {
         if (response.ok) {
                  resolve(response);
-                 console.log("aaa")
         } else {
             // analyze the cause of error
             response.json()
