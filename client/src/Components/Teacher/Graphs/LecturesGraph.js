@@ -80,6 +80,14 @@ class LecturesGraph extends Component {
 	    if(this.props.detail==='d'){
 	        FormatString= "D MMM YYYY"
 	    }
+	    let title;
+	    if (this.props.mode==='b'){
+	        title="Booked seats"
+	    }
+        if (this.props.mode==='a'){
+            title="Attendance of lectures"
+        }
+
 
 		const options1 = {
 			theme: "light1", // "light1", "dark1", "dark2"
@@ -91,7 +99,7 @@ class LecturesGraph extends Component {
 			},
 			xValueFormatString: FormatString,
 			title: {
-				text: "Booked seats trend"
+				text: title
 			},
 			data: [
 			        {

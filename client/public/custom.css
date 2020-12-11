@@ -85,3 +85,6 @@
 .actionsAlarm, .actionsInfo{
     margin-top:0px;
 }
+#controlled-main-bookings-tab{
+    margin-bottom:10px;
+}
