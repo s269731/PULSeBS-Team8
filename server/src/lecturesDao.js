@@ -4,7 +4,7 @@ const userDao = require('./userDao');
 const subjectDao = require('./subjectsDao');
 
 class Lecture {
-  constructor(lectureId, subjectName, teacherName, dateHour, modality, className, capacity, bookedPeople, booked) {
+  constructor(lectureId, subjectName, teacherName, dateHour, modality, className, capacity, bookedPeople, booked, presentPeople) {
     this.lectureId = lectureId;
     this.subjectName = subjectName;
     this.teacherName = teacherName;
@@ -14,6 +14,7 @@ class Lecture {
     this.capacity = capacity;
     this.bookedPeople = bookedPeople;
     this.booked = booked;
+    this.presentPeople = presentPeople;
   }
 }
 
@@ -46,7 +47,7 @@ async function getLecturesByUserId(id) {
       const teacher = await userDao.getUserById(rawlecture.TeacherId);
       const teacherName = `${teacher.name} ${teacher.surname}`;
       const reservation = getReservation(id, rawlecture.LectureId);
-      const lecture = new Lecture(rawlecture.LectureId, subjectName.SubjectName, teacherName, rawlecture.DateHour, rawlecture.Modality, rawlecture.Class, rawlecture.Capacity, rawlecture.BookedPeople, reservation);
+      const lecture = new Lecture(rawlecture.LectureId, subjectName.SubjectName, teacherName, rawlecture.DateHour, rawlecture.Modality, rawlecture.Class, rawlecture.Capacity, rawlecture.BookedPeople, reservation, rawlecture.PresentPeople);
 
       lectures.push(lecture);
     }));

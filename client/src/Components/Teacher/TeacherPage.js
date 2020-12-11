@@ -10,6 +10,7 @@ class TeacherPage extends React.Component {
     this.state = { loading: true, serverErr: null , modality:"lectures", noLect:false, noSubj:false};
     this.cancelLecture = this.cancelLecture.bind(this);
     this.changeModalityLecture = this.changeModalityLecture.bind(this);
+    this.recordAttendance=this.recordAttendance.bind(this);
   }
     setModality(k){
       this.setState({modality:k})
@@ -39,6 +40,21 @@ class TeacherPage extends React.Component {
               }
               this.setState({ serverErr: true });
           });
+  }
+  recordAttendance(id,number){
+    console.log(id)
+      console.log(number)
+      API.insertAttendanceInfo(id,number).then((res) => {
+          this.getLectures();
+      })
+          .catch((err) => {
+              console.log(err.status);
+              if (err.status === 401) {
+                  this.props.notLoggedUser();
+              }
+              this.setState({ serverErr: true });
+          });
+
   }
   getLectures() {
     API.getLecturesTeacher()
@@ -121,6 +137,7 @@ class TeacherPage extends React.Component {
                             lectures={this.state.lectures}
                             cancelLecture={this.cancelLecture}
                             changeModalityLecture={this.changeModalityLecture}
+                            recordAttendance={this.recordAttendance}
                             notLoggedUser={this.props.notLoggedUser}
                         />: <>
                             {this.state.noSubj ? <Row className="justify-content-md-center below-nav"><Alert className={"alert"} variant={"info"} data-testid={"no-courses-message"}><h4>No courses assigned to you</h4></Alert></Row>:

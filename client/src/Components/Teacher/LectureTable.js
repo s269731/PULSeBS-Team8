@@ -18,7 +18,7 @@ const LectureItem = (props) => {
     <>
       {l.visible && (
         <Card data-testid="card-toggle">
-          <Accordion.Toggle className="subjectName" as={Card.Header} eventKey={props.eId}>
+          <Accordion.Toggle className={l.canRecordAttendance || l.hasAttendance ? "pastSubjectName":"subjectName"} as={Card.Header} eventKey={props.eId}>
             <Row>
               <Col>
                 <h5>{l.subject}</h5>
@@ -61,6 +61,10 @@ const LectureItem = (props) => {
                         <h6 className="tableHeader">Booked students</h6>
                         <h5> {l.bookedStudents}</h5>
                       </Col>
+                      {l.hasAttendance===true && <Col xs={6} md={4} className="align-content-end">
+                        <h6 className="tableHeader">Present students</h6>
+                        <h5> {l.presentStudents}</h5>
+                      </Col>}
                     </Row>
                 )}
                   {/*BUTTONS*/}
@@ -71,10 +75,16 @@ const LectureItem = (props) => {
                           notLoggedUser={props.notLoggedUser}
                       />
                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      <ActionsForm l={l} cancelLecture={props.cancelLecture} operation={'delete'}/>
-                      {l.modality === "In person" && <>
+                      {!l.canRecordAttendance && !l.hasAttendance && <ActionsForm l={l} cancelLecture={props.cancelLecture} operation={'delete'}/>}
+                      {!l.canRecordAttendance && !l.hasAttendance && l.modality === "In person" && <>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <ActionsForm l={l} changeModalityLecture={props.changeModalityLecture} operation={'modify'}/>
+                        </>
+                      }
+                      {
+                        l.canRecordAttendance && !l.hasAttendance && l.bookedStudents>0 && <>
+                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                          <ActionsForm l={l} recordAttendance={props.recordAttendance} operation={'recordAttendance'}/>
                         </>
                       }
                     </Col>
@@ -166,6 +176,7 @@ class LectureTable extends React.Component {
                             lecture={e}
                             cancelLecture={this.props.cancelLecture}
                             changeModalityLecture={this.props.changeModalityLecture}
+                            recordAttendance={this.props.recordAttendance}
                             notLoggedUser={this.props.notLoggedUser}
                           />
                   );

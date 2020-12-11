@@ -54,10 +54,13 @@ async function retrieveLectures(url){
                         return new Date(l1.dateHour) - new Date(l2.dateHour);
                       })
                       .map((l) => {
+                        console.log(l)
+                        let hasAttendance= l.presentPeople && l.presentPeople !==0
                         let now = new Date();
                         let lectDay = new Date(l.dateHour);
                         let canDelete = lectDay - now - 3600000 > 0;
                         let canModify= lectDay - now - 3600000/2 > 0;
+                        let canRecordAttendance= !hasAttendance && lectDay - now < 0;
                         let fields = l.dateHour.split("T");
                         let date = fields[0];
                        let min=lectDay.getMinutes().toString()
@@ -79,12 +82,15 @@ async function retrieveLectures(url){
                           room: l.className,
                           capacity: l.capacity,
                           bookedStudents: l.bookedPeople,
+                          presentStudents:l.presentPeople,
                           teacherName: l.teacherName,
                           lectureId: l.lectureId,
                           booked: l.booked,
                           visible: true,
                           canDelete: canDelete,
-                          canModify:canModify
+                          canModify:canModify,
+                          canRecordAttendance : canRecordAttendance,
+                          hasAttendance: hasAttendance
                         };
                       })
               );
@@ -361,6 +367,30 @@ async function changeModalityCourse(list){
 });
 }
 
+
+async function insertAttendanceInfo(id, value){
+  console.log(id);
+  console.log(value)
+  return new Promise((resolve, reject) => {
+    fetch('/api/teacher/insertPresence', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({lectureId:id,presentPeople:value})
+    }).then((response) => {
+      if (response.ok) {
+        resolve(response);
+      } else {
+        // analyze the cause of error
+        response.json()
+            .then((obj) => {  reject(obj); }) // error msg in the response body
+            .catch((err) => { reject({ errors: [{ param: "Application", msg: "Cannot parse server response" }] }) }); // something else
+      }
+    }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] }) }); // connection errors
+  });
+}
+
 const API = {
   getUploadUrl,
   Login,
@@ -377,6 +407,7 @@ const API = {
   getTeacherStats,
   getCourses,
   getOfficerSchedule,
-  changeModalityCourse
+  changeModalityCourse,
+  insertAttendanceInfo
 };
 export default API;

@@ -1,20 +1,28 @@
 import React, { useState } from "react";
-import { Button, Modal, Alert } from "react-bootstrap";
+import {Button, Modal, Alert, Form, Col} from "react-bootstrap";
+
 
 
 function ActionsForm(props) {
     const [show, setShow] = useState(false);
-
+    const [attendanceNum, setAttendanceNum] = useState(0);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    const handleOperation = () => {
+
+    const handleOperation = (event) => {
         setShow(false);
         if (props.operation==='delete') {
             props.cancelLecture(props.l.id);
         }
         if(props.operation==='modify'){
             props.changeModalityLecture(props.l.id);
+        }
+        if(props.operation==='recordAttendance'){
+            event.preventDefault()
+            console.log(props.l.id)
+            console.log(attendanceNum)
+            props.recordAttendance(props.l.id, attendanceNum);
         }
     };
 
@@ -49,18 +57,27 @@ function ActionsForm(props) {
                     Cannot switch to online lecture
                 </Button>
             )}</>}
+            {props.operation==='recordAttendance' &&
+                <Button
+                    data-testid="record-attendance-lecture-button"
+                    variant="success"
+                    onClick={handleShow}
+                >
+                    Insert attendance information
+                </Button>
+            }
             <Modal
                 show={show}
                 onHide={handleClose}
                 data-testid="modification-lecture-modal"
             >
                 <Modal.Header closeButton>
-                    <Modal.Title>Warning</Modal.Title>
+                    {props.operation==='recordAttendance'? <Modal.Title>Insert attendance information</Modal.Title>:<Modal.Title>Warning</Modal.Title>}
                 </Modal.Header>
                 <Modal.Body>
-                    <Alert variant={"danger"}>
-                        {props.operation==='delete' && <h4>Are you sure to delete this lecture?</h4>}
-                        {props.operation==='modify' && <><h4>Are you sure to make this an online
+                    {props.operation!=='recordAttendance' && <><Alert variant={"danger"} className={"actionsAlarm"}>
+                        {props.operation === 'delete' && <h4>Are you sure to delete this lecture?</h4>}
+                        {props.operation === 'modify' && <><h4>Are you sure to make this an online
                             lecture?</h4><br/><h4>You cannot undo this operation</h4></>}
                     </Alert>
                     <hr
@@ -70,15 +87,38 @@ function ActionsForm(props) {
                             height: 0.5,
                             borderColor: "#000000",
                         }}
-                    />
+                    /></>}
                     <br />
-                    <Alert variant={"info"}>
+                    <Alert variant={"info"}  className={"actionsInfo"}>
                         <h5>
                             Date: {props.l.date} at {props.l.hour}
                         </h5>
                         <br />
                         <h5>Course: {props.l.subject}</h5>
+                        {props.operation==='recordAttendance' && <><br/><h5>Booked
+                        students: {props.l.bookedStudents}</h5></>}
                     </Alert>
+
+                    {props.operation==='recordAttendance' &&<><hr
+                        style={{
+                            color: "#000000",
+                            backgroundColor: "#000000",
+                            height: 0.5,
+                            borderColor: "#000000",
+                        }}
+                    /> <Form method="POST" onSubmit={(event) => handleOperation(event)}>
+                        <Form.Label><h5>Insert here the number of present students:</h5></Form.Label>
+                        <Form.Row>
+                            <Col xs={3}>
+                                <Form.Group controlId="description">
+                                     <Form.Control type="number" name="Number of present students" placeholder="Type a number" value = {attendanceNum} onChange={(ev) => setAttendanceNum(Number(ev.target.value))} required autoFocus/>
+                                </Form.Group>
+                            </Col>
+                            <Col xs={9}>
+                                    {(attendanceNum<0 || attendanceNum>props.l.bookedStudents) ? <Alert variant={"danger"} className={"actionsAlarm"}>Insert a number between 0 and {props.l.bookedStudents}</Alert> : <Form.Group className={"align-content-right"}><Button variant="primary" type="submit">Save</Button></Form.Group>}
+                            </Col>
+                        </Form.Row>
+                    </Form></>}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>

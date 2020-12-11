@@ -79,3 +79,9 @@
     color:green;
     font-weight: bold;
 }
+.pastSubjectName{
+    color: black;
+}
+.actionsAlarm, .actionsInfo{
+    margin-top:0px;
+}
