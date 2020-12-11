@@ -217,14 +217,17 @@ class StatsPage extends Component {
                             id="controlled-main-tab"
                             activeKey={this.state.mainModality}
                             onSelect={(k) => this.setMainModality(k)}
+                            variant={"pills"}
                         >
 
 
-                            <Tab eventKey="bookings" title="Bookings Trend">
+                            <Tab eventKey="bookings" title="Bookings Statistics">
+
                                 <Tabs
                                 id="controlled-main-bookings-tab"
                                 activeKey={this.state.modality}
                                 onSelect={(k) => this.setModality(k)}
+                                className={"below-tab"}
                             >
                                 <Tab eventKey="daily-bookings" title="Daily">
                                     <Row className="justify-content-md-center below-nav">
@@ -300,11 +303,12 @@ class StatsPage extends Component {
 
 
 
-                            <Tab eventKey="attendance" title="Attendance Trend">
+                            <Tab eventKey="attendance" title="Attendance Statistics">
                                 <Tabs
                                     id="controlled-main-attendance-tab"
                                     activeKey={this.state.modality}
                                     onSelect={(k) => this.setModality(k)}
+                                    className={"below-tab"}
                                 >
                                     <Tab eventKey="daily-attendance" title="Daily">
                                         <Row className="justify-content-md-center below-nav">
