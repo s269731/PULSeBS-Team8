@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Row, Col, Button, ButtonGroup, Tabs, Tab, Form, Accordion, Card } from "react-bootstrap";
+import { Container, Row, Col, Button, ButtonGroup, Tabs, Tab, Form, Accordion, Card,InputGroup,FormControl } from "react-bootstrap";
 import './manager.css'
 import API from "../../api/api";
 import LogGraph from './LogGraph'
@@ -63,6 +63,20 @@ class Manager extends React.Component {
         super();
         this.state = {
             logs: [],
+            search:'',
+            csvData:[],
+            searchData:[
+                // {
+                //     Teacher:{Name:'aaa'},
+                //     Subject:'bbb',
+                //     Lectures:[
+                //         {
+                //             DateHour:'2020-12-12',
+                //             StudentList:[{Name:'ggg'},{Name:'hhh'}]
+                //         }
+                //     ]
+                // }
+            ],
             modality: 'search'
         }
     }
@@ -89,9 +103,7 @@ class Manager extends React.Component {
         return self.indexOf(value) === index;
     }
     handleLogs(id, type) {
-        console.log(id)
         let logs = this.state.logs
-        console.log(logs)
         let newLogs = []
         if (type === 'reset') {
             newLogs = logs;
@@ -121,28 +133,33 @@ class Manager extends React.Component {
     }
 
     setModality(k) {
-        console.log(k);
         this.setState({ modality: k })
     }
-    onSearch = (val) => {
-        if (!val) {
-            this.setState({
-                data: { columns: cols, rows: this.state.logs }
-            })
-            return
-        }
-        let fil = { ...this.state.logs.filter(item => item.email.includes(val))[0] }
-        fil.username = <CSVLink style={ { color: '#000', textDecoration: 'underline' } } data={ csvData }>{ fil.username }</CSVLink>
+   
+    handleChange = (v)=>{
         this.setState({
-            data: { columns: cols, rows: [fil] }
+            search:v.target.value
         })
     }
-    onSearchSsn = (v)=>{
-        API.getContactTracing(v.target.value)
-        .then(res=>{
-            console.log(res);
-        })
+    onSearchSsn = () => {
+        API.getContactTracing(this.state.search)
+            .then(res => {
+                if(res.length){
+                    this.setState({searchData:res});
+                    
+                    this.setState({
+                        csvData:res.map(val=>({
+                            BookCourse:val.Subject,
+                            TeacherName:val.Teacher.Name,
+                            BookStudents:val.Lectures[0].StudentList.map(stu=>stu.Name).join('--')
+                        }))
+                    })
+                }else{
+                    alert('Request Error')
+                }
+            })
     }
+    
     render() {
         return (
             <Container className='manager' data-testid="manager-page" style={ { padding: 5 } }>
@@ -248,7 +265,6 @@ class Manager extends React.Component {
                                 <MDBDataTable
                                     striped
                                     bordered
-                                    onSearch={ this.onSearch }
                                     small
                                     data={ this.state.data }
                                 />
@@ -263,19 +279,59 @@ class Manager extends React.Component {
                             </Tab>
                             <Tab eventKey="search" title="Search View" tabClassName={ "tab-label" }>
                                 <Row className="justify-content-md-center">
-                                    <Col className="LogChart" lg={6} >
-                                        <Form>
-                                            <Form.Group controlId="formBasicEmail">
-                                                <Form.Label>Search with SSN</Form.Label>
-                                                <Form.Control onChange={this.onSearchSsn} type="email" placeholder="Enter SSN" />
-                                            </Form.Group>
-                                            <Button>
-                                            <CSVLink style={{color: '#000'}} data={csvData} variant="primary">
+                                    <Col className="LogChart" lg={ 6 } >
+                                        <InputGroup style={{padding: '20px 0'}}>
+                                            <FormControl
+                                                onChange={this.handleChange}
+                                                placeholder="Enter SSN"
+                                            />
+                                            <InputGroup.Append>
+                                                <Button onClick={this.onSearchSsn} variant="outline-secondary">Search</Button>
+                                            </InputGroup.Append>
+                                        </InputGroup>
+                                    </Col>
+                                </Row>
+                                {
+                                    this.state.searchData.length?<div className='searchData'>
+                                        <Row style={{borderBottom:'1px solid #ccc'}}>
+                                            <Col>SSN:{this.state.search}</Col>
+                                        </Row>
+                                        {
+                                            this.state.searchData.map((val)=>(
+                                                <>
+                                                    <Row>
+                                                        <Col>Subject:{val.Subject}</Col>
+                                                        <Col>Teacher:{val.Teacher.Name}</Col>
+                                                    </Row>
+                                                    {val.Lectures.map(lec=>(
+                                                        <>
+                                                            <Row>
+                                                                <Col>Lecture DateHour:{lec.DateHour}</Col>
+                                                            </Row>
+                                                            <Row>
+                                                                <Col>Lecture StudentList</Col>
+                                                            </Row>
+                                                            <Row>
+                                                                {lec.StudentList.map(stu=>(
+                                                                    <Col>{stu.Name}</Col>
+                                                                ))}
+                                                            </Row>
+                                                        </>
+                                                    ))}
+                                                </>
+                                            ))
+                                        }
+                                    </div>:<div className='nodata'>No Data</div>
+                                }
+                                <Row className="justify-content-md-center">
+                                    <Col style={{display:'flex',justifyContent:'space-around'}}  className="LogChart" lg={ 6 }>
+                                        <Button>
+                                            <CSVLink style={ { color: '#fff' } } data={ this.state.csvData } variant="primary">
                                                 Download CSV
                                             </CSVLink>
-                                            </Button>
-                                        </Form>
+                                        </Button>
 
+                                        <Button>Dowmload PDF</Button>
                                     </Col>
                                 </Row>
                             </Tab>

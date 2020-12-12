@@ -319,7 +319,7 @@ app.get('/api/teacher/presencestatistics', async (req, res) => {
 app.get('/api/teacher/pastlectures', async (req, res) => {
   const teacherId = req.user && req.user.user;
   try {
-    const lectures = await lecturesDao.getPastLectures(teacherId);
+    const lectures = await lecturesDao.getTeacherPastLectures(teacherId);
     res.json(lectures);
   } catch {
     res.json(lecturesErr);

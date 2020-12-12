@@ -6,8 +6,8 @@ test('Should return an array of objects related to Lectures stats', async () => 
   const subjectId = 1;
   const obj = await lecturesDao.getLecturesBySubjectId(subjectId);
   expect(obj).toBeTruthy();
-  expect(obj[0].LectureId).toBe(3);
-  expect(obj[0].BookedPeople).toBe(50);
+  expect(obj[0].LectureId).toBe(26);
+  expect(obj[0].BookedPeople).toBe(80);
 });
 
 test('Should return an array of objects related to Lectures stats', async () => {
@@ -390,4 +390,20 @@ test('Should return an error because the lecture is still in program', async () 
   } catch (error) {
     expect(error).toBe('Lecture is still in program');
   }
+});
+
+test('Should return just the the lectures of the past week', async () => {
+  const teacherId = 1;
+  const obj = await lecturesDao.getTeacherPastLectures(teacherId);
+  expect(obj).toBeTruthy();
+  expect(obj[0].lectureId).toBe(3);
+  expect(obj[1].lectureId).toBe(23);
+});
+
+test('Should return just Lectures of a given Subject with reportes presences', async () => {
+  const subjectId = 1;
+  const obj = await lecturesDao.getLecturesForPresenceStatisticsBySubjectId(subjectId);
+  expect(obj).toBeTruthy();
+  expect(obj[0].LectureId).toBe(26);
+  expect(obj[1].LectureId).toBe(27);
 });
