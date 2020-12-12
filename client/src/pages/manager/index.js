@@ -221,7 +221,7 @@ class Manager extends React.Component {
         return (
             <Container className='manager' data-testid="manager-page" style={ { padding: 5 } }>
                 <Row className="justify-content-md-center below-nav">
-                    { this.state.logs && this.state.subjects && this.state.modality!=='search' && <>
+                    { this.state.logs && this.state.subjects && this.state.modality==='table' && <>
                         <Col xs={ 2 } className="col-2 justify-content-md-left">
                             <h4>Filters</h4>
                             <Accordion>
