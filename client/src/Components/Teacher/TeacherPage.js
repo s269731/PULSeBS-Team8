@@ -7,7 +7,7 @@ import API from "../../api/api";
 class TeacherPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { loading: true, serverErr: null , modality:"lectures", noLect:false, noSubj:false};
+    this.state = {pastLectures:[], loading: true, serverErr: null , modality:"lectures", noLect:false, noSubj:false};
     this.cancelLecture = this.cancelLecture.bind(this);
     this.changeModalityLecture = this.changeModalityLecture.bind(this);
     this.recordAttendance=this.recordAttendance.bind(this);
@@ -103,7 +103,9 @@ class TeacherPage extends React.Component {
       });
     API.getPastLecturesTeacher().then((lects) => {
         console.log(lects)
-        this.setState({pastLectures:lects})
+        if(!lects.errors) {
+            this.setState({pastLectures: lects, serverErr: false, loading: null , noLect:false, noSubj:false})
+        }
     }).catch((err) => {
         console.log(err.status);
         if (err.status === 401) {

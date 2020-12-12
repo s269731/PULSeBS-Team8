@@ -6,7 +6,7 @@ import {
   Card,
   Accordion,
   Button,
-  ButtonGroup, Tabs, Tab,
+  ButtonGroup, Tabs, Tab, Alert
 } from "react-bootstrap";
 import StudentList from "./StudentList";
 import ActionsForm from "./ActionsForm";
@@ -219,7 +219,7 @@ class LectureTable extends React.Component {
                 <Row  className="justify-content-md-center below-tab">
                 <Col >
                   <Accordion className="box-shadow" defaultActiveKey="0">
-                    {this.props.pastLectures && this.props.pastLectures.map((e, id) => {
+                    {this.props.pastLectures && this.props.pastLectures.length>0 && this.props.pastLectures.map((e, id) => {
                       return (
                           <LectureItem
                               eId={id+1}
@@ -231,7 +231,8 @@ class LectureTable extends React.Component {
                           />
                       );
                     })}
-                  </Accordion>
+                    {!this.props.pastLectures || this.props.pastLectures.length==0 &&<Alert variant={"info"}><h5>No past lectures available</h5></Alert>}
+                      </Accordion>
                 </Col>
                 </Row>
               </Tab>
