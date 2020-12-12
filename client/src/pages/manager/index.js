@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Row, Col, Button, ButtonGroup, Tabs, Tab, Form, Accordion, Card,InputGroup,FormControl } from "react-bootstrap";
+import { Container, Row, Col, Button, ButtonGroup, Tabs, Tab,Alert, Accordion, Card,InputGroup,FormControl } from "react-bootstrap";
 import './manager.css'
 import API from "../../api/api";
 import LogGraph from './LogGraph'
@@ -147,7 +147,8 @@ class Manager extends React.Component {
                         csvData:res.map(val=>({
                             BookCourse:val.Subject,
                             TeacherName:val.Teacher.Name,
-                            BookStudents:val.Lectures[0].StudentList.map(stu=>stu.Name).join('--')
+                            TeacherSSN: val.Teacher.SSN,
+                            BookStudents:val.Lectures[0].StudentList.map(stu=>stu.Name+" "+stu.SSN).join('--')
                         }))
                     })
                 }else{
@@ -156,7 +157,18 @@ class Manager extends React.Component {
             })
     }
     downloadpdf = ()=>{
-        let ele = document.getElementsByClassName('searchData')[0];
+        //TODO: fix pdf rendering
+        let ele = document.getElementById('searchData');
+        /*console.log(ele)
+        var opt = {
+            margin:       0.1,
+            filename:     'Contact tracing report - '+this.state.search,
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2 },
+            jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };*/
+
+        //html2pdf().from(ele).set(opt).save();
         html2pdf().from(ele).save();
     }
 
@@ -261,7 +273,7 @@ class Manager extends React.Component {
                             onSelect={ (k) => {
                                 this.setModality(k);
                             } }>
-                            <Tab eventKey="table" title="Table View" tabClassName={ "tab-label" }>
+                            <Tab eventKey="table" title="Statistics Table" tabClassName={ "tab-label" }>
                                 <MDBDataTable
                                     striped
                                     bordered
@@ -270,14 +282,16 @@ class Manager extends React.Component {
                                 />
 
                             </Tab>
-                            <Tab eventKey="chart" title="Chart View" tabClassName={ "tab-label" }>
+                            <Tab eventKey="chart" title="Statistics Chart" tabClassName={ "tab-label" }>
                                 <Row className="justify-content-md-center">
                                     <Col className="LogChart" >
                                         { this.state.summaryOperations && <LogGraph summary={ this.state.summaryOperations } /> }
                                     </Col>
                                 </Row>
                             </Tab>
-                            <Tab eventKey="search" title="Search View" tabClassName={ "tab-label" }>
+                            <Tab eventKey="search" title="Generate Contact Tracing Report" tabClassName={ "tab-label" }>
+                                <Row className="justify-content-md-center">
+                                    <Alert variant={"info"}><h5>Insert the SSN number to generate the contact tracing report<br/> taking in consideration all the lectures of the past 14 days</h5></Alert></Row>
                                 <Row className="justify-content-md-center">
                                     <Col className="LogChart" lg={ 6 } >
                                         <InputGroup style={{padding: '20px 0'}}>
@@ -292,32 +306,60 @@ class Manager extends React.Component {
                                     </Col>
                                 </Row>
                                 {
-                                    this.state.searchData.length?<div className='searchData'>
+                                    this.state.searchData.length?<div id='searchData' className='searchData'>
                                         <Row style={{borderBottom:'1px solid #ccc'}}>
-                                            <Col>SSN:{this.state.search}</Col>
+                                            <Col><h6><span className={"tableHeader"}>Contact tracing report</span></h6></Col>
+                                            <Col><h6><span className={"tableHeader"}>Student SSN:</span>{this.state.search}</h6></Col>
                                         </Row>
                                         {
                                             this.state.searchData.map((val)=>(
                                                 <>
-                                                    <Row>
-                                                        <Col>Subject:{val.Subject}</Col>
-                                                        <Col>Teacher:{val.Teacher.Name}</Col>
+
+                                                    <Row className={"below-tab"}>
+                                                        <Col> <h6><span className={"tableHeader"}>Course:</span>{val.Subject}</h6></Col>
+                                                        <Col><h6><span className={"tableHeader"}>Teacher:</span>{val.Teacher.Name} <span className={"tableHeader"}>SSN:</span>{val.Teacher.SSN} </h6></Col>
                                                     </Row>
-                                                    {val.Lectures.map(lec=>(
-                                                        <>
-                                                            <Row>
-                                                                <Col>Lecture DateHour:{lec.DateHour}</Col>
-                                                            </Row>
-                                                            <Row>
-                                                                <Col>Lecture StudentList</Col>
-                                                            </Row>
-                                                            <Row>
-                                                                {lec.StudentList.map(stu=>(
-                                                                    <Col>{stu.Name}</Col>
-                                                                ))}
-                                                            </Row>
-                                                        </>
-                                                    ))}
+                                                    <hr
+                                                        style={{
+                                                            color: "#000000",
+                                                            backgroundColor: "#000000",
+                                                            height: 0.1,
+                                                            borderColor: "#000000",
+                                                            marginTop:"3px",
+                                                            marginBottom:"2px"
+                                                        }}
+                                                    />
+                                                    {val.Lectures.map(lec=> {
+                                                        let lectDay = new Date(lec.DateHour);
+                                                        let fields = lec.DateHour.split("T");
+                                                        let date = fields[0];
+                                                        let min = lectDay.getMinutes().toString()
+                                                        if (min === '0') {
+                                                            min = '00'
+                                                        }
+                                                        let hour = lectDay.getHours() + ":" + min;
+                                                        return (
+                                                            <>
+                                                                <Row className={"list-lecture-header"}>
+                                                                    <Col>
+                                                                        <h6><span className={"tableHeader"}>Lecture
+                                                                            Date:</span>{lectDay.toLocaleDateString("en")} at {hour}</h6></Col>
+                                                                </Row>
+
+                                                                <Row className={"list-lecture"} >
+                                                                    <Col><h6><span className={"tableHeader"}>Students present at the lecture:</span></h6></Col>
+                                                                </Row>
+
+                                                                    {lec.StudentList.map(stu => (
+                                                                        <Row className={"list-element"}>
+                                                                            <h6>{stu.SSN} {stu.Name}</h6>
+                                                                        </Row>
+                                                                    ))}
+
+                                                            </>
+                                                        )
+                                                    })}
+
                                                 </>
                                             ))
                                         }
@@ -331,7 +373,7 @@ class Manager extends React.Component {
                                             </CSVLink>
                                         </Button>
 
-                                        <Button onClick={this.downloadpdf}>Dowmload PDF</Button>
+                                        <Button onClick={this.downloadpdf}>Download PDF</Button>
                                     </Col>
                                 </Row>
                             </Tab>

@@ -92,3 +92,12 @@
 
     font-size: large;
 }
+
+.list-element{
+    margin-left:50px !important;
+}
+.list-lecture{
+    margin-left:30px !important;
+}.list-lecture-header{
+    margin-left:5px !important;
+}
