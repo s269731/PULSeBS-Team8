@@ -28,6 +28,7 @@ const uploadErr = { errors: [{ msg: 'There was an error in uploading the file' }
 const contactTracingErr = { errors: [{ msg: 'There was an error in the contact tracing' }] };
 const scheduleErr = { errors: [{ msg: 'There was an error in retrieving schedule' }] };
 const changeModalitySchedError = { errors: [{ msg: 'There was an error in changing the modality from Schedule view' }] };
+const modifyScheduleError = { errors: [{ msg: 'There was an error in modifying the Schedule' }] };
 
 const app = express();
 app.disable('x-powered-by');
@@ -323,6 +324,16 @@ app.get('/api/teacher/pastlectures', async (req, res) => {
     res.json(lectures);
   } catch {
     res.json(lecturesErr);
+  }
+});
+
+app.post('/api/officer/modifyschedule', async (req, res) => {
+  const info = req.body;  // Object info has the following properties with this specific order: ScheduleId, SubjectId, Class, Day, Capacity, Hour
+  try {
+    const lectureIds = await scheduleDao.modifySchedule(info);
+    res.json(lectureIds);
+  } catch (error) {
+    res.json(modifyScheduleError);
   }
 });
 
