@@ -6,6 +6,9 @@ import LogGraph from './LogGraph'
 import { MDBDataTable } from 'mdbreact';
 import { CSVLink } from "react-csv";
 import html2pdf from 'html2pdf.js';
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 
 
@@ -115,6 +118,9 @@ class Manager extends React.Component {
             }
             else {
                 if (type === 'operation') {
+                    if(id==='Switch lecture to Virtual modality'){
+                        id="Lectures switched to virtual modality"
+                    }
                     for (let l of logs) {
                         if (l.operation === id) {
                             newLogs.push(l)
@@ -142,7 +148,7 @@ class Manager extends React.Component {
             .then(res => {
                 if(res.length){
                     this.setState({searchData:res});
-                    
+                    console.log(res)
                     this.setState({
                         csvData:res.map(val=>({
                             BookCourse:val.Subject,
@@ -157,26 +163,65 @@ class Manager extends React.Component {
             })
     }
     downloadpdf = ()=>{
-        //TODO: fix pdf rendering
-        let ele = document.getElementById('searchData');
-        /*console.log(ele)
-        var opt = {
-            margin:       0.1,
-            filename:     'Contact tracing report - '+this.state.search,
-            image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 2 },
-            jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-        };*/
 
-        //html2pdf().from(ele).set(opt).save();
-        html2pdf().from(ele).save();
+        // initialize jsPDF
+        const doc = new jsPDF();
+
+        // define the columns we want and their titles
+        const tableColumn = [ "Student SSN", "Student","Lecture Date","Hour","Course", "Teacher", "Teacher SSN"];
+        // define an empty array of rows
+        const tableRows = [];
+
+        // for each ticket pass all its data into an array
+        this.state.searchData.forEach(rows => {
+            rows.Lectures.forEach(data=>{
+                data.StudentList.forEach(student=>{
+                    let lectDay = new Date(data.DateHour);
+                    let fields = data.DateHour.split("T");
+                    let min = lectDay.getMinutes().toString()
+                    if (min === '0') {
+                        min = '00'
+                    }
+                    let hour = lectDay.getHours() + ":" + min;
+                    const lectureData = [
+                        student.SSN,
+                        student.Name,
+                        lectDay.toLocaleDateString("en"),
+                        hour,
+                        rows.Subject,
+                        rows.Teacher.Name,
+                        rows.Teacher.SSN,
+
+
+                    ];
+                    // push each tickcet's info into a row
+                    tableRows.push(lectureData);
+                })
+
+            })
+
+        });
+
+
+        // startY is basically margin-top
+        doc.autoTable(tableColumn, tableRows, { startY: 20 });
+        const date = Date().split(" ");
+        // we use a date string to generate our filename.
+        const dateStr = date[0] + date[1] + date[2] + date[3] + date[4];
+        // ticket title. and margin-top + margin-left
+        doc.text("Contact tracing report for SSN: "+this.state.search, 14, 15);
+        // we define the name of our PDF file.
+        doc.save(`contact_tracing_report_${this.state.search}_${dateStr}.pdf`);
+
+
+
     }
 
     render() {
         return (
             <Container className='manager' data-testid="manager-page" style={ { padding: 5 } }>
                 <Row className="justify-content-md-center below-nav">
-                    { this.state.logs && this.state.subjects && <>
+                    { this.state.logs && this.state.subjects && this.state.modality!=='search' && <>
                         <Col xs={ 2 } className="col-2 justify-content-md-left">
                             <h4>Filters</h4>
                             <Accordion>
@@ -300,13 +345,13 @@ class Manager extends React.Component {
                                                 placeholder="Enter SSN"
                                             />
                                             <InputGroup.Append>
-                                                <Button onClick={this.onSearchSsn} variant="outline-secondary">Search</Button>
+                                                <Button onClick={this.onSearchSsn} variant="outline-primary">Search</Button>
                                             </InputGroup.Append>
                                         </InputGroup>
                                     </Col>
                                 </Row>
                                 {
-                                    this.state.searchData.length?<div id='searchData' className='searchData'>
+                                    this.state.searchData.length?<div id='searchDataId' className='searchData'>
                                         <Row style={{borderBottom:'1px solid #ccc'}}>
                                             <Col><h6><span className={"tableHeader"}>Contact tracing report</span></h6></Col>
                                             <Col><h6><span className={"tableHeader"}>Student SSN:</span>{this.state.search}</h6></Col>
@@ -363,19 +408,22 @@ class Manager extends React.Component {
                                                 </>
                                             ))
                                         }
-                                    </div>:<div className='nodata'>No Data</div>
+                                    </div>: <>{this.state.search!=='' && this.state.searchData.Errors && <div className='nodata'>No Data</div>}</>
                                 }
-                                <Row className="justify-content-md-center">
-                                    <Col style={{display:'flex',justifyContent:'space-around'}}  className="LogChart" lg={ 6 }>
+
+                                {this.state.searchData.length>0 && <Row className="justify-content-md-center">
+                                    <Col style={{display: 'flex', justifyContent: 'space-around'}} className="LogChart"
+                                         lg={6}>
                                         <Button>
-                                            <CSVLink style={ { color: '#fff' } } data={ this.state.csvData } variant="primary">
+                                            <CSVLink style={{color: '#fff'}} data={this.state.csvData}
+                                                     variant="primary">
                                                 Download CSV
                                             </CSVLink>
                                         </Button>
 
                                         <Button onClick={this.downloadpdf}>Download PDF</Button>
                                     </Col>
-                                </Row>
+                                </Row>}
                             </Tab>
                         </Tabs>
                     </Col>
