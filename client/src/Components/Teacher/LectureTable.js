@@ -219,7 +219,7 @@ class LectureTable extends React.Component {
                 <Row  className="justify-content-md-center below-tab">
                 <Col >
                   <Accordion className="box-shadow" defaultActiveKey="0">
-                    {this.props.pastLectures.map((e, id) => {
+                    {this.props.pastLectures && this.props.pastLectures.map((e, id) => {
                       return (
                           <LectureItem
                               eId={id+1}

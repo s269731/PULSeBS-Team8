@@ -48,6 +48,38 @@ const stats=[{
 
     ]
 }]
+const pastLectures=[
+    {
+        lectureId: 1,
+        subjectName: "SoftwareEngineering I",
+        dateHour: new Date(Date.now() - 2 * 24*60*60*1000).toISOString(),
+        modality: "In person",
+        className: "12A",
+        capacity: 150,
+        bookedPeople: 100,
+        teacherName: "Franco yjtyjty",
+    },
+    {
+        lectureId: 2,
+        subjectName: "SoftwareEngineering II",
+        dateHour: new Date(Date.now() - 1 * 24*60*60*1000).toISOString(),
+        modality: "Remote",
+        room: "12A",
+        capacity: 50,
+        bookedPeople: 100,
+        teacherName: "Franco yjtyjty",
+    },
+    {
+        lectureId: 4,
+        subjectName: "SoftwareEngineering II",
+        dateHour: new Date(Date.now() - 3 * 24*60*60*1000).toISOString(),
+        modality: "In person",
+        room: "12A",
+        capacity: 50,
+        bookedPeople: 100,
+        teacherName: "Franco yjtyjty"
+    },
+]
 const lectures=[
         {
             lectureId: 1,
@@ -153,6 +185,9 @@ const handlers=[
     })),
     rest.get('http://localhost/api/teacher/statistics',((req,res,ctx)=>{
         return res(ctx.status(200), ctx.json(stats))
+    })),
+    rest.get('http://localhost/api/teacher/pastlectures',((req,res,ctx)=>{
+        return res(ctx.status(200), ctx.json(pastLectures))
     })),
 
 
