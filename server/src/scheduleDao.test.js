@@ -3,14 +3,6 @@ const db = require('./db');
 const scheduleDao = require('./scheduleDao');
 const lecturesDao = require('./lecturesDao');
 
-db.prepare('DELETE FROM Logs').run();
-db.prepare('DELETE FROM Enrollments').run();
-db.prepare('DELETE FROM Bookings').run();
-db.prepare('DELETE from Lectures').run();
-db.prepare('DELETE FROM Schedule').run();
-db.prepare('DELETE FROM Subjects').run();
-db.prepare('DELETE FROM Users').run();
-
 const usersStmt = db.prepare('INSERT OR IGNORE INTO Users(Id, Role, Name, Surname, Email, Password, SSN) VALUES(?,?,?,?,?,?,?)');
 usersStmt.run(['d0001', 'D', 'Marco', 'Torchiano', 'd0001@prof.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141393']);
 
@@ -93,4 +85,25 @@ test('Should change the modality to In person all the lectures related to that S
     } catch (err) {
         expect(err).toBe('No results for that SubjectId');
     }
+});
+
+test('Should return an error because the object is exactly equal to the already existing one', async () => {
+    let obj = { "ScheduleId": 1, "SubjectId": "XX678", "Class": 4, "Day": "Mon", "Capacity": 100, "Hour": "8:30-11:00"};
+    try {
+        await scheduleDao.modifySchedule(obj);
+    } catch (err) {
+        expect(err).toBe('The received object doesn\'t modify anything');
+    }
+});
+
+test('Should update the schedule and related lectures for Class and Capacity values', async () => {
+    let obj = { "ScheduleId": 1, "SubjectId": "XX678", "Class": 5, "Day": "Mon", "Capacity": 120, "Hour": "8:30-11:00"};
+    let lectIds = await scheduleDao.modifySchedule(obj);
+    expect(lectIds).toBeTruthy();
+});
+
+test('Should update the schedule and related lectures also for Day and Hour values', async () => {
+    let obj = { "ScheduleId": 1, "SubjectId": "XX678", "Class": 5, "Day": "Tue", "Capacity": 95, "Hour": "10:30-12:00"};
+    let lectIds = await scheduleDao.modifySchedule(obj);
+    expect(lectIds).toBeTruthy();
 });

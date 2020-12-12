@@ -1,11 +1,118 @@
 <testExecutions version="1">
+<file path="src\lecturesDao.test.js">
+<testCase name="Should return an array of objects related to Lectures stats" duration="2" />
+<testCase name="Should return an array of objects related to Lectures stats" duration="1" />
+<testCase name="Should return list of lectures for the userId" duration="5" />
+<testCase name="Should not return the list of lectures for a userId that doesn&apos;t exist" duration="0" />
+<testCase name="Should return 1 to indicate that the reservation was correctly inserted " duration="3" />
+<testCase name="Should not return 1 because lectureId doesn&apos;t correspond to any lecture " duration="1" />
+<testCase name="Should return a message indicating lectureId bookings are closed " duration="3" />
+<testCase name="Should insert the reservation in the waiting list because of the classroom capacity has been exceeded " duration="3" />
+<testCase name="Should move a reservation from the waiting list into the bookings because a seat has become available" duration="5" />
+<testCase name="Second reservation should return a message showing that a seat for that lectureId is already booked" duration="1" />
+<testCase name="Should return list of student booked for a certain lectureId" duration="2" />
+<testCase name="Should not return list of student but undefined because of wrong lectureId" duration="0" />
+<testCase name="Should return info about all the lectures scheduled for tomorrow, so that email notifications can be sent" duration="2" />
+<testCase name="Should return an object with necessary info related to specific booking, so that the email confirmation can be sent" duration="2" />
+<testCase name="Should return an empty object" duration="0" />
+<testCase name="Should permit the deletion of the booking by the student" duration="3" />
+<testCase name="Should reject the request of deletion of booking by the student because the lectureId doesn&apos;t exist" duration="0" />
+<testCase name="Should reject the request of deletion of booking by the student because his booking doesn&apos;t exist" duration="3" />
+<testCase name="Should permit the deletion of the booking by the student that was in waiting list (no update of BookedPeople number)" duration="3" />
+<testCase name="Should permit the deletion of lecture by the teacher since the time constraint is satisfied" duration="3" />
+<testCase name="Should reject the request of deletion by a teacher because of the not satisfied time constraint" duration="0" />
+<testCase name="Should reject the request of deletion by a teacher" duration="0" />
+<testCase name="Should return Bookings for a certain student" duration="2" />
+<testCase name="Should return an array with only info element since nobody was booked for that cancelled lecture" duration="1" />
+<testCase name="Should return an array of info and emails" duration="1" />
+<testCase name="Should return an empty array since teacherId for that cancelled lecture doesn&apos;t exist" duration="4" />
+<testCase name="Should return Virtual as new Modality for the lecture" duration="7" />
+<testCase name="Should return a message error because a Virtual lecture cant be converted again" duration="1" />
+<testCase name="Should return the time constraint error" duration="3" />
+<testCase name="Should return error for incorrect lectureId" duration="1" />
+<testCase name="Should return an error because a Virtual lecture can&apos;t be booked" duration="3" />
+<testCase name="Should update the status of the student" duration="4" />
+<testCase name="Should not update the status of any student" duration="2" />
+<testCase name="Should return all the lectures of the last week for a certain studentId" duration="6" />
+<testCase name="Should return undefined because of the student didn&apos;t follow any lesson last week" duration="1" />
+<testCase name="Should return the Teacher related to a certain lectureId" duration="0" />
+<testCase name="Should return undefined because the lectureId is not related to a teacher" duration="1" />
+<testCase name="Should return undefined because the SubjectId doesn&apos;t exist" duration="0" />
+<testCase name="Should return undefined because the SubjectId doesn&apos;t exist" duration="0" />
+<testCase name="Should return 1 to indicate that the presentPerson" duration="2" />
+<testCase name="Should return error because presentPeople isn&apos;t a correct value" duration="4" />
+<testCase name="Should return error because values about update are not correct" duration="1" />
+<testCase name="Should return an error because the lecture is still in program" duration="0" />
+<testCase name="Should return just the the lectures of the past week" duration="2" />
+<testCase name="Should return just Lectures of a given Subject with reportes presences" duration="0" />
+</file>
+<file path="src\userDao.test.js">
+<testCase name="Should return correctly user by his email" duration="1" />
+<testCase name="Should return correctly user by his id" duration="1" />
+<testCase name="Should not return users with an email that does not exist" duration="0" />
+<testCase name="Should not return users with an id that does not exist" duration="1" />
+<testCase name="isStudent should resolve true if provided the correct id type" duration="0" />
+<testCase name="isStudent should reject if provided the wrong id type" duration="0" />
+<testCase name="isTeacher should resolve true if provided the correct id type" duration="1" />
+<testCase name="isTeacher should reject if provided the wrong id type" duration="0" />
+<testCase name="isManager should resolve true if provided the correct id type" duration="1" />
+<testCase name="isManager should reject if provided the wrong id type" duration="0" />
+<testCase name="isOfficer should resolve true if provided the correct id type" duration="0" />
+<testCase name="isOfficer should reject if provided the wrong id type" duration="1" />
+<testCase name="Hashed password should match with the provided plaintext one" duration="212" />
+<testCase name="Return an User by his/her SSN" duration="1" />
+</file>
+<file path="src\services\statistics.test.js">
+<testCase name="Test the correct computing of statistics" duration="6" />
+<testCase name="Test the correct computing of statistics about presences" duration="2" />
+</file>
 <file path="src\scheduleDao.test.js">
-<testCase name="Should populate Lectures" duration="36" />
-<testCase name="Should populate Lectures after making the table empty" duration="29" />
-<testCase name="Should get the Schedule" duration="17" />
-<testCase name="Should change the modality to Virtual all the lectures related to that SubjectId" duration="35" />
+<testCase name="Should populate Lectures" duration="35" />
+<testCase name="Should populate Lectures after making the table empty" duration="36" />
+<testCase name="Should get the Schedule" duration="3" />
+<testCase name="Should change the modality to Virtual all the lectures related to that SubjectId" duration="19" />
 <testCase name="Should change the modality to In person all the lectures related to that SubjectId" duration="2" />
-<testCase name="Should change the modality to In person all the lectures related to that SubjectId" duration="1" />
 <testCase name="Should change the modality to In person all the lectures related to that SubjectId" duration="0" />
+<testCase name="Should change the modality to In person all the lectures related to that SubjectId" duration="1" />
+<testCase name="Should return an error because the object is exactly equal to the already existing one" duration="0" />
+<testCase name="Should update the schedule and related lectures for Class and Capacity values" duration="2" />
+<testCase name="Should update the schedule and related lectures also for Day and Hour values" duration="3" />
+</file>
+<file path="src\services\email.test.js">
+<testCase name="Should send the email to teachers" duration="4" />
+<testCase name="Should send the email for booking confirmation" duration="1" />
+<testCase name="Should not send the email since that lectureId doesn&apos;t exist in the db" duration="0" />
+<testCase name="Should send emails to all the student booked for that cancelled lecture" duration="0" />
+<testCase name="Should not send emails because the array is empty" duration="1" />
+</file>
+<file path="src\logsDao.test.js">
+<testCase name="Should insert the record into Logs table, lecture passed as id" duration="2" />
+<testCase name="Should insert the record into Logs table, lecture passed directly as object with 2 properties" duration="8" />
+<testCase name="Should return all the records of Logs table in descending order" duration="2" />
+</file>
+<file path="src\services\importer.test.js">
+<testCase name="Should import students successfully" duration="2" />
+<testCase name="Should fail to import students when providing malformed csv file" duration="2" />
+<testCase name="Should import teachers successfully" duration="1" />
+<testCase name="Should fail to import teachers when providing malformed csv file" duration="1" />
+<testCase name="Should import courses successfully" duration="0" />
+<testCase name="Should fail to import courses when providing malformed csv file" duration="1" />
+<testCase name="Should import enrollments successfully" duration="1" />
+<testCase name="Should fail to import enrollments when providing malformed csv file" duration="1" />
+<testCase name="Should import schedules successfully" duration="0" />
+<testCase name="Should fail to import schedules when providing malformed csv file" duration="1" />
+</file>
+<file path="src\services\contactTracing.test.js">
+<testCase name="should return contact tracing" duration="6" />
+<testCase name="should return an error because the SSN doesn&apos;t correspond to a studentSSN but to a TeacherSSN" duration="0" />
+<testCase name="should throw an error if the student didnt have follow any lesson in the last week" duration="1" />
+</file>
+<file path="src\subjectsDao.test.js">
+<testCase name="Should return correctly subjectName by its id" duration="1" />
+<testCase name="Should not return subjects with an id that does not exist" duration="0" />
+<testCase name="Should return an array with subjectId, subjectName related to a teacherId" duration="0" />
+<testCase name="Should return an error because there aren&apos;t subjectIds related to that teacherId" duration="0" />
+<testCase name="Should return an error because the SubjectId doesn&apos;t exist" duration="1" />
+<testCase name="Should return the teacherId corresponded to that subjectId" duration="0" />
 </file>
 </testExecutions>
