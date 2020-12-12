@@ -95,8 +95,10 @@ class Manager extends React.Component {
                 console.log(logs)
                 let data = { columns: cols, rows: logs }
 
-                this.setState({ summaryOperations: summaryOperations, logs: logs, data: data, subjects: subjects })
-            })
+                this.setState({ summaryOperations: summaryOperations, logs: logs, data: data, subjects: subjects , serverErr:false})
+            }).catch((err)=> {
+                this.setState({serverErr:true})
+        })
     }
     onlyUnique(value, index, self) {
         return self.indexOf(value) === index;
@@ -149,7 +151,8 @@ class Manager extends React.Component {
                 if(res.length){
                     this.setState({searchData:res});
                     console.log(res)
-                    this.setState({
+                    this.setState({serverErr:false,
+                        emptyRes:false,
                         csvData:res.map(val=>({
                             BookCourse:val.Subject,
                             TeacherName:val.Teacher.Name,
@@ -158,8 +161,11 @@ class Manager extends React.Component {
                         }))
                     })
                 }else{
-                    alert('Request Error')
+                    this.setState({emptyRes: true})
                 }
+            })
+            .catch((err)=>{
+                this.setState({serverErr: true})
             })
     }
     downloadpdf = ()=>{
@@ -220,7 +226,9 @@ class Manager extends React.Component {
     render() {
         return (
             <Container className='manager' data-testid="manager-page" style={ { padding: 5 } }>
+                {this.state.serverErr && <Alert variant={"danger"}>Server error</Alert> }
                 <Row className="justify-content-md-center below-nav">
+
                     { this.state.logs && this.state.subjects && this.state.modality==='table' && <>
                         <Col xs={ 2 } className="col-2 justify-content-md-left">
                             <h4>Filters</h4>
@@ -408,7 +416,10 @@ class Manager extends React.Component {
                                                 </>
                                             ))
                                         }
-                                    </div>: <>{this.state.search!=='' && this.state.searchData.Errors && <div className='nodata'>No Data</div>}</>
+                                    </div>: <>
+                                        {this.state.search!=='' && this.state.searchData.Errors && <div className='nodata'>No Data</div>}
+                                        {this.state.emptyRes && <Alert variant={"danger"}>No results for your search</Alert> }
+                                        </>
                                 }
 
                                 {this.state.searchData.length>0 && <Row className="justify-content-md-center">
