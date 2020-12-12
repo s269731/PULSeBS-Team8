@@ -344,7 +344,6 @@ exports.getLecturesBySubjectId = (subjectId) => new Promise((resolve, reject) =>
   else reject('There aren\'t lectures for this subjectId');
 });
 
-// TODO: TO BE TESTED
 exports.getLecturesForPresenceStatisticsBySubjectId = (subjectId) => new Promise((resolve, reject) => {
   const sql = db.prepare("SELECT LectureId,DateHour,Capacity,BookedPeople,PresentPeople FROM Lectures WHERE SubjectId=? AND ReportPresence=1 AND DateHour < DateTime('now') ORDER BY DateHour");
   const rows = sql.all(subjectId);
@@ -430,8 +429,7 @@ exports.updatePresentPeople = (lectureId, presentPeople) => new Promise((resolve
   } else reject('Lecture is still in program');
 });
 
-// TODO: TO BE TESTED
-async function getPastLectures(teacherId) { //= > new Promise((resolve, reject) => {
+async function getTeacherPastLectures(teacherId) { //= > new Promise((resolve, reject) => {
   const sql = db.prepare('SELECT * FROM Lectures WHERE TeacherId = ?');
   const lectures = [];
   const now = new Date();
@@ -445,8 +443,8 @@ async function getPastLectures(teacherId) { //= > new Promise((resolve, reject) 
         const subjectName = await subjectDao.getSubjectName(rawlecture.SubjectId);
         const teacher = await userDao.getUserById(rawlecture.TeacherId);
         const teacherName = `${teacher.name} ${teacher.surname}`;
-        const reservation = getReservation(id, rawlecture.LectureId);
-        const lecture = new Lecture(rawlecture.LectureId, subjectName.SubjectName, teacherName, rawlecture.DateHour, rawlecture.Modality, rawlecture.Class, rawlecture.Capacity, rawlecture.BookedPeople, reservation, rawlecture.PresentPeople);
+        // const reservation = getReservation(id, rawlecture.LectureId);
+        const lecture = new Lecture(rawlecture.LectureId, subjectName.SubjectName, teacherName, rawlecture.DateHour, rawlecture.Modality, rawlecture.Class, rawlecture.Capacity, rawlecture.BookedPeople, undefined, rawlecture.PresentPeople);
 
         lectures.push(lecture);
       }
@@ -456,7 +454,7 @@ async function getPastLectures(teacherId) { //= > new Promise((resolve, reject) 
 } // ));
 
 exports.getTeacherByLectureId = getTeacherByLectureId;
-exports.getPastLectures = getPastLectures;
+exports.getTeacherPastLectures = getTeacherPastLectures;
 exports.getLecturesByUserId = getLecturesByUserId;
 exports.getTeachersForEmail = getTeachersForEmail;
 exports.getInfoBookingConfirmation = getInfoBookingConfirmation;

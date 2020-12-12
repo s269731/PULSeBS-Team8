@@ -151,7 +151,6 @@ async function computeTeacherStatistics(teacherId) {
   return statsArray;
 }
 
-// TODO: TO BE TESTED
 async function computeTeacherPresencesStatistics(teacherId) {
   const subjects = await subjectDao.getSubjectsByTeacherId(teacherId);
   const statsArray = [];
