@@ -48,3 +48,39 @@ test("Manager page rendering with logs", async () => {
   await waitFor(() => expect(mockGetLogs).toHaveBeenCalledTimes(1));
 });
  */
+/*TODO: find a solution to make jest work with canvasjs*/
+ it("handle search with non-ssn", async () => {
+    const mockSearch = jest.fn().mockImplementation(() => {
+      console.log("mockSearch mock triggered");
+    });
+    let { container } = render(
+      <Search Search={mockSearch} loading={false} error={false} />
+    );
+      act(() => {
+        let inputSsn = container.querySelector('input[name="ssn"]');
+        expect(inputSsn).not.toBe(null);
+       
+        fireEvent.change(inputSsn, {
+          target: { value: "DZ27229300" },
+        });
+        
+      const button = container.querySelector("[data-testid=Search-button]");
+      button.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+  
+      expect(mockSearch).toHaveBeenCalledTimes(1);
+    });
+  
+    it("handle Search with ssn", async () => {
+      const mockSearch = jest.fn().mockImplementation(() => {
+        console.log("mockSearch mock triggered");
+      });
+      let { container } = render(
+        <Search Search={mockSearch} loading={false} error={false} />
+    );
+  
+      const button = container.querySelector("[data-testid=Search-button]");
+      button.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+  
+      await waitFor(() => expect(mockSearch.toHaveBeenCalledTimes(0)));
+    });
+  });
