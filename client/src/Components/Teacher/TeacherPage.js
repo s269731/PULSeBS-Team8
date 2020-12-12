@@ -67,7 +67,9 @@ class TeacherPage extends React.Component {
             if(subs.errors){
                 this.setState({
                     subjects: [],
-                    lectures: [], loading: null,
+                    lectures: [],
+                    pastLectures:[],
+                    loading: null,
                     serverErr: null, noLect: false, noSubj:true
                 })
             }
@@ -84,7 +86,8 @@ class TeacherPage extends React.Component {
                 } else {
                     this.setState({
                         subjects: subs,
-                        lectures: [], loading: null,
+                        lectures: [],
+                        pastLectures:[], loading: null,
                         serverErr: null, noLect: true, noSubj:false
                     })
                 }
@@ -98,6 +101,18 @@ class TeacherPage extends React.Component {
         }
         this.setState({ serverErr: true, loading: null , noLect:false, noSubj:false});
       });
+    API.getPastLecturesTeacher().then((lects) => {
+        console.log(lects)
+        this.setState({pastLectures:lects})
+    }).catch((err) => {
+        console.log(err.status);
+        if (err.status === 401) {
+            this.props.notLoggedUser();
+        }
+        this.setState({ serverErr: true, loading: null , noLect:false, noSubj:false});
+    });
+
+
   }
   componentDidMount() {
     //retrieve lectures for the teacher
@@ -135,6 +150,7 @@ class TeacherPage extends React.Component {
                         {this.state.subjects && this.state.lectures.length>0 && !this.state.noSubj ? <LectureTable
                             subjects={this.state.subjects}
                             lectures={this.state.lectures}
+                            pastLectures={this.state.pastLectures}
                             cancelLecture={this.cancelLecture}
                             changeModalityLecture={this.changeModalityLecture}
                             recordAttendance={this.recordAttendance}

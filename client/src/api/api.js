@@ -48,46 +48,57 @@ async function retrieveLectures(url){
         .then((response) => {
           if (response.ok) {
             response.json().then((list) => {
-              resolve(
-                  list
-                      .sort((l1, l2) => {
-                        return new Date(l1.dateHour) - new Date(l2.dateHour);
-                      })
-                      .map((l) => {
-                        let now = new Date();
-                        let lectDay = new Date(l.dateHour);
-                        let canDelete = lectDay - now - 3600000 > 0;
-                        let canModify= lectDay - now - 3600000/2 > 0;
-                        let fields = l.dateHour.split("T");
-                        let date = fields[0];
-                       let min=lectDay.getMinutes().toString()
-                        if(min==='0'){
-                          min='00'
-                        }
-                        let hour = lectDay.getHours() + ":" + min;
-                            /*
-                            fields[1].split(".")[0].split(":")[0] +
-                            ":" +
-                            fields[1].split(".")[0].split(":")[1];
-                             */
-                        return {
-                          id: l.lectureId,
-                          subject: l.subjectName,
-                          date: date,
-                          hour: hour,
-                          modality: l.modality,
-                          room: l.className,
-                          capacity: l.capacity,
-                          bookedStudents: l.bookedPeople,
-                          teacherName: l.teacherName,
-                          lectureId: l.lectureId,
-                          booked: l.booked,
-                          visible: true,
-                          canDelete: canDelete,
-                          canModify:canModify
-                        };
-                      })
-              );
+              console.log(list)
+              if(!list.errors) {
+                resolve(
+                    list
+                        .sort((l1, l2) => {
+                          return new Date(l1.dateHour) - new Date(l2.dateHour);
+                        })
+                        .map((l) => {
+                          let hasAttendance= l.presentPeople && l.presentPeople !==0
+                          let now = new Date();
+                          let lectDay = new Date(l.dateHour);
+                          let canDelete = lectDay - now - 3600000 > 0;
+                          let canModify = lectDay - now - 3600000 / 2 > 0;
+                          let canRecordAttendance= !hasAttendance && lectDay - now < 0;
+                          let fields = l.dateHour.split("T");
+                          let date = fields[0];
+                          let min = lectDay.getMinutes().toString()
+                          if (min === '0') {
+                            min = '00'
+                          }
+                          let hour = lectDay.getHours() + ":" + min;
+                          /*
+                          fields[1].split(".")[0].split(":")[0] +
+                          ":" +
+                          fields[1].split(".")[0].split(":")[1];
+                           */
+                          return {
+                            id: l.lectureId,
+                            subject: l.subjectName,
+                            date: date,
+                            hour: hour,
+                            modality: l.modality,
+                            room: l.className,
+                            capacity: l.capacity,
+                            bookedStudents: l.bookedPeople,
+                            presentStudents:l.presentPeople,
+                            teacherName: l.teacherName,
+                            lectureId: l.lectureId,
+                            booked: l.booked,
+                            visible: true,
+                            canDelete: canDelete,
+                            canModify:canModify,
+                            canRecordAttendance : canRecordAttendance,
+                            hasAttendance: hasAttendance
+                          };
+                        })
+                );
+              }
+          else{
+            resolve(list);
+              }
             });
           } else {
             response
@@ -119,6 +130,11 @@ async function getLecturesTeacher() {
   let url = "/teacher/lectures";
   return await retrieveLectures(url)
 
+}
+
+async function getPastLecturesTeacher(){
+  let url= "/teacher/pastlectures";
+  return await retrieveLectures(url)
 }
 
 async function getUser() {
@@ -395,6 +411,8 @@ async function insertAttendanceInfo(id, value){
     }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] }) }); // connection errors
   });
 }
+
+
 const API = {
   getUploadUrl,
   Login,
@@ -404,6 +422,7 @@ const API = {
   bookLeacture,
   getStudentListByLectureId,
   getLecturesTeacher,
+  getPastLecturesTeacher,
   deleteLectureByTeacher,
   cancelBookingByStudent,
   changeModalityLecture,

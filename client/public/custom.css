@@ -88,7 +88,7 @@
 .actionsAlarm, .actionsInfo{
     margin-top:0px;
 }
-#controlled-main-tab-tab-bookings, #controlled-main-tab-tab-attendance {
+#controlled-main-tab-tab-bookings, #controlled-main-tab-tab-attendance,#controlled-teacher-tab-tab-next-lectures, #controlled-teacher-tab-tab-past-lectures {
 
     font-size: large;
 }

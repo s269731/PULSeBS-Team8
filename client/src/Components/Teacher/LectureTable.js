@@ -6,7 +6,7 @@ import {
   Card,
   Accordion,
   Button,
-  ButtonGroup,
+  ButtonGroup, Tabs, Tab,
 } from "react-bootstrap";
 import StudentList from "./StudentList";
 import ActionsForm from "./ActionsForm";
@@ -106,22 +106,43 @@ class LectureTable extends React.Component {
       loading: true,
       serverErr: false,
       lectures: props.lectures,
+      pastLectures: props.pastLectures,
+      modality:'next-lectures'
     };
   }
-
+  setModality(modality){
+    this.setState({modality:modality})
+  }
   handleLectures(id) {
-    if (id === "del") {
-      let lects = this.props.lectures;
-      for (let l of lects) {
-        l.visible = true;
+    if(this.state.modality==='next-lectures'){
+        if (id === "del") {
+          let lects = this.props.lectures;
+          for (let l of lects) {
+            l.visible = true;
+          }
+          this.setState({ lectures: lects });
+        } else {
+          let lects = this.props.lectures;
+          for (let l of lects) {
+            l.visible = l.subject === id;
+          }
+          this.setState({ lectures: lects });
+        }
+    }
+    if(this.state.modality==='past-lectures'){
+      if (id === "del") {
+        let lects = this.props.pastLectures;
+        for (let l of lects) {
+          l.visible = true;
+        }
+        this.setState({ pastLectures: lects });
+      } else {
+        let lects = this.props.pastLectures;
+        for (let l of lects) {
+          l.visible = l.subject === id;
+        }
+        this.setState({ pastLectures: lects });
       }
-      this.setState({ lectures: lects });
-    } else {
-      let lects = this.props.lectures;
-      for (let l of lects) {
-        l.visible = l.subject === id;
-      }
-      this.setState({ lectures: lects });
     }
   }
   render() {
@@ -129,10 +150,10 @@ class LectureTable extends React.Component {
       <>
         <Container fluid data-testid="lecturetable" className={"lectureTable"}>
           <Row className="justify-content-md-center below-nav">
-            <h3 className={"headerLectureList"}>Your next lectures </h3>
+            <h3 className={"headerLectureList"}>Your lectures </h3>
           </Row>
           <Row className="justify-content-md-center">
-            <Col className="col-2 justify-content-md-center">
+            <Col className="col-2 justify-content-md-center below-nav">
               <h5>Courses</h5>
               <ButtonGroup vertical>
                 {this.props.subjects.map((e) => {
@@ -168,20 +189,53 @@ class LectureTable extends React.Component {
               </ButtonGroup>
             </Col>
             <Col className="col-8">
-              <Accordion className="box-shadow" defaultActiveKey="0">
-                {this.props.lectures.map((e, id) => {
-                  return (
+              <Tabs
+                id="controlled-teacher-tab"
+                activeKey={this.state.modality}
+                onSelect={(k) => this.setModality(k)}
+                variant={"pills"}>
+              <Tab eventKey="next-lectures" title="My next lectures">
+            <Row  className="justify-content-md-center below-tab">
+                <Col>
+
+                <Accordion className="box-shadow" defaultActiveKey="0">
+                  {this.props.lectures.map((e, id) => {
+                    return (
+                            <LectureItem
+                              eId={id+1}
+                              lecture={e}
+                              cancelLecture={this.props.cancelLecture}
+                              changeModalityLecture={this.props.changeModalityLecture}
+                              recordAttendance={this.props.recordAttendance}
+                              notLoggedUser={this.props.notLoggedUser}
+                            />
+                    );
+                  })}
+                </Accordion>
+              </Col>
+            </Row>
+              </Tab>
+              <Tab eventKey="past-lectures" title="My past lectures">
+                <Row  className="justify-content-md-center below-tab">
+                <Col >
+                  <Accordion className="box-shadow" defaultActiveKey="0">
+                    {this.props.pastLectures.map((e, id) => {
+                      return (
                           <LectureItem
-                            eId={id+1}
-                            lecture={e}
-                            cancelLecture={this.props.cancelLecture}
-                            changeModalityLecture={this.props.changeModalityLecture}
-                            recordAttendance={this.props.recordAttendance}
-                            notLoggedUser={this.props.notLoggedUser}
+                              eId={id+1}
+                              lecture={e}
+                              cancelLecture={this.props.cancelLecture}
+                              changeModalityLecture={this.props.changeModalityLecture}
+                              recordAttendance={this.props.recordAttendance}
+                              notLoggedUser={this.props.notLoggedUser}
                           />
-                  );
-                })}
-              </Accordion>
+                      );
+                    })}
+                  </Accordion>
+                </Col>
+                </Row>
+              </Tab>
+            </Tabs>
             </Col>
           </Row>
         </Container>
