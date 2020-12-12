@@ -412,6 +412,7 @@ async function getModalityBySubjectId(subjectId) {
   const stmt = db.prepare(sql);
   const res = stmt.get(subjectId);
 
+  if (res.Modality === null) return undefined;
   return res;
 }
 

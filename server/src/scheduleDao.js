@@ -5,6 +5,11 @@ const lecturesDao = require('./lecturesDao');
 
 const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
 
+const endSemester = new Date(); // Suppose the first semester ends on 15th Jan
+endSemester.setDate(16);
+endSemester.setMonth(0);
+endSemester.setYear(2021);
+
 async function populateLectures() {
   const sql = 'SELECT * FROM Lectures';
   const stmt = db.prepare(sql);
@@ -22,10 +27,6 @@ async function populateLectures() {
     const current = new Date(); // get current date
     const weekStart = current.getDate() - current.getDay() + 1;
     const day_week = new Date(current.setDate(weekStart)); // get Monday of the current week
-    const endSemester = new Date(); // Suppose the first semester ends on 15th Jan
-    endSemester.setDate(16);
-    endSemester.setMonth(0);
-    endSemester.setYear(2021);
     let dates = [];
     let d = {};
 
@@ -91,34 +92,113 @@ async function getSchedule() {
 }
 
 exports.changeModalitySchedule = (array) => new Promise((resolve, reject) => {
-    if (array.length > 0) {
-        array.forEach(async (a) => {
-            if (a.Modality === 'Virtual') {
-                const sql3 = "SELECT LectureId FROM Lectures WHERE SubjectId=? AND DateHour > DATETIME('now')";
-                const stmt3 = db.prepare(sql3);
-                let ids = stmt3.all(a.SubjectId);
-                if (ids.length === 0) reject('No results for that SubjectId');
-                else {
-                  const sql = "UPDATE Lectures SET Modality='In person' WHERE SubjectId=? AND DateHour > DATETIME('now')"
-                  const stmt = db.prepare(sql);
-                  let res = stmt.run(a.SubjectId);
-                  if (res.changes) { resolve({ result: 'In person' }); } else { reject('Error in updating row'); }
-                }
-            } else {
-                const sql2 = "SELECT LectureId FROM Lectures WHERE SubjectId=? AND DateHour > DATETIME('now')";
-                const stmt2 = db.prepare(sql2);
-                let rows = stmt2.all(a.SubjectId);
-                if (rows.length > 0) {
-                    let lectIds = rows.map(({ LectureId }) => LectureId);   // array of lectureIds related to that SubjectId
-                    lectIds.forEach(async (lect) => {
-                    let res = await lecturesDao.changeLectureModality(lect);  
-                    if (res.result === 'Virtual') { resolve({ result: 'Virtual' }); } else { reject('Error in changing the modality to Virtual'); }                      
-                    });
-                    lectIds = [];
-                } else reject('No results for that SubjectId');
-            }
+  if (array.length > 0) {
+      array.forEach(async (a) => {
+          if (a.Modality === 'Virtual') {
+              const sql3 = "SELECT LectureId FROM Lectures WHERE SubjectId=? AND DateHour > DATETIME('now')";
+              const stmt3 = db.prepare(sql3);
+              let ids = stmt3.all(a.SubjectId);
+              if (ids.length === 0) reject('No results for that SubjectId');
+              else {
+                const sql = "UPDATE Lectures SET Modality='In person' WHERE SubjectId=? AND DateHour > DATETIME('now')"
+                const stmt = db.prepare(sql);
+                let res = stmt.run(a.SubjectId);
+                if (res.changes) { resolve({ result: 'In person' }); } else { reject('Error in updating row'); }
+              }
+          } else {
+              const sql2 = "SELECT LectureId FROM Lectures WHERE SubjectId=? AND DateHour > DATETIME('now')";
+              const stmt2 = db.prepare(sql2);
+              let rows = stmt2.all(a.SubjectId);
+              if (rows.length > 0) {
+                  let lectIds = rows.map(({ LectureId }) => LectureId);   // array of lectureIds related to that SubjectId
+                  lectIds.forEach(async (lect) => {
+                  let res = await lecturesDao.changeLectureModality(lect);  
+                  if (res.result === 'Virtual') { resolve({ result: 'Virtual' }); } else { reject('Error in changing the modality to Virtual'); }                      
+                  });
+                  lectIds = [];
+              } else reject('No results for that SubjectId');
+          }
+      });
+  }
+});
+
+// info_schedule is an object with ScheduleId, SubjectId, Class, Day, Capacity and Hour
+exports.modifySchedule = (info_schedule) => new Promise((resolve, reject) =>{
+  const sql = "SELECT * FROM Schedule WHERE ScheduleId=?";
+  const stmt = db.prepare(sql);
+  const found_schedule = stmt.get(info_schedule.ScheduleId);
+  let rows = [];
+  let transaction;
+
+  if (JSON.stringify(info_schedule) !== JSON.stringify(found_schedule)) {
+    let today = new Date();
+    const sql1 = "SELECT LectureId, DateHour FROM Lectures WHERE ScheduleId=? AND DateHour>?";
+    const stmt1 = db.prepare(sql1);
+    rows = stmt1.all(info_schedule.ScheduleId, today.toISOString());
+    if (rows.length > 0) {
+      const sql3 = "UPDATE Schedule SET Class=?, Day=?, Capacity=?, Hour=? WHERE ScheduleId=?";
+      const stmt3 = db.prepare(sql3);
+      //const res = stmt3.run(info_schedule.Class, info_schedule.Day, info_schedule.Capacity, info_schedule.Hour, info_schedule.ScheduleId);
+      if (info_schedule.Day === found_schedule.Day && info_schedule.Hour === found_schedule.Hour) {
+        // If Day and Hour were not modified, we can update directly only Class and Capacity
+        const sql2 = "UPDATE Lectures SET Class=?, Capacity=? WHERE ScheduleId=? AND DateHour>?";
+        const stmt2 = db.prepare(sql2);
+        transaction = db.transaction(() => {
+          let res1 = stmt2.run(info_schedule.Class, info_schedule.Capacity, info_schedule.ScheduleId, today.toISOString());
+          let res2 = stmt3.run(info_schedule.Class, info_schedule.Day, info_schedule.Capacity, info_schedule.Hour, info_schedule.ScheduleId);
+          return res1.changes > 0 && res2.changes > 0;
         });
-    }
+      } else {  // We need to update also Day and/or Hour
+        const current = new Date(rows[0].DateHour);
+        const weekStart = current.getDate() - current.getDay() + 1;
+        const day_week = new Date(current.setDate(weekStart));  // get Monday of the week of the first scheduled lesson
+        let i;
+  
+        switch(info_schedule.Day) {
+          case "Mon":
+            i = 0;
+            break;
+          case "Tue":
+            i = 1;
+            break;
+          case "Wed":
+            i = 2;
+            break;
+          case "Thu":
+            i = 3;
+            break;
+          case "Fri":
+            i = 4;
+            break;
+        }
+        day_week.setDate(day_week.getDate() + i);
+        const startHour = info_schedule.Hour.split('-')[0];
+        const hour = startHour.split(':'); // hour[0] = hour, hour[1] = minutes
+        day_week.setHours(hour[0], hour[1], 0, 0);
+        
+        const sql4 = "UPDATE Lectures SET Class=?, Capacity=?, DateHour=? WHERE LectureId=?";
+        const stmt4 = db.prepare(sql4);
+        transaction = db.transaction(() => {
+          let res1;
+          Promise.all(rows.map((row) => {
+            if (day_week.getTime() > today.getTime() && day_week.getTime() < endSemester.getTime()) {
+              res1 = stmt4.run(info_schedule.Class, info_schedule.Capacity, day_week.toISOString(), row.LectureId);
+            } else {
+              rows.splice(rows.indexOf(row), 1);
+            }
+            day_week.setDate(day_week.getDate() + 7);
+          }));
+          let res2 = stmt3.run(info_schedule.Class, info_schedule.Day, info_schedule.Capacity, info_schedule.Hour, info_schedule.ScheduleId);
+          return res1.changes > 0 && res2.changes > 0;
+        });
+      }
+    } else reject('There are no lectures to modify related to that Schedule');
+    let lectIds = rows.map(({ LectureId }) => LectureId);
+    const transactionresult = transaction();
+    if (transactionresult === true) resolve( lectIds );
+    else reject('There was an error in modifying Schedule and involved Lectures');
+  }
+  reject('The received object doesn\'t modify anything');
 });
 
 exports.populateLectures = populateLectures;
