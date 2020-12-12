@@ -340,6 +340,19 @@ async function getTeacherStats(){
     throw err;
   }
 }
+async function getTeacherAttendanceStats(){
+  let url='/teacher/presencestatistics';
+  const response = await fetch(baseURL + url);
+  const stats = await response.json();
+  if (response.ok) {
+    console.log(stats)
+    return stats
+  } else {
+    console.log(stats)
+    let err = { status: response.status, errObj: stats};
+    throw err;
+  }
+}
 async function getCourses(){
   let url = "/teacher/subjects";
   const response = await fetch(baseURL + url);
@@ -428,6 +441,7 @@ const API = {
   changeModalityLecture,
   getLogs,
   getTeacherStats,
+  getTeacherAttendanceStats,
   getCourses,
   getContactTracing,
   getOfficerSchedule,
