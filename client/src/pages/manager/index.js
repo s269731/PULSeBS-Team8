@@ -5,13 +5,9 @@ import API from "../../api/api";
 import LogGraph from './LogGraph'
 import { MDBDataTable } from 'mdbreact';
 import { CSVLink } from "react-csv";
+import html2pdf from 'html2pdf.js';
 
-const csvData = [
-    ["firstname", "lastname", "email"],
-    ["Ahmed", "Tomi", "ah@smthing.co.com"],
-    ["Raed", "Labes", "rl@smthing.co.com"],
-    ["Yezzi", "Min l3b", "ymin@cocococo.com"]
-];
+
 
 let typeOp = [
     'Insert reservation',
@@ -159,7 +155,11 @@ class Manager extends React.Component {
                 }
             })
     }
-    
+    downloadpdf = ()=>{
+        let ele = document.getElementsByClassName('searchData')[0];
+        html2pdf().from(ele).save();
+    }
+
     render() {
         return (
             <Container className='manager' data-testid="manager-page" style={ { padding: 5 } }>
@@ -331,7 +331,7 @@ class Manager extends React.Component {
                                             </CSVLink>
                                         </Button>
 
-                                        <Button>Dowmload PDF</Button>
+                                        <Button onClick={this.downloadpdf}>Dowmload PDF</Button>
                                     </Col>
                                 </Row>
                             </Tab>
