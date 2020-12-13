@@ -105,12 +105,39 @@ describe('Teachers', () => {
 
   // TODO: test the time constraints
 
+  test('teachers can see past lectures for recording presence', async () => {
+    await page.goto(baseUrl + 'teacher');
+    await page.waitForSelector('[data-testid="teacher-page"]');
+    await page.waitForSelector('[data-testid="lecturetable"]');
+    await page.click('[id="controlled-teacher-tab-tab-past-lectures"]');
+    await page.waitForSelector('[id="controlled-teacher-tab-tabpane-past-lectures"]');
+  }, 9000000);
+
+  test('teachers can record presence for a lecture', async () => {
+    await page.goto(baseUrl + 'teacher');
+    await page.waitForSelector('[data-testid="teacher-page"]');
+    await page.waitForSelector('[data-testid="lecturetable"]');
+    await page.click('[id="controlled-teacher-tab-tab-past-lectures"]');
+    await page.waitForSelector('[id="controlled-teacher-tab-tabpane-past-lectures"]');
+    await page.waitForSelector('[data-testid="record-attendance-lecture-button"]');
+  }, 9000000);
+
   test('teachers can show the statistics page', async () => {
     await page.goto(baseUrl + 'teacher');
     await page.waitForSelector('[data-testid="teacher-page"]');
     await page.waitForSelector('[data-testid="lecturetable"]');
     await page.click('[id="controlled-tab-tab-stats"]');
     await page.waitForSelector('[data-testid="logs-daily-table"]');
+  }, 9000000);
+
+  test('teachers can show the attendance statistics graph', async () => {
+    await page.goto(baseUrl + 'teacher');
+    await page.waitForSelector('[data-testid="teacher-page"]');
+    await page.waitForSelector('[data-testid="lecturetable"]');
+    await page.click('[id="controlled-tab-tab-stats"]');
+    await page.waitForSelector('[data-testid="logs-daily-table"]');
+    await page.click('[id="controlled-main-tab-tab-attendance"]');
+    await page.waitForSelector('[id="controlled-main-attendance-tab-tabpane-daily-attendance"]');
   }, 9000000);
 
   test('teachers can logout', async () => {
