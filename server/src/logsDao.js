@@ -9,6 +9,7 @@ async function insertLog(userId, typeOp, obj) {
   // 1 = cancel reservation (only students)
   // 2 = cancel lecture (only teachers)
   // 3 = lectures switched to virtual modality (only teachers)
+  // 4 = record attendance (only teachers)
 
   const date_hour = new Date();
   const timestamp = date_hour.getTime();
@@ -41,6 +42,7 @@ async function getLogs() {
   // 1 = cancel reservation (only students)
   // 2 = cancel lecture (only teachers)
   // 3 = lectures switched to virtual modality (only teachers)
+  // 4 = record attendance (only teachers)
 
   const sql = 'SELECT * FROM Logs ORDER BY Id DESC';
   const stmt = db.prepare(sql);
@@ -71,7 +73,7 @@ async function getLogs() {
     const records = stmt2.all();
     const obj3 = {};
 
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 5; i++) {
       const obj2 = records.find((o) => o.TypeOp === i);
       if (obj2 === undefined) obj3[`TypeOp${i}`] = 0;
       else obj3[`TypeOp${i}`] = obj2.count;

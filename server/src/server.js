@@ -238,6 +238,7 @@ app.get('/api/manager/logs', async (req, res) => {
   // 1 = cancel reservation (only students)
   // 2 = cancel lecture (only teachers)
   // 3 = lectures switched to virtual modality (only teachers)
+  // 4 = record attendance (only teachers) 
 
   try {
     const logs = await logsDao.getLogs();
@@ -298,9 +299,11 @@ app.post('/api/officer/changemodalitysched', async (req, res) => {
 });
 
 app.post('/api/teacher/insertPresence', async (req, res) => {
+  const userId = req.user && req.user.user;
   const { lectureId, presentPeople } = req.body;
   try {
     const result = await lecturesDao.updatePresentPeople(lectureId, presentPeople);
+    logsDao.insertLog(userId, 4, lectureId);
     res.json(result);
   } catch (error) {
     res.json({ errors: [{ msg: error }] });
