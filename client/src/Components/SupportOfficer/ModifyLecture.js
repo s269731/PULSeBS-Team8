@@ -1,9 +1,9 @@
 import React from "react";
 import {
   Container,
+  Card,
   Row,
   Col,
-  Card,
   Accordion,
   Button,
   ButtonGroup,
@@ -11,8 +11,29 @@ import {
 } from "react-bootstrap";
 import API from "../../api/api";
 import Jumbotron from "../../assets/edit.jpg";
+import TimeField from 'react-simple-timefield';
 
-
+const options = [
+  {
+    label: "Mon",
+    value: "Mon"
+  }, {
+    label: "Tue",
+    value: "Tue"
+  }, {
+    label: "Wed",
+    value: "Wed"
+  }, {
+    label: "Thu",
+    value: "Thu"
+  }, {
+    label: "Fri",
+    value: "Fri"
+  }, {
+    label: "Sat",
+    value: "Sat"
+  }
+];
 
 class ModifyLecture extends React.Component {
   constructor(props) {
@@ -31,8 +52,7 @@ class ModifyLecture extends React.Component {
         }, {
           SubjectId: 4,
           SubjectName: "4th Year"
-        }
-        , {
+        }, {
           SubjectId: 5,
           SubjectName: "5th Year"
         }
@@ -41,87 +61,143 @@ class ModifyLecture extends React.Component {
       checkedCourses: [],
       students: [],
       loading: true,
+      refresh: false,
       serverErr: false,
       lectures: [],
+      filteredLec1: [],
       filteredLec2: [],
-      allChecked: false
+      allChecked: false,
+      changeYear: false,
+      year: "del",
+      weekDay: "",
+      disabled: true,
+      scId: null
     };
   }
 
-  deleteCourse(id){
-    let lectures = this.state.lectures.filter(lectures => 
-      {return lectures !== id});
+  deleteCourse(id) {
+    let lectures = this
+      .state
+      .lectures
+      .filter(lectures => {
+        return lectures !== id
+      });
     this.setState({lectures: lectures});
   }
 
   componentDidMount() {
-    API.getOfficerSchedule()
-        .then((res) => {
-          this.setState({ lectures: res});
+    API
+      .getOfficerSchedule()
+      .then((res) => {
+        if (this.state.changeYear === true) {
+          this.setState({lectures: this.state.filteredLec1})
           this.setState({filteredLec2: res})
-        })
-        .catch((err) => {
-          if (err.status === 401) {
-            // this.props.notLoggedUser();
-          }
-           this.setState({ serverErr: true, loading: null });
-        });
+          this.changeYear(this.state.year)
+        } else {
+          this.setState({lectures: res});
+          this.setState({filteredLec2: res})
+        }
+      })
+      .catch((err) => {
+        if (err.status === 401) {
+          // this.props.notLoggedUser();
+        }
+        this.setState({serverErr: true, loading: null});
+      });
   }
 
-
-  changeYear=(id)=>{
+  changeYear = (id) => {
     if (id === "del") {
       this.setState({lectures: this.state.filteredLec2});
+      this.setState({year: "del"})
+    } else {
+      this.setState({checkedCourses: []});
+      this.setState({year: id})
+      this.setState({filteredLec2: this.state.filteredLec2})
+      let filteredLec = this
+        .state
+        .filteredLec2
+        .filter(item => {
+          return item.Year === id
+        });
+      this.setState({lectures: filteredLec});
+      this.setState({filteredLec1: filteredLec})
+
     }
-    else{ 
-    this.setState({filteredLec2: this.state.filteredLec2})
-    let filteredLec = this.state.filteredLec2.filter(item => 
-      {return item.Year === id});
-    this.setState({lectures: filteredLec});
   }
-}
 
-selectAll(event){
-  const isChecked = event.target.checked;
-  if (isChecked) {
-    let courses = [...this.state.checkedCourses,test];
-    this.setState=({allChecked: true})
-    this.setState({checkedCourses: courses});
-  } else {
-    let courses = this.state.checkedCourses.filter(courses => 
-      {return courses.id !== test.id});
-    this.setState({checkedCourses: courses});
-  }
-}
+  // selectAll(event){   const isChecked = event.target.checked;   if (isChecked)
+  // {     let courses = [...this.state.checkedCourses,test];
+  // this.setState=({allChecked: true})     this.setState({checkedCourses:
+  // courses});   } else {     let courses =
+  // this.state.checkedCourses.filter(courses =>       {return courses.id !==
+  // test.id});     this.setState({checkedCourses: courses});   } }
 
-  chooseCourse(event, id, subjId, modality) {
+  chooseCourse = (event, id, subjId, modality) => {
     const isChecked = event.target.checked;
-    let test={
+    let test = {
       id: id,
       SubjectId: subjId,
       Modality: modality
     }
     if (isChecked) {
-      let courses = [...this.state.checkedCourses,test];
+      let courses = [
+        ...this.state.checkedCourses,
+        test
+      ];
       this.setState({checkedCourses: courses});
+      // this.setState({refresh: true})
     } else {
-      let courses = this.state.checkedCourses.filter(courses => 
-        {return courses.id !== test.id});
+      let courses = this
+        .state
+        .checkedCourses
+        .filter(courses => {
+          return courses.id !== test.id
+        });
       this.setState({checkedCourses: courses});
     }
   }
 
+  changeModality = (courses) => {
+    API
+      .changeModalityCourse(courses)
+      .then(() => {
+        this.setState({changeYear: true})
+        this.componentDidMount();
+      })
+      .catch((err) => {
+        if (err.status === 401) {
+          this
+            .props
+            .notLoggedUser();
+        }
+      });
+  }
 
-  changeModality=(courses)=>{
-    API.changeModalityCourse(courses)
-    .then(() => {
-      console.log("helloSuccess")
-      // this.componentDidMount();
-    }).catch((err) => {
-  console.log(err+"");
-  if (err.status === 401) {
-    this.props.notLoggedUser();
-  }});
+  setSelectedOption = (e, id) => {
+    this.setState({weekDay: e})
+  }
+  enableEdit(id) {
+    this
+      .state
+      .lectures
+      .map((e) => {
+        {
+          e
+            .schedules
+            .map((sc) => {
+              if (sc.ScheduleId === id) {
+                this.setState({scId: id});
+                this.setState({disabled: false});
+              }
+            })
+        }
+
+      })
+
+  }
+  disableEdit() {
+    this.setState({scId: null})
   }
 
   render() {
@@ -129,63 +205,62 @@ selectAll(event){
     <Container fluid data-testid="lecturetable" className={"lectureTable"}>
       <Row className="justify-content-md-center below-nav">
         <h3 className={"headerLectureList"}>List of Courses:
-        </h3 >
+        </h3>
       </Row>
       < Row className="justify-content-md-center">
         <Col className="col-2 justify-content-md-center">
-          <h3>Years</h3>
+          <h3>Years</h3>{this.state.refresh}
           <ButtonGroup vertical>
-            {this.state.Years.map((e) => {
+            {this
+              .state
+              .Years
+              .map((e) => {
                 // console.log(e)
-                return ( <> 
-                <Button
+                return ( <> <Button
                   variant="primary"
                   onClick={() => this.changeYear(e.SubjectId)}
                   data-testid="handlelecture-button">
                   {e.SubjectName}
-                </Button> < br /> 
-                </>);
+                </Button> < br /> </>);
               })}
-              <Button
-                  variant={"danger"}
-                  onClick={(e) => {
-                    this.changeYear(this.state.delete);
-                  }}
-                  data-testid="handlelecture-del-button"
-                >
-                  Cancel filters
-                </Button>
+            <Button
+              variant={"danger"}
+              onClick={(e) => {
+              this.changeYear(this.state.delete);
+            }}
+              data-testid="handlelecture-del-button">
+              Cancel filters
+            </Button>
           </ButtonGroup>
           <br></br>
           <br></br>
           <br></br>
-          
-          {this.state.checkedCourses.length > 0  &&
-          <h4>Change Modality</h4>
-          }
-          {this.state.checkedCourses.length > 0 && 
-          <Button block  variant="info" data-testid="handlelecture-button14"
-          onClick={() => this.changeModality(this.state.checkedCourses)}>
+
+          {this.state.checkedCourses.length > 0 && <h4>Change Modality</h4>
+}
+          {this.state.checkedCourses.length > 0 && <Button
+            block
+            variant="info"
+            data-testid="handlelecture-button14"
+            onClick={() => this.changeModality(this.state.checkedCourses)}>
             Change Modality
           </Button>
-           }
-         
+}
+
         </Col>
         <Row>
           <Row></Row>
           <Row></Row>
 
-        <Form.Check     
-                          className="my-1 mr-sm-2"
-                          label="Check All"
-                          key={1}
-                          type="checkbox"
-                         />
+          <Form.Check className="my-1 mr-sm-2" label="Check All" key={1} type="checkbox"/>
         </Row>
-        
+
         < Col className="col-8">
           <Accordion className="box-shadow" defaultActiveKey="0">
-            {this.state.lectures.map((e, id) => {
+            {this
+              .state
+              .lectures
+              .map((e, id) => {
                 return (
                   <Form>
                     <Form.Group controlId="formBasicCheckbox">
@@ -197,56 +272,194 @@ selectAll(event){
                         <h5>{id + 1}.</h5>
                         <Col className="subjectName">
                           <h5 >
-                            {e.SubjName }
+                            {e.SubjName}
                           </h5>
-                        
+
                         </Col>
                         <Col>
-                <h5><b>Course Code:</b> {e.SubjectId}</h5>
+                          <Row>
+                            <h5>
+                              <b>Course Code:</b>
+                              {e.SubjectId}</h5>
+                          </Row>
+                          <Row>
+                            <h5>
+                              <b>Year:</b>
+                              {e.Year}
+                            </h5>
+                          </Row>
+                          <Row>
+                            <h5>
+                              <b>Semestr:</b>
+                              {e.Semester}</h5>
+                          </Row>
+                          <Row>
+                            <h5>
+                              <b>Teacher:</b>
+                              {e.Tname}
+                              {e.Tsurname}</h5>
+                          </Row>
+                          <Row>
+                            <h5>
+                              <b>Modality:</b>{this.state.refresh} {e.Modality}</h5>
+                          </Row>
                         </Col>
-                        <Col className="align-content-start date">
+
+                        <Col xs={5} className="align-content-start date">
                           <h5>
-                            <b>Days of Week</b>
-                            {e.schedules.map((sc, id) => {
-                return (  <>
-                      <select name="Todays_Day">
-                          <option value="Mon">Monday</option>
-                          <option value="Tue">Tuesday</option>
-                          <option value="Wed">Wednesday</option>
-                          <option value="Thu">Thursday</option>
-                          <option value="Fri">Friday</option>
-                          <option value="Sat">Saturday</option>
-                          <option value="Sun">Sunday</option>
-                      </select>
-                      <h5></h5>
-                            <h5>{sc.Hour}</h5>
-                           </>
-              )})}
+                            <b>Course Details</b>
+                            <div className="select-container">
+
+                              {e
+                                .schedules
+                                .map((sc, id) => {
+
+                                  let hr = sc
+                                    .Hour
+                                    .substring(0, 5);
+                                  let min = sc
+                                    .Hour
+                                    .substring(6, 11);
+
+                                  return ( <> <Card
+                                    bg='light'
+                                    style={{
+                                    float: "left"
+                                  }}>
+                                    <Card.Body>
+                                      <b>Time:</b>
+                                      <select
+                                      
+                                        disabled={sc.ScheduleId===this.state.scId ? false : true}
+                                        // ? "disabled"
+                                        // : ""}
+                                        style={{
+                                        border: '1px solid #666',
+                                        fontSize: 20,
+                                        width: 100,
+                                        padding: '2px 4px',
+                                        margin: '2px',
+                                        color: '#333',
+                                        borderRadius: 10
+                                      }}
+                                        id={id}
+                                        defaultValue={sc.Day}
+                                        onChange={e => this.setSelectedOption(e.target.value, id)}>
+                                        {options.map((option) => {
+                                          return ( <> <option key={option.value} value={option.value}>
+                                            {option.label}
+                                          </option> 
+                                          </>
+                                        );
+                                      })}
+                                      </select>
+                                      <TimeField
+                                        disabled={sc.ScheduleId===this.state.scId ? false : true}
+                                        style={{
+                                        border: '1px solid #666',
+                                        fontSize: 20,
+                                        width: 80,
+                                        padding: '2px 4px',
+                                        margin: '2px',
+                                        color: '#333',
+                                        borderRadius: 10
+                                      }}
+                                        value={hr}></TimeField>-
+                                      <TimeField
+                                        disabled={sc.ScheduleId===this.state.scId ? false : true}
+                                        style={{
+                                        border: '1px solid #666',
+                                        fontSize: 20,
+                                        width: 80,
+                                        padding: '2px 4px',
+                                        margin: '2px',
+                                        color: '#333',
+                                        borderRadius: 12
+                                      }}
+                                        value={min}></TimeField>
+                                      {/* <input  defaultValue={hr}></input> - <input type="time" defaultValue={min}></input> */}
+                                      <br></br>
+                                      <b>Class:</b>
+                                      <input
+                                        disabled={sc.ScheduleId===this.state.scId ? false : true}
+                                        style={{
+                                        border: '1px solid #666',
+                                        fontSize: 20,
+                                        width: 90,
+                                        padding: '2px 4px',
+                                        margin: '2px',
+                                        color: '#333',
+                                        borderRadius: 10
+                                      }}
+                                        defaultValue={sc.Class}
+                                        type="text"
+                                        id="class"
+                                        size="5"/>
+                                      <br></br>
+                                      <b>Capacity:</b>
+                                      <input
+                                        disabled={sc.ScheduleId===this.state.scId ? false : true}
+                                        style={{
+                                        border: '1px solid #666',
+                                        fontSize: 20,
+                                        width: 90,
+                                        padding: '2px 4px',
+                                        margin: '2px',
+                                        color: '#333',
+                                        borderRadius: 10
+                                      }}
+                                        defaultValue={sc.Capacity}
+                                        type="number"
+                                        id="capacity"
+                                        size="5"/>
+
+                                      <Button
+                                        onClick={() => this.enableEdit(sc.ScheduleId)}
+                                        style={{
+                                        height: "1.6rem",
+                                        position: 'absolute',
+                                        right: "0",
+                                        top: "0"
+                                      }}
+                                        variant="light">
+                                        <img
+                                          style={{
+                                          height: "1.6rem",
+                                          position: 'absolute',
+                                          right: "0",
+                                          top: "0"
+                                        }}
+                                          src={Jumbotron}
+                                          alt="my image"/>
+                                      </Button>
+                                      {/* </Card> */}
+                                      <br></br>
+                                      {sc.ScheduleId === this.state.scId && <Button
+                                        style={{
+                                        float: 'right',
+                                        margin: "1px"
+                                      }}
+                                        size="sm"
+                                        variant="success">Save</Button>
+}
+                                      {sc.ScheduleId === this.state.scId && <Button
+                                        onClick={() => this.disableEdit()}
+                                        style={{
+                                        float: 'right',
+                                        margin: "1px"
+                                      }}
+                                        size="sm"
+                                        variant="danger">Cancel</Button>
+}
+                                    </Card.Body>
+                                  </Card> 
+                                  </>
+                                  );
+                                })}
+                            </div>
                           </h5>
                         </Col>
-                <Col>
-                <Row></Row>
-                <Row><h5><b>Year:</b> {e.Year} </h5></Row>
-                <Row><h5><b>Semestr:</b> {e.Semester }</h5></Row>
-                <Row><h5><b>Teacher:</b> {e.Tname} {e.Tsurname}</h5></Row>
-                <Row><h5><b>Modality:</b> {e.Modality}</h5> </Row>
-                </Col>
-                {/* <Col>
-                
-                </Col> */}
-                <Button data-testid="course-upload-button" variant="light">
-          <img
-            style={{
-            height: "2rem",
-            float: "left",
-            margin: "2px"
-          }}
-            src={Jumbotron}
-            alt="my image"
-            onClick={this.routeAddCor}/>
-             </Button>
                       </Row>
-                      
                     </Form.Group>
                   </Form>
                 );
