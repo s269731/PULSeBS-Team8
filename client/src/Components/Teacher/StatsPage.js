@@ -4,7 +4,13 @@ import {Row, Col, Button, ButtonGroup,Container, Tabs, Tab,Alert} from 'react-bo
 import API from '../../api/api.js'
 
 import { MDBDataTable } from 'mdbreact';
+const emptyObj= {
+    subjectId: {SubjectId:-1,SubjectName:""},
+    dailystatsarray: [],
+    weeklystatsarray: [],
+    monthlystatsarray: []
 
+}
 const colsDaily=[
     {
         label: 'Date',
@@ -72,23 +78,67 @@ const colsMonthly=[
     },
 ]
 
+const colsAttendanceDaily=[
+    {
+        label: 'Date',
+        field: 'date',
+        sort: 'asc',
+        width: 150
+    },
+    {
+        label: 'Hour',
+        field: 'hour',
+        sort: 'asc',
+        width: 150
+    },
+    {
+        label: 'Present Students',
+        field: 'presentPeople',
+        sort: 'asc',
+        width: 150
+    }
+]
+const colsAttendanceWeekly=[
+    {
+        label: 'Week',
+        field: 'weekId',
+        sort: 'asc',
+        width: 150
+    },
+    {
+        label: 'Average Present Students',
+        field: 'weeklyavgpresences',
+        sort: 'asc',
+        width: 150
+    }
+]
+const colsAttendanceMonthly=[
+    {
+        label: 'Month',
+        field: 'monthId',
+        sort: 'asc',
+        width: 150
+    },
+    {
+        label: 'Average Present Students',
+        field: 'monthlyavgpresences',
+        sort: 'asc',
+        width: 150
+    },
+
+]
+
 class StatsPage extends Component {
     constructor() {
         super();
-        this.state={mainModality:'bookings', modality:'daily-bookings', stats:[],emptyLogs:false}
+        this.state={mainModality:'bookings', modality:'daily-bookings', stats:[],emptyLogs:false, logs:[], attendanceLogs:[], subjectLogs:emptyObj, subjectAttendanceLogs:emptyObj}
 
     }
     componentDidMount() {
         API.getTeacherStats().then((res)=>{
             console.log(res)
             if(res.errors){
-                let subjectLogs = {
-                    subjectId: {SubjectId:-1,SubjectName:""},
-                    dailystatsarray: [],
-                    weeklystatsarray: [],
-                    monthlystatsarray: []
-
-                }
+                let subjectLogs = emptyObj
                 this.setState({subjectLogs: subjectLogs, logs:[], emptyLogs:true});
             }
             else {
@@ -108,6 +158,34 @@ class StatsPage extends Component {
                 }
                 console.log(res)
                 this.setState({logs: res, subjectLogs: res[0],emptyLogs:false})
+            }
+        }).catch((err)=>{
+            console.log(err)
+        })
+
+        API.getTeacherAttendanceStats().then((res)=>{
+            console.log(res)
+            if(res.errors){
+                let subjectLogs = emptyObj
+                this.setState({subjectAttendanceLogs: subjectLogs, attendanceLogs:[], emptyAttendanceLogs:true});
+            }
+            else {
+                let i = 0;
+                while (i < res.length) {
+                    for (let l of res[i].dailystatsarray) {
+                        let time = l.date
+                        let mins=new Date(time).getMinutes().toString()
+                        if(mins==='0'){
+                            mins='00'
+                        }
+                        l.date = new Date(l.date).toLocaleDateString("en")
+                        l.hour = new Date(time).getHours()+":"+mins
+                        console.log(l.hour)
+                    }
+                    i++;
+                }
+                console.log(res)
+                this.setState({attendanceLogs: res, subjectAttendanceLogs: res[0],emptyAttendanceLogs:false})
             }
         }).catch((err)=>{
             console.log(err)
@@ -138,8 +216,15 @@ class StatsPage extends Component {
             }
         }
         else {
+            let tobeFiltered;
+            if(this.state.mainModality==='bookings'){
+                tobeFiltered=this.state.logs;
+            }
+            else{
+                tobeFiltered=this.state.attendanceLogs
+            }
             let trovato = 0;
-            for (let item of this.state.logs) {
+            for (let item of tobeFiltered) {
                 if (item.subjectId.SubjectName === id) {
                     trovato = 1
                     this.setState({subjectLogs: item});
@@ -154,7 +239,12 @@ class StatsPage extends Component {
                         monthlystatsarray: []
 
                     }
-                    this.setState({subjectLogs: subjectLogs});
+                    if(this.state.mainModality==='bookings') {
+                        this.setState({subjectLogs: subjectLogs});
+                    }
+                    else{
+                        this.setState({subjectAttendanceLogs: subjectLogs});
+                    }
                 }
             }
 
@@ -314,17 +404,17 @@ class StatsPage extends Component {
                                         <Row className="justify-content-md-center below-nav">
                                             <Col>
                                                 {this.props.canShowGraphs &&
-                                                <LecturesGraph mode={'a'} detail={'d'} logs={this.state.subjectLogs.dailystatsarray}/>}
+                                                <LecturesGraph mode={'a'} detail={'d'} logs={this.state.subjectAttendanceLogs.dailystatsarray}/>}
                                             </Col>
                                         </Row>
                                         <Row className="justify-content-md-center below-nav">
                                             <Col>
-                                                { this.state.subjectLogs.dailystatsarray.length!==0 ?
+                                                { this.state.subjectAttendanceLogs.dailystatsarray.length!==0 ?
                                                     <MDBDataTable
                                                         striped
                                                         bordered
                                                         small
-                                                        data={{columns: colsDaily, rows: this.state.subjectLogs.dailystatsarray}
+                                                        data={{columns: colsAttendanceDaily, rows: this.state.subjectAttendanceLogs.dailystatsarray}
                                                         }
                                                         data-testid={"logs-daily-attendance-table"}
                                                     />: <Alert variant={"danger"} data-testid={"no-logs-attendance-warning"}>No statistics available for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
@@ -336,17 +426,17 @@ class StatsPage extends Component {
                                         <Row className="justify-content-md-center below-nav">
                                             <Col>
                                                 {this.props.canShowGraphs &&
-                                                <LecturesGraph mode={'a'} detail={'w'} logs={this.state.subjectLogs.weeklystatsarray}/>}
+                                                <LecturesGraph mode={'a'} detail={'w'} logs={this.state.subjectAttendanceLogs.weeklystatsarray}/>}
                                             </Col>
                                         </Row>
                                         <Row className="justify-content-md-center below-nav">
                                             <Col>
-                                                { this.state.subjectLogs.dailystatsarray.length!==0 ?
+                                                { this.state.subjectAttendanceLogs.dailystatsarray.length!==0 ?
                                                     <MDBDataTable
                                                         striped
                                                         bordered
                                                         small
-                                                        data={{columns: colsWeekly, rows: this.state.subjectLogs.weeklystatsarray}}
+                                                        data={{columns: colsAttendanceWeekly, rows: this.state.subjectAttendanceLogs.weeklystatsarray}}
                                                         data-testid={"logs-weekly-attendance-table"}
                                                     />: <Alert variant={"danger"} data-testid={"no-logs-attendance-warning"}>No statistics available for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }
 
@@ -358,19 +448,19 @@ class StatsPage extends Component {
                                         <Row className="justify-content-md-center below-nav">
                                             <Col>
                                                 {this.props.canShowGraphs &&
-                                                <LecturesGraph mode={'a'} detail={'m'} logs={this.state.subjectLogs.monthlystatsarray}/>}
+                                                <LecturesGraph mode={'a'} detail={'m'} logs={this.state.subjectAttendanceLogs.monthlystatsarray}/>}
                                             </Col>
                                         </Row>
                                         <Row className="justify-content-md-center below-nav">
                                             <Col>
 
-                                                { this.state.subjectLogs.dailystatsarray.length!==0 ? <MDBDataTable
+                                                { this.state.subjectAttendanceLogs.dailystatsarray.length!==0 ? <MDBDataTable
                                                     striped
                                                     bordered
                                                     small
                                                     data={{
-                                                        columns: colsMonthly,
-                                                        rows: this.state.subjectLogs.monthlystatsarray
+                                                        columns: colsAttendanceMonthly,
+                                                        rows: this.state.subjectAttendanceLogs.monthlystatsarray
                                                     }}
                                                     data-testid={"logs-monthly-attendance-table"}
                                                 />: <Alert variant={"danger"} data-testid={"no-logs-attendance-warning"}>No statistics available for {this.state.subjectLogs.subjectId.SubjectName} course</Alert> }

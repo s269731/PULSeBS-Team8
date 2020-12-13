@@ -5,42 +5,75 @@ class LecturesGraph extends Component {
 	constructor() {
 		super();
 		this.generateBookedDataPoints = this.generateBookedDataPoints.bind(this);
-		this.generateBookedRateDataPoints = this.generateBookedRateDataPoints.bind(this);
+	//	this.generateBookedRateDataPoints = this.generateBookedRateDataPoints.bind(this);
 	}
 
 	generateBookedDataPoints() {
 	let pts=[]
 	if(this.props.detail==='d'){
-        for(let l of this.props.logs){
-
+        if(this.props.mode==='b'){
+            for(let l of this.props.logs){
             pts.push({x: new Date(l.date), y:l.bookedSeats, label:l.date})
+            }
+            console.log(pts)
+            return pts;
         }
-        console.log(pts)
-        return pts;
+        if(this.props.mode==='a'){
+                    for(let l of this.props.logs){
+                    pts.push({x: new Date(l.date), y:l.presentPeople, label:l.date})
+                    }
+                    console.log(pts)
+                    return pts;
+                }
     }
 
     if(this.props.detail==='w'){
-    let i=1;
-            for(let l of this.props.logs){
-                pts.push({x: i, y:l.weeklyavgbookings, label:l.weekId})
-                i=i+1
+
+            if(this.props.mode==='b'){
+                let i=1;
+                for(let l of this.props.logs){
+                    pts.push({x: i, y:l.weeklyavgbookings, label:l.weekId})
+                    i=i+1
+                }
+                console.log(pts)
+                return pts;
             }
-            console.log(pts)
-            return pts;
+            if(this.props.mode==='a'){
+                            let i=1;
+                            for(let l of this.props.logs){
+                                pts.push({x: i, y:l.weeklyavgpresences, label:l.weekId})
+                                i=i+1
+                            }
+                            console.log(pts)
+                            return pts;
+                        }
         }
     if(this.props.detail==='m'){
-    let i=1
-            for(let l of this.props.logs){
-                pts.push({x: i, y:l.monthlyavgbookings, label:l.monthId})
-                i=i+1
-            }
-            console.log(pts)
-            return pts;
-        }
+           if(this.props.mode==='b'){
+                let i=1
+                for(let l of this.props.logs){
+                    pts.push({x: i, y:l.monthlyavgbookings, label:l.monthId})
+                    i=i+1
+                }
+                console.log(pts)
+                return pts;
+                }
+                if(this.props.mode==='a'){
+                                           let i=1
+                                           for(let l of this.props.logs){
+                                               pts.push({x: i, y:l.monthlyavgpresences, label:l.monthId})
+                                               i=i+1
+                                           }
+                                           console.log(pts)
+                                           return pts;
+                                           }
+           }
+
 
 
 	}
-	generateBookedRateDataPoints() {
+
+/*	generateBookedRateDataPoints() {
     	let pts=[]
     	if(this.props.detail==='d'){
             for(let l of this.props.logs){
@@ -71,7 +104,8 @@ class LecturesGraph extends Component {
             }
 
 
-    	}
+    	}*/
+
 
 
 
