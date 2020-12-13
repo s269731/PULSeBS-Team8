@@ -289,7 +289,8 @@ async function getLogs(){
     'Insert reservation',
     'Cancel reservation',
     'Cancel lecture',
-    'Lectures switched to virtual modality'
+    'Lectures switched to virtual modality',
+    'Record attendance info'
   ]
   let url = "/manager/logs";
   const response = await fetch(baseURL + url);

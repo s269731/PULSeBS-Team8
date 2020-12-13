@@ -16,7 +16,8 @@ let typeOp = [
     'Insert reservation',
     'Cancel reservation',
     'Cancel lecture',
-    'Switch lecture to Virtual modality'
+    'Switch lecture to Virtual modality',
+    'Record attendance info'
 ]
 const cols = [
     {
@@ -61,6 +62,7 @@ class Manager extends React.Component {
     constructor() {
         super();
         this.state = {
+            filterApplied:'reset',
             logs: [],
             search:'',
             csvData:[],
@@ -133,7 +135,7 @@ class Manager extends React.Component {
         }
         let data = { columns: cols, rows: newLogs }
 
-        this.setState({ data: data });
+        this.setState({ data: data,filterApplied:id });
     }
 
     setModality(k) {
@@ -316,6 +318,7 @@ class Manager extends React.Component {
                                     </Accordion.Collapse>
                                 </Card>
                             </Accordion>
+
                         </Col></>
                     }
                     <Col>
@@ -327,6 +330,7 @@ class Manager extends React.Component {
                                 this.setModality(k);
                             } }>
                             <Tab eventKey="table" title="Statistics Table" tabClassName={ "tab-label" }>
+                                {this.state.filterApplied!=='reset' && <Alert className={'alert-filter'} variant={'info'}><h6>Data filtered by: <span className={"filterName"}> {this.state.filterApplied}</span></h6></Alert>}
                                 <MDBDataTable
                                     striped
                                     bordered

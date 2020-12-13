@@ -22,3 +22,9 @@
     font-size: 30px;
     margin: 20px 0;
 }
+.alert-filter{
+    margin-top:10px !important;
+}
+.filterName{
+    color:red !important;
+}

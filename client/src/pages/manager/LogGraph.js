@@ -25,7 +25,8 @@ class LogGraph extends Component {
                     { y: this.props.summary.TypeOp0, label: "Student bookings" },
                     { y: this.props.summary.TypeOp1, label: "Student book cancellations" },
                     { y: this.props.summary.TypeOp2, label: "Teacher lecture cancellations" },
-                    { y: this.props.summary.TypeOp3, label: "Teacher lecture modality switchings" }
+                    { y: this.props.summary.TypeOp3, label: "Teacher lecture modality switchings" },
+                    { y: this.props.summary.TypeOp4, label: "Record attendance info" }
                 ]
             }]
         }
