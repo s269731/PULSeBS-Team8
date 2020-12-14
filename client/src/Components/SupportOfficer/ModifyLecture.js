@@ -29,9 +29,6 @@ const options = [
   }, {
     label: "Fri",
     value: "Fri"
-  }, {
-    label: "Sat",
-    value: "Sat"
   }
 ];
 
@@ -69,7 +66,11 @@ class ModifyLecture extends React.Component {
       allChecked: false,
       changeYear: false,
       year: "del",
-      weekDay: "",
+      weekDay: null,
+      Time1: null,
+      Time2: null,
+      Class: null,
+      Capacity: null,
       disabled: true,
       scId: null,
       tabModality:'modality'
@@ -104,7 +105,6 @@ setModality(val){
       })
       .catch((err) => {
         if (err.status === 401) {
-          // this.props.notLoggedUser();
         }
         this.setState({serverErr: true, loading: null});
       });
@@ -180,10 +180,23 @@ setModality(val){
 confirmMessage(){
     this.setState({confirm:false})
 }
-  setSelectedOption = (e, id) => {
+
+  setSelectedOptionWeek = (e) => {
     this.setState({weekDay: e})
   }
-  enableEdit(id) {
+  setSelectedOptionTime1 = (e) => {
+    this.setState({Time1: e})
+  }
+  setSelectedOptionTime2 = (e) => {
+    this.setState({Time2: e})
+  }
+  setSelectedOptionClass = (e) => {
+    this.setState({Class: e})
+  }
+  setSelectedOptionCapacity = (e) => {
+    this.setState({Capacity: e})
+  }
+  enableEdit(sc) {
     this
       .state
       .lectures
@@ -191,10 +204,13 @@ confirmMessage(){
         {
           e
             .schedules
-            .map((sc) => {
-              if (sc.ScheduleId === id) {
-                this.setState({scId: id});
-                this.setState({disabled: false});
+            .map((scNew) => {
+              if (scNew.ScheduleId === sc.ScheduleId) {
+                this.setState({scId: sc.ScheduleId, disabled: false,
+                Class: sc.Class, Time1: sc.Hour.substring(0, 5), 
+              Time2: sc.Hour.substring(6, 11),
+            Capacity: sc.Capacity, weekDay: sc.Day});
+                // this.setState({disabled: false});
               }
             })
         }
@@ -205,6 +221,27 @@ confirmMessage(){
   disableEdit() {
     this.setState({scId: null})
   }
+
+  SaveEdit(subId, CourId){
+  let a={
+    "SubjectId": subId,
+    "ScheduleId": CourId,
+    "Class": this.state.Class,
+    "Day":  this.state.weekDay,
+    "Capacity":  this.state.Capacity,
+    "Hour": this.state.Time1+"-"+this.state.Time2
+  }
+
+  API.changeSchedule(a)
+      .then((res) => {
+      })
+      .catch((err) => {
+        if (err.status === 401) {
+          this.props.notLoggedUser();
+        }
+      });
+      this.setState({scId: null})
+    }
 
   render() {
     return ( <> 
@@ -420,10 +457,7 @@ confirmMessage(){
                                     <Card.Body>
                                       <b>Time:</b>
                                       <select
-                                      
                                         disabled={sc.ScheduleId===this.state.scId ? false : true}
-                                        // ? "disabled"
-                                        // : ""}
                                         style={{
                                         border: '1px solid #666',
                                         fontSize: 20,
@@ -435,7 +469,7 @@ confirmMessage(){
                                       }}
                                         id={id}
                                         defaultValue={sc.Day}
-                                        onChange={e => this.setSelectedOption(e.target.value, id)}>
+                                        onChange={e => this.setSelectedOptionWeek(e.target.value)}>
                                         {options.map((option) => {
                                           return ( <> <option key={option.value} value={option.value}>
                                             {option.label}
@@ -445,6 +479,7 @@ confirmMessage(){
                                       })}
                                       </select>
                                       <TimeField
+                                       onChange={e => this.setSelectedOptionTime1(e.target.value)}
                                         disabled={sc.ScheduleId===this.state.scId ? false : true}
                                         style={{
                                         border: '1px solid #666',
@@ -457,6 +492,7 @@ confirmMessage(){
                                       }}
                                         value={hr}></TimeField>-
                                       <TimeField
+                                       onChange={e => this.setSelectedOptionTime2(e.target.value)}
                                         disabled={sc.ScheduleId===this.state.scId ? false : true}
                                         style={{
                                         border: '1px solid #666',
@@ -472,6 +508,7 @@ confirmMessage(){
                                       <br></br>
                                       <b>Class:</b>
                                       <input
+                                       onChange={e => this.setSelectedOptionClass(e.target.value)}
                                         disabled={sc.ScheduleId===this.state.scId ? false : true}
                                         style={{
                                         border: '1px solid #666',
@@ -489,6 +526,8 @@ confirmMessage(){
                                       <br></br>
                                       <b>Capacity:</b>
                                       <input
+                                       defaultValue={sc.Capacity}
+                                       onChange={e => this.setSelectedOptionCapacity(e.target.value)}
                                         disabled={sc.ScheduleId===this.state.scId ? false : true}
                                         style={{
                                         border: '1px solid #666',
@@ -499,13 +538,12 @@ confirmMessage(){
                                         color: '#333',
                                         borderRadius: 10
                                       }}
-                                        defaultValue={sc.Capacity}
                                         type="number"
                                         id="capacity"
                                         size="5"/>
 
                                       <Button
-                                        onClick={() => this.enableEdit(sc.ScheduleId)}
+                                        onClick={() => this.enableEdit(sc)}
                                         style={{
                                         height: "1.6rem",
                                         position: 'absolute',
@@ -530,6 +568,7 @@ confirmMessage(){
                                         float: 'right',
                                         margin: "1px"
                                       }}
+                                      onClick={() => this.SaveEdit(e.SubjectId, sc.ScheduleId)}
                                         size="sm"
                                         variant="success">Save</Button>}
                                       {sc.ScheduleId === this.state.scId && <Button
