@@ -7,7 +7,7 @@ import {
   Accordion,
   Button,
   ButtonGroup,
-  Form
+  Form, Tabs, Tab, Alert
 } from "react-bootstrap";
 import API from "../../api/api";
 import Jumbotron from "../../assets/edit.jpg";
@@ -71,7 +71,8 @@ class ModifyLecture extends React.Component {
       year: "del",
       weekDay: "",
       disabled: true,
-      scId: null
+      scId: null,
+      tabModality:'modality'
     };
   }
 
@@ -84,7 +85,9 @@ class ModifyLecture extends React.Component {
       });
     this.setState({lectures: lectures});
   }
-
+setModality(val){
+    this.setState({tabModality:val})
+}
   componentDidMount() {
     API
       .getOfficerSchedule()
@@ -92,6 +95,7 @@ class ModifyLecture extends React.Component {
         if (this.state.changeYear === true) {
           this.setState({lectures: this.state.filteredLec1})
           this.setState({filteredLec2: res})
+          this.setState({ checkedCourses: []})
           this.changeYear(this.state.year)
         } else {
           this.setState({lectures: res});
@@ -162,7 +166,7 @@ class ModifyLecture extends React.Component {
     API
       .changeModalityCourse(courses)
       .then(() => {
-        this.setState({changeYear: true})
+        this.setState({changeYear: true, confirm:true})
         this.componentDidMount();
       })
       .catch((err) => {
@@ -173,7 +177,9 @@ class ModifyLecture extends React.Component {
         }
       });
   }
-
+confirmMessage(){
+    this.setState({confirm:false})
+}
   setSelectedOption = (e, id) => {
     this.setState({weekDay: e})
   }
@@ -236,52 +242,135 @@ class ModifyLecture extends React.Component {
           <br></br>
           <br></br>
 
-          {this.state.checkedCourses.length > 0 && <h4>Change Modality</h4>
-}
-          {this.state.checkedCourses.length > 0 && <Button
-            block
-            variant="info"
-            data-testid="handlelecture-button14"
-            onClick={() => this.changeModality(this.state.checkedCourses)}>
-            Change Modality
-          </Button>
-}
+
 
         </Col>
-        <Row>
-          <Row></Row>
-          <Row></Row>
 
-          <Form.Check className="my-1 mr-sm-2" label="Check All" key={1} type="checkbox"/>
-        </Row>
 
         < Col className="col-8">
+          <Tabs id="manager-tab"
+                activeKey={ this.state.modality }
+                onSelect={ (k) => {
+                  this.setModality(k);
+                } }>
+            <Tab eventKey="modality" title="Change Modality" tabClassName={ "tab-label" }>
+
+                {this.state.confirm &&<><Row className="below-tab justify-content-md-center" >
+                  <h6>
+                    <Alert variant={"success"}>
+                    <Row className={'justify-content-md-center  border-bottom  pb-3 pt-2 mb-0'}>Courses modality correctly changed!</Row>
+                  <Button
+                      block
+                      variant="info"
+
+                      onClick={() => this.confirmMessage()}>
+                    <h6>Ok</h6>
+                  </Button></Alert></h6> </Row></>
+                }
+
+
+
+                {!this.state.confirm && this.state.checkedCourses.length > 0 &&<><Row className="below-tab" data-testid="lecture-s-row">
+
+                  <Button
+                      block
+                      variant="info"
+                      data-testid="handlelecture-button14"
+                      onClick={() => this.changeModality(this.state.checkedCourses)}>
+                    <h6>Change Modality for selected courses</h6>
+                  </Button></Row></>
+                }
+
+
+              <Row className="border-bottom  pb-3 pt-2 mb-0" data-testid="lecture-s-row">
+                <Col>
+                <h6><Alert variant={"info"} className={"below-tab"}><Form.Check className="my-1 mr-sm-2" label="Select all courses" key={1} type="checkbox"/></Alert> </h6>
+                </Col>
+              </Row>
+
+              {this
+                  .state
+                  .lectures
+                  .map((e, id) => {
+
+                    return (<><Card data-testid="card-toggle">
+
+                      <Card.Header>
+
+
+                        <Row className="border-bottom  pb-3 pt-2 mb-0" data-testid="lecture-s-row">
+                          <Form>
+                            <Form.Group controlId="formBasicCheckbox">
+
+                              <Form.Check
+                                  key={id + 1}
+                                  type="checkbox"
+                                  onChange={event => this.chooseCourse(event, id, e.SubjectId, e.Modality)}/>
+                            </Form.Group>
+                          </Form>
+                          <Col xs={3} className={'align-content-left'}>
+
+                            <h5>{e.SubjectId}</h5>
+
+
+                          </Col>
+                          <Col xs={6} className={'align-content-center'}>
+                            <h5 className="subjectName">
+                              <b></b>{e.SubjName}</h5>
+
+                            <h5><b>{e.Modality}</b></h5>
+                          </Col>
+                          <Col xs={2} className={'align-content-right'}>
+
+                            <h5>
+                              <b>Year:</b>
+                              {e.Year}
+                            </h5>
+
+                          </Col>
+                        </Row>
+                      </Card.Header>
+                    </Card>
+                    </>)})}
+
+            </Tab>
+
+
+            <Tab eventKey="schedule" title="Change Schedule" tabClassName={ "tab-label" }>
           <Accordion className="box-shadow" defaultActiveKey="0">
             {this
               .state
               .lectures
               .map((e, id) => {
-                return (
-                  <Form>
-                    <Form.Group controlId="formBasicCheckbox">
-                      <Row className="border-bottom  pb-3 pt-2 mb-0" data-testid="lecture-s-row">
-                        <Form.Check
-                          key={id + 1}
-                          type="checkbox"
-                          onChange={event => this.chooseCourse(event, id, e.SubjectId, e.Modality)}/>
-                        <h5>{id + 1}.</h5>
-                        <Col className="subjectName">
-                          <h5 >
-                            {e.SubjName}
-                          </h5>
 
-                        </Col>
-                        <Col>
-                          <Row>
-                            <h5>
-                              <b>Course Code:</b>
-                              {e.SubjectId}</h5>
+                return (<>
+                    <Card data-testid="card-toggle">
+                      <Accordion.Toggle className="box-shadow" as={Card.Header} eventKey={id+1} data-testid="card-toggle">
+                        <Row className="border-bottom  pb-3 pt-2 mb-0" data-testid="lecture-s-row">
+
+                            <Col xs={3} className={'align-content-left'}>
+                              <h5>{e.SubjectId}</h5>
+
+                            </Col>
+                            <Col xs={6} className={'align-content-center'}>
+                                <h5 className="subjectName">
+                                  <b></b>{e.SubjName}</h5>
+                            </Col>
+                          <Col xs={2} className={'align-content-right'}>
+                                <h5>
+                                  <b >Year:</b>
+                                  {e.Year}
+                                </h5>
+                            </Col>
+
                           </Row>
+
+                      </Accordion.Toggle>
+
+                      <Accordion.Collapse eventKey={id+1}>
+                        <Card.Body>
+                          <Row>
+                          <Col xs={6}>
                           <Row>
                             <h5>
                               <b>Year:</b>
@@ -290,7 +379,7 @@ class ModifyLecture extends React.Component {
                           </Row>
                           <Row>
                             <h5>
-                              <b>Semestr:</b>
+                              <b>Semester:</b>
                               {e.Semester}</h5>
                           </Row>
                           <Row>
@@ -303,11 +392,14 @@ class ModifyLecture extends React.Component {
                             <h5>
                               <b>Modality:</b>{this.state.refresh} {e.Modality}</h5>
                           </Row>
-                        </Col>
+                          </Col>
 
-                        <Col xs={5} className="align-content-start date">
+                          <Col xs={5} className="date">
                           <h5>
-                            <b>Course Details</b>
+
+
+                            <b>Course Schedule</b>
+
                             <div className="select-container">
 
                               {e
@@ -320,7 +412,6 @@ class ModifyLecture extends React.Component {
                                   let min = sc
                                     .Hour
                                     .substring(6, 11);
-
                                   return ( <> <Card
                                     bg='light'
                                     style={{
@@ -440,8 +531,7 @@ class ModifyLecture extends React.Component {
                                         margin: "1px"
                                       }}
                                         size="sm"
-                                        variant="success">Save</Button>
-}
+                                        variant="success">Save</Button>}
                                       {sc.ScheduleId === this.state.scId && <Button
                                         onClick={() => this.disableEdit()}
                                         style={{
@@ -449,22 +539,24 @@ class ModifyLecture extends React.Component {
                                         margin: "1px"
                                       }}
                                         size="sm"
-                                        variant="danger">Cancel</Button>
-}
+                                        variant="danger">Cancel</Button>}
                                     </Card.Body>
-                                  </Card> 
+                                  </Card>
                                   </>
                                   );
                                 })}
                             </div>
                           </h5>
                         </Col>
-                      </Row>
-                    </Form.Group>
-                  </Form>
+                          </Row>
+                        </Card.Body>
+                      </Accordion.Collapse>
+                    </Card></>
                 );
               })}
           </Accordion>
+            </Tab>
+          </Tabs>
         </Col>
       </Row >
     </Container> 
