@@ -135,12 +135,19 @@ test('handlers message for no courses (teacher)', async () => {
     await waitFor(() => screen.getByTestId('no-courses-message'))}
 )
 
-test('loads and displays logs for teachers', async () => {
+test('loads and displays bookings logs for teachers', async () => {
     render(<TeacherPage showgraphs={false}/>)
     await waitFor(() => screen.getByTestId("logs-daily-table"))
     expect(screen.getAllByTestId("logs-daily-table")).toHaveLength(1)
     expect(screen.getAllByTestId("logs-weekly-table")).toHaveLength(1)
     expect(screen.getAllByTestId("logs-monthly-table")).toHaveLength(1)
+})
+test('loads and displays attendance logs for teachers', async () => {
+    render(<TeacherPage showgraphs={false}/>)
+    await waitFor(() => screen.getByTestId("logs-daily-table"))
+    expect(screen.getAllByTestId("logs-daily-attendance-table")).toHaveLength(1)
+    expect(screen.getAllByTestId("logs-weekly-attendance-table")).toHaveLength(1)
+    expect(screen.getAllByTestId("logs-monthly-attendace-table")).toHaveLength(1)
 })
 test('handle no logs error for teachers', async () => {
     server.use(

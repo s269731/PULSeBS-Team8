@@ -311,7 +311,7 @@ class StatsPage extends Component {
                         >
 
 
-                            <Tab eventKey="bookings" title="Bookings Statistics">
+                            <Tab eventKey="bookings" title="Bookings Statistics" data-testid={"bookings-stats-tab"}>
 
                                 <Tabs
                                 id="controlled-main-bookings-tab"
@@ -319,7 +319,7 @@ class StatsPage extends Component {
                                 onSelect={(k) => this.setModality(k)}
                                 className={"below-tab"}
                             >
-                                <Tab eventKey="daily-bookings" title="Daily">
+                                <Tab eventKey="daily-bookings" title="Daily" data-testid={"bookings-daily-stats-tab"}>
                                     <Row className="justify-content-md-center below-nav">
                                         <Col>
                                             {this.props.canShowGraphs &&
@@ -341,7 +341,7 @@ class StatsPage extends Component {
                                     </Row>
 
                                 </Tab>
-                                <Tab eventKey="weekly-bookings" title="Weekly">
+                                <Tab eventKey="weekly-bookings" title="Weekly" data-testid={"bookings-weekly-stats-tab"}>
                                     <Row className="justify-content-md-center below-nav">
                                         <Col>
                                             {this.props.canShowGraphs &&
@@ -363,7 +363,7 @@ class StatsPage extends Component {
                                     </Row>
 
                                 </Tab>
-                                <Tab eventKey="monthly-bookings" title="Monthly">
+                                <Tab eventKey="monthly-bookings" title="Monthly" data-testid={"bookings-monthly-stats-tab"}>
                                     <Row className="justify-content-md-center below-nav">
                                         <Col>
                                             {this.props.canShowGraphs &&
@@ -393,14 +393,14 @@ class StatsPage extends Component {
 
 
 
-                            <Tab eventKey="attendance" title="Attendance Statistics">
+                            <Tab eventKey="attendance" title="Attendance Statistics" data-testid={"attendance-stats-tab"}>
                                 <Tabs
                                     id="controlled-main-attendance-tab"
                                     activeKey={this.state.modality}
                                     onSelect={(k) => this.setModality(k)}
                                     className={"below-tab"}
                                 >
-                                    <Tab eventKey="daily-attendance" title="Daily">
+                                    <Tab eventKey="daily-attendance" title="Daily" data-testid={"attendance-daily-stats-tab"}>
                                         <Row className="justify-content-md-center below-nav">
                                             <Col>
                                                 {this.props.canShowGraphs &&
@@ -422,7 +422,7 @@ class StatsPage extends Component {
                                         </Row>
 
                                     </Tab>
-                                    <Tab eventKey="weekly-attendance" title="Weekly">
+                                    <Tab eventKey="weekly-attendance" title="Weekly" data-testid={"attendance-weekly-stats-tab"}>
                                         <Row className="justify-content-md-center below-nav">
                                             <Col>
                                                 {this.props.canShowGraphs &&
@@ -444,7 +444,7 @@ class StatsPage extends Component {
                                         </Row>
 
                                     </Tab>
-                                    <Tab eventKey="monthly-attendance" title="Monthly">
+                                    <Tab eventKey="monthly-attendance" title="Monthly" data-testid={"attendance-monthly-stats-tab"}>
                                         <Row className="justify-content-md-center below-nav">
                                             <Col>
                                                 {this.props.canShowGraphs &&

@@ -111,11 +111,11 @@ function ActionsForm(props) {
                         <Form.Row>
                             <Col xs={3}>
                                 <Form.Group controlId="description">
-                                     <Form.Control data-testid={"insert-attendance-field"} type="number" name="Number of present students" placeholder="Type a number" value = {attendanceNum} onChange={(ev) => setAttendanceNum(Number(ev.target.value))} required autoFocus/>
+                                     <Form.Control data-testid={"insert-attendance-field"} type="number" id={"inputNum"} name="Number" placeholder="Type a number" value = {attendanceNum} onChange={(ev) => setAttendanceNum(Number(ev.target.value))} required autoFocus/>
                                 </Form.Group>
                             </Col>
                             <Col xs={9}>
-                                    {(attendanceNum<0 || attendanceNum>props.l.bookedStudents) ? <Alert variant={"danger"} className={"actionsAlarm"}>Insert a number between 0 and {props.l.bookedStudents}</Alert> : <Form.Group className={"align-content-right"}><Button variant="primary" type="submit">Save</Button></Form.Group>}
+                                    {(attendanceNum<0 || attendanceNum>props.l.bookedStudents) ? <Alert variant={"danger"} className={"actionsAlarm"}>Insert a number between 0 and {props.l.bookedStudents}</Alert> : <Form.Group className={"align-content-right"}><Button variant="primary" type="submit" data-testid={"submit-button"}>Save</Button></Form.Group>}
                             </Col>
                         </Form.Row>
                     </Form></>}

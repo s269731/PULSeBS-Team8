@@ -48,6 +48,26 @@ const stats=[{
 
     ]
 }]
+const attStats=[{
+    subjectId:{SubjectId:1, SubjectName:"SoftwareEngineering II"},
+    dailystatsarray:[{
+        date:"2020-11-28T17:26:00.029Z",
+        presentPeople:100
+    }],
+    weeklystatsarray:[
+        {
+            weekId:'23-28 NOV 2020',
+            weeklyavgpresences:40
+        }
+    ],
+    monthlystatsarray:[
+        {
+            monthId: 'NOV-2020',
+            monthlyavgpresences: 100
+        }
+
+    ]
+}]
 const pastLectures=[
     {
         lectureId: 1,
@@ -58,6 +78,7 @@ const pastLectures=[
         capacity: 150,
         bookedPeople: 100,
         teacherName: "Franco yjtyjty",
+        presentPeople:10
     },
     {
         lectureId: 2,
@@ -68,6 +89,7 @@ const pastLectures=[
         capacity: 50,
         bookedPeople: 100,
         teacherName: "Franco yjtyjty",
+        presentPeople:0
     },
     {
         lectureId: 4,
@@ -77,7 +99,8 @@ const pastLectures=[
         room: "12A",
         capacity: 50,
         bookedPeople: 100,
-        teacherName: "Franco yjtyjty"
+        teacherName: "Franco yjtyjty",
+        presentPeople:0
     },
 ]
 const lectures=[
@@ -112,6 +135,7 @@ const lectures=[
             teacherName: "Franco yjtyjty"
         }
     ]
+
 
 const studentslectures=[
         {
@@ -185,6 +209,9 @@ const handlers=[
     })),
     rest.get('http://localhost/api/teacher/statistics',((req,res,ctx)=>{
         return res(ctx.status(200), ctx.json(stats))
+    })),
+    rest.get('http://localhost/api/teacher/presencestatistics',((req,res,ctx)=>{
+        return res(ctx.status(200), ctx.json(attStats))
     })),
     rest.get('http://localhost/api/teacher/pastlectures',((req,res,ctx)=>{
         return res(ctx.status(200), ctx.json(pastLectures))

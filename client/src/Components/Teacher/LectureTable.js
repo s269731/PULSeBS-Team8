@@ -194,7 +194,7 @@ class LectureTable extends React.Component {
                 activeKey={this.state.modality}
                 onSelect={(k) => this.setModality(k)}
                 variant={"pills"}>
-              <Tab eventKey="next-lectures" title="My next lectures">
+              <Tab eventKey="next-lectures" title="My next lectures" data-testid={"tab-next-lect"}>
             <Row  className="justify-content-md-center below-tab">
                 <Col>
 
@@ -215,7 +215,7 @@ class LectureTable extends React.Component {
               </Col>
             </Row>
               </Tab>
-              <Tab eventKey="past-lectures" title="My past lectures">
+              <Tab eventKey="past-lectures" title="My past lectures" data-testid={"tab-past-lect"}>
                 <Row  className="justify-content-md-center below-tab">
                 <Col >
                   <Accordion className="box-shadow" defaultActiveKey="0">

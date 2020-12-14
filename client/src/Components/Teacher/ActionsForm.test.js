@@ -4,7 +4,7 @@ import ActionsForm from "./ActionsForm";
 import {act} from "react-dom/test-utils";
 
 const leftClick = { button: 0 };
-const lecture = { canDelete: true, canModify:true, hasAttendance:false, canRecordAttendance:true, bookedPeople:10 };
+const lecture = { canDelete: true, canModify:true, hasAttendance:false, canRecordAttendance:true, bookedStudents:10 };
 
 test("Cancel lecture button works", async () => {
     const cancelLecture = jest.fn();
@@ -42,18 +42,23 @@ test("Modify lecture button works", async () => {
 test("Insert attendance number works", async ()=>{
     const recordAttLecture = jest.fn();
 
-    let { container } = render(<ActionsForm l={lecture} recordAttendance={recordAttLecture} operation={'recordAttendance'}/>);
+    render(<ActionsForm l={lecture} recordAttendance={recordAttLecture} operation={'recordAttendance'}/>);
 
     userEvent.click(screen.getByTestId("record-attendance-lecture-button"), leftClick);
 
-    expect(screen.getByTestId("modification-lecture-modal")).toBeInTheDocument();
+    await waitFor(() =>  expect(screen.getByTestId("insert-attendance-field")).toBeInTheDocument());
     act(() => {
-        let inputNumber = container.querySelector('input[name="Number of present students"]');
+        let inputNumber = screen.getByTestId("insert-attendance-field")
+        console.log(inputNumber)
+        expect(inputNumber).not.toBe(null);
         fireEvent.change(inputNumber, {
             target: { value: "3" },
         });
     })
-
+    userEvent.click(
+        screen.getByTestId("submit-button"),
+        leftClick
+    );
 
     await waitFor(() => expect(recordAttLecture).toHaveBeenCalledTimes(1));
 
