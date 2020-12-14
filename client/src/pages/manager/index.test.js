@@ -48,7 +48,7 @@ test("Manager page rendering with logs", async () => {
   await waitFor(() => expect(mockGetLogs).toHaveBeenCalledTimes(1));
 });
  */
-/*TODO: find a solution to make jest work with canvasjs*/
+/*TODO: find a solution to make jest work with canvasjs
  it("handle search with non-ssn", async () => {
     const mockSearch = jest.fn().mockImplementation(() => {
       console.log("mockSearch mock triggered");
@@ -83,4 +83,4 @@ test("Manager page rendering with logs", async () => {
   
       await waitFor(() => expect(mockSearch.toHaveBeenCalledTimes(0)));
     });
-  });
+  });*/
