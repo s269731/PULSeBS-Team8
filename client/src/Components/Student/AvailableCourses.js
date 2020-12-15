@@ -1,5 +1,5 @@
 import React from "react";
-import {Row, Col, Alert, Button, Accordion, Card, ButtonGroup, Container} from "react-bootstrap";
+import {Row, Col,Button, Accordion, Card, ButtonGroup, Container} from "react-bootstrap";
 
 const LectureItem = (props) => {
 
