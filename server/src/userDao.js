@@ -101,3 +101,24 @@ exports.checkPassword = (user, password) => {
   }
   return bcrypt.compareSync(password, user.password);
 };
+
+async function getEmailsSchedule(lectureIds) {
+  let values = [];
+  const array = [];
+  let emails = [];
+  if (lectureIds.length > 0) {
+    lectureIds.forEach((l) => {
+      const sql = 'SELECT Email FROM Users WHERE Id IN (SELECT StudentId FROM Bookings WHERE LectureId=?)';
+      const stmt = db.prepare(sql);
+      const rows = stmt.all(l);
+      values = rows.map(({ Email }) => Email);	// take only the value part
+      Array.prototype.push.apply(array, values);	// push values into array
+    });
+    if (array.length > 0) {
+      emails = [...new Set(array)];	// in order to obtain distinct values of emails
+    }
+  }
+  return emails;
+}
+
+exports.getEmailsSchedule = getEmailsSchedule;

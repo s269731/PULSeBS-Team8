@@ -238,7 +238,7 @@ app.get('/api/manager/logs', async (req, res) => {
   // 1 = cancel reservation (only students)
   // 2 = cancel lecture (only teachers)
   // 3 = lectures switched to virtual modality (only teachers)
-  // 4 = record attendance (only teachers) 
+  // 4 = record attendance (only teachers)
 
   try {
     const logs = await logsDao.getLogs();
@@ -331,9 +331,13 @@ app.get('/api/teacher/pastlectures', async (req, res) => {
 });
 
 app.post('/api/officer/modifyschedule', async (req, res) => {
-  const info = req.body;  // Object info has the following properties with this specific order: ScheduleId, SubjectId, Class, Day, Capacity, Hour
+  const info = req.body; // Object info has the following properties with this specific order: ScheduleId, SubjectId, Class, Day, Capacity, Hour
   try {
     const lectureIds = await scheduleDao.modifySchedule(info);
+    const emails = await userDao.getEmailsSchedule(lectureIds);
+    if (emails.length > 0) {
+      emailService.sendModifySchedule(info, emails);
+    }
     res.json(lectureIds);
   } catch (error) {
     res.json(modifyScheduleError);

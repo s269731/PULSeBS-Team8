@@ -1,6 +1,7 @@
 const Mailer = require('nodemailer/lib/mailer');
 const waitForExpect = require('wait-for-expect');
 const emailService = require('./email');
+const userDao = require('../userDao');
 
 const array = [
   {
@@ -63,4 +64,20 @@ test('Should not send emails because the array is empty', async () => {
   });
   await emailService.sendingEmailCancelledLecture(empty);
   expect(Mailer.prototype.sendMail).not.toHaveBeenCalled();
+});
+
+test('Should send the email to students for modified schedules', async () => {
+// Object info has the following properties with this specific order: ScheduleId, SubjectId, Class, Day, Capacity, Hour
+  const info = {
+    ScheduleId: 1, SubjectId: 1, Class: 4, Day: 'Mon', Capacity: 100, Hour: '8.30 - 11.30',
+  };
+  const lectureIds = [1, 2];
+  const emails = await userDao.getEmailsSchedule(lectureIds);
+  jest.useFakeTimers();
+  spyOn(Mailer.prototype, 'sendMail').and.callFake((mailOptions, cb) => {
+    cb(null, true);
+  });
+  await emailService.sendModifySchedule(info, emails);
+
+  expect(Mailer.prototype.sendMail).toHaveBeenCalledTimes(6);
 });

@@ -106,3 +106,11 @@ test('Return an User by his/her SSN', async () => {
   expect(user.name).toBe('Marco');
   expect(user.surname).toBe('Torchiano');
 });
+
+test('Return emails', async () => {
+  const lectureIds = [1,2];
+  const obj = await userDao.getEmailsSchedule(lectureIds);
+  expect(obj).toBeTruthy();
+  expect(obj[0]).toBe('s0002@student.com');
+  expect(obj[5]).toBe('s0007@student.com');
+});

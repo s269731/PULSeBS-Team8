@@ -1,6 +1,7 @@
 const config = require('config');
 const nodemailer = require('nodemailer');
 const lecturesDao = require('../lecturesDao');
+const subjectDao = require('../subjectsDao');
 
 const mail = nodemailer.createTransport({
   service: config.mailer.service,
@@ -65,6 +66,16 @@ async function sendingEmailCancelledLecture(students) {
   }
 }
 
+async function sendModifySchedule(info, emails) {
+  const subjectName = subjectDao.getSubjectName(info.SubjectId);
+
+  emails.forEach((emailaddr) => {
+    sendEmail(emailaddr, 'Lecture Schedule changed', `${subjectName} 
+    lecture's scheduled for ${info.Day} ${info.Hour} changed, go check new Schedule`);
+  });
+}
+
+exports.sendModifySchedule = sendModifySchedule;
 exports.sendBookingConfirmationEmail = sendBookingConfirmationEmail;
 exports.sendingEmailBookedPeople = sendingEmailBookedPeople;
 exports.sendingEmailCancelledLecture = sendingEmailCancelledLecture;

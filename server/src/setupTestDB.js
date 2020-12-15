@@ -73,12 +73,16 @@ function initTestDB() {
   lectStmt.run([21, 12, 7, moment(global.now).subtract(4, 'days').toISOString(), 'In person', '12A', 100, 6]);
   lectStmt.run([22, 11, 6, moment(global.now).subtract(1, 'days').toISOString(), 'In person', '12A', 100, 6]);
   const lectStmt1 = db.prepare('INSERT OR IGNORE INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople,PresentPeople,ReportPresence) VALUES(?,?,?,?,?,?,?,?,?,?)');
-  lectStmt1.run([23, 1, 1, moment(global.now).subtract(5, 'days').toISOString(), 'In person', '12A', 100, 50, 34, 1]);
-  lectStmt1.run([24, 1, 1, moment(global.now).subtract(9, 'days').toISOString(), 'In person', '12A', 100, 60, 55, 1]);
+  const dec10 = new Date('10 December 2020');
+  lectStmt1.run([23, 1, 1, dec10.toISOString(), 'In person', '12A', 100, 50, 34, 1]);
+  const dec6 = new Date('6 December 2020');
+  lectStmt1.run([24, 1, 1, dec6.toISOString(), 'In person', '12A', 100, 60, 55, 1]);
   lectStmt1.run([25, 1, 1, moment(global.now).add(1, 'month').toISOString(), 'In person', '12A', 100, 6, 6, 1]);
-  lectStmt1.run([26, 1, 1, moment(global.now).subtract(2, 'month').toISOString(), 'In person', '12A', 100, 80, 78, 1]);
-  lectStmt1.run([27, 1, 1, moment(global.now).subtract(2, 'week').toISOString(), 'In person', '12A', 100, 15, 5, 1]);
-  lectStmt1.run([28, 1, 1, moment(global.now).subtract(9, 'days').toISOString(), 'In person', '12A', 100, 100, 100, 1]);
+  const oct15 = new Date('15 October 2020');
+  lectStmt1.run([26, 1, 1, oct15.toISOString(), 'In person', '12A', 100, 80, 78, 1]);
+  const dec1 = new Date('1 December 2020');
+  lectStmt1.run([27, 1, 1, dec1.toISOString(), 'In person', '12A', 100, 15, 5, 1]);
+  lectStmt1.run([28, 1, 1, dec6.toISOString(), 'In person', '12A', 100, 100, 100, 1]);
 
   /** ********************* */
   /*    ENROLLMENTS TABLE   */
