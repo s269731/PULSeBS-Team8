@@ -29,6 +29,20 @@
     getUser = () => {
       API.getUser()
         .then((res) => {
+          let path;
+          if(res.role==='S'){
+            path='/student'
+          }
+          if(res.role==='D'){
+            path='/teacher'
+          }
+          if(res.role==='O'){
+            path='/officer'
+          }
+          if(res.role==='M'){
+            path='/manager'
+          }
+          res['path']=path
           this.setState({ loggedUser: res });
         })
         .catch((err) => {
@@ -41,6 +55,20 @@
       this.setState({ loading: true });
       API.Login(pars)
         .then((user) => {
+          let path;
+          if(user.role==='S'){
+            path='/student'
+          }
+          if(user.role==='D'){
+            path='/teacher'
+          }
+          if(user.role==='O'){
+            path='/officer'
+          }
+          if(user.role==='M'){
+            path='/manager'
+          }
+          user['path']=path
           this.setState({ loggedUser: user, authErr: null, loading: false });
           this.getUser();
         })
@@ -98,69 +126,26 @@
                     </h3>
                     {this.state.loggedUser &&
                       this.state.loggedUser.role &&
-                      this.state.loggedUser.role === "S" && (
+                       (
                         <>
                           <Alert variant={"info"}>
-                            <Link to="/student">
+                            <Link to={this.state.loggedUser.path}>
                               {" "}
                               ACCESS TO YOUR PERSONAL PAGE{" "}
                             </Link>
                           </Alert>
                         </>
                       )}
-                    {this.state.loggedUser &&
-                      this.state.loggedUser.role &&
-                      this.state.loggedUser.role === "D" && (
-                        <>
-                          <Alert variant={"info"}>
-                            <Link to="/teacher">
-                              {" "}
-                              ACCESS TO YOUR PERSONAL PAGE{" "}
-                            </Link>
-                          </Alert>
-                        </>
-                      )}
-                    {this.state.loggedUser &&
-                    this.state.loggedUser.role &&
-                    this.state.loggedUser.role === "O" && (
-                        <>
-                          <Alert variant={"info"}>
-                            <Link to="/officer">
-                              {" "}
-                              ACCESS TO YOUR PERSONAL PAGE{" "}
-                            </Link>
-                          </Alert>
-                        </>
-                    )}
-                    {this.state.loggedUser &&
-                    this.state.loggedUser.role &&
-                    this.state.loggedUser.role === "M" && (
-                        <>
-                          <Alert variant={"info"}>
-                            <Link to="/manager">
-                              {" "}
-                              ACCESS TO YOUR PERSONAL PAGE{" "}
-                            </Link>
-                          </Alert>
-                        </>
-                    )}
+
                   </Row>
                 </Col>
               </Container>
             </Route>
             <Route exact path="/login">
-              {this.state.loggedUser && this.state.loggedUser.role === "D" && (
-                <Redirect to="/teacher" />
+              {this.state.loggedUser && (
+                <Redirect to={this.state.loggedUser.path} />
               )}
-              {this.state.loggedUser && this.state.loggedUser.role === "S" && (
-                <Redirect to="/student" />
-              )}
-              {this.state.loggedUser && this.state.loggedUser.role === "M" && (
-                  <Redirect to="/manager" />
-              )}
-              {this.state.loggedUser && this.state.loggedUser.role === "O" && (
-                  <Redirect to="/officer" />
-              )}
+
               {!this.state.loggedUser && (
                 <Login
                   login={this.login}
