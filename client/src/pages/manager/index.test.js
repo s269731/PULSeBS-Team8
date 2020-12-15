@@ -2,6 +2,8 @@ import {render, screen, waitFor} from "@testing-library/react";
 import Manager from "./index";
 import React from "react";
 import API from "../../api/api";
+import manager from "./index";
+import "@testing-library/jest-dom/extend-expect";
 
 const leftClick = { button: 0 };
 let typeOp = [
@@ -28,6 +30,10 @@ const parsedLogs = { summary:summary, logs: logs.map((l)=>{
     timestamp:new Date(parseInt(l.timestamp)).toLocaleString("en")
   })
 })};
+const ContactTracing = [
+  { SSN: "aa", name: "bb"},
+  { SSN: "zz", name: "yy"},
+];
 
 test("Manager page rendering", async () => {
   render(<Manager />);
@@ -84,3 +90,12 @@ test("Manager page rendering with logs", async () => {
       await waitFor(() => expect(mockSearch.toHaveBeenCalledTimes(0)));
     });
   });*/
+  test("Manager page rendering with Contact Tracing report", async () => {
+    const mockgetContactTracing = jest.spyOn(API, "getContactTracing");
+ 
+  mockgetContactTracing.mockReturnValue(new Promise((resolve) => resolve(ContactTracing)));
+   render(<Manager />);
+  
+   expect(screen.getByTestId("manager-page")).toBeInTheDocument();
+   
+  });
