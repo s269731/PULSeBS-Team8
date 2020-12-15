@@ -5,8 +5,8 @@ import API from "../../api/api";
 import LogGraph from './LogGraph'
 import { MDBDataTable } from 'mdbreact';
 import { CSVLink } from "react-csv";
-import html2pdf from 'html2pdf.js';
-import html2canvas from "html2canvas";
+
+
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 
