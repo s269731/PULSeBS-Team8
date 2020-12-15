@@ -11,7 +11,7 @@ import Jumbotron3 from "../../assets/language.png";
 import Jumbotron4 from "../../assets/classroom.png";
 import AddStudent from "./AddStudent";
 import ModifyLecture from "./ModifyLecture";
-import API from "../../api/api";
+
 
 
 
