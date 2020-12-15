@@ -111,31 +111,34 @@ setModality(val){
   }
 
   changeYear = (id) => {
+
     if (id === "del") {
-      this.setState({lectures: this.state.filteredLec2});
-      this.setState({year: "del"})
+      this.setState({allChecked: false,checkedCourses: [],lectures: this.state.filteredLec2, year: "del"});
     } else {
-      this.setState({checkedCourses: []});
-      this.setState({year: id})
-      this.setState({filteredLec2: this.state.filteredLec2})
-      let filteredLec = this
-        .state
-        .filteredLec2
-        .filter(item => {
+      this.setState({allChecked: false,checkedCourses: [], year: id, filteredLec2: this.state.filteredLec2});
+
+      let filteredLec = this.state.filteredLec2.filter(item => {
           return item.Year === id
         });
-      this.setState({lectures: filteredLec});
-      this.setState({filteredLec1: filteredLec})
-
+      this.setState({lectures: filteredLec, filteredLec1: filteredLec});
     }
   }
 
-  // selectAll(event){   const isChecked = event.target.checked;   if (isChecked)
-  // {     let courses = [...this.state.checkedCourses,test];
-  // this.setState=({allChecked: true})     this.setState({checkedCourses:
-  // courses});   } else {     let courses =
-  // this.state.checkedCourses.filter(courses =>       {return courses.id !==
-  // test.id});     this.setState({checkedCourses: courses});   } }
+  selectAll=(event)=>{  
+     const isChecked = event.target.checked; 
+     this.setState({allChecked: !this.state.allChecked})
+     if (isChecked){
+      if(this.state.year==="del"){ 
+        this.setState({checkedCourses: this.state.filteredLec2});  
+      }
+      else{
+        this.setState({checkedCourses: this.state.filteredLec1});  
+      }
+     } 
+  else {     
+        this.setState({checkedCourses: []}); 
+          } 
+        }
 
   chooseCourse = (event, id, subjId, modality) => {
     const isChecked = event.target.checked;
@@ -145,12 +148,8 @@ setModality(val){
       Modality: modality
     }
     if (isChecked) {
-      let courses = [
-        ...this.state.checkedCourses,
-        test
-      ];
+      let courses = [...this.state.checkedCourses,test];
       this.setState({checkedCourses: courses});
-      // this.setState({refresh: true})
     } else {
       let courses = this
         .state
@@ -162,10 +161,13 @@ setModality(val){
     }
   }
 
+
   changeModality = (courses) => {
-    API
-      .changeModalityCourse(courses)
-      .then(() => {
+    let l=courses;
+    if(this.state.allChecked){
+      l=this.state.filteredLec2
+    }
+    API.changeModalityCourse(l).then(() => {
         this.setState({changeYear: true, confirm:true})
         this.componentDidMount();
       })
@@ -210,7 +212,6 @@ confirmMessage(){
                 Class: sc.Class, Time1: sc.Hour.substring(0, 5), 
               Time2: sc.Hour.substring(6, 11),
             Capacity: sc.Capacity, weekDay: sc.Day});
-                // this.setState({disabled: false});
               }
             })
         }
@@ -278,9 +279,6 @@ confirmMessage(){
           <br></br>
           <br></br>
           <br></br>
-
-
-
         </Col>
 
 
@@ -304,11 +302,7 @@ confirmMessage(){
                     <h6>Ok</h6>
                   </Button></Alert></h6> </Row></>
                 }
-
-
-
                 {!this.state.confirm && this.state.checkedCourses.length > 0 &&<><Row className="below-tab" data-testid="lecture-s-row">
-
                   <Button
                       block
                       variant="info"
@@ -321,7 +315,9 @@ confirmMessage(){
 
               <Row className="border-bottom  pb-3 pt-2 mb-0" data-testid="lecture-s-row">
                 <Col>
-                <h6><Alert variant={"info"} className={"below-tab"}><Form.Check className="my-1 mr-sm-2" label="Select all courses" key={1} type="checkbox"/></Alert> </h6>
+                <h6><Alert variant={"info"} className={"below-tab"}>
+                  <Form.Check checked={this.state.allChecked} onChange={this.selectAll}   className="my-1 mr-sm-2" label="Select all courses" key={1} type="checkbox"/>
+                  </Alert> </h6>
                 </Col>
               </Row>
 
@@ -333,13 +329,12 @@ confirmMessage(){
                     return (<><Card data-testid="card-toggle">
 
                       <Card.Header>
-
-
                         <Row className="border-bottom  pb-3 pt-2 mb-0" data-testid="lecture-s-row">
                           <Form>
                             <Form.Group controlId="formBasicCheckbox">
 
                               <Form.Check
+                                  checked={this.state.allChecked || this.state.checkedCourses.some(item=>item.id===id)}
                                   key={id + 1}
                                   type="checkbox"
                                   onChange={event => this.chooseCourse(event, id, e.SubjectId, e.Modality)}/>
@@ -348,7 +343,6 @@ confirmMessage(){
                           <Col xs={3} className={'align-content-left'}>
 
                             <h5>{e.SubjectId}</h5>
-
 
                           </Col>
                           <Col xs={6} className={'align-content-center'}>
@@ -399,7 +393,6 @@ confirmMessage(){
                                   {e.Year}
                                 </h5>
                             </Col>
-
                           </Row>
 
                       </Accordion.Toggle>
@@ -433,16 +426,11 @@ confirmMessage(){
 
                           <Col xs={5} className="date">
                           <h5>
-
-
                             <b>Course Schedule</b>
 
                             <div className="select-container">
 
-                              {e
-                                .schedules
-                                .map((sc, id) => {
-
+                              {e.schedules.map((sc, id) => {
                                   let hr = sc
                                     .Hour
                                     .substring(0, 5);
@@ -504,7 +492,6 @@ confirmMessage(){
                                         borderRadius: 12
                                       }}
                                         value={min}></TimeField>
-                                      {/* <input  defaultValue={hr}></input> - <input type="time" defaultValue={min}></input> */}
                                       <br></br>
                                       <b>Class:</b>
                                       <input
@@ -561,7 +548,6 @@ confirmMessage(){
                                           src={Jumbotron}
                                           alt="my image"/>
                                       </Button>
-                                      {/* </Card> */}
                                       <br></br>
                                       {sc.ScheduleId === this.state.scId && <Button
                                         style={{
