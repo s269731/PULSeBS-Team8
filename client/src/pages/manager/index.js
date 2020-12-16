@@ -156,10 +156,10 @@ class Manager extends React.Component {
                     this.setState({serverErr:false,
                         emptyRes:false,
                         csvData:res.map(val=>({
-                            BookCourse:val.Subject,
+                            BookedCourse:val.Subject,
                             TeacherName:val.Teacher.Name,
                             TeacherSSN: val.Teacher.SSN,
-                            BookStudents:val.Lectures[0].StudentList.map(stu=>stu.Name+" "+stu.SSN).join('--')
+                            BookedStudents:val.Lectures[0].StudentList.map(stu=>stu.Name+" "+stu.SSN).join('--')
                         }))
                     })
                 }else{
@@ -353,11 +353,12 @@ class Manager extends React.Component {
                                     <Col className="LogChart" lg={ 6 } >
                                         <InputGroup style={{padding: '20px 0'}}>
                                             <FormControl
+                                                data-testid="ssn-input"
                                                 onChange={this.handleChange}
                                                 placeholder="Enter SSN"
                                             />
                                             <InputGroup.Append>
-                                                <Button onClick={this.onSearchSsn} variant="outline-primary">Search</Button>
+                                                <Button data-testid="ssn-button" onClick={this.onSearchSsn} variant="outline-primary">Search</Button>
                                             </InputGroup.Append>
                                         </InputGroup>
                                     </Col>
@@ -429,14 +430,14 @@ class Manager extends React.Component {
                                 {this.state.searchData.length>0 && <Row className="justify-content-md-center">
                                     <Col style={{display: 'flex', justifyContent: 'space-around'}} className="LogChart"
                                          lg={6}>
-                                        <Button>
+                                        <Button data-testid="csv-download-button">
                                             <CSVLink style={{color: '#fff'}} data={this.state.csvData}
                                                      variant="primary">
                                                 Download CSV
                                             </CSVLink>
                                         </Button>
 
-                                        <Button onClick={this.downloadpdf}>Download PDF</Button>
+                                        <Button data-testid="pdf-download-button" onClick={this.downloadpdf}>Download PDF</Button>
                                     </Col>
                                 </Row>}
                             </Tab>

@@ -22,11 +22,11 @@ const officer = {
 
 beforeAll(async () => {
   // launch browser
-  browser = await puppeteer.launch({headless: false});
+  browser = await puppeteer.launch({headless: false, devtools: true});
   // creates a new page in the opened browser
   page = await browser.newPage()
 })
-
+/*
 describe('Students', () => {
   test('students can login', async () => {
     await page.goto(baseUrl);
@@ -201,6 +201,13 @@ describe('Officers', () => {
     await page.waitForSelector('[data-testid="upload-page"]');
   }, 9000000);
 
+  test('officers can show the modify lectures page', async () => {
+    await page.goto(baseUrl + 'officer');
+    await page.waitForSelector('[data-testid="officer-page"]');
+    await page.click('[id="controlled-tab-tab-calendar"]');
+    await page.waitForSelector('[data-testid="lecturetable"]');
+  }, 9000000);
+
   test('officers can logout', async () => {
     await page.waitForSelector('[data-testid="logout-link"]');
     await page.click('[data-testid="logout-link"]');
@@ -208,7 +215,7 @@ describe('Officers', () => {
   }, 9000000);
 
 });
-
+*/
 describe('Managers', () => {
   test('managers can login', async () => {
     await page.goto(baseUrl);
@@ -233,6 +240,52 @@ describe('Managers', () => {
     await page.waitForSelector('[id="manager-tab-tab-chart"]');
     await page.click('[id="manager-tab-tab-chart"]');
     await page.waitForSelector('[class="canvasjs-chart-container"]');
+  }, 9000000);
+
+  test('officers can show the contact tracing tab', async () => {
+    await page.goto(baseUrl + 'manager');
+    await page.waitForSelector('[data-testid="manager-page"]');
+    await page.waitForSelector('[id="manager-tab-tab-chart"]');
+    await page.click('[id="manager-tab-tab-search"]');
+    await page.waitForSelector('[id="manager-tab-tabpane-search"]');
+  }, 9000000);
+
+  test('officers can show the contact tracing for a student', async () => {
+    await page.goto(baseUrl + 'manager');
+    await page.waitForSelector('[data-testid="manager-page"]');
+    await page.waitForSelector('[id="manager-tab-tab-chart"]');
+    await page.click('[id="manager-tab-tab-search"]');
+    await page.waitForSelector('[data-testid="ssn-input"]');
+    await page.focus('[data-testid="ssn-input"]')
+    await page.keyboard.type('XT6141391')
+    await page.click('[data-testid="ssn-button"]');
+    await page.waitForSelector('[id="searchDataId"]');
+  }, 9000000);
+
+  test('officers can download a csv file of the contact tracing for a student', async () => {
+    await page.goto(baseUrl + 'manager');
+    await page.waitForSelector('[data-testid="manager-page"]');
+    await page.waitForSelector('[id="manager-tab-tab-chart"]');
+    await page.click('[id="manager-tab-tab-search"]');
+    await page.waitForSelector('[data-testid="ssn-input"]');
+    await page.focus('[data-testid="ssn-input"]')
+    await page.keyboard.type('XT6141391')
+    await page.click('[data-testid="ssn-button"]');
+    await page.waitForSelector('[data-testid="csv-download-button"]');
+    await page.click('[data-testid="csv-download-button"]');
+  }, 9000000);
+
+  test('officers can download a pdf file of the contact tracing for a student', async () => {
+    await page.goto(baseUrl + 'manager');
+    await page.waitForSelector('[data-testid="manager-page"]');
+    await page.waitForSelector('[id="manager-tab-tab-chart"]');
+    await page.click('[id="manager-tab-tab-search"]');
+    await page.waitForSelector('[data-testid="ssn-input"]');
+    await page.focus('[data-testid="ssn-input"]')
+    await page.keyboard.type('XT6141391')
+    await page.click('[data-testid="ssn-button"]');
+    await page.waitForSelector('[data-testid="pdf-download-button"]');
+    await page.click('[data-testid="pdf-download-button"]');
   }, 9000000);
 
   test('officers can logout', async () => {
