@@ -12,6 +12,7 @@ import {
 import API from "../../api/api";
 import Jumbotron from "../../assets/edit.jpg";
 import TimeField from 'react-simple-timefield';
+import ModifyModal from "./ModifyModal";
 
 const options = [
   {
@@ -75,6 +76,7 @@ class ModifyLecture extends React.Component {
       scId: null,
       tabModality:'modality'
     };
+    this.SaveEdit=this.SaveEdit.bind(this)
   }
 
   deleteCourse(id) {
@@ -89,41 +91,61 @@ class ModifyLecture extends React.Component {
 setModality(val){
     this.setState({tabModality:val})
 }
-  componentDidMount() {
+
+  retrieveCourses(){
+    console.log("here2")
     API
-      .getOfficerSchedule()
-      .then((res) => {
-        if (this.state.changeYear === true) {
-          this.setState({lectures: this.state.filteredLec1})
-          this.setState({filteredLec2: res})
-          this.setState({ checkedCourses: []})
-          this.changeYear(this.state.year)
-        } else {
-          this.setState({lectures: res});
-          this.setState({filteredLec2: res})
-        }
-      })
-      .catch((err) => {
-        if (err.status === 401) {
-        }
-        this.setState({serverErr: true, loading: null});
-      });
+        .getOfficerSchedule()
+        .then((res) => {
+          console.log(res)
+          if (this.state.changeYear === true) {
+            console.log("if")
+            this.setState({lectures: this.state.filteredLec1})
+            this.setState({filteredLec2: res})
+            this.setState({ checkedCourses: []})
+            this.changeYear(this.state.year)
+          } else {
+            console.log("else")
+            this.setState({lectures: res});
+            this.setState({filteredLec2: res})
+          }
+        })
+        .catch((err) => {
+          if (err.status === 401) {
+          }
+          this.setState({serverErr: true, loading: null});
+        });
+  }
+  componentDidMount() {
+   this.retrieveCourses()
   }
 
   changeYear = (id) => {
+      if (id === "del") {
+        this.setState({
+          changeYear: true,
+          allChecked: false,
+          checkedCourses: [],
+          lectures: this.state.filteredLec2,
+          year: "del"
+        });
+      } else {
+        this.setState({
+          changeYear: true,
+          allChecked: false,
+          checkedCourses: [],
+          year: id,
+          filteredLec2: this.state.filteredLec2
+        });
 
-    if (id === "del") {
-      this.setState({changeYear: true, allChecked: false,checkedCourses: [],lectures: this.state.filteredLec2, year: "del"});
-    } else {
-      this.setState({changeYear: true, allChecked: false,checkedCourses: [], year: id, filteredLec2: this.state.filteredLec2});
-
-      let filteredLec = this.state.filteredLec2.filter(item => {
+        let filteredLec = this.state.filteredLec2.filter(item => {
           return item.Year === id
         });
-      this.setState({lectures: filteredLec, filteredLec1: filteredLec});
-    }
-  }
 
+        this.setState({lectures: filteredLec, filteredLec1: filteredLec});
+      }
+
+  }
   selectAll=(event)=>{  
      const isChecked = event.target.checked; 
      this.setState({allChecked: !this.state.allChecked})
@@ -223,40 +245,16 @@ confirmMessage(){
     this.setState({scId: null})
   }
 
-  SaveEdit(subId, CourId){
-  let a={
-    "SubjectId": subId,
-    "ScheduleId": CourId,
-    "Class": this.state.Class,
-    "Day":  this.state.weekDay,
-    "Capacity":  this.state.Capacity,
-    "Hour": this.state.Time1+"-"+this.state.Time2
-  }
-  API.changeSchedule(a).then((res) => {      
-    {this.state.lectures.map((e, id) => {
-      return(
-        <>
-        {e.schedules.map((sc, id) => {
-            return(
-              <>
-              {sc.ScheduleId===CourId &&
-              this.setState({weekDay: sc.Day})
-              }
-              </>
-            )
-        })}
-        </>)
-      })}
-      this.componentDidMount();
-      // this.changeYear(this.state.currYear);   
-
-    })
-    .catch((err) => {
-      if (err.status === 401) {
-        this.props.notLoggedUser();
-      }
-    });
-    this.setState({scId: null})
+  SaveEdit(a){
+    API.changeSchedule(a).then((res) => {
+      console.log('here')
+      this.retrieveCourses()
+      })
+      .catch((err) => {
+        if (err.status === 401) {
+          this.props.notLoggedUser();
+        }
+      });
   }
 
 
@@ -389,7 +387,7 @@ confirmMessage(){
               .state
               .lectures
               .map((e, id) => {
-
+                console.log(e)
                 return (<>
                     <Card data-testid="card-toggle">
                       <Accordion.Toggle className="box-shadow" as={Card.Header} eventKey={id+1} data-testid="card-toggle">
@@ -440,150 +438,53 @@ confirmMessage(){
                           </Row>
                           </Col>
 
-                          <Col xs={5} className="date">
+                          <Col xs={6} className="date">
                           <h5>
                             <b>Course Schedule</b>
 
                             <div className="select-container">
 
                               {e.schedules.map((sc, id) => {
-                                  let hr = sc
+
+                                  /*let hr = sc
                                     .Hour
                                     .substring(0, 5);
+                                  console.log(hr)
                                   let min = sc
                                     .Hour
-                                    .substring(6, 11);
-                                  return ( <> <Card
-                                    bg='light'
-                                    style={{
-                                    float: "left"
-                                  }}>
-                                    <Card.Body>
-                                      <b>Time:</b>
-                                      <select
-                                        disabled={sc.ScheduleId===this.state.scId ? false : true}
-                                        style={{
-                                        border: '1px solid #666',
-                                        fontSize: 20,
-                                        width: 100,
-                                        padding: '2px 4px',
-                                        margin: '2px',
-                                        color: '#333',
-                                        borderRadius: 10
-                                      }}
-                                        id={id}
-                                        defaultValue={sc.Day}
-                                        onChange={e => this.setSelectedOptionWeek(e.target.value)}>
-                                        {options.map((option) => {
-                                          return ( <> <option key={option.value} value={option.value}>
-                                            {option.label}
-                                          </option> 
-                                          </>
-                                        );
-                                      })}
-                                      </select>
-                                      <TimeField
-                                       onChange={e => this.setSelectedOptionTime1(e.target.value)}
-                                        disabled={sc.ScheduleId===this.state.scId ? false : true}
-                                        style={{
-                                        border: '1px solid #666',
-                                        fontSize: 20,
-                                        width: 80,
-                                        padding: '2px 4px',
-                                        margin: '2px',
-                                        color: '#333',
-                                        borderRadius: 10
-                                      }}
-                                        value={hr}></TimeField>-
-                                      <TimeField
-                                       onChange={e => this.setSelectedOptionTime2(e.target.value)}
-                                        disabled={sc.ScheduleId===this.state.scId ? false : true}
-                                        style={{
-                                        border: '1px solid #666',
-                                        fontSize: 20,
-                                        width: 80,
-                                        padding: '2px 4px',
-                                        margin: '2px',
-                                        color: '#333',
-                                        borderRadius: 12
-                                      }}
-                                        value={min}></TimeField>
-                                      <br></br>
-                                      <b>Class:</b>
-                                      <input
-                                       onChange={e => this.setSelectedOptionClass(e.target.value)}
-                                        disabled={sc.ScheduleId===this.state.scId ? false : true}
-                                        style={{
-                                        border: '1px solid #666',
-                                        fontSize: 20,
-                                        width: 90,
-                                        padding: '2px 4px',
-                                        margin: '2px',
-                                        color: '#333',
-                                        borderRadius: 10
-                                      }}
-                                        defaultValue={sc.Class}
-                                        type="text"
-                                        id="class"
-                                        size="5"/>
-                                      <br></br>
-                                      <b>Capacity:</b>
-                                      <input
-                                       defaultValue={sc.Capacity}
-                                       onChange={e => this.setSelectedOptionCapacity(e.target.value)}
-                                        disabled={sc.ScheduleId===this.state.scId ? false : true}
-                                        style={{
-                                        border: '1px solid #666',
-                                        fontSize: 20,
-                                        width: 90,
-                                        padding: '2px 4px',
-                                        margin: '2px',
-                                        color: '#333',
-                                        borderRadius: 10
-                                      }}
-                                        type="number"
-                                        id="capacity"
-                                        size="5"/>
+                                    .substring(6, 11);*/
+                                let hours=sc.Hour.split('-')
+                                if(hours[0].split(":")[0].length===1){
+                                  hours[0]='0'+hours[0]
+                                }
+                                if(hours[1].split(":")[0].length===1){
+                                  hours[1]='0'+hours[1]
+                                }
 
-                                      <Button
-                                        onClick={() => this.enableEdit(sc)}
-                                        style={{
-                                        height: "1.6rem",
-                                        position: 'absolute',
-                                        right: "0",
-                                        top: "0"
-                                      }}
-                                        variant="light">
-                                        <img
-                                          style={{
-                                          height: "1.6rem",
-                                          position: 'absolute',
-                                          right: "0",
-                                          top: "0"
-                                        }}
-                                          src={Jumbotron}
-                                          alt="my image"/>
-                                      </Button>
-                                      <br></br>
-                                      {sc.ScheduleId === this.state.scId && <Button
-                                        style={{
-                                        float: 'right',
-                                        margin: "1px"
-                                      }}
-                                      onClick={() => this.SaveEdit(e.SubjectId, sc.ScheduleId)}
-                                        size="sm"
-                                        variant="success">Save</Button>}
-                                      {sc.ScheduleId === this.state.scId && <Button
-                                        onClick={() => this.disableEdit()}
-                                        style={{
-                                        float: 'right',
-                                        margin: "1px"
-                                      }}
-                                        size="sm"
-                                        variant="danger">Cancel</Button>}
-                                    </Card.Body>
-                                  </Card>
-                                  </>
+                                  return ( <>
+                                        <Card
+                                            bg='light'
+                                            style={{
+                                              float: "left"
+                                            }}>
+                                          <Card.Body>
+
+                                            <Row>
+                                              <Col><b>Day:</b>{sc.Day}</Col>
+                                              <Col><b>From:</b>{hours[0]}</Col>
+                                              <Col><b>To:</b>{hours[1]}</Col>
+                                            </Row>
+                                            <Row>
+                                              <Col><b>Class:</b>{sc.Class}</Col>
+                                              <Col><b>Capacity:</b>{sc.Capacity}</Col>
+                                            </Row>
+
+
+                                            <ModifyModal sc={sc} hr={hours[0]} min={hours[1]} id={id} e={e} SaveEdit={this.SaveEdit} notLoggedUser={this.props.notLoggedUser}/>
+
+                                            </Card.Body>
+                                            </Card>
+                                        </>
                                   );
                                 })}
                             </div>
