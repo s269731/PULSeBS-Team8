@@ -167,7 +167,7 @@ setModality(val){
   changeModality = (courses) => {
     let l=courses;
     if(this.state.allChecked){
-      l=this.state.filteredLec2
+      l=this.state.checkedCourses
     }
     API.changeModalityCourse(l).then(() => {
         this.setState({changeYear: true, confirm:true})
@@ -248,13 +248,14 @@ confirmMessage(){
       < Row className="justify-content-md-center">
         <Col className="col-2 justify-content-md-center">
           <h3>Years</h3>{this.state.refresh}
-          <ButtonGroup vertical>
+          <ButtonGroup data-testid="changeYearGroup" vertical>
             {this
               .state
               .Years
               .map((e) => {
                 // console.log(e)
                 return ( <> <Button
+                  data-testid="changeYear"
                   variant="primary"
                   onClick={() => this.changeYear(e.SubjectId)}
                   data-testid="handlelecture-button">
@@ -262,6 +263,7 @@ confirmMessage(){
                 </Button> < br /> </>);
               })}
             <Button
+            data-testid="cancel-filter"
               variant={"danger"}
               onClick={(e) => {
               this.changeYear(this.state.delete);
@@ -296,6 +298,7 @@ confirmMessage(){
                     <h6>Ok</h6>
                   </Button></Alert></h6> </Row></>
                 }
+
                 {!this.state.confirm && this.state.checkedCourses.length > 0 &&<><Row className="below-tab" data-testid="lecture-s-row">
                   <Button
                       block
@@ -310,7 +313,7 @@ confirmMessage(){
               <Row className="border-bottom  pb-3 pt-2 mb-0" data-testid="lecture-s-row">
                 <Col>
                 <h6><Alert variant={"info"} className={"below-tab"}>
-                  <Form.Check checked={this.state.allChecked} onChange={this.selectAll}   className="my-1 mr-sm-2" label="Select all courses" key={1} type="checkbox"/>
+                  <Form.Check data-testid="checkAll" checked={this.state.allChecked} onChange={this.selectAll}   className="my-1 mr-sm-2" label="Select all courses" key={1} type="checkbox"/>
                   </Alert> </h6>
                 </Col>
               </Row>
@@ -328,6 +331,7 @@ confirmMessage(){
                             <Form.Group controlId="formBasicCheckbox">
 
                               <Form.Check
+                                  data-testid="checkOne"
                                   checked={this.state.allChecked || this.state.checkedCourses.some(item=>item.id===id)}
                                   key={id + 1}
                                   type="checkbox"
@@ -361,7 +365,7 @@ confirmMessage(){
             </Tab>
 
 
-            <Tab eventKey="schedule" title="Change Schedule" tabClassName={ "tab-label" }>
+            <Tab data-testid="Change-Schedule-Id" eventKey="schedule" title="Change Schedule" tabClassName={ "tab-label" }>
           <Accordion className="box-shadow" defaultActiveKey="0">
             {this
               .state
@@ -371,7 +375,7 @@ confirmMessage(){
                 return (<>
                     <Card data-testid="card-toggle">
                       <Accordion.Toggle className="box-shadow" as={Card.Header} eventKey={id+1} data-testid="card-toggle">
-                        <Row className="border-bottom  pb-3 pt-2 mb-0" data-testid="lecture-s-row">
+                        <Row className="border-bottom  pb-3 pt-2 mb-0" data-testid="lecture-s-rowM">
 
                             <Col xs={3} className={'align-content-left'}>
                               <h5>{e.SubjectId}</h5>
