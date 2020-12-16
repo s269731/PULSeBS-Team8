@@ -113,9 +113,9 @@ setModality(val){
   changeYear = (id) => {
 
     if (id === "del") {
-      this.setState({allChecked: false,checkedCourses: [],lectures: this.state.filteredLec2, year: "del"});
+      this.setState({changeYear: true, allChecked: false,checkedCourses: [],lectures: this.state.filteredLec2, year: "del"});
     } else {
-      this.setState({allChecked: false,checkedCourses: [], year: id, filteredLec2: this.state.filteredLec2});
+      this.setState({changeYear: true, allChecked: false,checkedCourses: [], year: id, filteredLec2: this.state.filteredLec2});
 
       let filteredLec = this.state.filteredLec2.filter(item => {
           return item.Year === id
@@ -232,17 +232,33 @@ confirmMessage(){
     "Capacity":  this.state.Capacity,
     "Hour": this.state.Time1+"-"+this.state.Time2
   }
+  API.changeSchedule(a).then((res) => {      
+    {this.state.lectures.map((e, id) => {
+      return(
+        <>
+        {e.schedules.map((sc, id) => {
+            return(
+              <>
+              {sc.ScheduleId===CourId &&
+              this.setState({weekDay: sc.Day})
+              }
+              </>
+            )
+        })}
+        </>)
+      })}
+      this.componentDidMount();
+      // this.changeYear(this.state.currYear);   
 
-  API.changeSchedule(a)
-      .then((res) => {
-      })
-      .catch((err) => {
-        if (err.status === 401) {
-          this.props.notLoggedUser();
-        }
-      });
-      this.setState({scId: null})
-    }
+    })
+    .catch((err) => {
+      if (err.status === 401) {
+        this.props.notLoggedUser();
+      }
+    });
+    this.setState({scId: null})
+  }
+
 
   render() {
     return ( <> 
