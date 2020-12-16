@@ -10,28 +10,8 @@ import {
   Form, Tabs, Tab, Alert
 } from "react-bootstrap";
 import API from "../../api/api";
-import Jumbotron from "../../assets/edit.jpg";
-import TimeField from 'react-simple-timefield';
 import ModifyModal from "./ModifyModal";
 
-const options = [
-  {
-    label: "Mon",
-    value: "Mon"
-  }, {
-    label: "Tue",
-    value: "Tue"
-  }, {
-    label: "Wed",
-    value: "Wed"
-  }, {
-    label: "Thu",
-    value: "Thu"
-  }, {
-    label: "Fri",
-    value: "Fri"
-  }
-];
 
 class ModifyLecture extends React.Component {
   constructor(props) {
@@ -413,28 +393,36 @@ confirmMessage(){
 
                       <Accordion.Collapse eventKey={id+1}>
                         <Card.Body>
-                          <Row>
-                          <Col xs={6}>
-                          <Row>
+                          <Row className={'align-content-center'}>
+                          <Col  className={'align-content-center'} xs={6}>
+                          <Row className={'align-content-center'}>
+                            <Col>
                             <h5>
                               <b>Year:</b>
-                              {e.Year}
+                              &nbsp;{e.Year}
                             </h5>
+                            </Col>
                           </Row>
-                          <Row>
-                            <h5>
+                            <Row>
+
+                            <Col><h5>
                               <b>Semester:</b>
-                              {e.Semester}</h5>
+                              &nbsp;{e.Semester}</h5></Col>
                           </Row>
+
                           <Row>
+                            <Col>
                             <h5>
+
                               <b>Teacher:</b>
-                              {e.Tname}
-                              {e.Tsurname}</h5>
+                              &nbsp;{e.Tname}&nbsp;
+                              {e.Tsurname}</h5></Col>
+
                           </Row>
                           <Row>
                             <h5>
-                              <b>Modality:</b>{this.state.refresh} {e.Modality}</h5>
+                              <Col>
+                              <b>Modality:</b>{this.state.refresh} {e.Modality}</Col></h5>
                           </Row>
                           </Col>
 
