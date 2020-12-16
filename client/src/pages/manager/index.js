@@ -156,10 +156,10 @@ class Manager extends React.Component {
                     this.setState({serverErr:false,
                         emptyRes:false,
                         csvData:res.map(val=>({
-                            BookCourse:val.Subject,
+                            BookedCourse:val.Subject,
                             TeacherName:val.Teacher.Name,
                             TeacherSSN: val.Teacher.SSN,
-                            BookStudents:val.Lectures[0].StudentList.map(stu=>stu.Name+" "+stu.SSN).join('--')
+                            BookedStudents:val.Lectures[0].StudentList.map(stu=>stu.Name+" "+stu.SSN).join('--')
                         }))
                     })
                 }else{
