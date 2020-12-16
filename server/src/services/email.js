@@ -67,10 +67,10 @@ async function sendingEmailCancelledLecture(students) {
 }
 
 async function sendModifySchedule(info, emails) {
-  const subjectName = subjectDao.getSubjectName(info.SubjectId);
+  const subjectName = await subjectDao.getSubjectName(info.SubjectId);
 
   emails.forEach((emailaddr) => {
-    sendEmail(emailaddr, 'Lecture Schedule changed', `${subjectName} 
+    sendEmail(emailaddr, 'Lecture Schedule changed', `${subjectName.SubjectName} 
     lecture's scheduled for ${info.Day} ${info.Hour} changed, go check new Schedule`);
   });
 }
