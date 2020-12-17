@@ -144,17 +144,22 @@ class Manager extends React.Component {
    
     handleChange = (v)=>{
         this.setState({
-            search:v.target.value
+            search:v.target.value,
+            searchData:[]
         })
     }
     onSearchSsn = () => {
+        this.setState({searchData:[]})
         API.getContactTracing(this.state.search)
             .then(res => {
+                let i=0
+                const cols=[
+                    "RowId","Student SSN","Student Name", "Lecture Date", "Lecture Hour", "Course", "Teacher Name", "Teacher SSN"
+                ]
                 const list=[]
+                list.push(cols)
                 if(res.length){
                     this.setState({searchData:res});
-                    console.log("val")
-                    console.log(res)
                         res.forEach(rows => {
                             rows.Lectures.forEach(data=>{
                                 data.StudentList.forEach(student=> {
@@ -165,7 +170,9 @@ class Manager extends React.Component {
                                         min = '00'
                                     }
                                     let hour = lectDay.getHours() + ":" + min;
+                                    i=i+1;
                                     const lectureData = [
+                                        i,
                                         student.SSN,
                                         student.Name,
                                         lectDay.toLocaleDateString("en"),
