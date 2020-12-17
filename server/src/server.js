@@ -281,8 +281,8 @@ app.get('/api/manager/contactTracing/:studentSSN', async (req, res) => {
 
 app.get('/api/officer/schedule', async (req, res) => {
   try {
-    const schedule = await scheduleDao.getSchedule();
-    res.json(schedule);
+    const scheduleList = await scheduleDao.getSchedule();
+    res.json(scheduleList);
   } catch (error) {
     res.json(scheduleErr);
   }
