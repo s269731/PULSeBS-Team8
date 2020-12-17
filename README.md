@@ -14,7 +14,7 @@
 # Contents
 
 - [How to run docker images](#how-to-run-docker-images)
-    - [Version v1.5](#version-v1.5)
+    - [Version v1.5](#version-v15)
     - [Version v1](#version-v1)
     - [Version v0](#version-v0)
 - [How to use the application](#how-to-use-the-application)
@@ -24,7 +24,7 @@
         - [Officers](#officers)
         - [Managers](#managers)
     - [CSV File format](#csv-file-format)
-        - [Version v1.5](#For-version-v1.5)
+        - [Version v1.5](#For-version-v15)
         - [Version v1](#For-version-v1)
                  - [Students](#students)
                  - [Teachers](#teachers)
