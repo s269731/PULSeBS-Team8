@@ -153,13 +153,17 @@ class Manager extends React.Component {
                 if(res.length){
                     this.setState({searchData:res});
                     console.log(res)
+                    const lectures = [];
+                    res.forEach((val) => {
+                        lectures.push(val);
+                    });
                     this.setState({serverErr:false,
                         emptyRes:false,
                         csvData:res.map(val=>({
                             BookedCourse:val.Subject,
                             TeacherName:val.Teacher.Name,
                             TeacherSSN: val.Teacher.SSN,
-                            BookedStudents:val.Lectures[0].StudentList.map(stu=>stu.Name+" "+stu.SSN).join('--')
+                            BookedStudents:lectures.StudentList.map(stu=>stu.Name+" "+stu.SSN).join('--')
                         }))
                     })
                 }else{
