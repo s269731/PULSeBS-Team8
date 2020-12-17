@@ -204,7 +204,7 @@ confirmMessage(){
     this
       .state
       .lectures
-      .map((e) => {
+      .forEach((e) => {
         {
           e
             .schedules
