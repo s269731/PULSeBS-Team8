@@ -150,18 +150,41 @@ class Manager extends React.Component {
     onSearchSsn = () => {
         API.getContactTracing(this.state.search)
             .then(res => {
+                const list=[]
                 if(res.length){
                     this.setState({searchData:res});
+                    console.log("val")
                     console.log(res)
+                        res.forEach(rows => {
+                            rows.Lectures.forEach(data=>{
+                                data.StudentList.forEach(student=> {
+                                    let lectDay = new Date(data.DateHour);
+                                    let fields = data.DateHour.split("T");
+                                    let min = lectDay.getMinutes().toString()
+                                    if (min === '0') {
+                                        min = '00'
+                                    }
+                                    let hour = lectDay.getHours() + ":" + min;
+                                    const lectureData = [
+                                        student.SSN,
+                                        student.Name,
+                                        lectDay.toLocaleDateString("en"),
+                                        hour,
+                                        rows.Subject,
+                                        rows.Teacher.Name,
+                                        rows.Teacher.SSN,
+
+
+                                    ];
+                                    list.push(lectureData)
+                                })
+
+                            })
+
+                    })
                     this.setState({serverErr:false,
                         emptyRes:false,
-                        csvData:res.map(val=>({
-                            BookedCourse:val.Subject,
-                            TeacherName:val.Teacher.Name,
-                            TeacherSSN: val.Teacher.SSN,
-                            BookedStudents:val.Lectures[0].StudentList.map(stu=>stu.Name+" "+stu.SSN).join('--')
-                        }))
-                    })
+                        csvData:list})
                 }else{
                     this.setState({emptyRes: true})
                 }
@@ -431,7 +454,7 @@ class Manager extends React.Component {
                                     <Col style={{display: 'flex', justifyContent: 'space-around'}} className="LogChart"
                                          lg={6}>
                                         <Button data-testid="csv-download-button">
-                                            <CSVLink style={{color: '#fff'}} data={this.state.csvData}
+                                            <CSVLink style={{color: '#fff'}} data={this.state.csvData} filename={`contact_tracing_report_${this.state.search}.csv`}
                                                      variant="primary">
                                                 Download CSV
                                             </CSVLink>
