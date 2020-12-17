@@ -35,6 +35,10 @@ async function importFile(file, table) {
     .on('data', (data) => {
       const values = Object.values(data);
       try {
+        if (lectures === 1 && values[4].split(':').length === 4) {
+          const parts = values[4].split(':');
+          values[4] = `${parts[0]}:${parts[1]}-${parts[2]}:${parts[3]}`;
+        }
         stmt.run(values);
       } catch (err) {
         console.log(err);
