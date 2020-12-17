@@ -348,7 +348,7 @@ class Manager extends React.Component {
                             </Tab>
                             <Tab eventKey="search" title="Generate Contact Tracing Report" tabClassName={ "tab-label" }>
                                 <Row className="justify-content-md-center">
-                                    <Alert variant={"info"}><h5>Insert the SSN number to generate the contact tracing report<br/> taking in consideration all the lectures of the past 14 days</h5></Alert></Row>
+                                    <Alert variant={"info"}><h5>Insert the SSN number to generate the contact tracing report<br/> taking in consideration all the past lectures of the current week</h5></Alert></Row>
                                 <Row className="justify-content-md-center">
                                     <Col className="LogChart" lg={ 6 } >
                                         <InputGroup style={{padding: '20px 0'}}>
