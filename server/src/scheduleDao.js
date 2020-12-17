@@ -180,14 +180,14 @@ exports.modifySchedule = (info_schedule) => new Promise((resolve, reject) => {
         const stmt4 = db.prepare(sql4);
         transaction = db.transaction(() => {
           let res1;
-          Promise.all(rows.map((row) => {
+          rows.forEach((row) => {
             if (day_week.getTime() > today.getTime() && day_week.getTime() < endSemester.getTime()) {
               res1 = stmt4.run(info_schedule.Class, info_schedule.Capacity, day_week.toISOString(), row.LectureId);
             } else {
               rows.splice(rows.indexOf(row), 1);
             }
             day_week.setDate(day_week.getDate() + 7);
-          }));
+          });
           const res2 = stmt3.run(info_schedule.Class, info_schedule.Day, info_schedule.Capacity, info_schedule.Hour, info_schedule.ScheduleId);
           return res1.changes > 0 && res2.changes > 0;
         });
