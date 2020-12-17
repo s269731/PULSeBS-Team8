@@ -185,7 +185,7 @@ class Manager extends React.Component {
             rows.Lectures.forEach(data=>{
                 data.StudentList.forEach(student=>{
                     let lectDay = new Date(data.DateHour);
-                    let fields = data.DateHour.split("T");
+                    //let fields = data.DateHour.split("T");
                     let min = lectDay.getMinutes().toString()
                     if (min === '0') {
                         min = '00'
@@ -390,7 +390,7 @@ class Manager extends React.Component {
                                                     {val.Lectures.map(lec=> {
                                                         let lectDay = new Date(lec.DateHour);
                                                         let fields = lec.DateHour.split("T");
-                                                        let date = fields[0];
+                                                        //let date = fields[0];
                                                         let min = lectDay.getMinutes().toString()
                                                         if (min === '0') {
                                                             min = '00'

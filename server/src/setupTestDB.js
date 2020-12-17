@@ -73,7 +73,8 @@ function initTestDB() {
   lectStmt.run([21, 12, 7, moment(global.now).subtract(4, 'days').toISOString(), 'In person', '12A', 100, 6]);
   lectStmt.run([22, 11, 6, moment(global.now).subtract(1, 'days').toISOString(), 'In person', '12A', 100, 6]);
   const lectStmt1 = db.prepare('INSERT OR IGNORE INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople,PresentPeople,ReportPresence) VALUES(?,?,?,?,?,?,?,?,?,?)');
-  const dec10 = new Date('10 December 2020');
+  const dec10 = new Date();
+  dec10.setDate(dec10.getDate() - 4);
   lectStmt1.run([23, 1, 1, dec10.toISOString(), 'In person', '12A', 100, 50, 34, 1]);
   const dec6 = new Date('6 December 2020');
   lectStmt1.run([24, 1, 1, dec6.toISOString(), 'In person', '12A', 100, 60, 55, 1]);

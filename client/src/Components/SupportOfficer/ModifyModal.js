@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import {Button, Modal, Alert, Form, Col, Card} from "react-bootstrap";
+import {Button, Modal, Alert, Card} from "react-bootstrap";
 import TimeField from "react-simple-timefield";
-import Jumbotron from "../../assets/edit.jpg";
-import API from "../../api/api";
 
 
 const options = [
