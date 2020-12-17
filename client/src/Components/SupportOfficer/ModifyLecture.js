@@ -284,7 +284,7 @@ confirmMessage(){
                 onSelect={ (k) => {
                   this.setModality(k);
                 } }>
-            <Tab eventKey="modality" title="Change Modality" tabClassName={ "tab-label" }>
+            <Tab data-testid="Change-Modality-Id" eventKey="modality" title="Change Modality" tabClassName={ "tab-label" }>
 
                 {this.state.confirm &&<><Row className="below-tab justify-content-md-center" >
                   <h6>
