@@ -14,6 +14,7 @@
 # Contents
 
 - [How to run docker images](#how-to-run-docker-images)
+    - [Version v1.5](#version-v15)
     - [Version v1](#version-v1)
     - [Version v0](#version-v0)
 - [How to use the application](#how-to-use-the-application)
@@ -23,17 +24,23 @@
         - [Officers](#officers)
         - [Managers](#managers)
     - [CSV File format](#csv-file-format)
-        - [Students](#students)
-        - [Teachers](#teachers)
-        - [Courses](#courses)
-        - [Classes](#classes)
-        - [Lectures](#lectures)
+        - [Version v1.5](#For-version-v15)
+        - [Version v1](#For-version-v1)
+                 - [Students](#students)
+                 - [Teachers](#teachers)
+                - [Courses](#courses)
+                - [Classes](#classes)
+                - [Lectures](#lectures)
 - [How to run E2E automated tests](#how-to-run-e2e-automated-tests)
 
 
 
 # How to run docker images
 (if you are on windows, you must avoid "sudo")
+
+## Version v1.5
+- sudo docker pull se2team8/pulsebs-team8:v1.5
+- sudo docker run -p 3000:3000 -p 3001:3001 se2team8/pulsebs-team8:v1.5
 
 ## Version v1
 - sudo docker pull se2team8/pulsebs-team8:v1
@@ -84,8 +91,14 @@ So, you need to:
 | -----|---------|
 | pulsebs8-m0001@yahoo.com | pass2 |
 
-## CSV Files format
-To upload some data in the officer page (for version v1 only)
+## CSV Files format 
+
+## For version v1.5
+Use the same format of csv files provided by the Product Owner 
+
+
+## For version v1
+To upload some data in the officer page
 
 ### Students
 Integer ID, "S", Name, Surname, Email, Password Hash, Course
