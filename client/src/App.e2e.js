@@ -26,7 +26,7 @@ beforeAll(async () => {
   // creates a new page in the opened browser
   page = await browser.newPage()
 })
-/*
+
 describe('Students', () => {
   test('students can login', async () => {
     await page.goto(baseUrl);
@@ -215,7 +215,7 @@ describe('Officers', () => {
   }, 9000000);
 
 });
-*/
+
 describe('Managers', () => {
   test('managers can login', async () => {
     await page.goto(baseUrl);
