@@ -356,8 +356,9 @@ test('Should return undefined because the SubjectId doesn\'t exist', async () =>
 });
 
 test('Should return 1 to indicate that the presentPerson', async () => {
-  const lectureId = 3;
-  const presentPeople = 50;
+  const lectureId = 29;
+  // const presentPeople = [{ StudentId: 2 }, { StudentId: 3 }, { StudentId: 4 }, { StudentId: 5 }];
+  const presentPeople = [2, 3, 4, 5];
   const result = await lecturesDao.updatePresentPeople(lectureId, presentPeople);
   expect(result.result).toBe(1);
 });
@@ -368,23 +369,27 @@ test('Should return error because presentPeople isn\'t a correct value', async (
   try {
     const result = await lecturesDao.updatePresentPeople(lectureId, presentPeople);
   } catch (error) {
-    expect(error).toBe('The value inserted is not correct, please insert an Integer');
+    expect(error).toBe('The value inserted is not correct, please insert an Array of StudentId');
   }
 });
 
 test('Should return error because values about update are not correct', async () => {
   const lectureId = 3;
-  const presentPeople = 101;
+  const presentPeople = [];
+  for (let j = 0; j < 102; j++) {
+    presentPeople[j] = j;
+  }
   try {
     const result = await lecturesDao.updatePresentPeople(lectureId, presentPeople);
   } catch (error) {
-    expect(error).toBe('Error in updating number of Present People');
+    expect(error).toBe('Error while marking students as present');
   }
 });
 
 test('Should return an error because the lecture is still in program', async () => {
   const lectureId = 2;
-  const presentPeople = 6;
+  // const presentPeople = [{ StudentId: 2 }, { StudentId: 3 }, { StudentId: 4 }];
+  const presentPeople = [2, 3, 4];
   try {
     const result = await lecturesDao.updatePresentPeople(lectureId, presentPeople);
   } catch (error) {

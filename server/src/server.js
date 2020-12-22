@@ -298,11 +298,12 @@ app.post('/api/officer/changemodalitysched', async (req, res) => {
   }
 });
 
-app.post('/api/teacher/insertPresence', async (req, res) => {
+app.post('/api/teacher/insertPresence:lectureId', async (req, res) => {
   const userId = req.user && req.user.user;
-  const { lectureId, presentPeople } = req.body;
+  const { lectureId } = req.params;
+  const { presentPeopleArray } = req.body;
   try {
-    const result = await lecturesDao.updatePresentPeople(lectureId, presentPeople);
+    const result = await lecturesDao.updatePresentPeople(lectureId, presentPeopleArray);
     logsDao.insertLog(userId, 4, lectureId);
     res.json(result);
   } catch (error) {

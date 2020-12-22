@@ -84,6 +84,7 @@ function initTestDB() {
   const dec1 = new Date('1 December 2020');
   lectStmt1.run([27, 1, 1, dec1.toISOString(), 'In person', '12A', 100, 15, 5, 1]);
   lectStmt1.run([28, 1, 1, dec6.toISOString(), 'In person', '12A', 100, 100, 100, 1]);
+  lectStmt.run([29, 1, 1, today.subtract(4, 'days').toISOString(), 'In person', '12A', 100, 50]);
 
   /** ********************* */
   /*    ENROLLMENTS TABLE   */
@@ -106,6 +107,10 @@ function initTestDB() {
   bookStmt.run(2, 5, 0);
   bookStmt.run(2, 6, 0);
   bookStmt.run(2, 7, 0);
+  bookStmt.run(29, 2, 0);
+  bookStmt.run(29, 3, 0);
+  bookStmt.run(29, 4, 0);
+  bookStmt.run(29, 5, 0);
   bookStmt.run(4, 7, 1);
   bookStmt.run(4, 6, 1);
   bookStmt.run(20, 7, 0);

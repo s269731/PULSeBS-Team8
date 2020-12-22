@@ -27,7 +27,7 @@ test('Test the correct computing of statistics about presences', async () => {
   expect(obj[0].weeklystatsarray[0].weeklyavgpresences).toBe(78);
   expect(obj[0].weeklystatsarray[1].weekId).toBe('30 NOV-06 DEC 2020');
   expect(obj[0].weeklystatsarray[1].weeklyavgpresences).toBe(53.333333333333336);
-  expect(obj[0].weeklystatsarray[2].weekId).toBe('07-13 DEC 2020');
+  expect(obj[0].weeklystatsarray[2].weekId).toBe('14-20 DEC 2020');
   expect(obj[0].weeklystatsarray[2].weeklyavgpresences).toBe(34);
   expect(obj[0].monthlystatsarray[0].monthId).toBe('OCT-2020');
   expect(obj[0].monthlystatsarray[0].monthlyavgpresences).toBe(78);

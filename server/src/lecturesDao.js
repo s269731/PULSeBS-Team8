@@ -70,6 +70,12 @@ const getLectureTimeConstraint = (lectureId) => {
   return row;
 };
 
+/*    Bookings STATUS map:
+      Status = 0 -> Student booked
+      Status = 1 -> Student in Waiting List
+      Status = 3 -> Student present at Lecture
+
+ */
 exports.insertReservation = (lectureId, studentId) => new Promise((resolve, reject) => {
   const sql = 'SELECT * FROM Bookings WHERE LectureId=? AND StudentId=?';
   const insertbookings = db.prepare('INSERT INTO Bookings(LectureId,StudentId) VALUES(?,?)');
@@ -182,7 +188,7 @@ async function getInfoBookingConfirmation(lectureId, studentId) {
 }
 
 async function getStudentsListByLectureId(lectureId) {
-  const sql = 'SELECT StudentId FROM Bookings WHERE LectureId=? AND Status=0';
+  const sql = 'SELECT StudentId,Status FROM Bookings WHERE LectureId=? AND (Status=0 OR Status=3)';
   const stmt = db.prepare(sql);
   const rows = stmt.all(lectureId);
   const studentlist = [];
@@ -190,7 +196,10 @@ async function getStudentsListByLectureId(lectureId) {
   if (rows.length > 0) {
     rows.forEach(async (row) => {
       const student = await userDao.getUserById(row.StudentId);
-      studentlist.push(student);
+      studentlist.push({
+        // eslint-disable-next-line max-len
+        id: student.id, role: student.role, name: student.name, surname: student.surname, city: student.city, email: student.email, birthday: student.birthday, ssn: student.ssn, status: row.Status,
+      });
     });
     // console.log(studentlist);
     return studentlist;
@@ -421,13 +430,30 @@ exports.updatePresentPeople = (lectureId, presentPeople) => new Promise((resolve
   const sql1 = db.prepare('SELECT DateHour FROM Lectures WHERE LectureId=?');
   const res1 = sql1.get(lectureId);
   const lectureTime = new Date(res1.DateHour);
-  if (Number.isInteger(presentPeople) === false) reject('The value inserted is not correct, please insert an Integer');
-  if (lectureTime < now) {
-    const sql = db.prepare('UPDATE Lectures SET PresentPeople=?, ReportPresence=1 WHERE LectureId=? AND Capacity>=PresentPeople AND BookedPeople>=?');
-    const res = sql.run(presentPeople, lectureId, presentPeople);
-    if (res.changes === 1) resolve({ result: 1 });
-    else reject('Error in updating number of Present People');
-  } else reject('Lecture is still in program');
+  let i = 0;
+  const sqlupdate = db.prepare('UPDATE Bookings SET Status=3 WHERE LectureId=? AND StudentId=?');
+  if (Array.isArray(presentPeople) === false) reject('The value inserted is not correct, please insert an Array of StudentId');
+
+  const transaction = db.transaction(() => {
+    if (lectureTime < now) {
+      presentPeople.forEach((studentId) => {
+        const updateres = sqlupdate.run(lectureId, studentId);
+        if (updateres.changes === 1) i += 1;
+        else reject('Error while marking students as present');
+      });
+
+      if (i === presentPeople.length) {
+        const sql = db.prepare('UPDATE Lectures SET PresentPeople=?, ReportPresence=1 WHERE LectureId=? AND Capacity>=PresentPeople AND BookedPeople>=?');
+        const res = sql.run(presentPeople.length, lectureId, presentPeople.length);
+        if (res.changes === 1) return 0;
+        reject ('Error while marking students as present');
+      } reject ('Error while marking students as present');
+    } return 1;
+  });
+
+  const transactionresult = transaction();
+  if (transactionresult === 0) resolve({ result: 1 });
+  else if (transactionresult === 1) reject('Lecture is still in program');
 });
 
 async function getTeacherPastLectures(teacherId) { //= > new Promise((resolve, reject) => {
