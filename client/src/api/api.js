@@ -59,6 +59,7 @@ async function retrieveLectures(url){
                           let hasAttendance= l.presentPeople && l.presentPeople !==0
                           let now = new Date();
                           let lectDay = new Date(l.dateHour);
+                          let canBook=lectDay>now;
                           let canDelete = lectDay - now - 3600000 > 0;
                           let canModify = lectDay - now - 3600000 / 2 > 0;
                           let canRecordAttendance= !hasAttendance && lectDay - now < 0;
@@ -91,7 +92,8 @@ async function retrieveLectures(url){
                             canDelete: canDelete,
                             canModify:canModify,
                             canRecordAttendance : canRecordAttendance,
-                            hasAttendance: hasAttendance
+                            hasAttendance: hasAttendance,
+                            canBook:canBook
                           };
                         })
                 );

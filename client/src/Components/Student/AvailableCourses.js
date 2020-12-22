@@ -91,7 +91,7 @@ const LectureItem = (props) => {
                                     l.booked === 2 &&
                                     l.bookedStudents < l.capacity && (
                                         <Col>
-                                            <Button
+                                            {l.canBook ? <Button
                                                 data-testid="course-book-button"
                                                 onClick={() => bookLecture(l.lectureId)}
                                                 size="lg"
@@ -99,7 +99,14 @@ const LectureItem = (props) => {
                                                 block
                                             >
                                                 Book Now
-                                            </Button>
+                                            </Button> :<Button
+                                                size="lg"
+                                                variant="success"
+                                                disabled
+                                                block
+                                            >
+                                                Cannot book
+                                            </Button> }
                                         </Col>
                                     )}
                                     {l.modality === "In person" &&
