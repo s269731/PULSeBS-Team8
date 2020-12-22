@@ -1,13 +1,17 @@
 import React, { Component } from "react";
-import {Nav, Navbar, Col, Row} from "react-bootstrap";
+import {Nav, Navbar, Col, Row, Button} from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "../App.css";
+import Jumbotron from "../assets/helpF.png";
+import HelpStudentModal from "./Student/HelpStudentModal";
+
 //import {Link} from 'react-router-dom'
 
 class Header extends Component {
   constructor(props) {
     super(props);
   }
+
   render() {
     return (
       <Navbar variant="dark" bg="primary" className={"Nav"}>
@@ -53,6 +57,9 @@ class Header extends Component {
                     </span>{" "}
                   </span>{" "}
                 </span>
+                {this.props.loggedUser.role === "S" &&
+            <HelpStudentModal/>}
+
                 <Link
                   to="/home"
                   className="headerLinks "
