@@ -70,10 +70,24 @@ const LectureItem = (props) => {
                   {/*BUTTONS*/}
                   <Row className="pt-4 pb-2">
                     <Col className="align-content-end">
-                      <StudentList
-                          id={l.id}
-                          notLoggedUser={props.notLoggedUser}
-                      />
+                      {
+                        l.bookedStudents>0 ? <>
+                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                              <StudentList
+                                  id={l.id}
+                                  notLoggedUser={props.notLoggedUser}
+                                  recordAttendance={l.canRecordAttendance}
+                                  hasAttendance={l.hasAttendance}
+                                  getLectures={props.getLectures}
+                              />
+                        </>: <Button
+                            variant="primary"
+                            disabled
+                        >
+                          No students booked
+                        </Button>
+                     }
+
                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                       {!l.canRecordAttendance && !l.hasAttendance && <ActionsForm l={l} cancelLecture={props.cancelLecture} operation={'delete'}/>}
                       {!l.canRecordAttendance && !l.hasAttendance && l.modality === "In person" && <>
@@ -81,12 +95,7 @@ const LectureItem = (props) => {
                         <ActionsForm l={l} changeModalityLecture={props.changeModalityLecture} operation={'modify'}/>
                         </>
                       }
-                      {
-                        l.canRecordAttendance && !l.hasAttendance && l.bookedStudents>0 && <>
-                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                          <ActionsForm l={l} recordAttendance={props.recordAttendance} operation={'recordAttendance'}/>
-                        </>
-                      }
+
                     </Col>
                   </Row>
 
@@ -228,6 +237,7 @@ class LectureTable extends React.Component {
                               changeModalityLecture={this.props.changeModalityLecture}
                               recordAttendance={this.props.recordAttendance}
                               notLoggedUser={this.props.notLoggedUser}
+                              getLectures={this.props.getLectures}
                           />
                       );
                     })}

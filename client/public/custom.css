@@ -104,3 +104,8 @@
  #selectAll{
      margin-top:5px !important;
  }
+.selectAll{
+    margin-top:10px !important;
+    margin-bottom: 0px !important;
+    font-weight: bold;
+}

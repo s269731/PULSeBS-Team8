@@ -1,30 +1,85 @@
 import React, { useState } from "react";
-import { Button, Modal, Alert, Spinner, Row, Col } from "react-bootstrap";
+import {Button, Modal, Alert, Spinner, Row, Col, Form} from "react-bootstrap";
 import API from "../../api/api";
 
-function StudentItem(s) {
-  console.log(s.s.surname);
-  return (
-    <>
-      <Row data-testid="student-row">
-        <Col>{s.s.surname}</Col>
-        <Col>{s.s.name}</Col>
-        <Col>{s.s.email}</Col>
-      </Row>
-    </>
-  );
-}
+
 
 function StudentList(props) {
   const [show, setShow] = useState(false);
   const [students, setStudents] = useState([]);
   const [serverErr, setServerErr] = useState(false);
   const [loading, setLoading] = useState(false);
+    const [selectAll, setSelectAll]=useState(false)
+    const [alert, setAlertShow]=useState(false);
+  const addStudent=(add, id, ssn)=>{
+console.log(add)
+      let res=students.map((s)=>{
+          if(s.id===id){
+              s.select=add;
+          }
+          return s;
+      });
+        console.log(res)
+      setStudents(res);
+  }
+const addAllStudents=(add)=>{
+
+          let res = students.map((s) => {
+
+                  s.select = add;
+              return s;
+          });
+          console.log(res)
+          setStudents(res);
+          if(add) {
+              setSelectAll(true)
+          }else{
+              setSelectAll(false)
+          }
+
+    }
+const handleAlertShow=()=>{
+        setAlertShow(true)
+}
+const handleAlertUnshow=()=>{
+        setAlertShow(false)
+}
+
+const submitAttendanceData=()=>{
+    setAlertShow(false)
+        let presentStuds=[]
+    students.forEach((s)=>{
+            if(s.select){
+                presentStuds.push(s.id)
+            }
+        })
+    console.log(presentStuds)
+    API.insertAttendanceInfo(props.id, presentStuds).then((res)=>{
+        setServerErr(false);
+
+        handleClose();
+        props.getLectures();
+    }).catch((e)=>{
+        setServerErr(true);
+    })
+}
+
+
   const handleClose = () => setShow(false);
   const handleShow = () => {
     setLoading(true);
     API.getStudentListByLectureId(props.id)
       .then((res) => {
+          res=res.map((s)=>{
+              return {
+                  select: s.status===3 ? 1 : 0,
+                  id:s.id,
+                  name:s.name,
+                  surname:s.surname,
+                  ssn:s.ssn,
+                  email:s.email
+              }
+          })
         setStudents(res);
         setLoading(false);
         setServerErr(false);
@@ -40,6 +95,14 @@ function StudentList(props) {
     setShow(true);
   };
 
+let hasAttendance=props.hasAttendance
+    if(props.hasAttendance===1){
+       hasAttendance=true
+    }
+    if(props.hasAttendance===0){
+        hasAttendance=false
+    }
+    console.log(hasAttendance)
   return (
     <>
       <Button
@@ -47,12 +110,12 @@ function StudentList(props) {
         onClick={handleShow}
         data-testid="studentlist-button"
       >
-        Booked students
+          {!hasAttendance ? <>{ props.recordAttendance ? <>Insert attendance information</> : <>List of booked students</>}</> : <>List of present students</>}
       </Button>
 
       <Modal show={show} onHide={handleClose} data-testid="studentlist-modal">
         <Modal.Header closeButton>
-          <Modal.Title>Booked students</Modal.Title>
+          <Modal.Title>{!hasAttendance ? <>{ props.recordAttendance ? <>Insert attendance information</> : <>List of booked students</>}</> : <>List of present students</>}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {serverErr && (
@@ -100,6 +163,7 @@ function StudentList(props) {
                 <Col>SURNAME</Col>
                 <Col>NAME</Col>
                 <Col>E-MAIL</Col>
+                  {(props.recordAttendance===true || hasAttendance===true) && <Col><Row>PRESENCE</Row></Col>}
               </Row>
               <hr
                 style={{
@@ -115,17 +179,93 @@ function StudentList(props) {
             !loading &&
             students.length !== 0 &&
             students.map((s, id) => {
-              return <StudentItem  key={id} s={s} />;
+
+              return <>
+                  <Row data-testid="student-row">
+                      <Col>{s.surname}</Col>
+                      <Col>{s.name}</Col>
+                      <Col>{s.email}</Col>
+
+                      {(props.recordAttendance || hasAttendance) && <Col>
+                          <Form>
+                              <Form.Group controlId="formBasicCheckbox">
+
+                                  {hasAttendance ? <Form.Check
+                                      data-testid="checkOne"
+                                      checked={s.select}
+                                      key={s.id}
+                                      disabled
+                                      type="checkbox"
+
+                                  /> : <Form.Check
+                                      data-testid="checkOne"
+                                      checked={s.select}
+                                      key={s.id}
+                                      type="checkbox"
+                                      onChange={event => addStudent(event.target.checked, s.id, s.SSN)}
+                                  />}
+                              </Form.Group>
+                          </Form>
+                      </Col>}
+
+
+                  </Row>
+              </>
             })}
+            {(props.recordAttendance && !hasAttendance) &&
+            <Row className={"selectAll text-center text-md-right"}>
+                <Col>
+                <Form>
+                    <Form.Group controlId="formBasicCheckbox">
+
+                        <Form.Check
+                            data-testid="checkOne"
+                            checked={selectAll}
+                            type="checkbox"
+                            label={"Select All"}
+                            onChange={event => addAllStudents(event.target.checked)}
+                        />
+                    </Form.Group>
+                </Form>
+                </Col>
+            </Row>
+            }
+
         </Modal.Body>
         <Modal.Footer>
-          <Button
-            variant="secondary"
-            onClick={handleClose}
-            data-testid="close-button"
-          >
-            Close
-          </Button>
+            {
+                alert ?
+
+                    <Alert variant={"danger"}> <Row className={"text-center text-md-left"}>
+                        <Col>
+                            <h6>Do you really want to save the attendance information? <br/><b>(You cannot undo this operation)</b></h6>
+                        </Col>
+
+                            <Col xs={2}>
+                                <Button variant={"success"} onClick={submitAttendanceData}>Yes</Button>
+                            </Col>
+                            <Col xs={2}>
+                                <Button variant={"secondary"} onClick={handleAlertUnshow}>No</Button>
+                            </Col>
+                    </Row>
+                    </Alert>
+                    :<>
+                    {(props.recordAttendance && !hasAttendance) && <Button
+                        variant="primary"
+                        onClick={handleAlertShow}
+                        data-testid="submit-attendance-button"
+                    >
+                        Save
+                    </Button>}
+
+                <Button
+                variant="secondary"
+                onClick={handleClose}
+                data-testid="close-button"
+                >
+                Close
+                </Button>
+            </>}
         </Modal.Footer>
       </Modal>
     </>

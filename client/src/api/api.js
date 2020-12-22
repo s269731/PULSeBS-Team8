@@ -405,13 +405,14 @@ async function changeModalityCourse(list){
 async function insertAttendanceInfo(id, value){
   console.log(id);
   console.log(value)
+  console.log(JSON.stringify(value));
   return new Promise((resolve, reject) => {
-    fetch('/api/teacher/insertPresence', {
+    fetch('/api/teacher/insertPresence'+id.toString(), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({lectureId:id,presentPeople:value})
+      body: JSON.stringify({presentPeopleArray: value})
     }).then((response) => {
       if (response.ok) {
         resolve(response);

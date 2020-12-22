@@ -11,6 +11,7 @@ class TeacherPage extends React.Component {
     this.cancelLecture = this.cancelLecture.bind(this);
     this.changeModalityLecture = this.changeModalityLecture.bind(this);
     this.recordAttendance=this.recordAttendance.bind(this);
+    this.getLectures=this.getLectures.bind(this)
   }
     setModality(k){
       this.setState({modality:k})
@@ -157,6 +158,7 @@ class TeacherPage extends React.Component {
                             changeModalityLecture={this.changeModalityLecture}
                             recordAttendance={this.recordAttendance}
                             notLoggedUser={this.props.notLoggedUser}
+                            getLectures={this.getLectures}
                         />: <>
                             {this.state.noSubj ? <Row className="justify-content-md-center below-nav"><Alert className={"alert"} variant={"info"} data-testid={"no-courses-message"}><h4>No courses assigned to you</h4></Alert></Row>:
                             <Row className="justify-content-md-center below-nav"><Alert className={"alert"} variant={"info"} data-testid={"no-lectures-message"}><h4>You have not programmed lectures</h4></Alert></Row>
