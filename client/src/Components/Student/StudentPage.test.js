@@ -19,7 +19,8 @@ const lecturesList = [
     teacherName: "Franco yjtyjty",
     lectureId: 1,
     booked: 2,
-    visible:true
+    visible:true,
+    canBook:true
   },
   {
     id: 2,
@@ -33,7 +34,8 @@ const lecturesList = [
     teacherName: "Franco yjtyjty",
     lectureId: 1,
     booked: 1,
-    visible:true
+    visible:true,
+    canBook:true
   },
   {
     id: 3,
@@ -47,7 +49,8 @@ const lecturesList = [
     teacherName: "Franco yjtyjty",
     lectureId: 1,
     booked: 1,
-    visible:true
+    visible:true,
+    canBook:true
   },
   {
     id: 4,
@@ -61,7 +64,8 @@ const lecturesList = [
     teacherName: "Franco yjtyjty",
     lectureId: 1,
     booked: 2,
-    visible:true
+    visible:true,
+    canBook:true
   },
 ];
 

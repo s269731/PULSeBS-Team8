@@ -38,7 +38,7 @@ test("Modify lecture button works", async () => {
     );
     await waitFor(() => expect(modifyLecture).toHaveBeenCalledTimes(1));
 });
-
+/*
 test("Insert attendance number works", async ()=>{
     const recordAttLecture = jest.fn();
 
@@ -62,4 +62,4 @@ test("Insert attendance number works", async ()=>{
 
     await waitFor(() => expect(recordAttLecture).toHaveBeenCalledTimes(1));
 
-})
+})*/

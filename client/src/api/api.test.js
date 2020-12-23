@@ -147,7 +147,7 @@ test('loads and displays attendance logs for teachers', async () => {
     await waitFor(() => screen.getByTestId("logs-daily-table"))
     expect(screen.getAllByTestId("logs-daily-attendance-table")).toHaveLength(1)
     expect(screen.getAllByTestId("logs-weekly-attendance-table")).toHaveLength(1)
-    expect(screen.getAllByTestId("logs-monthly-attendace-table")).toHaveLength(1)
+    expect(screen.getAllByTestId("logs-monthly-attendance-table")).toHaveLength(1)
 })
 test('handle no logs error for teachers', async () => {
     server.use(
@@ -199,7 +199,37 @@ test('get student list with no students', async()=> {
     userEvent.click(screen.getByTestId("studentlist-button"), leftClick);
     await waitFor(() => expect(screen.getByTestId('no-student-message')));
 })
+test('teacher insert attendance', async()=>{
 
+        const mockInsertAttendanceByTeacher=jest.spyOn(API,"insertAttendanceInfo");
+        const mockNotLoggedUser = jest.fn();
+        render(<StudentList id={1} notLoggedUser={mockNotLoggedUser}
+                            recordAttendance={true}
+                            hasAttendance={false}/>);
+        userEvent.click(screen.getByTestId("studentlist-button"), leftClick);
+        await waitFor(()=>{expect(screen.getAllByTestId("checkOne")).not.toBeNull()});
+        expect(screen.getAllByTestId("checkOne")).toHaveLength(2)
+        expect(screen.getAllByTestId("checkAll")).toHaveLength(1)
+        expect(screen.getByTestId("submit-attendance-button")).not.toBeNull()
+
+    userEvent.click(
+        screen.getAllByTestId("checkOne")[0],
+        leftClick
+    );
+    userEvent.click(
+        screen.getAllByTestId("checkOne")[0],
+        leftClick
+    );
+    userEvent.click(screen.getByTestId("submit-attendance-button"))
+    await waitFor(() => expect(screen.getByTestId("confirm-button")).not.toBeNull());
+    userEvent.click(
+        screen.getByTestId("confirm-button"),
+        leftClick
+    );
+
+    await waitFor(() => expect(mockInsertAttendanceByTeacher).toHaveBeenCalledTimes(1));
+
+})
 test('teacher delete a lecture', async()=>{
     const deleteSpy=jest.spyOn(API, "deleteLectureByTeacher");
     render( <ActionsForm l={{
