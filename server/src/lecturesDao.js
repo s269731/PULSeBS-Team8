@@ -381,7 +381,7 @@ async function checkWaitingList(lectureId) {
 }
 
 exports.getLecturesForStudentContactTracing = (studentId) => new Promise((resolve, reject) => {
-  const sql = db.prepare('SELECT LectureId FROM Bookings WHERE StudentId=? AND Status=0');
+  const sql = db.prepare('SELECT LectureId FROM Bookings WHERE StudentId=? AND (Status=0 OR Status=3)');
   const bookings = sql.all(studentId);
   const sql1 = db.prepare('SELECT LectureId,TeacherId,DateHour,SubjectId FROM Lectures WHERE LectureId=?');
   const lectures = [];

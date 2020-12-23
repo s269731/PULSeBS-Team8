@@ -113,18 +113,18 @@ function initTestDB() {
   bookStmt.run(29, 5, 0);
   bookStmt.run(4, 7, 1);
   bookStmt.run(4, 6, 1);
-  bookStmt.run(20, 7, 0);
-  bookStmt.run(21, 7, 0);
-  bookStmt.run(22, 7, 0);
-  bookStmt.run(20, 4, 0);
-  bookStmt.run(21, 2, 0);
-  bookStmt.run(22, 3, 0);
-  bookStmt.run(20, 5, 0);
-  bookStmt.run(21, 6, 0);
-  bookStmt.run(22, 2, 0);
-  bookStmt.run(20, 6, 0);
-  bookStmt.run(21, 5, 0);
-  bookStmt.run(22, 8, 0);
+  bookStmt.run(20, 7, 3);
+  bookStmt.run(21, 7, 3);
+  bookStmt.run(22, 7, 3);
+  bookStmt.run(20, 4, 3);
+  bookStmt.run(21, 2, 3);
+  bookStmt.run(22, 3, 3);
+  bookStmt.run(20, 5, 3);
+  bookStmt.run(21, 6, 3);
+  bookStmt.run(22, 2, 3);
+  bookStmt.run(20, 6, 3);
+  bookStmt.run(21, 5, 3);
+  bookStmt.run(22, 8, 3);
 
   /** ********************* */
   /*      LOGS TABLE        */
