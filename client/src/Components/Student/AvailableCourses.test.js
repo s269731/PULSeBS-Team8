@@ -19,12 +19,13 @@ const lecturesList = [
     teacherName: "Franco yjtyjty",
     lectureId: 1,
     booked: 2,
-    visible:true
+    visible:true,
+    canBook:true
   },
   {
     id: 2,
     subject: "SoftwareEngineering II",
-    date: new Date(Date.now() + 2 * 24*60*60*1000).toISOString().split('T')[0],
+    date: new Date(Date.now() + 3 * 24*60*60*1000).toISOString().split('T')[0],
     hour: "15:26",
     modality: "In person",
     room: "12A",
@@ -33,12 +34,13 @@ const lecturesList = [
     teacherName: "Franco yjtyjty",
     lectureId: 1,
     booked: 2,
-    visible:true
+    visible:true,
+    canBook:true
   },
   {
     id: 3,
     subject: "SoftwareEngineering II",
-    date: new Date(Date.now() + 3 * 24*60*60*1000).toISOString().split('T')[0],
+    date: new Date(Date.now() + 4 * 24*60*60*1000).toISOString().split('T')[0],
     hour: "15:26",
     modality: "In person",
     room: "12A",
@@ -47,12 +49,13 @@ const lecturesList = [
     teacherName: "Franco yjtyjty",
     lectureId: 1,
     booked: 1,
-    visible:true
+    visible:true,
+    canBook:true
   },
   {
     id: 4,
     subject: "SoftwareEngineering II",
-    date: new Date(Date.now() + 3 * 24*60*60*1000).toISOString().split('T')[0],
+    date: new Date(Date.now() + 5 * 24*60*60*1000).toISOString().split('T')[0],
     hour: "15:26",
     modality: "Virtual",
     room: "12A",
@@ -61,7 +64,8 @@ const lecturesList = [
     teacherName: "Franco yjtyjty",
     lectureId: 1,
     booked: 1,
-    visible:true
+    visible:true,
+    canBook:true
   },
 ];
 const subjects=["SoftwareEngineering II"]

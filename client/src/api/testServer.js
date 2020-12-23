@@ -11,13 +11,19 @@ const students=[
             role:"S",
             name:"Luca",
             surname:"Barco",
-            email:"pippo@topolino.com"
+            email:"pippo@topolino.com",
+            ssn:"aaab1",
+            id:1,
+            status:0
         },
         {
             role:"S",
             name: "Matteo",
             surname: "Berri",
-            email: "pluto@topolino.com"
+            email: "pluto@topolino.com",
+            ssn:"cccab1",
+            id:2,
+            status:0
         }
     ]
 const subjects=[

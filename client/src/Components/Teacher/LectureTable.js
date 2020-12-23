@@ -13,11 +13,12 @@ import ActionsForm from "./ActionsForm";
 
 const LectureItem = (props) => {
   let l = props.lecture;
+  console.log(l)
   const date = new Date(l.date);
   return (
     <>
       {l.visible && (
-        <Card data-testid="card-toggle">
+        <Card data-testid={(l.canRecordAttendance || l.hasAttendance) ? "past-card-toggle" : "card-toggle"}>
           <Accordion.Toggle className={l.canRecordAttendance || l.hasAttendance ? "pastSubjectName":"subjectName"} as={Card.Header} eventKey={props.eId}>
             <Row>
               <Col>
@@ -200,9 +201,11 @@ class LectureTable extends React.Component {
             <Col className="col-8">
               <Tabs
                 id="controlled-teacher-tab"
+                data-testid={"teacher-tab"}
                 activeKey={this.state.modality}
                 onSelect={(k) => this.setModality(k)}
                 variant={"pills"}>
+
               <Tab eventKey="next-lectures" title="My next lectures" data-testid={"tab-next-lect"}>
             <Row  className="justify-content-md-center below-tab">
                 <Col>

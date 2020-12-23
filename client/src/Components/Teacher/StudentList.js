@@ -103,6 +103,7 @@ let hasAttendance=props.hasAttendance
         hasAttendance=false
     }
     console.log(hasAttendance)
+    console.log(props.recordAttendance)
   return (
     <>
       <Button
@@ -219,7 +220,7 @@ let hasAttendance=props.hasAttendance
                     <Form.Group controlId="formBasicCheckbox">
 
                         <Form.Check
-                            data-testid="checkOne"
+                            data-testid="checkAll"
                             checked={selectAll}
                             type="checkbox"
                             label={"Select All"}
@@ -242,10 +243,10 @@ let hasAttendance=props.hasAttendance
                         </Col>
 
                             <Col xs={2}>
-                                <Button variant={"success"} onClick={submitAttendanceData}>Yes</Button>
+                                <Button data-testid={"confirm-button"} variant={"success"} onClick={submitAttendanceData}>Yes</Button>
                             </Col>
                             <Col xs={2}>
-                                <Button variant={"secondary"} onClick={handleAlertUnshow}>No</Button>
+                                <Button data-testid={"exit-button"} variant={"secondary"} onClick={handleAlertUnshow}>No</Button>
                             </Col>
                     </Row>
                     </Alert>
