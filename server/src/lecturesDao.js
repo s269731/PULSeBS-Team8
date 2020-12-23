@@ -187,8 +187,10 @@ async function getInfoBookingConfirmation(lectureId, studentId) {
   return info;
 }
 
-async function getStudentsListByLectureId(lectureId) {
-  const sql = 'SELECT StudentId,Status FROM Bookings WHERE LectureId=? AND (Status=0 OR Status=3)';
+async function getStudentsListByLectureId(lectureId, contactTracing) {
+  let sql;
+  if (contactTracing === true) sql = 'SELECT StudentId,Status FROM Bookings WHERE LectureId=? AND Status=3';
+  else sql = 'SELECT StudentId,Status FROM Bookings WHERE LectureId=? AND (Status=0 OR Status=3)';
   const stmt = db.prepare(sql);
   const rows = stmt.all(lectureId);
   const studentlist = [];
@@ -379,7 +381,7 @@ async function checkWaitingList(lectureId) {
 }
 
 exports.getLecturesForStudentContactTracing = (studentId) => new Promise((resolve, reject) => {
-  const sql = db.prepare('SELECT LectureId FROM Bookings WHERE StudentId=? AND Status=0');
+  const sql = db.prepare('SELECT LectureId FROM Bookings WHERE StudentId=? AND (Status=0 OR Status=3)');
   const bookings = sql.all(studentId);
   const sql1 = db.prepare('SELECT LectureId,TeacherId,DateHour,SubjectId FROM Lectures WHERE LectureId=?');
   const lectures = [];
@@ -446,8 +448,8 @@ exports.updatePresentPeople = (lectureId, presentPeople) => new Promise((resolve
         const sql = db.prepare('UPDATE Lectures SET PresentPeople=?, ReportPresence=1 WHERE LectureId=? AND Capacity>=PresentPeople AND BookedPeople>=?');
         const res = sql.run(presentPeople.length, lectureId, presentPeople.length);
         if (res.changes === 1) return 0;
-        reject ('Error while marking students as present');
-      } reject ('Error while marking students as present');
+        reject('Error while marking students as present');
+      } reject('Error while marking students as present');
     } return 1;
   });
 
