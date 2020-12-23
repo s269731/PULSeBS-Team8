@@ -492,4 +492,3 @@ exports.getBookingsByUserId = getBookingsByUserId;
 exports.getStudentsCancelledLecture = getStudentsCancelledLecture;
 exports.checkWaitingList = checkWaitingList;
 exports.getModalityBySubjectId = getModalityBySubjectId;
-exports.getStudentsListByLectureIdForContactTracing = getStudentsListByLectureIdForContactTracing;
