@@ -49,7 +49,7 @@ async function trackStudentContacts(studentSSN) {
     const teacher = refactorUserForContactTracing(await lecturesDao.getTeacherByLectureId(lecture.LectureId));
     if (teacher === undefined) throw ('Error in Contact Tracing: Error retrieving teacher of a lesson followed by the student');
     // eslint-disable-next-line max-len
-    const studentlist = refactorUserForContactTracing(await lecturesDao.getStudentsListByLectureId(lecture.LectureId));
+    const studentlist = refactorUserForContactTracing(await lecturesDao.getStudentsListByLectureId(lecture.LectureId, true));
     if (Array.isArray(studentlist)) {
       const index = studentlist.findIndex((obj) => obj.Id === student.Id);
       if (index > -1) studentlist.splice(index, 1);

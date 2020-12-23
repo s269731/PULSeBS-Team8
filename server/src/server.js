@@ -169,7 +169,7 @@ app.get('/api/teacher/lectures', async (req, res) => {
 
 app.get('/api/teacher/lectures/:lectureId', async (req, res) => {
   try {
-    const list = await lecturesDao.getStudentsListByLectureId(req.params.lectureId);
+    const list = await lecturesDao.getStudentsListByLectureId(req.params.lectureId,false);
     if (!list) {
       res.json([]);
     }

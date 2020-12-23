@@ -98,7 +98,7 @@ test('Second reservation should return a message showing that a seat for that le
 
 test('Should return list of student booked for a certain lectureId', async () => {
   const lectureId = 1;
-  const obj = await lecturesDao.getStudentsListByLectureId(lectureId);
+  const obj = await lecturesDao.getStudentsListByLectureId(lectureId,false);
   expect(obj).toBeTruthy();
   expect(obj[1].id).toBe('2.0');
   expect(obj[2].id).toBe('3.0');
@@ -110,7 +110,7 @@ test('Should return list of student booked for a certain lectureId', async () =>
 
 test('Should not return list of student but undefined because of wrong lectureId', async () => {
   const lectureId = 10;
-  const obj = await lecturesDao.getStudentsListByLectureId(lectureId);
+  const obj = await lecturesDao.getStudentsListByLectureId(lectureId,false);
   expect(obj).toBeUndefined();
 });
 
