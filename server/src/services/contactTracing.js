@@ -49,15 +49,18 @@ async function trackStudentContacts(studentSSN) {
     const teacher = refactorUserForContactTracing(await lecturesDao.getTeacherByLectureId(lecture.LectureId));
     if (teacher === undefined) throw ('Error in Contact Tracing: Error retrieving teacher of a lesson followed by the student');
     // eslint-disable-next-line max-len
-    const studentlist = refactorUserForContactTracing(await lecturesDao.getStudentsListByLectureId(lecture.LectureId, true));
-    if (Array.isArray(studentlist)) {
-      const index = studentlist.findIndex((obj) => obj.Id === student.Id);
-      if (index > -1) studentlist.splice(index, 1);
+    const res = await lecturesDao.getStudentsListByLectureId(lecture.LectureId, true);
+    if (res) {
+      const studentlist = refactorUserForContactTracing(res);
+      if (Array.isArray(studentlist)) {
+        const index = studentlist.findIndex((obj) => obj.Id === student.Id);
+        if (index > -1) studentlist.splice(index, 1);
       // eslint-disable-next-line max-len
+      }
+      subjectLectureStudentListArr.push({
+        Subject: lecture.SubjectName, DateHour: lecture.DateHour, Teacher: teacher, StudentList: studentlist,
+      });
     }
-    subjectLectureStudentListArr.push({
-      Subject: lecture.SubjectName, DateHour: lecture.DateHour, Teacher: teacher, StudentList: studentlist,
-    });
   }));
 
   const reducedlist = rearrangeTrackArray(subjectLectureStudentListArr);
