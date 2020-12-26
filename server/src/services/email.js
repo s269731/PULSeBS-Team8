@@ -74,7 +74,17 @@ async function sendModifySchedule(info, emails) {
   });
 }
 
+async function sendChangeModalityVirtual(info, emails) {
+  const subjectName = await subjectDao.getSubjectName(info.SubjectId);
+  const dateString = new Date(info.date_hour);
+
+  emails.forEach((emailaddr) => {
+    sendEmail(emailaddr, 'Lecture switched to virtual modality', `The ${subjectName.SubjectName}\'s lecture scheduled for ${dateString} will be virtual`);
+  });
+}
+
 exports.sendModifySchedule = sendModifySchedule;
 exports.sendBookingConfirmationEmail = sendBookingConfirmationEmail;
 exports.sendingEmailBookedPeople = sendingEmailBookedPeople;
 exports.sendingEmailCancelledLecture = sendingEmailCancelledLecture;
+exports.sendChangeModalityVirtual = sendChangeModalityVirtual;

@@ -2,6 +2,7 @@ const moment = require('moment');
 const db = require('./db');
 const userDao = require('./userDao');
 const subjectDao = require('./subjectsDao');
+const emailService = require('./services/email');
 
 class Lecture {
   constructor(lectureId, subjectName, teacherName, dateHour, modality, className, capacity, bookedPeople, booked, presentPeople) {
@@ -322,19 +323,27 @@ async function getStudentsCancelledLecture(lectureId, teacherId) {
 }
 
 exports.changeLectureModality = (lectureId) => new Promise((resolve, reject) => {
-  const sql = db.prepare('SELECT Modality,DateHour FROM Lectures WHERE LectureId=?');
-  const sqlupdate = db.prepare('UPDATE Lectures SET Modality=? WHERE LectureId=?');
-  const sqldelete = db.prepare('DELETE FROM Bookings WHERE LectureId=?');
-  const virtual = 'Virtual';
+  const sql = db.prepare('SELECT Modality, DateHour, BookedPeople, SubjectId FROM Lectures WHERE LectureId=?');  
   const result = sql.get(lectureId);
+  const virtual = 'Virtual';
   if (result === undefined) reject('Error in retrieving lecture by his lectureId');
   else {
     const now = new Date();
-    // now.setHours(now.getHours() + 1);
-    console.log(`data: ${now}`);
+    //console.log(`data: ${now}`);
     const lecturetime = new Date(result.DateHour);
     if (lecturetime.getTime() - now.getTime() > 1.8e+6) {
       if (result.Modality === 'In person') {
+        if (result.BookedPeople > 0) {
+          const sql2 = db.prepare('SELECT Email FROM Users WHERE Id IN (SELECT StudentId FROM Bookings WHERE LectureId=?)');
+          const results = sql2.all(lectureId);
+          const emails = results.map(({ Email }) => Email);
+          console.log(emails);
+          const obj = { SubjectId: result.SubjectId, date_hour: result.DateHour};
+          console.log(obj);
+          emailService.sendChangeModalityVirtual(obj, emails);
+        }
+        const sqlupdate = db.prepare('UPDATE Lectures SET Modality=?, BookedPeople=0 WHERE LectureId=?');
+        const sqldelete = db.prepare('DELETE FROM Bookings WHERE LectureId=?');
         const transaction = db.transaction(() => {
           const updateres = sqlupdate.run(virtual, lectureId);
           sqldelete.run(lectureId);
@@ -420,7 +429,7 @@ async function getTeacherByLectureId(lectureId) {
 }
 
 async function getModalityBySubjectId(subjectId) {
-  const sql = 'SELECT MAX(Modality) AS Modality FROM Lectures WHERE SubjectId=?';
+  const sql = "SELECT MAX(Modality) AS Modality FROM Lectures WHERE SubjectId=? AND DateHour > DATETIME('now')";
   const stmt = db.prepare(sql);
   const res = stmt.get(subjectId);
 
