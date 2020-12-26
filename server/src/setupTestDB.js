@@ -48,7 +48,7 @@ function initTestDB() {
   // add past lectures for statistics
   const nov30 = new Date('30 November 2020');
   lectStmt.run([6, 10, 3, nov30.toISOString(), 'In person', '12A', 150, 6]);
-  lectStmt.run([7, 10, 3, moment(global.now).add(5, 'days').toISOString(), 'In person', '12A', 100, 6]);
+  lectStmt.run([7, 10, 3, moment(global.now).add(5, 'days').toISOString(), 'In person', '12A', 100, 0]);
   const sept1 = new Date('1 September 2020');
   lectStmt.run([8, 10, 3, sept1.toISOString(), 'In person', '12A', 100, 50]);
   const nov26 = new Date('26 November 2020');

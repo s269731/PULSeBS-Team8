@@ -255,14 +255,14 @@ test('Should return an empty array since teacherId for that cancelled lecture do
 });
 
 test('Should return Virtual as new Modality for the lecture', async () => {
-  const lectureId = 2;
+  const lectureId = 7;
   const result = await lecturesDao.changeLectureModality(lectureId);
   expect(result).toBeTruthy();
   expect(result.result).toBe('Virtual');
 });
 
 test('Should return a message error because a Virtual lecture cant be converted again', async () => {
-  const lectureId = 2;
+  const lectureId = 7;
   try {
     await lecturesDao.changeLectureModality(lectureId);
   } catch (err) {
@@ -271,7 +271,7 @@ test('Should return a message error because a Virtual lecture cant be converted 
 });
 
 test('Should return the time constraint error', async () => {
-  const lectureId = 5;
+  const lectureId = 17;
   try {
     await lecturesDao.changeLectureModality(lectureId);
   } catch (err) {
@@ -289,7 +289,7 @@ test('Should return error for incorrect lectureId', async () => {
 });
 
 test('Should return an error because a Virtual lecture can\'t be booked', async () => {
-  const lectureId = 2;
+  const lectureId = 7;
   const studentId = 1;
   try {
     await lecturesDao.insertReservation(lectureId, studentId);
@@ -349,10 +349,10 @@ test('Should return undefined because the SubjectId doesn\'t exist', async () =>
   expect(modality).toBe(undefined);
 });
 
-test('Should return undefined because the SubjectId doesn\'t exist', async () => {
+test('Should return the modality related to the SubjectId', async () => {
   const subjectId = 3;
   const modality = await lecturesDao.getModalityBySubjectId(subjectId);
-  expect(modality.Modality).toBe('In person');
+  expect(modality.Modality).toBe('Virtual');
 });
 
 test('Should return 1 to indicate that the presentPerson', async () => {

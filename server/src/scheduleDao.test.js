@@ -59,7 +59,7 @@ test('Should get the Schedule', async () => {
   expect(results).toEqual(array);
 });
 
-test('Should change the modality to Virtual all the lectures related to that SubjectId', async () => {
+test('Should change the modality to Virtual for all the lectures related to that SubjectId', async () => {
   const subjectId_Mod = [
     { SubjectId: 'XX678', Modality: 'In person' },
   ];
@@ -67,7 +67,7 @@ test('Should change the modality to Virtual all the lectures related to that Sub
   expect(res.result).toBe('Virtual');
 });
 
-test('Should change the modality to In person all the lectures related to that SubjectId', async () => {
+test('Should change the modality to In person for all the lectures related to that SubjectId', async () => {
   const subjectId_Mod = [
     { SubjectId: 'XX678', Modality: 'Virtual' },
   ];
@@ -75,7 +75,7 @@ test('Should change the modality to In person all the lectures related to that S
   expect(res.result).toBe('In person');
 });
 
-test('Should change the modality to In person all the lectures related to that SubjectId', async () => {
+test('Should not change the modality to In person because SubjectId doesn\'t exist', async () => {
   const subjectId_Mod = [
     { SubjectId: 'XX699', Modality: 'In person' },
   ];
@@ -86,7 +86,7 @@ test('Should change the modality to In person all the lectures related to that S
   }
 });
 
-test('Should change the modality to In person all the lectures related to that SubjectId', async () => {
+test('Should not change the modality to Virtual because SubjectId doesn\'t exist', async () => {
   const subjectId_Mod = [
     { SubjectId: 'XX699', Modality: 'Virtual' },
   ];

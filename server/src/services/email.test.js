@@ -81,3 +81,18 @@ test('Should send the email to students for modified schedules', async () => {
 
   expect(Mailer.prototype.sendMail).toHaveBeenCalledTimes(6);
 });
+
+test('Should send the email to students after modality for a lecture is switched to virtual', async () => {
+  // Object info has the following properties: SubjectId, date_hour
+    const info = {
+      SubjectId: 1, date_hour: '2020-01-14T10:30:00.000Z',
+    };
+    const emails = ['abc@stud.com', 'def@stud.com'];
+    spyOn(Mailer.prototype, 'sendMail').and.callFake((mailOptions, cb) => {
+      cb(null, true);
+    });
+    await emailService.sendChangeModalityVirtual(info, emails);
+  
+    expect(Mailer.prototype.sendMail).toHaveBeenCalledTimes(2);
+  });
+  
