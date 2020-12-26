@@ -97,6 +97,15 @@ test('Should not change the modality to Virtual because SubjectId doesn\'t exist
   }
 });
 
+test('Should return an error because the array is empty', async () => {
+  const subjectId_Mod = [];
+  try {
+    await scheduleDao.changeModalitySchedule(subjectId_Mod);
+  } catch (err) {
+    expect(err).toBe('Cannot convert empty array');
+  }
+});
+
 test('Should return an error because the object is exactly equal to the already existing one', async () => {
   const obj = {
     ScheduleId: 1, SubjectId: 'XX678', Class: 4, Day: 'Mon', Capacity: 100, Hour: '8:30-11:00',

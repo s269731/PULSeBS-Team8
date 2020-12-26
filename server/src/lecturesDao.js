@@ -326,6 +326,8 @@ exports.changeLectureModality = (lectureId) => new Promise((resolve, reject) => 
   const sql = db.prepare('SELECT Modality, DateHour, BookedPeople, SubjectId FROM Lectures WHERE LectureId=?');  
   const result = sql.get(lectureId);
   const virtual = 'Virtual';
+  let emails = {};
+  let info = {};
   if (result === undefined) reject('Error in retrieving lecture by his lectureId');
   else {
     const now = new Date();
@@ -336,11 +338,9 @@ exports.changeLectureModality = (lectureId) => new Promise((resolve, reject) => 
         if (result.BookedPeople > 0) {
           const sql2 = db.prepare('SELECT Email FROM Users WHERE Id IN (SELECT StudentId FROM Bookings WHERE LectureId=?)');
           const results = sql2.all(lectureId);
-          const emails = results.map(({ Email }) => Email);
-          console.log(emails);
-          const obj = { SubjectId: result.SubjectId, date_hour: result.DateHour};
-          console.log(obj);
-          emailService.sendChangeModalityVirtual(obj, emails);
+          emails = results.map(({ Email }) => Email);
+          obj = { SubjectId: result.SubjectId, date_hour: result.DateHour};
+          // emailService.sendChangeModalityVirtual(obj, emails);
         }
         const sqlupdate = db.prepare('UPDATE Lectures SET Modality=?, BookedPeople=0 WHERE LectureId=?');
         const sqldelete = db.prepare('DELETE FROM Bookings WHERE LectureId=?');
@@ -350,11 +350,17 @@ exports.changeLectureModality = (lectureId) => new Promise((resolve, reject) => 
           return updateres.changes === 1;
         });
         const transactionresult = transaction();
-        if (transactionresult === true) resolve({ result: 'Virtual' });
+        if (transactionresult === true) {
+          if (result.BookedPeople > 0) {
+            emailService.sendChangeModalityVirtual(obj, emails);
+          }
+          resolve({ result: 'Virtual' });
+        }
         else reject('Error in updating the Lecture Modality');
-      } else reject('You can\'t convert a Virtual Lecture into a in presence one');
+      }
+      resolve({ result: 'Virtual' });
     }
-    reject('Lecture Modality can\'t be changed within 30 minutes before its start');
+    else reject('Lecture Modality can\'t be changed within 30 minutes before its start');
   }
 });
 
@@ -428,15 +434,6 @@ async function getTeacherByLectureId(lectureId) {
   return teacher;
 }
 
-async function getModalityBySubjectId(subjectId) {
-  const sql = "SELECT MAX(Modality) AS Modality FROM Lectures WHERE SubjectId=? AND DateHour > DATETIME('now')";
-  const stmt = db.prepare(sql);
-  const res = stmt.get(subjectId);
-
-  if (res.Modality === null) return undefined;
-  return res;
-}
-
 exports.updatePresentPeople = (lectureId, presentPeople) => new Promise((resolve, reject) => {
   const now = new Date();
   const sql1 = db.prepare('SELECT DateHour FROM Lectures WHERE LectureId=?');
@@ -501,4 +498,3 @@ exports.getStudentsListByLectureId = getStudentsListByLectureId;
 exports.getBookingsByUserId = getBookingsByUserId;
 exports.getStudentsCancelledLecture = getStudentsCancelledLecture;
 exports.checkWaitingList = checkWaitingList;
-exports.getModalityBySubjectId = getModalityBySubjectId;

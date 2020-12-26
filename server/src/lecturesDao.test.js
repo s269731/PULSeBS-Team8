@@ -261,13 +261,11 @@ test('Should return Virtual as new Modality for the lecture', async () => {
   expect(result.result).toBe('Virtual');
 });
 
-test('Should return a message error because a Virtual lecture cant be converted again', async () => {
-  const lectureId = 7;
-  try {
-    await lecturesDao.changeLectureModality(lectureId);
-  } catch (err) {
-    expect(err).toBe('You can\'t convert a Virtual Lecture into a in presence one');
-  }
+test('Should return Virtual because the modality is already set to Virtual', async () => {
+    const lectureId = 7;
+    const result = await lecturesDao.changeLectureModality(lectureId);
+    expect(result).toBeTruthy();
+    expect(result.result).toBe('Virtual');
 });
 
 test('Should return the time constraint error', async () => {
@@ -343,7 +341,7 @@ test('Should return undefined because the lectureId is not related to a teacher'
   expect(obj).toBe(undefined);
 });
 
-test('Should return undefined because the SubjectId doesn\'t exist', async () => {
+/*test('Should return undefined because the SubjectId doesn\'t exist', async () => {
   const subjectId = 20;
   const modality = await lecturesDao.getModalityBySubjectId(subjectId);
   expect(modality).toBe(undefined);
@@ -353,7 +351,7 @@ test('Should return the modality related to the SubjectId', async () => {
   const subjectId = 3;
   const modality = await lecturesDao.getModalityBySubjectId(subjectId);
   expect(modality.Modality).toBe('Virtual');
-});
+});*/
 
 test('Should return 1 to indicate that the presentPerson', async () => {
   const lectureId = 29;

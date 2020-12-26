@@ -28,13 +28,13 @@ async function populateLectures() {
     const weekStart = current.getDate() - current.getDay() + 1;
     const day_week = new Date(current.setDate(weekStart)); // get Monday of the current week
     let dates = [];
-    let d = {};
+    //let d = {};
 
     // iterate for each day of the week, from Mon to Fri
     days.forEach((day) => {
       let lect_dayOfWeek = rows.filter((r) => r.Day === day); // Array of all the lectures held in a specific day of the week
       if (lect_dayOfWeek.length > 0) {
-        d = new Date(day_week);
+        let d = new Date(day_week);
         while (d < endSemester) { // iterate until we don't overcome the semester limit
           dates.push(new Date(d));
           d.setDate(d.getDate() + 7);
@@ -61,7 +61,7 @@ async function populateLectures() {
 }
 
 async function getSchedule() {
-  const sql = 'SELECT SubjectId, SubjName, Year, Semester, u.Name as Tname, u.Surname as Tsurname FROM Subjects su, Users u WHERE su.TeacherId = u.Id ORDER BY Year';
+  const sql = 'SELECT SubjectId, SubjName, Year, Semester, u.Name as Tname, u.Surname as Tsurname, Modality FROM Subjects su, Users u WHERE su.TeacherId = u.Id ORDER BY Year';
   const stmt = db.prepare(sql);
   const rows = stmt.all();
   let schedules = [];
@@ -69,10 +69,10 @@ async function getSchedule() {
 
   if (rows.length > 0) {
     await Promise.all(rows.map(async (row) => {
-      const res = await lecturesDao.getModalityBySubjectId(row.SubjectId);
+      /*const res = await lecturesDao.getModalityBySubjectId(row.SubjectId);
       if (res !== undefined) {
         row.Modality = res.Modality;
-      }
+      }*/
       const sql2 = 'SELECT ScheduleId, Class, Day, Capacity, Hour FROM Schedule WHERE SubjectId=?';
       const stmt2 = db.prepare(sql2);
       const results = stmt2.all(row.SubjectId);
@@ -94,32 +94,45 @@ async function getSchedule() {
 exports.changeModalitySchedule = (array) => new Promise((resolve, reject) => {
   if (array.length > 0) {
     array.forEach(async (a) => {
+      const sql2 = "SELECT LectureId FROM Lectures WHERE SubjectId=? AND DateHour > DATETIME('now')";
+      const stmt2 = db.prepare(sql2);
+      const sql3 = "UPDATE Subjects SET Modality=? WHERE SubjectId=?";
+      const stmt3 = db.prepare(sql3);
       if (a.Modality === 'Virtual') {
-        const sql3 = "SELECT LectureId FROM Lectures WHERE SubjectId=? AND DateHour > DATETIME('now')";
-        const stmt3 = db.prepare(sql3);
-        const ids = stmt3.all(a.SubjectId);
+        const ids = stmt2.all(a.SubjectId);
         if (ids.length === 0) reject('No results for that SubjectId');
         else {
           const sql = "UPDATE Lectures SET Modality='In person' WHERE SubjectId=? AND DateHour > DATETIME('now')";
           const stmt = db.prepare(sql);
-          const res = stmt.run(a.SubjectId);
-          if (res.changes) { resolve({ result: 'In person' }); } else { reject('Error in updating row'); }
+          transaction = db.transaction(() => {
+            const res1 = stmt3.run('In person', a.SubjectId);
+            const res2 = stmt.run(a.SubjectId);
+            return res1.changes > 0 && res2.changes > 0;
+          });
+          const transactionresult = transaction();
+          if (transactionresult === true) resolve({ result: 'In person' });
+          else reject('Error in updating rows');
         }
-      } else {
-        const sql2 = "SELECT LectureId FROM Lectures WHERE SubjectId=? AND DateHour > DATETIME('now')";
-        const stmt2 = db.prepare(sql2);
+      } else {        
         const rows = stmt2.all(a.SubjectId);
         if (rows.length > 0) {
           let lectIds = rows.map(({ LectureId }) => LectureId); // array of lectureIds related to that SubjectId
-          lectIds.forEach(async (lect) => {
-            const res = await lecturesDao.changeLectureModality(lect);
-            if (res.result === 'Virtual') { resolve({ result: 'Virtual' }); } else { reject('Error in changing the modality to Virtual'); }
+          transaction = db.transaction(() => {
+            const res1 = stmt3.run('Virtual', a.SubjectId);
+            let res2;
+            lectIds.forEach(async (lect) => {
+              res2 = await lecturesDao.changeLectureModality(lect);
+            });
+            return res1.changes > 0;
           });
-          lectIds = [];
+          const transactionresult = transaction();
+          if (transactionresult === true) resolve({ result: 'Virtual' });
+          else reject('Error in updating rows');
         } else reject('No results for that SubjectId');
       }
     });
   }
+  else reject('Cannot convert empty array');
 });
 
 // info_schedule is an object with ScheduleId, SubjectId, Class, Day, Capacity and Hour
