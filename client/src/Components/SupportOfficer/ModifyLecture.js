@@ -11,6 +11,7 @@ import {
 } from "react-bootstrap";
 import API from "../../api/api";
 import ModifyModal from "./ModifyModal";
+import ExcludeHolidayModal from "./ExcludeHolidayModal";
 
 
 class ModifyLecture extends React.Component {
@@ -55,7 +56,7 @@ class ModifyLecture extends React.Component {
       disabled: true,
       scId: null,
       tabModality:'modality'
-    };
+        };
     this.SaveEdit=this.SaveEdit.bind(this)
   }
 
@@ -239,9 +240,11 @@ confirmMessage(){
 
 
   render() {
+   
     return ( <> 
+     
     <Container fluid data-testid="lecturetable" className={"lectureTable"}>
-      <Row className="justify-content-md-center below-nav">
+    <Row className="justify-content-md-center below-nav">
         <h3 className={"headerLectureList"}>List of Courses:
         </h3>
       </Row>
@@ -274,6 +277,9 @@ confirmMessage(){
           </ButtonGroup>
           <br></br>
           <br></br>
+          <br></br>
+          <h3>Exclude Holidays</h3>{this.state.refresh}
+            <ExcludeHolidayModal/>
           <br></br>
         </Col>
 
