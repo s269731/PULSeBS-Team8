@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import "../App.css";
 import Jumbotron from "../assets/helpF.png";
 import HelpStudentModal from "./Student/HelpStudentModal";
+import HelpTeacherModal from "./Teacher/HelpTeacherModal";
+
 
 //import {Link} from 'react-router-dom'
 
@@ -68,6 +70,8 @@ class Header extends Component {
 
                 {this.props.loggedUser.role === "S" &&
             <HelpStudentModal/>}
+             {this.props.loggedUser.role === "D" &&
+            <HelpTeacherModal/>}
                 <Link
                   to="/home"
                   className="headerLinks "
