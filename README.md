@@ -137,7 +137,7 @@ To run end-to-end tests, run these configurations:
 ## How to run SAML Identity provider
 
 - Clone the Repository
-- Go into docekr-test-saml-idp
+- Go into docker-saml-idp
 - run the commands:
     - docker-compose build
     - docker-compose up
