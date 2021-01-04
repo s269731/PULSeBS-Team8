@@ -2,18 +2,7 @@
 const saml = require('passport-saml');
 const fs = require('fs');
 const path=require('path');
-const userDao=require('../userDao');
 function passportConfig(passport){
-
-
-    const strategyCallback = (user, done) => {
-        getUserByIdOrCreateIfNotExists(profile)
-            .then(result => {
-                return done(null, result);
-            })
-            .catch(err => done(err));
-    };
-
 
     let dir=__dirname.split(path.sep);
     dir.pop()
@@ -35,6 +24,7 @@ function passportConfig(passport){
         privateCert: fs.readFileSync(str  + 'certs/key.pem', 'utf8'),
         identifierFormat: null,
     }, function(profile, done) {
+        
         return done(null, profile);
     });
     return samlStrategy;
