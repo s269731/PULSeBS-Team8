@@ -200,7 +200,7 @@ function SignUp(props) {
                     fullWidth
                     variant="contained"
                     color="secondary"
-                    onClick={() => window.open( 'http://localhost:3001/login')} >Login with your SOFTENG Credentials</Button>
+                    onClick={() => window.open( 'http://localhost:3001/loginSAML')} >Login with your SOFTENG Credentials</Button>
 
           </div>
         </div>

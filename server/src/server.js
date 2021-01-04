@@ -70,7 +70,7 @@ passport.use('samlStrategy',strategy);
 app.use(passport.initialize({}));
 app.use(passport.session({}));
 
-app.get('/login',
+app.get('/loginSAML',
     function (req, res, next) {
       console.log('-----------------------------');
       console.log('/Start login handler');
@@ -97,30 +97,6 @@ app.post('/login/callback',
       res.send('Log in Callback Success');
     }
 );
-app.get('/api/user',(req,res)=>{
-  if(req.user){
-    console.log(1)
-    console.log(req.user)
-    let role=""
-    if(req.user.eduPersonAffiliation==='students'){
-      role='S'
-    }
-    if(req.user.eduPersonAffiliation==='professors'){
-      role='D'
-    }
-    if(req.user.eduPersonAffiliation==='booking_managers'){
-      role='M'
-    }
-    if(req.user.eduPersonAffiliation==='officers'){
-      role='O'
-    }
-    res.json({id: req.user.uid, email: req.user.email, role:role, name:"Pippo"})
-  }
-  else {
-    console.log(0)
-    res.status(401).json(authErrorObj);
-  }
-})
 
 
 
@@ -148,6 +124,47 @@ app.post('/api/login', async (req, res) => {
 });
 
 app.use(cookieParser());
+
+app.get('/api/user',async (req,res)=>{
+  if(req.isAuthenticated()) {
+    console.log("has SAML token");
+    if (req.user) {
+      console.log(1)
+      console.log(req.user)
+      let role = ""
+      if (req.user.eduPersonAffiliation === 'students') {
+        role = 'S'
+      }
+      if (req.user.eduPersonAffiliation === 'professors') {
+        role = 'D'
+      }
+      if (req.user.eduPersonAffiliation === 'booking_managers') {
+        role = 'M'
+      }
+      if (req.user.eduPersonAffiliation === 'officers') {
+        role = 'O'
+      }
+      res.json({id: req.user.uid, email: req.user.email, role: role, name: "Pippo"})
+    } else {
+      console.log(0)
+      res.status(401).json(authErrorObj);
+    }
+  }
+  else{
+    //IT DOESN'T WORK! The cookie "token" is present but it's not correctly parsed, so this check always fails even if the user is logged with jwt
+    console.log("check JWT token");
+    console.log(req.signedCookies)
+    const userId = req.user && req.user.user;
+    try {
+      const user = await userDao.getUserById(userId);
+      res.json({
+        id: user.id, role: user.role, name: user.name, surname: user.surname,
+      });
+    } catch {
+      res.status(401).json(authErrorObj);
+    }
+  }
+})
 
 // AUTHENTICATED REST API endpoints
 app.use(jwt({ secret: config.jwtSecret, getToken: (req) => req.cookies.token, algorithms: ['HS256'] }));
