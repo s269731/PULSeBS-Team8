@@ -125,6 +125,19 @@ app.post('/api/login', async (req, res) => {
 
 app.use(cookieParser());
 
+
+
+
+
+// AUTHENTICATED REST API endpoints
+/*app.use(jwt({ secret: config.jwtSecret, getToken: (req) => req.cookies.token, algorithms: ['HS256'] }));
+// To return a better object in case of errors
+app.use((err, req, res, next) => {
+  if (err.name === 'UnauthorizedError') {
+    res.status(401).json(authErrorObj);
+  }
+});*/
+
 app.get('/api/user',async (req,res)=>{
 
   //TODO: solve problem with this api.
@@ -138,7 +151,11 @@ app.get('/api/user',async (req,res)=>{
   * state that an user is authenticated even if he uses SAML or JWT
   *
   * */
-  if(req.isAuthenticated()) {
+
+  //TEMPORARY SOLUTION: manually decode the jwt token, whithout the use of app.use(jwt...)
+  //it works but we need to change ALL the apis to manually detect if an user is auth or not...
+
+  if(req.cookies.SimpleSAMLAuthTokenIdp) {
     console.log("has SAML token");
     if (req.user) {
       console.log(1)
@@ -171,35 +188,32 @@ app.get('/api/user',async (req,res)=>{
       res.status(401).json(authErrorObj);
     }
   }
-  else{
-    //IT DOESN'T WORK! The cookie "token" is present but it's not correctly parsed, so this check always fails even if the user is logged with jwt
+  else if(req.cookies.token){
+     let result= jsonwebtoken.verify(req.cookies.token, config.jwtSecret);
     console.log("check JWT token");
-    console.log(req.cookies)
-    const userId = req.user && req.user.user;
+    console.log(result)
+    const userId = result && result.user;
     try {
       const user = await userDao.getUserById(userId);
       res.json({
         id: user.id, role: user.role, name: user.name, surname: user.surname,
       });
     } catch {
-      res.status(401).json(authErrorObj);
+
     }
+  }
+  else{
+    res.status(401).json(authErrorObj);
   }
 })
 
-
-
-// AUTHENTICATED REST API endpoints
-app.use(jwt({ secret: config.jwtSecret, getToken: (req) => req.cookies.token, algorithms: ['HS256'] }));
-// To return a better object in case of errors
-app.use((err, req, res, next) => {
-  if (err.name === 'UnauthorizedError') {
-    res.status(401).json(authErrorObj);
-  }
-});
-
 app.post('/api/logout', (req, res) => {
-  res.clearCookie('token').end();
+  if(req.cookies.token) {
+    res.clearCookie('token').end();
+  }
+  if(req.cookies.SimpleSAMLAuthTokenIdp){
+    res.clearCookie('SimpleSAMLAuthTokenIdp').end();
+  }
 });
 /* OLD VERSION
 app.get('/api/user', async (req, res) => {

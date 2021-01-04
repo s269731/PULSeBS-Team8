@@ -24,7 +24,7 @@ function passportConfig(passport){
         privateCert: fs.readFileSync(str  + 'certs/key.pem', 'utf8'),
         identifierFormat: null,
     }, function(profile, done) {
-        
+
         return done(null, profile);
     });
     return samlStrategy;
