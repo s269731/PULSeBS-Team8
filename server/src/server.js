@@ -5,6 +5,9 @@ const jsonwebtoken = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const fileUpload = require('express-fileupload');
 const schedule = require('node-schedule');
+const session = require('express-session');
+const bodyParser = require('body-parser');
+const passport = require('passport');
 const setupTestDB = require('./setupTestDB');
 const emailService = require('./services/email');
 const importerService = require('./services/importer');
@@ -15,7 +18,7 @@ const statistics = require('./services/statistics');
 const subjectsDao = require('./subjectsDao');
 const contactTracing = require('./services/contactTracing');
 const scheduleDao = require('./scheduleDao');
-
+const passportConfig = require('./passport_strategies/strategies');
 const authErrorObj = { errors: [{ msg: 'Authorization error' }] };
 const lecturesErr = { errors: [{ msg: 'There was an error retrieving available lectures' }] };
 const studentListError = { errors: [{ msg: 'There was an error retrieving list of students for this lectureId' }] };
@@ -40,6 +43,74 @@ schedule.scheduleJob('0 23 * * *', () => {
 });
 
 app.use(express.json());
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(session({secret: 'secret',
+  resave: false,
+  saveUninitialized: true,}));
+//SAML LOGIN
+passport.serializeUser(function(user, done) {
+  console.log('-----------------------------');
+  console.log('serialize user');
+  console.log(user);
+  console.log('-----------------------------');
+  done(null, user);
+});
+passport.deserializeUser(function(user, done) {
+  console.log('-----------------------------');
+  console.log('deserialize user');
+  console.log(user);
+  console.log('-----------------------------');
+  done(null, user);
+});
+
+const strategy = passportConfig.passportConfig(passport);
+passport.use('samlStrategy',strategy);
+app.use(passport.initialize({}));
+app.use(passport.session({}));
+
+app.get('/login',
+    function (req, res, next) {
+      console.log('-----------------------------');
+      console.log('/Start login handler');
+      next();
+    },
+    passport.authenticate('samlStrategy'),
+);
+app.post('/login/callback',
+    function (req, res, next) {
+      console.log('-----------------------------');
+      console.log('/Start login callback ');
+      next();
+    },
+    passport.authenticate('samlStrategy' ,{
+      successRedirect: '/home',
+      failureRedirect: '/login',
+      failureFlash: true
+    }),
+    function (req, res) {
+      console.log('-----------------------------');
+      console.log('login call back dumps');
+      console.log(req.user);
+      console.log('-----------------------------');
+      res.send('Log in Callback Success');
+    }
+);
+app.get('/api/user',(req,res)=>{
+  if(req.user){
+    console.log(1)
+    console.log(req.user)
+    res.json({id: req.user.uid, email: req.user.email})
+  }
+  else {
+    console.log(0)
+    res.json({id: -1 , email: ""})
+  }
+})
+
+
+
 
 app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
