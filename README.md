@@ -32,7 +32,7 @@
                 - [Classes](#classes)
                 - [Lectures](#lectures)
 - [How to run E2E automated tests](#how-to-run-e2e-automated-tests)
-
+- [How to run SAML Identity provider](#how-to-run-saml-identity-provider)
 
 
 # How to run docker images
@@ -133,3 +133,12 @@ To run end-to-end tests, run these configurations:
 - on the client
     - `npm start`
     - `npm test:e2e`
+
+## How to run SAML Identity provider
+
+- Clone the Repository
+- Go into docekr-test-saml-idp
+- run the commands:
+    - docker-compose build
+    - docker-compose up
+- Then, run the application as usual (npm start in both server and client)
