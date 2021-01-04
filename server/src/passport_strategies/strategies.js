@@ -2,7 +2,19 @@
 const saml = require('passport-saml');
 const fs = require('fs');
 const path=require('path');
+const userDao=require('../userDao');
 function passportConfig(passport){
+
+
+    const strategyCallback = (user, done) => {
+        getUserByIdOrCreateIfNotExists(profile)
+            .then(result => {
+                return done(null, result);
+            })
+            .catch(err => done(err));
+    };
+
+
     let dir=__dirname.split(path.sep);
     dir.pop()
     dir.pop()

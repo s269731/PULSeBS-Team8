@@ -126,13 +126,25 @@ app.post('/api/login', async (req, res) => {
 app.use(cookieParser());
 
 app.get('/api/user',async (req,res)=>{
+
+  //TODO: solve problem with this api.
+  /*
+  * The problem is related to usage of both jwt token and saml token.
+  * If you move this api after the app.use(jwt......) it works only for jwt based login
+  * If you leave it as it is, it works only for SAML login.
+  *
+  * We need to find a way to make this api working for both login methods.
+  * Furthermore, this is necessary also for all the other authenticated api: we need a way to
+  * state that an user is authenticated even if he uses SAML or JWT
+  *
+  * */
   if(req.isAuthenticated()) {
     console.log("has SAML token");
     if (req.user) {
       console.log(1)
       console.log(req.user)
       let role = ""
-      if (req.user.eduPersonAffiliation === 'students') {
+      /*if (req.user.eduPersonAffiliation === 'students') {
         role = 'S'
       }
       if (req.user.eduPersonAffiliation === 'professors') {
@@ -143,8 +155,17 @@ app.get('/api/user',async (req,res)=>{
       }
       if (req.user.eduPersonAffiliation === 'officers') {
         role = 'O'
+      }*/
+      const userId = req.user && req.user.uid;
+      try {
+        const user = await userDao.getUserById(userId);
+        res.json({
+          id: user.id, role: user.role, name: user.name, surname: user.surname,
+        });
+      } catch {
+        res.status(401).json(authErrorObj);
       }
-      res.json({id: req.user.uid, email: req.user.email, role: role, name: "Pippo"})
+      //res.json({id: req.user.uid, email: req.user.email, role: role, name: "Pippo"})
     } else {
       console.log(0)
       res.status(401).json(authErrorObj);
@@ -153,7 +174,7 @@ app.get('/api/user',async (req,res)=>{
   else{
     //IT DOESN'T WORK! The cookie "token" is present but it's not correctly parsed, so this check always fails even if the user is logged with jwt
     console.log("check JWT token");
-    console.log(req.signedCookies)
+    console.log(req.cookies)
     const userId = req.user && req.user.user;
     try {
       const user = await userDao.getUserById(userId);
@@ -166,6 +187,8 @@ app.get('/api/user',async (req,res)=>{
   }
 })
 
+
+
 // AUTHENTICATED REST API endpoints
 app.use(jwt({ secret: config.jwtSecret, getToken: (req) => req.cookies.token, algorithms: ['HS256'] }));
 // To return a better object in case of errors
@@ -174,10 +197,11 @@ app.use((err, req, res, next) => {
     res.status(401).json(authErrorObj);
   }
 });
+
 app.post('/api/logout', (req, res) => {
   res.clearCookie('token').end();
 });
-
+/* OLD VERSION
 app.get('/api/user', async (req, res) => {
   const userId = req.user && req.user.user;
   try {
@@ -188,7 +212,7 @@ app.get('/api/user', async (req, res) => {
   } catch {
     res.status(401).json(authErrorObj);
   }
-});
+});*/
 
 app.use('/api/student', (req, res, next) => {
   const studentId = req.user && req.user.user;
