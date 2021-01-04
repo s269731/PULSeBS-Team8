@@ -101,11 +101,24 @@ app.get('/api/user',(req,res)=>{
   if(req.user){
     console.log(1)
     console.log(req.user)
-    res.json({id: req.user.uid, email: req.user.email})
+    let role=""
+    if(req.user.eduPersonAffiliation==='students'){
+      role='S'
+    }
+    if(req.user.eduPersonAffiliation==='professors'){
+      role='D'
+    }
+    if(req.user.eduPersonAffiliation==='booking_managers'){
+      role='M'
+    }
+    if(req.user.eduPersonAffiliation==='officers'){
+      role='O'
+    }
+    res.json({id: req.user.uid, email: req.user.email, role:role, name:"Pippo"})
   }
   else {
     console.log(0)
-    res.json({id: -1 , email: ""})
+    res.status(401).json(authErrorObj);
   }
 })
 

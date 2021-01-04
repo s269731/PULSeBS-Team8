@@ -196,6 +196,12 @@ function SignUp(props) {
             >
               Log In
             </Button>
+            <Button type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => window.open( 'http://localhost:3001/login')} >Login with your SOFTENG Credentials</Button>
+
           </div>
         </div>
       </Container>
