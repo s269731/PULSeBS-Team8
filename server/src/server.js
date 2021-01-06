@@ -29,6 +29,7 @@ const contactTracingErr = { errors: [{ msg: 'There was an error in the contact t
 const scheduleErr = { errors: [{ msg: 'There was an error in retrieving schedule' }] };
 const changeModalitySchedError = { errors: [{ msg: 'There was an error in changing the modality from Schedule view' }] };
 const modifyScheduleError = { errors: [{ msg: 'There was an error in modifying the Schedule' }] };
+const excludeHolidaysError = { errors: [{ msg: 'There was an error in excluding holidays' }] };
 
 const app = express();
 app.disable('x-powered-by');
@@ -342,6 +343,17 @@ app.post('/api/officer/modifyschedule', async (req, res) => {
     res.json(lectureIds);
   } catch (error) {
     res.json(modifyScheduleError);
+  }
+});
+
+// DELETE with body
+app.delete('/api/officer/excludeholidays', async (req, res) => {
+  const dates = req.body;
+  try {
+    const result = await lecturesDao.excludeHolidays(dates);
+    res.json(result);
+  } catch (error) {
+    res.json(excludeHolidaysError);
   }
 });
 
