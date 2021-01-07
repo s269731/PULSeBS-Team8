@@ -450,6 +450,25 @@ async function changeSchedule(list){
   });
 }
 
+async function excludeHolidays(dates) {
+  let url = "/officer/excludeholidays";
+  const response = await fetch(baseURL + url, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(dates),
+  });
+  const result = await response.json();
+  if (response.ok) {
+    return result;
+  } else {
+    let err = { status: response.status, errObj: result };
+
+    throw err;
+  }
+}
+
 
 const API = {
   getUploadUrl,
@@ -472,6 +491,7 @@ const API = {
   getOfficerSchedule,
   changeModalityCourse,
   insertAttendanceInfo,
-  changeSchedule
+  changeSchedule,
+  excludeHolidays
 };
 export default API;

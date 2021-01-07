@@ -426,3 +426,40 @@ test('Should return just Lectures of a given Subject with reportes presences', a
   expect(obj[0].LectureId).toBe(26);
   expect(obj[1].LectureId).toBe(27);
 });
+
+test('Should return an error because the array of dates is empty', async () => {
+  const dates = [];
+  try {
+    const result = await lecturesDao.excludeHolidays(dates);
+  } catch (error) {
+    expect(error).toBe('Array of dates is empty');
+  }
+});
+
+test('Should return an error because the date is in the past', async () => {
+  const dates = [{year: 2020, month: {index: 5}, day: 2}];
+  try {
+    const result = await lecturesDao.excludeHolidays(dates);
+  } catch (error) {
+    expect(error).toBe('Cannot delete lectures already held');
+  }
+});
+
+test('Should return an error because there are no lectures scheduled for that date', async () => {
+  const dates = [{year: 2021, month: {index: 1}, day: 2}];
+  try {
+    const result = await lecturesDao.excludeHolidays(dates);
+  } catch (error) {
+    expect(error).toBe('No lectures scheduled for that date');
+  }
+});
+
+test('Should delete lectures scheduled for that date', async () => {
+  const nextWeek = new Date();
+  nextWeek.setDate(nextWeek.getDate() + 7);
+  const dates = [{year: nextWeek.getFullYear(), month: {index: nextWeek.getMonth()}, day: nextWeek.getDate()}];
+
+  const obj = await lecturesDao.excludeHolidays(dates);
+  expect(obj).toBeTruthy();
+  expect(obj.result).toBe(1);
+});
