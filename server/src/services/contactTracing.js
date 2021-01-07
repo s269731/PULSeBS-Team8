@@ -37,17 +37,17 @@ function rearrangeTrackArray(list) {
   return reducedList;
 }
 
-async function trackStudentContacts(studentSSN) {
-  const student = refactorUserForContactTracing(await userDao.getUserBySSN(studentSSN));
-  if (student === undefined || await userDao.isStudent(student.Id) === false) throw ('Error in Contact Tracing: The SSN you inserted doesn\'t correspond to any student');
+async function trackStudentContacts(student) {
   const lectures = await lecturesDao.getLecturesForStudentContactTracing(student.Id);
   if (lectures === undefined) throw ('Error in Contact Tracing: The Student didn\'t follow any lesson in the past week');
   const subjectLectureStudentListArr = [];
 
   await Promise.all(lectures.map(async (lecture) => {
     // eslint-disable-next-line max-len
-    const teacher = refactorUserForContactTracing(await lecturesDao.getTeacherByLectureId(lecture.LectureId));
+
+    const teacher = await refactorUserForContactTracing(await lecturesDao.getTeacherByLectureId(lecture.LectureId));
     if (teacher === undefined) throw ('Error in Contact Tracing: Error retrieving teacher of a lesson followed by the student');
+
     // eslint-disable-next-line max-len
     const res = await lecturesDao.getStudentsListByLectureId(lecture.LectureId, true);
     if (res) {
@@ -55,16 +55,60 @@ async function trackStudentContacts(studentSSN) {
       if (Array.isArray(studentlist)) {
         const index = studentlist.findIndex((obj) => obj.Id === student.Id);
         if (index > -1) studentlist.splice(index, 1);
-      // eslint-disable-next-line max-len
+        // eslint-disable-next-line max-len
       }
       subjectLectureStudentListArr.push({
         Subject: lecture.SubjectName, DateHour: lecture.DateHour, Teacher: teacher, StudentList: studentlist,
       });
     }
   }));
-
   const reducedlist = rearrangeTrackArray(subjectLectureStudentListArr);
   return reducedlist;
 }
 
-exports.trackStudentContacts = trackStudentContacts;
+async function trackTeacherContacts(teacher) {
+  const lectures = await lecturesDao.getLecturesForTeacherContactTracing(teacher.Id);
+  if (lectures === undefined) throw ('Error in Contact Tracing: The Teacher didn\'t held any lesson in the past week');
+  const subjectLectureStudentListArr = [];
+
+  await Promise.all(lectures.map(async (lecture) => {
+    const res = await lecturesDao.getStudentsListByLectureId(lecture.LectureId, true);
+    if (res) {
+      const studentlist = refactorUserForContactTracing(res);
+
+      subjectLectureStudentListArr.push({
+        Subject: lecture.SubjectName, DateHour: lecture.DateHour, Teacher: teacher, StudentList: studentlist,
+      });
+    }
+  }));
+  const reducedlist = rearrangeTrackArray(subjectLectureStudentListArr);
+  return reducedlist;
+}
+
+async function getContactTracing(SSN) {
+  const usr = await userDao.getUserBySSN(SSN);
+  let mode;
+  if (usr === undefined) throw ("Error in Contact Tracing: The SSN you inserted doesn't correspond to any entry in the DB");
+  const user = refactorUserForContactTracing(usr);
+  let res;
+  try {
+    if (await userDao.isStudent(user.Id)) {
+      res = await trackStudentContacts(user);
+      mode = 'Student';
+    }
+  } catch (e) {
+    if (e !== 'Error in Contact Tracing: The Student didn\'t follow any lesson in the past week') {
+      try {
+        if (await userDao.isTeacher(user.Id)) {
+          res = await trackTeacherContacts(user);
+          mode = 'Teacher';
+        }
+      } catch (er) {
+        throw ('Error in Contact Tracing: The SSN you inserted doesn\'t correspond to any student or teacher');
+      }
+    }
+  }
+  return ({ Role: mode, Result: res });
+}
+
+exports.getContactTracing = getContactTracing;

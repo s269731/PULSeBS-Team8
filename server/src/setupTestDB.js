@@ -33,6 +33,7 @@ function initTestDB() {
   subjStmt.run([5, 1, 1, 10, 'Security']);
   subjStmt.run([6, 1, 1, 11, 'Computer Network Technologies']);
   subjStmt.run([7, 1, 1, 12, 'Big Data']);
+  subjStmt.run([8, 1, 1, 11, 'Reti']);
 
   /** ********************* */
   /*    LECTURES TABLE      */
@@ -41,7 +42,9 @@ function initTestDB() {
   const lectStmt = db.prepare('INSERT OR IGNORE INTO Lectures(LectureId, TeacherId, SubjectId, DateHour, Modality, Class, Capacity, BookedPeople) VALUES(?,?,?,?,?,?,?,?)');
   lectStmt.run([1, 1, 1, today.add(1, 'days').toISOString(), 'In person', '12A', 150, 6]);
   lectStmt.run([2, 1, 1, today.add(2, 'hours').toISOString(), 'In person', '12A', 100, 6]);
-  lectStmt.run([3, 1, 1, today.subtract(3, 'days').toISOString(), 'In person', '12A', 100, 50]);
+  const gen7 = new Date('7 January 2021');
+  //lectStmt.run([3, 1, 1, today.subtract(3, 'days').toISOString(), 'In person', '12A', 100, 50]);
+  lectStmt.run([3, 1, 1, gen7.toISOString(), 'In person', '12A', 100, 50]);
   lectStmt.run([4, 1, 1, today.add(5, 'days').toISOString(), 'In person', '12A', 100, 50]);
   today = moment(global.now);
   lectStmt.run([5, 1, 1, today.add(2, 'days').toISOString(), 'In person', '12A', 100, 100]);
@@ -85,6 +88,7 @@ function initTestDB() {
   lectStmt1.run([27, 1, 1, dec1.toISOString(), 'In person', '12A', 100, 15, 5, 1]);
   lectStmt1.run([28, 1, 1, dec6.toISOString(), 'In person', '12A', 100, 100, 100, 1]);
   lectStmt.run([29, 1, 1, today.subtract(4, 'days').toISOString(), 'In person', '12A', 100, 50]);
+  lectStmt.run([30, 11, 8, today.subtract(4, 'days').toISOString(), 'In person', '12A', 100, 50]);
 
   /** ********************* */
   /*    ENROLLMENTS TABLE   */
@@ -124,7 +128,10 @@ function initTestDB() {
   bookStmt.run(22, 2, 3);
   bookStmt.run(20, 6, 3);
   bookStmt.run(21, 5, 3);
-  bookStmt.run(22, 8, 3);
+  bookStmt.run(22, 4, 3);
+  bookStmt.run(30, 2, 3);
+  bookStmt.run(30, 3, 3);
+  bookStmt.run(30, 2, 3);
 
   /** ********************* */
   /*      LOGS TABLE        */

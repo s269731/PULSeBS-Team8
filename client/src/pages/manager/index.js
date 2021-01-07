@@ -78,6 +78,7 @@ class Manager extends React.Component {
                 //     ]
                 // }
             ],
+            contactTracingRole:'',
             modality: 'search'
         }
     }
@@ -152,15 +153,16 @@ class Manager extends React.Component {
         this.setState({searchData:[]})
         API.getContactTracing(this.state.search)
             .then(res => {
+                this.setState({contactTracingRole:res.Role})
                 let i=0
                 const cols=[
                     "RowId","Student SSN","Student Name", "Lecture Date", "Lecture Hour", "Course", "Teacher Name", "Teacher SSN"
                 ]
                 const list=[]
                 list.push(cols)
-                if(res.length){
-                    this.setState({searchData:res});
-                        res.forEach(rows => {
+                if(res.Result.length){
+                    this.setState({searchData:res.Result});
+                        res.Result.forEach(rows => {
                             rows.Lectures.forEach(data=>{
                                 data.StudentList.forEach(student=> {
                                     let lectDay = new Date(data.DateHour);
@@ -396,8 +398,8 @@ class Manager extends React.Component {
                                 {
                                     this.state.searchData.length?<div id='searchDataId' className='searchData'>
                                         <Row style={{borderBottom:'1px solid #ccc'}}>
-                                            <Col><h6><span className={"tableHeader"}>Contact tracing report</span></h6></Col>
-                                            <Col><h6><span className={"tableHeader"}>Student SSN:</span>{this.state.search}</h6></Col>
+                                            <Col><h6><span className={"tableHeader"}>{this.state.contactTracingRole} Contact tracing report</span></h6></Col>
+                                            <Col><h6><span className={"tableHeader"}>{this.state.contactTracingRole} SSN:</span>{this.state.search}</h6></Col>
                                         </Row>
                                         {
                                             this.state.searchData.map((val)=>(
@@ -405,7 +407,13 @@ class Manager extends React.Component {
 
                                                     <Row className={"below-tab"}>
                                                         <Col> <h6><span className={"tableHeader"}>Course:</span>{val.Subject}</h6></Col>
-                                                        <Col><h6><span className={"tableHeader"}>Teacher:</span>{val.Teacher.Name} <span className={"tableHeader"}>SSN:</span>{val.Teacher.SSN} </h6></Col>
+                                                        { this.state.contactTracingRole==='Student' &&
+                                                            <Col><h6><span
+                                                                className={"tableHeader"}>Teacher:</span>{val.Teacher.Name}
+                                                                <span
+                                                                    className={"tableHeader"}>SSN:</span>{val.Teacher.SSN}
+                                                            </h6></Col>
+                                                        }
                                                     </Row>
                                                     <hr
                                                         style={{

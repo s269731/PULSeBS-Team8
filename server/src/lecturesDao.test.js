@@ -98,7 +98,7 @@ test('Second reservation should return a message showing that a seat for that le
 
 test('Should return list of student booked for a certain lectureId', async () => {
   const lectureId = 1;
-  const obj = await lecturesDao.getStudentsListByLectureId(lectureId,false);
+  const obj = await lecturesDao.getStudentsListByLectureId(lectureId, false);
   expect(obj).toBeTruthy();
   expect(obj[1].id).toBe('2.0');
   expect(obj[2].id).toBe('3.0');
@@ -110,7 +110,7 @@ test('Should return list of student booked for a certain lectureId', async () =>
 
 test('Should not return list of student but undefined because of wrong lectureId', async () => {
   const lectureId = 10;
-  const obj = await lecturesDao.getStudentsListByLectureId(lectureId,false);
+  const obj = await lecturesDao.getStudentsListByLectureId(lectureId, false);
   expect(obj).toBeUndefined();
 });
 
@@ -262,10 +262,10 @@ test('Should return Virtual as new Modality for the lecture', async () => {
 });
 
 test('Should return Virtual because the modality is already set to Virtual', async () => {
-    const lectureId = 7;
-    const result = await lecturesDao.changeLectureModality(lectureId);
-    expect(result).toBeTruthy();
-    expect(result.result).toBe('Virtual');
+  const lectureId = 7;
+  const result = await lecturesDao.changeLectureModality(lectureId);
+  expect(result).toBeTruthy();
+  expect(result.result).toBe('Virtual');
 });
 
 test('Should return the time constraint error', async () => {
@@ -329,6 +329,22 @@ test('Should return undefined because of the student didn\'t follow any lesson l
   expect(obj).toBe(undefined);
 });
 
+test('Should return all the lectures of the last week for a certain teacherId', async () => {
+  const teacherId = 11;
+  const obj = await lecturesDao.getLecturesForTeacherContactTracing(teacherId);
+  expect(obj).toBeTruthy();
+  expect(obj.length).toBe(3);
+  expect(obj[0].LectureId).toBe(20);
+  expect(obj[1].LectureId).toBe(22);
+  expect(obj[2].LectureId).toBe(30);
+});
+
+test('Should return undefined because of the teacher didn\'t held any lesson last week', async () => {
+  const teacherId = 10;
+  const obj = await lecturesDao.getLecturesForTeacherContactTracing(teacherId);
+  expect(obj.length).toBe(0);
+});
+
 test('Should return the Teacher related to a certain lectureId', async () => {
   const lectureId = 15;
   const obj = await lecturesDao.getTeacherByLectureId(lectureId);
@@ -341,7 +357,7 @@ test('Should return undefined because the lectureId is not related to a teacher'
   expect(obj).toBe(undefined);
 });
 
-/*test('Should return undefined because the SubjectId doesn\'t exist', async () => {
+/* test('Should return undefined because the SubjectId doesn\'t exist', async () => {
   const subjectId = 20;
   const modality = await lecturesDao.getModalityBySubjectId(subjectId);
   expect(modality).toBe(undefined);
@@ -351,7 +367,7 @@ test('Should return the modality related to the SubjectId', async () => {
   const subjectId = 3;
   const modality = await lecturesDao.getModalityBySubjectId(subjectId);
   expect(modality.Modality).toBe('Virtual');
-});*/
+}); */
 
 test('Should return 1 to indicate that the presentPerson', async () => {
   const lectureId = 29;

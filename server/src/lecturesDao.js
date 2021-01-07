@@ -207,7 +207,7 @@ async function getStudentsListByLectureId(lectureId, contactTracing) {
     // console.log(studentlist);
     return studentlist;
   }
-    //return studentlist;
+  // return studentlist;
 }
 
 exports.deleteBookingStudent = (lectureId, studentId) => new Promise((resolve, reject) => {
@@ -323,15 +323,15 @@ async function getStudentsCancelledLecture(lectureId, teacherId) {
 }
 
 exports.changeLectureModality = (lectureId) => new Promise((resolve, reject) => {
-  const sql = db.prepare('SELECT Modality, DateHour, BookedPeople, SubjectId FROM Lectures WHERE LectureId=?');  
+  const sql = db.prepare('SELECT Modality, DateHour, BookedPeople, SubjectId FROM Lectures WHERE LectureId=?');
   const result = sql.get(lectureId);
   const virtual = 'Virtual';
   let emails = {};
-  let info = {};
+  const info = {};
   if (result === undefined) reject('Error in retrieving lecture by his lectureId');
   else {
     const now = new Date();
-    //console.log(`data: ${now}`);
+    // console.log(`data: ${now}`);
     const lecturetime = new Date(result.DateHour);
     if (lecturetime.getTime() - now.getTime() > 1.8e+6) {
       if (result.Modality === 'In person') {
@@ -339,7 +339,7 @@ exports.changeLectureModality = (lectureId) => new Promise((resolve, reject) => 
           const sql2 = db.prepare('SELECT Email FROM Users WHERE Id IN (SELECT StudentId FROM Bookings WHERE LectureId=?)');
           const results = sql2.all(lectureId);
           emails = results.map(({ Email }) => Email);
-          obj = { SubjectId: result.SubjectId, date_hour: result.DateHour};
+          obj = { SubjectId: result.SubjectId, date_hour: result.DateHour };
           // emailService.sendChangeModalityVirtual(obj, emails);
         }
         const sqlupdate = db.prepare('UPDATE Lectures SET Modality=?, BookedPeople=0 WHERE LectureId=?');
@@ -355,12 +355,10 @@ exports.changeLectureModality = (lectureId) => new Promise((resolve, reject) => 
             emailService.sendChangeModalityVirtual(obj, emails);
           }
           resolve({ result: 'Virtual' });
-        }
-        else reject('Error in updating the Lecture Modality');
+        } else reject('Error in updating the Lecture Modality');
       }
       resolve({ result: 'Virtual' });
-    }
-    else reject('Lecture Modality can\'t be changed within 30 minutes before its start');
+    } else reject('Lecture Modality can\'t be changed within 30 minutes before its start');
   }
 });
 
@@ -416,6 +414,29 @@ exports.getLecturesForStudentContactTracing = (studentId) => new Promise((resolv
             LectureId: lecture.LectureId, TeacherId: lecture.TeacherId, DateHour: lecture.DateHour, SubjectName: subjName.SubjectName,
           });
         }
+      }
+    });
+    // console.log(`lectures for contact tracing:${lectures}`);
+    resolve(lectures);
+  }
+  resolve(undefined);
+});
+
+exports.getLecturesForTeacherContactTracing = (teacherId) => new Promise((resolve, reject) => {
+  const sql = db.prepare('SELECT LectureId,TeacherId,DateHour,SubjectId FROM Lectures WHERE TeacherId=?');
+  const result = sql.all(teacherId);
+  const lectures = [];
+  const now = new Date();
+  const oneweekago = moment(now).subtract('7', 'days');
+  if (result.length > 0) {
+    result.forEach(async (row) => {
+      const lecturedate = new Date(row.DateHour);
+      if (lecturedate > oneweekago && lecturedate < now) {
+        const subjName = await subjectDao.getSubjectName(row.SubjectId);
+        lectures.push({
+          // eslint-disable-next-line max-len
+          LectureId: row.LectureId, TeacherId: row.TeacherId, DateHour: row.DateHour, SubjectName: subjName.SubjectName,
+        });
       }
     });
     // console.log(`lectures for contact tracing:${lectures}`);
