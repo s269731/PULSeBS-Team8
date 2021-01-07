@@ -89,6 +89,8 @@ function initTestDB() {
   lectStmt1.run([28, 1, 1, dec6.toISOString(), 'In person', '12A', 100, 100, 100, 1]);
   lectStmt.run([29, 1, 1, today.subtract(4, 'days').toISOString(), 'In person', '12A', 100, 50]);
   lectStmt.run([30, 11, 8, today.subtract(4, 'days').toISOString(), 'In person', '12A', 100, 50]);
+  const nextWeek = moment(global.now);
+  lectStmt.run([31, 1, 1, nextWeek.add(7, 'days').toISOString(), 'In person', '12A', 100, 50]);
 
   /** ********************* */
   /*    ENROLLMENTS TABLE   */

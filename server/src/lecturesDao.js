@@ -513,8 +513,10 @@ async function getTeacherPastLectures(teacherId) { //= > new Promise((resolve, r
 exports.excludeHolidays = (date_array) => new Promise((resolve, reject) => {
   if (date_array.length > 0) {
     const today = new Date();
+    let correct = [];
+    let already_held = [];
+    let not_found = [];
     date_array.forEach(async (d) => {
-    //date_array.forEach((d) => {
       const year = d.year;
       const month = d.month.index;
       const day = d.day;
@@ -522,7 +524,6 @@ exports.excludeHolidays = (date_array) => new Promise((resolve, reject) => {
       dt.setDate(day);
       dt.setMonth(month);
       dt.setYear(year);
-      console.log(dt);
 
       if (dt > today) {
         const sql1 = db.prepare('SELECT COUNT(*) as count FROM Lectures WHERE DATE(DateHour) = DATE(?)');
@@ -531,11 +532,21 @@ exports.excludeHolidays = (date_array) => new Promise((resolve, reject) => {
           const sql2 = db.prepare('DELETE FROM Lectures WHERE DATE(DateHour) = DATE(?)');
           const res = sql2.run(dt.toISOString());
           console.log(res);
-          if (res.changes > 0) { resolve({ result: 1 }); } else { reject('Error in deleting row'); }
-
-        } else reject('No lectures scheduled for that date')
-      } else reject('Cannot delete lectures already held');
+          if (res.changes > 0) { correct.push(dt.toISOString()); } else { reject('Error in deleting row'); }
+        } else {
+          not_found.push(dt.toISOString());
+          //reject('No lectures scheduled for that date');
+        }
+      } else {
+        already_held.push(dt.toISOString());
+        //reject('Cannot delete lectures already held');
+      }
     });
+    let result = {};
+    result.correct = correct;
+    result.already_held = already_held;
+    result.not_found = not_found;
+    resolve(result);
   } else reject('Array of dates is empty');
 });
 
