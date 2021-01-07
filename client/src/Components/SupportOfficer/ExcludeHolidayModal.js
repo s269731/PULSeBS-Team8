@@ -9,19 +9,15 @@ function ExcludeHolidayModal(props) {
     const handleClose = () => setShow(false);
     const handleShow = () => {setShow(true)};
     const [date, setDate] = useState(new DateObject());
+    // const [date, setDateEmpty] = useState(new DateObject());
 
-    const excludeHolidays = (dates) => {
-      API.excludeHolidays(dates).then(() => {
-          handleClose();
-          setDate(new DateObject());
-        })
-        .catch((err) => {
-          console.log(err.status);
-          if (err.status === 401) {
-            this.props.notLoggedUser();
-          }
-        });
+    const callApi=(date)=>{
+      props.excludeHolidays(date)
+      handleClose();
+      setDate();
     }
+
+
 
     return (
       <>
@@ -43,13 +39,15 @@ function ExcludeHolidayModal(props) {
           <DatePicker 
                 value={date} 
                  onChange={setDate}
-                 multiple={true}/>
+                 multiple={true}
+                 minDate={new Date()}
+                 />
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
               Close
             </Button>
-            <Button variant="primary" onClick={() => excludeHolidays(date)}>Send</Button>
+            <Button variant="primary" onClick={() => callApi(date)}>Send</Button>
           </Modal.Footer>
         </Modal>
       </>

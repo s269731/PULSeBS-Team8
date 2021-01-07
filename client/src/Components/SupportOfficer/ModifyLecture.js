@@ -55,7 +55,11 @@ class ModifyLecture extends React.Component {
       Capacity: null,
       disabled: true,
       scId: null,
-      tabModality:'modality'
+      tabModality:'modality',
+      showMessage: false,
+      correct:"",
+      notFound:"",
+      alreadyHeld:""
         };
     this.SaveEdit=this.SaveEdit.bind(this)
   }
@@ -74,13 +78,11 @@ setModality(val){
 }
 
   retrieveCourses(){
-    console.log("here2")
     API
         .getOfficerSchedule()
         .then((res) => {
           console.log(res)
           if (this.state.changeYear === true) {
-            console.log("if")
             this.setState({lectures: this.state.filteredLec1})
             this.setState({filteredLec2: res})
             this.setState({ checkedCourses: []})
@@ -165,6 +167,26 @@ setModality(val){
   }
 
 
+
+   excludeHolidays = (dates) => {
+    API.excludeHolidays(dates).then((res) => {
+      let correct= JSON.stringify(res.correct)
+      let notFound=JSON.stringify(res.not_found)
+      let alreadyHeld= JSON.stringify(res.already_held)
+      
+      this.setState({showMessage:true})
+      this.setState({correct: correct, notFound: notFound, alreadyHeld: alreadyHeld})
+      //  handleClose;
+      })
+      .catch((err) => {
+        console.log(err.status);
+        if (err.status === 401) {
+          this.props.notLoggedUser();
+        }
+      });
+  }
+
+
   changeModality = (courses) => {
     let l=courses;
     if(this.state.allChecked){
@@ -184,6 +206,9 @@ setModality(val){
   }
 confirmMessage(){
     this.setState({confirm:false})
+}
+confirmMessage(){
+  this.setState({showMessage:false})
 }
 
   setSelectedOptionWeek = (e) => {
@@ -279,7 +304,7 @@ confirmMessage(){
           <br></br>
           <br></br>
           <h3>Exclude Holidays</h3>{this.state.refresh}
-            <ExcludeHolidayModal/>
+            <ExcludeHolidayModal excludeHolidays={this.excludeHolidays} />
           <br></br>
         </Col>
 
@@ -292,10 +317,28 @@ confirmMessage(){
                 } }>
             <Tab data-testid="Change-Modality-Id" eventKey="modality" title="Change Modality" tabClassName={ "tab-label" }>
 
+            {this.state.showMessage &&<><Row className="below-tab justify-content-md-center" >
+                  <h6>
+                    <Alert variant={"success"}>
+                    <Row className={'justify-content-md-center  border-bottom  pb-3 pt-2 mb-0'}>
+
+            Correct: {this.state.correct}<br/>
+            Not Found: {this.state.notFound}<br/>
+            Already Held: {this.state.alreadyHeld}<br/>
+              </Row>
+                  <Button
+                      block
+                      variant="info"
+                      onClick={() => this.confirmMessage()}>
+                    <h6>Ok</h6>
+                  </Button></Alert></h6> </Row></>
+                }
+
                 {this.state.confirm &&<><Row className="below-tab justify-content-md-center" >
                   <h6>
                     <Alert variant={"success"}>
-                    <Row className={'justify-content-md-center  border-bottom  pb-3 pt-2 mb-0'}>Courses modality correctly changed!</Row>
+                    <Row className={'justify-content-md-center  border-bottom  pb-3 pt-2 mb-0'}>
+                      Courses modality correctly changed!</Row>
                   <Button
                       block
                       variant="info"
