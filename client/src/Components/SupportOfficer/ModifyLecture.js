@@ -173,7 +173,10 @@ setModality(val){
       let correct= JSON.stringify(res.correct)
       let notFound=JSON.stringify(res.not_found)
       let alreadyHeld= JSON.stringify(res.already_held)
-      
+      correct=  JSON.parse(correct).map((e) => e.replace(/\T.*\Z/g,  '. '));;
+      notFound=  JSON.parse(notFound).map((e) => e.replace(/\T.*\Z/g,  '. '));;
+      alreadyHeld=  JSON.parse(alreadyHeld).map((e) => e.replace(/\T.*\Z/g,  '. '));;
+
       this.setState({showMessage:true})
       this.setState({correct: correct, notFound: notFound, alreadyHeld: alreadyHeld})
       //  handleClose;
@@ -254,6 +257,7 @@ confirmMessage(){
   SaveEdit(a){
     API.changeSchedule(a).then((res) => {
       console.log('here')
+      alert(JSON.stringify(res));
       this.retrieveCourses()
       })
       .catch((err) => {
