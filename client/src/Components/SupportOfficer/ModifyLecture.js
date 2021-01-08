@@ -257,7 +257,6 @@ confirmMessage(){
   SaveEdit(a){
     API.changeSchedule(a).then((res) => {
       console.log('here')
-      alert(JSON.stringify(res));
       this.retrieveCourses()
       })
       .catch((err) => {
