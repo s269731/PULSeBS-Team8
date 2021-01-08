@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {Button, Modal, Alert, Card} from "react-bootstrap";
 import TimeField from "react-simple-timefield";
-
+import TimePicker from 'react-time-picker';
 
 const options = [
     {
@@ -79,12 +79,12 @@ function ModifyModal(props) {
                             <select
                                 style={{
                                     border: '1px solid #666',
-                                    fontSize: 20,
+                                    fontSize: 18,
+                                    height: 30,
                                     width: 100,
-                                    padding: '2px 4px',
-                                    margin: '2px',
+                                    padding: '0px 4px',
+                                    margin: '3px',
                                     color: '#333',
-                                    borderRadius: 10
                                 }}
                                 id={props.id}
                                 defaultValue={props.sc.Day}
@@ -97,30 +97,19 @@ function ModifyModal(props) {
                                     );
                                 })}
                             </select>
-                            <TimeField
-                                onChange={e => setOptionHour1(e.target.value)}
-                                style={{
-                                    border: '1px solid #666',
-                                    fontSize: 20,
-                                    width: 80,
-                                    padding: '2px 4px',
-                                    margin: '2px',
-                                    color: '#333',
-                                    borderRadius: 10
-                                }}
-                                value={props.hr}></TimeField>-
-                            <TimeField
-                                onChange={e => setOptionHour2(e.target.value)}
-                                style={{
-                                    border: '1px solid #666',
-                                    fontSize: 20,
-                                    width: 80,
-                                    padding: '2px 4px',
-                                    margin: '2px',
-                                    color: '#333',
-                                    borderRadius: 12
-                                }}
-                                value={props.min}></TimeField>
+
+                                 <TimePicker
+                                    value={props.hr}
+                                    onChange={(value)=>setOptionHour1(value)}
+                                    disableClock={true}
+                                />-
+                                <TimePicker
+                                    value={props.min}
+                                    onChange={(value)=>setOptionHour2(value)}
+                                    minTime={props.hr}
+                                    disableClock={true}
+                                />
+
                             <br></br>
                             <b>Class:</b>
                             <input
@@ -129,10 +118,9 @@ function ModifyModal(props) {
                                     border: '1px solid #666',
                                     fontSize: 20,
                                     width: 90,
-                                    padding: '2px 4px',
+                                    padding: '0px 4px',
                                     margin: '2px',
                                     color: '#333',
-                                    borderRadius: 10
                                 }}
                                 defaultValue={props.sc.Class}
                                 type="text"
@@ -147,10 +135,9 @@ function ModifyModal(props) {
                                     border: '1px solid #666',
                                     fontSize: 20,
                                     width: 90,
-                                    padding: '2px 4px',
+                                    padding: '0px 4px',
                                     margin: '2px',
                                     color: '#333',
-                                    borderRadius: 10
                                 }}
                                 type="number"
                                 id="capacity"
@@ -158,22 +145,7 @@ function ModifyModal(props) {
 
 
                             <br></br>
-                            {/*props.sc.ScheduleId === this.state.scId && <Button
-                                style={{
-                                    float: 'right',
-                                    margin: "1px"
-                                }}
-                                onClick={() => this.SaveEdit(props.e.SubjectId, props.sc.ScheduleId)}
-                                size="sm"
-                                variant="success">Save</Button>*/}
-                            {/*props.sc.ScheduleId === this.state.scId && <Button
-                                onClick={() => this.disableEdit()}
-                                style={{
-                                    float: 'right',
-                                    margin: "1px"
-                                }}
-                                size="sm"
-                                variant="danger">Cancel</Button>*/}
+
                         </Card.Body>
                     </Card>
                 </Modal.Body>
