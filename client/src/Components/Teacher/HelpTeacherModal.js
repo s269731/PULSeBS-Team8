@@ -31,6 +31,8 @@ function HelpTeacherModal(props) {
         onHide={ handleClose }
         backdrop="static"
         keyboard={ false }
+        data-testid="teacher-page-modal"
+
       >
         <Modal.Header closeButton>
           <Modal.Title>Tutorial</Modal.Title>
