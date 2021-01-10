@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {Button, Modal} from "react-bootstrap";
 import DatePicker, { DateObject } from "react-multi-date-picker";
-import API from "../../api/api";
+
 
 
 function ExcludeHolidayModal(props) {
