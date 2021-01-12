@@ -5,6 +5,9 @@ const jsonwebtoken = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const fileUpload = require('express-fileupload');
 const schedule = require('node-schedule');
+const session = require('express-session');
+const bodyParser = require('body-parser');
+const passport = require('passport');
 const setupTestDB = require('./setupTestDB');
 const emailService = require('./services/email');
 const importerService = require('./services/importer');
@@ -15,6 +18,7 @@ const statistics = require('./services/statistics');
 const subjectsDao = require('./subjectsDao');
 const contactTracing = require('./services/contactTracing');
 const scheduleDao = require('./scheduleDao');
+const passportConfig = require('./passport_strategies/strategies');
 
 const authErrorObj = { errors: [{ msg: 'Authorization error' }] };
 const lecturesErr = { errors: [{ msg: 'There was an error retrieving available lectures' }] };
@@ -41,6 +45,57 @@ schedule.scheduleJob('0 23 * * *', () => {
 });
 
 app.use(express.json());
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(session({
+  secret: 'secret',
+  resave: false,
+  saveUninitialized: true,
+}));
+// SAML LOGIN
+passport.serializeUser((user, done) => {
+  console.log('-----------------------------');
+  console.log('serialize user');
+  console.log('-----------------------------');
+  done(null, user);
+});
+passport.deserializeUser((user, done) => {
+  console.log('-----------------------------');
+  console.log('deserialize user');
+  console.log('-----------------------------');
+  done(null, user);
+});
+
+const strategy = passportConfig.passportConfig(passport);
+passport.use('samlStrategy', strategy);
+app.use(passport.initialize({}));
+app.use(passport.session({}));
+
+app.get('/loginSAML',
+  (req, res, next) => {
+    console.log('-----------------------------');
+    console.log('/Start login handler');
+    next();
+  },
+  passport.authenticate('samlStrategy'));
+
+app.post('/login/callback',
+  bodyParser.urlencoded({ extended: false }),
+  passport.authenticate('samlStrategy', { session: false }),
+  (req, res) => {
+    userDao.getUserById(req.user.uid).then((user) => {
+      const token = jsonwebtoken.sign({ user: user.id },
+        config.jwtSecret,
+        { expiresIn: config.tokenExpireTime });
+      res.cookie('token', token, { httpOnly: true, sameSite: true, maxAge: 1000 * config.tokenExpireTime });
+      res.redirect('/');
+      res.end();
+    }).catch((err) => {
+      // user doesn't exist in our database
+      console.log(err);
+    });
+  });
 
 app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
@@ -74,9 +129,6 @@ app.use((err, req, res, next) => {
     res.status(401).json(authErrorObj);
   }
 });
-app.post('/api/logout', (req, res) => {
-  res.clearCookie('token').end();
-});
 
 app.get('/api/user', async (req, res) => {
   const userId = req.user && req.user.user;
@@ -88,6 +140,12 @@ app.get('/api/user', async (req, res) => {
   } catch {
     res.status(401).json(authErrorObj);
   }
+});
+
+app.post('/api/logout', (req, res) => {
+  if (req.cookies.token) res.clearCookie('token');
+  if (req.cookies.SimpleSAMLAuthTokenIdp) res.clearCookie('SimpleSAMLAuthTokenIdp');
+  res.end();
 });
 
 app.use('/api/student', (req, res, next) => {
@@ -170,7 +228,7 @@ app.get('/api/teacher/lectures', async (req, res) => {
 
 app.get('/api/teacher/lectures/:lectureId', async (req, res) => {
   try {
-    const list = await lecturesDao.getStudentsListByLectureId(req.params.lectureId,false);
+    const list = await lecturesDao.getStudentsListByLectureId(req.params.lectureId, false);
     if (!list) {
       res.json([]);
     }

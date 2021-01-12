@@ -15,6 +15,7 @@ class Header extends Component {
   }
 
   render() {
+    console.log(this.props.loggedUser)
     return (
       <Navbar variant="dark" bg="primary" className={"Nav"}>
         <Navbar.Brand>

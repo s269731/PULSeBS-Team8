@@ -196,6 +196,12 @@ function SignUp(props) {
             >
               Log In
             </Button>
+            <Button type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="secondary"
+                    ><a href={'http://localhost:3001/loginSAML'} className={'whiteLink'}>Login with your SOFTENG Credentials</a></Button>
+
           </div>
         </div>
       </Container>
