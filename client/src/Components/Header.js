@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import {Nav, Navbar, Col, Row, Button} from "react-bootstrap";
+import {Nav, Navbar, Col, Row} from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "../App.css";
-import Jumbotron from "../assets/helpF.png";
+
 import HelpStudentModal from "./Student/HelpStudentModal";
 import HelpTeacherModal from "./Teacher/HelpTeacherModal";
 

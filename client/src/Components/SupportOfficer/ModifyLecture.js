@@ -325,8 +325,8 @@ confirmMessage(){
                     <Alert variant={"success"}>
                     <Row className={'justify-content-md-center  border-bottom  pb-3 pt-2 mb-0'}>
 
-            Correct: {this.state.correct}<br/>
-            Not Found: {this.state.notFound}<br/>
+            Correctly setted: {this.state.correct}<br/>
+            Lectures not found on these dates: {this.state.notFound}<br/>
             Already Held: {this.state.alreadyHeld}<br/>
               </Row>
                   <Button

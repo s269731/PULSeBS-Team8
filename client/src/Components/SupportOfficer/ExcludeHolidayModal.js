@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {Button, Modal} from "react-bootstrap";
 import DatePicker, { DateObject } from "react-multi-date-picker";
-import API from "../../api/api";
+
 
 
 function ExcludeHolidayModal(props) {
@@ -21,7 +21,7 @@ function ExcludeHolidayModal(props) {
 
     return (
       <>
-        <Button onClick={handleShow} data-testid="help-button" variant="info">
+        <Button onClick={handleShow} data-testid="exc-holiday-button" variant="info">
             Choose Holidays
             </Button>
   
@@ -31,6 +31,7 @@ function ExcludeHolidayModal(props) {
           backdrop="static"
           keyboard={false}
           animation={true}
+          data-testid="exc-holiday-modal" 
         >
           <Modal.Header closeButton>
             <Modal.Title>Choose Holidays</Modal.Title>
@@ -41,10 +42,11 @@ function ExcludeHolidayModal(props) {
                  onChange={setDate}
                  multiple={true}
                  minDate={new Date()}
+                 data-testid="exc-holiday-datepick"
                  />
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
+            <Button data-testid="exc-holiday-close" variant="secondary" onClick={handleClose}>
               Close
             </Button>
             <Button variant="primary" onClick={() => callApi(date)}>Send</Button>
