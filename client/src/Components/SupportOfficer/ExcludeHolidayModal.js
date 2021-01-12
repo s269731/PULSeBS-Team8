@@ -11,8 +11,8 @@ function ExcludeHolidayModal(props) {
     const [date, setDate] = useState(new DateObject());
     // const [date, setDateEmpty] = useState(new DateObject());
 
-    const callApi=(date)=>{
-      props.excludeHolidays(date)
+    const callApi=(date2)=>{
+      props.excludeHolidays(date2)
       handleClose();
       setDate();
     }
