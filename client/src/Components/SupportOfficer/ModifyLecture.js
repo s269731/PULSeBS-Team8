@@ -94,8 +94,8 @@ setModality(val){
           }
         })
         .catch((err) => {
-          if (err.status === 401) {
-          }
+          //if (err.status === 401) {
+          //}
           this.setState({serverErr: true, loading: null});
         });
   }
@@ -159,8 +159,8 @@ setModality(val){
       let courses = this
         .state
         .checkedCourses
-        .filter(courses => {
-          return courses.id !== test.id
+        .filter(course => {
+          return course.id !== test.id
         });
       this.setState({checkedCourses: courses});
     }
@@ -173,9 +173,9 @@ setModality(val){
       let correct= JSON.stringify(res.correct)
       let notFound=JSON.stringify(res.not_found)
       let alreadyHeld= JSON.stringify(res.already_held)
-      correct=  JSON.parse(correct).map((e) => e.replace(/\T.*\Z/g,  '. '));;
-      notFound=  JSON.parse(notFound).map((e) => e.replace(/\T.*\Z/g,  '. '));;
-      alreadyHeld=  JSON.parse(alreadyHeld).map((e) => e.replace(/\T.*\Z/g,  '. '));;
+      correct=  JSON.parse(correct).map((e) => e.replace(/\T.*\Z/g,  '. '));
+      notFound=  JSON.parse(notFound).map((e) => e.replace(/\T.*\Z/g,  '. '));
+      alreadyHeld=  JSON.parse(alreadyHeld).map((e) => e.replace(/\T.*\Z/g,  '. '));
 
       this.setState({showMessage:true})
       this.setState({correct: correct, notFound: notFound, alreadyHeld: alreadyHeld})
@@ -488,7 +488,7 @@ confirmMessage(){
 
                             <div className="select-container">
 
-                              {e.schedules.map((sc, id) => {
+                              {e.schedules.map((sc, idx) => {
 
                                   /*let hr = sc
                                     .Hour
@@ -524,7 +524,7 @@ confirmMessage(){
                                             </Row>
 
 
-                                            <ModifyModal sc={sc} hr={hours[0]} min={hours[1]} id={id} e={e} SaveEdit={this.SaveEdit} notLoggedUser={this.props.notLoggedUser}/>
+                                            <ModifyModal sc={sc} hr={hours[0]} min={hours[1]} id={idx} e={e} SaveEdit={this.SaveEdit} notLoggedUser={this.props.notLoggedUser}/>
 
                                             </Card.Body>
                                             </Card>
