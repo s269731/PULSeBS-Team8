@@ -167,7 +167,7 @@ class OfficerPage extends Component {
                             lectures={this.state.lectures}
                             cancelLecture={this.cancelLecture}
                             changeModalityLecture={this.changeModalityLecture}
-                            // notLoggedUser={this.props.notLoggedUser}
+                            notLoggedUser={this.props.notLoggedUser}
                         />: <>
                             {this.state.noSubj ? 
                             <Row className="justify-content-md-center below-nav"><Alert className={"alert"} variant={"info"} data-testid={"no-courses-message"}><h4>No courses assigned to you</h4></Alert></Row>:
@@ -177,7 +177,7 @@ class OfficerPage extends Component {
                             lectures={this.state.lectures}
                             cancelLecture={this.cancelLecture}
                             changeModalityLecture={this.changeModalityLecture}
-                            // notLoggedUser={this.props.notLoggedUser}
+                            notLoggedUser={this.props.notLoggedUser}
                         />
                             // <Row className="justify-content-md-center below-nav"><Alert className={"alert"} variant={"info"} data-testid={"no-lectures-message"}><h4>You have not programmed lectures</h4></Alert></Row>
                             }

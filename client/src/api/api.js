@@ -400,7 +400,7 @@ async function changeModalityCourse(list){
       } else {
         // analyze the cause of error
         response.json()
-            .then((obj) => {  reject(obj); }) // error msg in the response body
+            .then((obj) => {  reject({status:response.status, msg:obj}); }) // error msg in the response body
             .catch((err) => { reject({ errors: [{ param: "Application", msg: "Cannot parse server response" }] }) }); // something else
       }
     }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] }) }); // connection errors
@@ -425,7 +425,7 @@ async function insertAttendanceInfo(id, value){
       } else {
         // analyze the cause of error
         response.json()
-            .then((obj) => {  reject(obj); }) // error msg in the response body
+            .then((obj) => {  reject({status:response.status, msg:obj}); }) // error msg in the response body
             .catch((err) => { reject({ errors: [{ param: "Application", msg: "Cannot parse server response" }] }) }); // something else
       }
     }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] }) }); // connection errors
@@ -447,7 +447,7 @@ async function changeSchedule(list){
       } else {
         // analyze the cause of error
         response.json()
-            .then((obj) => {  reject(obj); }) // error msg in the response body
+            .then((obj) => {  reject({status:response.status, msg:obj}); }) // error msg in the response body
             .catch((err) => { reject({ errors: [{ param: "Application", msg: "Cannot parse server response" }] }) }); // something else
       }
     }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] }) }); // connection errors

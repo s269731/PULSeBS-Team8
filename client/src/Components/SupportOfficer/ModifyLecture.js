@@ -94,8 +94,9 @@ setModality(val){
           }
         })
         .catch((err) => {
-          //if (err.status === 401) {
-          //}
+          if (err.status === 401) {
+            this.props.notLoggedUser();
+          }
           this.setState({serverErr: true, loading: null});
         });
   }
@@ -200,6 +201,7 @@ setModality(val){
         this.componentDidMount();
       })
       .catch((err) => {
+        console.log(err.status)
         if (err.status === 401) {
           this
             .props
@@ -207,11 +209,9 @@ setModality(val){
         }
       });
   }
+
 confirmMessage(){
-    this.setState({confirm:false})
-}
-confirmMessage(){
-  this.setState({showMessage:false})
+  this.setState({showMessage:false, confirm:false})
 }
 
   setSelectedOptionWeek = (e) => {
@@ -256,10 +256,10 @@ confirmMessage(){
 
   SaveEdit(a){
     API.changeSchedule(a).then((res) => {
-      console.log('here')
       this.retrieveCourses()
       })
       .catch((err) => {
+        console.log("err")
         if (err.status === 401) {
           this.props.notLoggedUser();
         }

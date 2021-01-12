@@ -87,6 +87,7 @@
         });
     };
     notLoggedUser() {
+        console.log("not")
       this.setState({ loggedUser: null });
     }
     render() {
@@ -99,7 +100,7 @@
           />
           <Switch>
           <Route exact path="/officer">
-            {this.state.loggedUser && this.state.loggedUser.role === "O" ? <OfficerPage/>:<Redirect to="/login" />}
+            {this.state.loggedUser && this.state.loggedUser.role === "O" ? <OfficerPage notLoggedUser={this.notLoggedUser}/>:<Redirect to="/login" />}
           </Route>
             <Route exact path="/officer/addStudent">
               {this.state.loggedUser && this.state.loggedUser.role === "O" ?<AddStudent/>:<Redirect to="/login" />}
