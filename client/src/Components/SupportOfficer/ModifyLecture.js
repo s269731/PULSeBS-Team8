@@ -68,8 +68,8 @@ class ModifyLecture extends React.Component {
     let lectures = this
       .state
       .lectures
-      .filter(lectures => {
-        return lectures !== id
+      .filter(lects => {
+        return lects !== id
       });
     this.setState({lectures: lectures});
   }
