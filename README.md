@@ -137,7 +137,7 @@ To run end-to-end tests, run these configurations:
 ## How to run SAML Identity provider
 
 - Clone the Repository https://github.com/LucaBarco/Pulsebs-SAMLIdP
-- Go into docker-saml-idp
+- Go into the repository folder
 - run the commands:
     - docker-compose build
     - docker-compose up
