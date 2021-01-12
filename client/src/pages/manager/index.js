@@ -155,18 +155,18 @@ class Manager extends React.Component {
             .then(res => {
                 this.setState({contactTracingRole:res.Role})
                 let i=0
-                const cols=[
+                const Excols=[
                     "RowId","Student SSN","Student Name", "Lecture Date", "Lecture Hour", "Course", "Teacher Name", "Teacher SSN"
                 ]
                 const list=[]
-                list.push(cols)
+                list.push(Excols)
                 if(res.Result.length){
                     this.setState({searchData:res.Result});
                         res.Result.forEach(rows => {
                             rows.Lectures.forEach(data=>{
                                 data.StudentList.forEach(student=> {
                                     let lectDay = new Date(data.DateHour);
-                                    let fields = data.DateHour.split("T");
+                                    //let fields = data.DateHour.split("T");
                                     let min = lectDay.getMinutes().toString()
                                     if (min === '0') {
                                         min = '00'
@@ -427,7 +427,7 @@ class Manager extends React.Component {
                                                     />
                                                     {val.Lectures.map(lec=> {
                                                         let lectDay = new Date(lec.DateHour);
-                                                        let fields = lec.DateHour.split("T");
+                                                        //let fields = lec.DateHour.split("T");
                                                         //let date = fields[0];
                                                         let min = lectDay.getMinutes().toString()
                                                         if (min === '0') {
