@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {Button, Modal, Alert, Card} from "react-bootstrap";
+import {Button, Modal, Card} from "react-bootstrap";
 
 import TimePicker from 'react-time-picker';
 
@@ -25,7 +25,7 @@ const options = [
 
 function ModifyModal(props) {
     const [show, setShow] = useState(false);
-    const [error, setError] = useState(false);
+
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const [optionDay, setOptionDay] = useState(props.sc.Day);
@@ -68,7 +68,7 @@ function ModifyModal(props) {
                     <Modal.Title>Change Schedule</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {error && <Alert variant={'danger'}>Server Error</Alert>}
+
                     <Card
                         bg='light'
                         style={{

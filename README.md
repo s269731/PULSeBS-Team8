@@ -14,6 +14,7 @@
 # Contents
 
 - [How to run docker images](#how-to-run-docker-images)
+    - [Version v2](#version-v2)
     - [Version v1.5](#version-v15)
     - [Version v1](#version-v1)
     - [Version v0](#version-v0)
@@ -38,20 +39,26 @@
 # How to run docker images
 (if you are on windows, you must avoid "sudo")
 
+## Version v2
+- `sudo docker pull se2team8/pulsebs-team8:v2`
+- `sudo docker run -p 3000:3000 -p 3001:3001 se2team8/pulsebs-team8:v2`
+
+Notice: to use the `Login with SoftEng credentials` feature in the login page, you have to run the IdP docker image. See [How to run SAML Identity provider](#how-to-run-saml-identity-provider).
+
 ## Version v1.5
-- sudo docker pull se2team8/pulsebs-team8:v1.5
-- sudo docker run -p 3000:3000 -p 3001:3001 se2team8/pulsebs-team8:v1.5
+- `sudo docker pull se2team8/pulsebs-team8:v1.5`
+- `sudo docker run -p 3000:3000 -p 3001:3001 se2team8/pulsebs-team8:v1.5`
 
 ## Version v1
-- sudo docker pull se2team8/pulsebs-team8:v1
-- sudo docker run -p 3000:3000 -p 3001:3001 se2team8/pulsebs-team8:v1
+- `sudo docker pull se2team8/pulsebs-team8:v1`
+- `sudo docker run -p 3000:3000 -p 3001:3001 se2team8/pulsebs-team8:v1`
 
 ## Version v0
 For only the very first version, we used docker-compose.
 So, you need to:
 - download the code of this repository with **tag v0**
-- in the folder of the code, execute: *docker-compose pull*
-- then execute: *docker-compose run*
+- in the folder of the code, execute: `docker-compose pull`
+- then execute: `docker-compose run`
 
 # How to use the application
 
@@ -139,6 +146,6 @@ To run end-to-end tests, run these configurations:
 - Clone the Repository https://github.com/LucaBarco/Pulsebs-SAMLIdP
 - Go into the repository folder
 - run the commands:
-    - docker-compose build
-    - docker-compose up
-- Then, run the application as usual (npm start in both server and client)
+    - `docker-compose build`
+    - `docker-compose up`
+- Then, run the application as usual (either npm start in both server and client or via docker image)
