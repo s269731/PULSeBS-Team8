@@ -6,8 +6,8 @@ const lecturesDao = require('./lecturesDao');
 const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
 
 const endSemester = new Date(); // Suppose the first semester ends on 15th Jan
-endSemester.setDate(16);
-endSemester.setMonth(0);
+endSemester.setDate(20);
+endSemester.setMonth(1);
 endSemester.setYear(2021);
 
 async function populateLectures() {
