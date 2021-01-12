@@ -19,6 +19,7 @@ const subjectsDao = require('./subjectsDao');
 const contactTracing = require('./services/contactTracing');
 const scheduleDao = require('./scheduleDao');
 const passportConfig = require('./passport_strategies/strategies');
+
 const authErrorObj = { errors: [{ msg: 'Authorization error' }] };
 const lecturesErr = { errors: [{ msg: 'There was an error retrieving available lectures' }] };
 const studentListError = { errors: [{ msg: 'There was an error retrieving list of students for this lectureId' }] };
@@ -46,60 +47,54 @@ app.use(express.json());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(session({secret: 'secret',
+app.use(session({
+  secret: 'secret',
   resave: false,
-  saveUninitialized: true,}));
-//SAML LOGIN
-passport.serializeUser(function(user, done) {
+  saveUninitialized: true,
+}));
+// SAML LOGIN
+passport.serializeUser((user, done) => {
   console.log('-----------------------------');
   console.log('serialize user');
-  console.log(user);
   console.log('-----------------------------');
   done(null, user);
 });
-passport.deserializeUser(function(user, done) {
+passport.deserializeUser((user, done) => {
   console.log('-----------------------------');
   console.log('deserialize user');
-  console.log(user);
   console.log('-----------------------------');
   done(null, user);
 });
 
 const strategy = passportConfig.passportConfig(passport);
-passport.use('samlStrategy',strategy);
+passport.use('samlStrategy', strategy);
 app.use(passport.initialize({}));
 app.use(passport.session({}));
 
 app.get('/loginSAML',
-    function (req, res, next) {
-      console.log('-----------------------------');
-      console.log('/Start login handler');
-      next();
-    },
-    passport.authenticate('samlStrategy'),
-);
+  (req, res, next) => {
+    console.log('-----------------------------');
+    console.log('/Start login handler');
+    next();
+  },
+  passport.authenticate('samlStrategy'));
+
 app.post('/login/callback',
-    function (req, res, next) {
-      console.log('-----------------------------');
-      console.log('/Start login callback ');
-      next();
-    },
-    passport.authenticate('samlStrategy' ,{
-      successRedirect: '/home',
-      failureRedirect: '/login',
-      failureFlash: true
-    }),
-    function (req, res) {
-      console.log('-----------------------------');
-      console.log('login call back dumps');
-      console.log(req.user);
-      console.log('-----------------------------');
-      res.send('Log in Callback Success');
-    }
-);
-
-
-
+  bodyParser.urlencoded({ extended: false }),
+  passport.authenticate('samlStrategy', { session: false }),
+  (req, res) => {
+    userDao.getUserById(req.user.uid).then((user) => {
+      const token = jsonwebtoken.sign({ user: user.id },
+        config.jwtSecret,
+        { expiresIn: config.tokenExpireTime });
+      res.cookie('token', token, { httpOnly: true, sameSite: true, maxAge: 1000 * config.tokenExpireTime });
+      res.redirect('/');
+      res.end();
+    }).catch((err) => {
+      // user doesn't exist in our database
+      console.log(err);
+    });
+  });
 
 app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
@@ -125,97 +120,15 @@ app.post('/api/login', async (req, res) => {
 
 app.use(cookieParser());
 
-
-
-
-
 // AUTHENTICATED REST API endpoints
-/*app.use(jwt({ secret: config.jwtSecret, getToken: (req) => req.cookies.token, algorithms: ['HS256'] }));
+app.use(jwt({ secret: config.jwtSecret, getToken: (req) => req.cookies.token, algorithms: ['HS256'] }));
 // To return a better object in case of errors
 app.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
     res.status(401).json(authErrorObj);
   }
-});*/
-
-app.get('/api/user',async (req,res)=>{
-
-  //TODO: solve problem with this api.
-  /*
-  * The problem is related to usage of both jwt token and saml token.
-  * If you move this api after the app.use(jwt......) it works only for jwt based login
-  * If you leave it as it is, it works only for SAML login.
-  *
-  * We need to find a way to make this api working for both login methods.
-  * Furthermore, this is necessary also for all the other authenticated api: we need a way to
-  * state that an user is authenticated even if he uses SAML or JWT
-  *
-  * */
-
-  //TEMPORARY SOLUTION: manually decode the jwt token, whithout the use of app.use(jwt...)
-  //it works but we need to change ALL the apis to manually detect if an user is auth or not...
-
-  if(req.cookies.SimpleSAMLAuthTokenIdp) {
-    console.log("has SAML token");
-    if (req.user) {
-      console.log(1)
-      console.log(req.user)
-      let role = ""
-      /*if (req.user.eduPersonAffiliation === 'students') {
-        role = 'S'
-      }
-      if (req.user.eduPersonAffiliation === 'professors') {
-        role = 'D'
-      }
-      if (req.user.eduPersonAffiliation === 'booking_managers') {
-        role = 'M'
-      }
-      if (req.user.eduPersonAffiliation === 'officers') {
-        role = 'O'
-      }*/
-      const userId = req.user && req.user.uid;
-      try {
-        const user = await userDao.getUserById(userId);
-        res.json({
-          id: user.id, role: user.role, name: user.name, surname: user.surname,
-        });
-      } catch {
-        res.status(401).json(authErrorObj);
-      }
-      //res.json({id: req.user.uid, email: req.user.email, role: role, name: "Pippo"})
-    } else {
-      console.log(0)
-      res.status(401).json(authErrorObj);
-    }
-  }
-  else if(req.cookies.token){
-     let result= jsonwebtoken.verify(req.cookies.token, config.jwtSecret);
-    console.log("check JWT token");
-    console.log(result)
-    const userId = result && result.user;
-    try {
-      const user = await userDao.getUserById(userId);
-      res.json({
-        id: user.id, role: user.role, name: user.name, surname: user.surname,
-      });
-    } catch {
-
-    }
-  }
-  else{
-    res.status(401).json(authErrorObj);
-  }
-})
-
-app.post('/api/logout', (req, res) => {
-  if(req.cookies.token) {
-    res.clearCookie('token').end();
-  }
-  if(req.cookies.SimpleSAMLAuthTokenIdp){
-    res.clearCookie('SimpleSAMLAuthTokenIdp').end();
-  }
 });
-/* OLD VERSION
+
 app.get('/api/user', async (req, res) => {
   const userId = req.user && req.user.user;
   try {
@@ -226,7 +139,13 @@ app.get('/api/user', async (req, res) => {
   } catch {
     res.status(401).json(authErrorObj);
   }
-});*/
+});
+
+app.post('/api/logout', (req, res) => {
+  if (req.cookies.token) res.clearCookie('token');
+  if (req.cookies.SimpleSAMLAuthTokenIdp) res.clearCookie('SimpleSAMLAuthTokenIdp');
+  res.end();
+});
 
 app.use('/api/student', (req, res, next) => {
   const studentId = req.user && req.user.user;
@@ -308,7 +227,7 @@ app.get('/api/teacher/lectures', async (req, res) => {
 
 app.get('/api/teacher/lectures/:lectureId', async (req, res) => {
   try {
-    const list = await lecturesDao.getStudentsListByLectureId(req.params.lectureId,false);
+    const list = await lecturesDao.getStudentsListByLectureId(req.params.lectureId, false);
     if (!list) {
       res.json([]);
     }
