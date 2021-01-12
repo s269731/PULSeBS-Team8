@@ -35,9 +35,11 @@ async function populateLectures() {
       let lect_dayOfWeek = rows.filter((r) => r.Day === day); // Array of all the lectures held in a specific day of the week
       if (lect_dayOfWeek.length > 0) {
         let d = new Date(day_week);
-        while (d < endSemester) { // iterate until we don't overcome the semester limit
+        let cond = d < endSemester;
+        while (cond) { // iterate until we don't overcome the semester limit
           dates.push(new Date(d));
           d.setDate(d.getDate() + 7);
+          cond = d < endSemester;
         }
         lect_dayOfWeek.forEach(async (lect) => {
           const startHour = lect.Hour.split('-')[0];
