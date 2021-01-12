@@ -148,4 +148,4 @@ To run end-to-end tests, run these configurations:
 - run the commands:
     - `docker-compose build`
     - `docker-compose up`
-- Then, run the application as usual (npm start in both server and client or via docker image)
+- Then, run the application as usual (either npm start in both server and client or via docker image)
