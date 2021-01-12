@@ -58,8 +58,12 @@ async function retrieveLectures(url){
                         .map((l) => {
                           let hasAttendance= l.presentPeople && l.presentPeople !==0
                           let now = new Date();
+                          let today = new Date();
+                          today.setHours(0,0,0,0)
                           let lectDay = new Date(l.dateHour);
-                          let canBook=lectDay>now;
+                          let lectDate=new Date(l.dateHour);
+                          lectDate.setHours(0,0,0,0)
+                          let canBook=lectDate>today;
                           let canDelete = lectDay - now - 3600000 > 0;
                           let canModify = lectDay - now - 3600000 / 2 > 0;
                           let canRecordAttendance= !hasAttendance && lectDay - now < 0;

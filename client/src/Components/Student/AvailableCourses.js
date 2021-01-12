@@ -105,7 +105,7 @@ const LectureItem = (props) => {
                                                 disabled
                                                 block
                                             >
-                                                Cannot book
+                                                Bookings are closed for this lecture
                                             </Button> }
                                         </Col>
                                     )}
@@ -125,7 +125,7 @@ const LectureItem = (props) => {
                                         </Col>
                                     )}
                                     {l.modality === "In person" &&
-                                    (l.booked === 0 || l.booked == 1) &&
+                                    (l.booked === 0 || l.booked === 1) &&
                                     // l.canModify===true &&
                                     (<Col>
                                             <Row className="justify-content-md-center">
@@ -145,6 +145,7 @@ const LectureItem = (props) => {
                                                     <h5 data-testid="confirm-message" className={"confirm"}><i>You are in waiting list</i></h5>
 
                                                 )}
+
                                             </Row>
                                         <Row className={"buttonStudent justify-content-md-center"}>
                                             <Button
