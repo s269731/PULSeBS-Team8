@@ -50,13 +50,13 @@ async function populateLectures() {
             const teacherId = await subjectDao.getTeacherIdBySubjectId(lect.SubjectId);
             const sql2 = 'INSERT INTO Lectures(TeacherId, SubjectId, ScheduleId, DateHour, Class, Capacity) VALUES (?,?,?,?,?,?)';
             const stmt2 = db.prepare(sql2);
-            const res = stmt2.run(teacherId.TeacherId, lect.SubjectId, lect.ScheduleId, date_hour.toISOString(), lect.Class, lect.Capacity);
+            stmt2.run(teacherId.TeacherId, lect.SubjectId, lect.ScheduleId, date_hour.toISOString(), lect.Class, lect.Capacity);
           }));
         });
       }
       day_week.setDate(day_week.getDate() + 1);
       dates = [];
-      lect_dayOfWeek = [];
+      //lect_dayOfWeek = [];
     });
   }
   return 0;
@@ -106,7 +106,7 @@ exports.changeModalitySchedule = (array) => new Promise((resolve, reject) => {
         else {
           const sql = "UPDATE Lectures SET Modality='In person' WHERE SubjectId=? AND DateHour > DATETIME('now')";
           const stmt = db.prepare(sql);
-          transaction = db.transaction(() => {
+          const transaction = db.transaction(() => {
             const res1 = stmt3.run('In person', a.SubjectId);
             const res2 = stmt.run(a.SubjectId);
             return res1.changes > 0 && res2.changes > 0;
@@ -121,9 +121,8 @@ exports.changeModalitySchedule = (array) => new Promise((resolve, reject) => {
           let lectIds = rows.map(({ LectureId }) => LectureId); // array of lectureIds related to that SubjectId
           transaction = db.transaction(() => {
             const res1 = stmt3.run('Virtual', a.SubjectId);
-            let res2;
             lectIds.forEach(async (lect) => {
-              res2 = await lecturesDao.changeLectureModality(lect);
+              await lecturesDao.changeLectureModality(lect);
             });
             return res1.changes > 0;
           });
