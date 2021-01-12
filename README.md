@@ -43,7 +43,7 @@
 - `sudo docker pull se2team8/pulsebs-team8:v2`
 - `sudo docker run -p 3000:3000 -p 3001:3001 se2team8/pulsebs-team8:v2`
 
-Notice: to use the "Login with SoftEng credentials feature, you have to run the IdP docker image. See [How to run SAML Identity provider](#how-to-run-saml-identity-provider).
+Notice: to use the `Login with SoftEng credentials` feature in the login page, you have to run the IdP docker image. See [How to run SAML Identity provider](#how-to-run-saml-identity-provider).
 
 ## Version v1.5
 - `sudo docker pull se2team8/pulsebs-team8:v1.5`
