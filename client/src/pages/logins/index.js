@@ -197,6 +197,7 @@ function SignUp(props) {
               Log In
             </Button>
             <Button type="submit"
+                    data-testid="login-idp-button"
                     fullWidth
                     variant="contained"
                     color="secondary"

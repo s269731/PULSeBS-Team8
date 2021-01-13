@@ -21,6 +21,7 @@ function initTestDB() {
   usersStmt.run([11, 'D', 'Maria', 'Balducci', 'd0003@prof.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141340']);
   usersStmt.run([12, 'D', 'Paolino', 'Garzetta', 'd0004@prof.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141341']);
   usersStmt.run([13, 'S', 'Alvaro', 'Vitale', 's0007@student.com', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141342']);
+  usersStmt.run(['900000', 'S', 'Donald', 'Trump', 's900000@students.politu.it', '$2b$12$JzpgpB9ruQNwczLJXMkL9.UPoo4K1Sdlpx4g6/9aVHRyz/GzjrRpa', 'XT6141232']);
 
   /** ********************* */
   /*    SUBJECTS TABLE      */

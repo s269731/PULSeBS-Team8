@@ -28,6 +28,26 @@ beforeAll(async () => {
 })
 
 describe('Students', () => {
+  test('students can login with an IdP', async () => {
+    await page.goto(baseUrl);
+    await page.waitForSelector('[data-testid="home-page"]');
+    await page.click('[data-testid="login-link"]');
+
+    await page.waitForSelector('[data-testid="login-page"]');
+    await page.click('[data-testid="login-idp-button"]');
+    await page.waitForSelector("input[name=username]");
+    await page.type("input[name=username]", 's900000');
+    await page.type("input[name=password]", 'MK97060783');
+    await page.keyboard.press('Enter');
+    await page.waitForSelector('[data-testid="home-page"]');
+  }, 9000000);
+
+  test('students can logout after logging in with IdP', async () => {
+    await page.waitForSelector('[data-testid="logout-link"]');
+    await page.click('[data-testid="logout-link"]');
+    await page.waitForSelector('[data-testid="home-page"]');
+  }, 9000000);
+
   test('students can login', async () => {
     await page.goto(baseUrl);
     await page.waitForSelector('[data-testid="home-page"]');
