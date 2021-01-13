@@ -133,14 +133,6 @@ Integer ID, Teacher ID, Subject ID, DateHour (in the format YYYY-MM-DDTHH:MM:SS.
 
 ex. 121,28,7,2020-12-10T11:30:00.000Z,In person,14,30,21
 
-## How to run E2E automated tests
-To run end-to-end tests, run these configurations:
-- on the server
-    - `npm start:test`
-- on the client
-    - `npm start`
-    - `npm test:e2e`
-
 ## How to run SAML Identity provider
 
 - Clone the Repository https://github.com/LucaBarco/Pulsebs-SAMLIdP
@@ -149,3 +141,13 @@ To run end-to-end tests, run these configurations:
     - `docker-compose build`
     - `docker-compose up`
 - Then, run the application as usual (either npm start in both server and client or via docker image)
+
+## How to run E2E automated tests
+To successfully run all end-to-end tests, you must first have the SAML IdP up and running ([see instructions above](#how-to-run-e2e-automated-tests)).
+
+Then, run these configurations:
+- on the server
+    - `npm start:test`
+- on the client
+    - `npm start`
+    - `npm test:e2e`
