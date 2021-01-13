@@ -80,6 +80,21 @@ describe('Students', () => {
     await page.click('[id="controlled-tab-tab-calendar"]');
     await page.waitForSelector('[data-testid="calendar-page"]');
   }, 9000000);
+  
+  test('students can show a tutorial', async () => {
+    await page.goto(baseUrl + 'student');
+    await page.waitForSelector('[data-testid="student-page"]');
+    await page.click('[data-testid="help-button"]');
+    await page.waitForSelector('[data-testid="student-page-modal"]');
+  }, 9000000);
+
+  test('students can close the tutorial modal', async () => {
+    await page.goto(baseUrl + 'student');
+    await page.waitForSelector('[data-testid="student-page"]');
+    await page.click('[data-testid="help-button"]');
+    await page.waitForSelector('[data-testid="student-page-modal"]');
+    await page.click('[data-testid="understood-button"]');
+  }, 9000000);
 
   test('students can logout', async () => {
     await page.waitForSelector('[data-testid="logout-link"]');
@@ -123,7 +138,13 @@ describe('Teachers', () => {
     // TODO: also click on cancel-lecture-closemodal-button
   }, 9000000);
 
-  // TODO: test the time constraints
+  test('teachers can open the tutorial', async () => {
+    await page.goto(baseUrl + 'teacher');
+    await page.waitForSelector('[data-testid="teacher-page"]');
+    await page.click('[data-testid="help-button"]');
+    await page.waitForSelector('[data-testid="teacher-page-modal"]');
+    //await page.click('[data-testid="understood-button"]');
+  }, 9000000);
 
   test('teachers can see past lectures for recording presence', async () => {
     await page.goto(baseUrl + 'teacher');
@@ -227,6 +248,13 @@ describe('Officers', () => {
     await page.click('[id="controlled-tab-tab-calendar"]');
     await page.waitForSelector('[data-testid="lecturetable"]');
   }, 9000000);
+  
+  test('officers can show the exclude holidays modal', async () => {
+    await page.goto(baseUrl + 'officer');
+    await page.waitForSelector('[data-testid="officer-page"]');
+    await page.click('[data-testid="exc-holiday-button"]');
+    await page.waitForSelector('[data-testid="exc-holiday-modal"]');
+  }, 9000000);
 
   test('officers can logout', async () => {
     await page.waitForSelector('[data-testid="logout-link"]');
@@ -303,6 +331,32 @@ describe('Managers', () => {
     await page.waitForSelector('[data-testid="ssn-input"]');
     await page.focus('[data-testid="ssn-input"]')
     await page.keyboard.type('XT6141391')
+    await page.click('[data-testid="ssn-button"]');
+    await page.waitForSelector('[data-testid="pdf-download-button"]');
+    await page.click('[data-testid="pdf-download-button"]');
+  }, 9000000);
+  
+    test('officers can download a csv file of the contact tracing for a teacher', async () => {
+    await page.goto(baseUrl + 'manager');
+    await page.waitForSelector('[data-testid="manager-page"]');
+    await page.waitForSelector('[id="manager-tab-tab-chart"]');
+    await page.click('[id="manager-tab-tab-search"]');
+    await page.waitForSelector('[data-testid="ssn-input"]');
+    await page.focus('[data-testid="ssn-input"]')
+    await page.keyboard.type('XT6141390')
+    await page.click('[data-testid="ssn-button"]');
+    await page.waitForSelector('[data-testid="csv-download-button"]');
+    await page.click('[data-testid="csv-download-button"]');
+  }, 9000000);
+
+  test('officers can download a pdf file of the contact tracing for a teacher', async () => {
+    await page.goto(baseUrl + 'manager');
+    await page.waitForSelector('[data-testid="manager-page"]');
+    await page.waitForSelector('[id="manager-tab-tab-chart"]');
+    await page.click('[id="manager-tab-tab-search"]');
+    await page.waitForSelector('[data-testid="ssn-input"]');
+    await page.focus('[data-testid="ssn-input"]')
+    await page.keyboard.type('XT6141390')
     await page.click('[data-testid="ssn-button"]');
     await page.waitForSelector('[data-testid="pdf-download-button"]');
     await page.click('[data-testid="pdf-download-button"]');
