@@ -324,10 +324,12 @@ confirmMessage(){
                   <h6>
                     <Alert variant={"success"}>
                     <Row className={'justify-content-md-center  border-bottom  pb-3 pt-2 mb-0'}>
-
-            Correctly setted: {this.state.correct}<br/>
-            Lectures not found on these dates: {this.state.notFound}<br/>
-            Already Held: {this.state.alreadyHeld}<br/>
+                      <Col>
+                      {this.state.correct.length>0?<> <Row className=" justify-content-md-center" ><span className={"courseTitle"}>Holidays correctly set to:</span> <>{this.state.correct}<br/></></Row></>:<></>}<br/>
+                      {this.state.notFound.length>0?<> <Row className=" justify-content-md-center" ><span className={"courseTitle"}>Lectures not found on these dates:</span> {this.state.notFound}<br/></Row></>:<></>}<br/>
+                      {this.state.alreadyHeld.length>0?<>  <Row className=" justify-content-md-center" ><span className={"courseTitle"}>Already Held:</span> {this.state.alreadyHeld}<br/></Row></>:<></>}<br/>
+            <br/>
+                      </Col>
               </Row>
                   <Button
                       block

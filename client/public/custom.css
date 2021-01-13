@@ -113,3 +113,13 @@
 .whiteLink{
     color:white !important;
 }
+.react-datepicker__input-container {
+    width: inherit;
+}
+
+.react-datepicker-wrapper {
+    width: 100%;
+}
+.rmdp-input{
+    width:450px !important;
+}

@@ -94,6 +94,8 @@ app.post('/login/callback',
     }).catch((err) => {
       // user doesn't exist in our database
       console.log(err);
+      res.redirect('/');
+      res.end();
     });
   });
 

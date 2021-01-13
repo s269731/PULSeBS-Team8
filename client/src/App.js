@@ -165,7 +165,7 @@
             </Route>
             <Route exact path="/student">
               {this.state.loggedUser && this.state.loggedUser.role === "S" ? (
-                <StudentPage />
+                <StudentPage notLoggedUser={this.notLoggedUser}/>
               ) : (
                 <Redirect to="/login" />
               )}

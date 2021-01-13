@@ -43,6 +43,7 @@ function ExcludeHolidayModal(props) {
                  multiple={true}
                  minDate={new Date()}
                  data-testid="exc-holiday-datepick"
+                inline
                  />
           </Modal.Body>
           <Modal.Footer>
