@@ -80,6 +80,21 @@ describe('Students', () => {
     await page.click('[id="controlled-tab-tab-calendar"]');
     await page.waitForSelector('[data-testid="calendar-page"]');
   }, 9000000);
+  
+  test('students can show a tutorial', async () => {
+    await page.goto(baseUrl + 'student');
+    await page.waitForSelector('[data-testid="student-page"]');
+    await page.click('[data-testid="help-button"]');
+    await page.waitForSelector('[data-testid="student-page-modal"]');
+  }, 9000000);
+
+  test('students can close the tutorial modal', async () => {
+    await page.goto(baseUrl + 'student');
+    await page.waitForSelector('[data-testid="student-page"]');
+    await page.click('[data-testid="help-button"]');
+    await page.waitForSelector('[data-testid="student-page-modal"]');
+    await page.click('[data-testid="understood-button"]');
+  }, 9000000);
 
   test('students can logout', async () => {
     await page.waitForSelector('[data-testid="logout-link"]');
@@ -123,7 +138,13 @@ describe('Teachers', () => {
     // TODO: also click on cancel-lecture-closemodal-button
   }, 9000000);
 
-  // TODO: test the time constraints
+  test('teachers can open the tutorial', async () => {
+    await page.goto(baseUrl + 'teacher');
+    await page.waitForSelector('[data-testid="teacher-page"]');
+    await page.click('[data-testid="help-button"]');
+    await page.waitForSelector('[data-testid="teacher-page-modal"]');
+    //await page.click('[data-testid="understood-button"]');
+  }, 9000000);
 
   test('teachers can see past lectures for recording presence', async () => {
     await page.goto(baseUrl + 'teacher');
