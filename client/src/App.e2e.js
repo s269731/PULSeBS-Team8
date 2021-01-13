@@ -328,6 +328,32 @@ describe('Managers', () => {
     await page.waitForSelector('[data-testid="pdf-download-button"]');
     await page.click('[data-testid="pdf-download-button"]');
   }, 9000000);
+  
+    test('officers can download a csv file of the contact tracing for a teacher', async () => {
+    await page.goto(baseUrl + 'manager');
+    await page.waitForSelector('[data-testid="manager-page"]');
+    await page.waitForSelector('[id="manager-tab-tab-chart"]');
+    await page.click('[id="manager-tab-tab-search"]');
+    await page.waitForSelector('[data-testid="ssn-input"]');
+    await page.focus('[data-testid="ssn-input"]')
+    await page.keyboard.type('XT6141390')
+    await page.click('[data-testid="ssn-button"]');
+    await page.waitForSelector('[data-testid="csv-download-button"]');
+    await page.click('[data-testid="csv-download-button"]');
+  }, 9000000);
+
+  test('officers can download a pdf file of the contact tracing for a teacher', async () => {
+    await page.goto(baseUrl + 'manager');
+    await page.waitForSelector('[data-testid="manager-page"]');
+    await page.waitForSelector('[id="manager-tab-tab-chart"]');
+    await page.click('[id="manager-tab-tab-search"]');
+    await page.waitForSelector('[data-testid="ssn-input"]');
+    await page.focus('[data-testid="ssn-input"]')
+    await page.keyboard.type('XT6141390')
+    await page.click('[data-testid="ssn-button"]');
+    await page.waitForSelector('[data-testid="pdf-download-button"]');
+    await page.click('[data-testid="pdf-download-button"]');
+  }, 9000000);
 
   test('officers can logout', async () => {
     await page.waitForSelector('[data-testid="logout-link"]');
