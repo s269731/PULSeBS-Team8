@@ -248,6 +248,13 @@ describe('Officers', () => {
     await page.click('[id="controlled-tab-tab-calendar"]');
     await page.waitForSelector('[data-testid="lecturetable"]');
   }, 9000000);
+  
+  test('officers can show the exclude holidays modal', async () => {
+    await page.goto(baseUrl + 'officer');
+    await page.waitForSelector('[data-testid="officer-page"]');
+    await page.click('[data-testid="exc-holiday-button"]');
+    await page.waitForSelector('[data-testid="exc-holiday-modal"]');
+  }, 9000000);
 
   test('officers can logout', async () => {
     await page.waitForSelector('[data-testid="logout-link"]');
