@@ -52,7 +52,7 @@ function ModifyModal(props) {
     return (
         <>
             <Button
-                data-testid="cancel-lecture-button"
+                data-testid="modify-schedule-button"
                 variant="danger"
                 onClick={handleShow}
             >

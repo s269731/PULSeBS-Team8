@@ -1,98 +1,101 @@
 <testExecutions version="1">
-<file path="src\Components\Teacher\TeacherPage.test.js">
-<testCase name="Teacher page rendering with lectures" duration="1029" />
-<testCase name="Teacher page rendering with failing lectures api" duration="31" />
-<testCase name="LectureTable filter lectures button works" duration="184" />
-<testCase name="LectureTable cancel filter lectures button works" duration="155" />
-<testCase name="Cancel lecture button from Teacher Page works" duration="463" />
-<testCase name="Insert attendance form from Teacher Page works" duration="636" />
-<testCase name="Modify lecture button from Teacher Page works" duration="442" />
+<file path="src\App.test.js">
+<testCase name="full app rendering/navigating to login and logout" duration="2488" />
+<testCase name="fail when getting the current user" duration="64" />
+<testCase name="random routes redirect to home page" duration="18" />
+</file>
+<file path="src\Components\SupportOfficer\ModifyModal.test.js">
+<testCase name="Modify Modal rendering" duration="244" />
 </file>
 <file path="src\api\api.test.js">
-<testCase name="right login" duration="297" />
-<testCase name="wrong login" duration="164" />
-<testCase name="get auth user" duration="869" />
-<testCase name="get no auth user" duration="21" />
-<testCase name="logout" duration="25" />
-<testCase name="loads and displays lectures for teachers" duration="306" />
-<testCase name="handlers server error for teacher lectures" duration="49" />
-<testCase name="handlers message for no lectures (teacher)" duration="116" />
-<testCase name="handlers message for no courses (teacher)" duration="69" />
-<testCase name="loads and displays bookings logs for teachers" duration="564" />
-<testCase name="loads and displays attendance logs for teachers" duration="405" />
-<testCase name="handle no logs error for teachers" duration="153" />
-<testCase name="get student list with more some student" duration="131" />
-<testCase name="get student list with no students" duration="56" />
-<testCase name="teacher insert attendance" duration="213" />
-<testCase name="teacher delete a lecture" duration="87" />
-<testCase name="teacher modify a lecture" duration="111" />
-<testCase name="show student lectures list" duration="171" />
-<testCase name="show student lectures list for no auth user" duration="128" />
-</file>
-<file path="src\App.test.js">
-<testCase name="full app rendering/navigating to login and logout" duration="1885" />
-<testCase name="fail when getting the current user" duration="19" />
-<testCase name="random routes redirect to home page" duration="15" />
+<testCase name="right login" duration="313" />
+<testCase name="wrong login" duration="150" />
+<testCase name="get auth user" duration="1003" />
+<testCase name="get no auth user" duration="33" />
+<testCase name="logout" duration="52" />
+<testCase name="loads and displays lectures for teachers" duration="595" />
+<testCase name="handlers server error for teacher lectures" duration="57" />
+<testCase name="handlers message for no lectures (teacher)" duration="173" />
+<testCase name="handlers message for no courses (teacher)" duration="110" />
+<testCase name="loads and displays bookings logs for teachers" duration="748" />
+<testCase name="loads and displays attendance logs for teachers" duration="488" />
+<testCase name="handle no logs error for teachers" duration="189" />
+<testCase name="get student list with more some student" duration="144" />
+<testCase name="get student list with no students" duration="55" />
+<testCase name="teacher insert attendance" duration="233" />
+<testCase name="teacher delete a lecture" duration="102" />
+<testCase name="teacher modify a lecture" duration="115" />
+<testCase name="show student lectures list" duration="224" />
+<testCase name="show student lectures list for no auth user" duration="178" />
 </file>
 <file path="src\Components\Student\StudentPage.test.js">
-<testCase name="Student page rendering/navigation" duration="195" />
-<testCase name="Student page rendering with lectures list" duration="501" />
-<testCase name="Student page rendering without lectures list" duration="175" />
-<testCase name="Successfully book a lecture" duration="463" />
-<testCase name="Should fail to book a lecture if not logged in" duration="333" />
-<testCase name="Successfully cancel a lecture reservation" duration="311" />
-<testCase name="Should fail to cancel a lecture reservation" duration="256" />
+<testCase name="Student page rendering/navigation" duration="253" />
+<testCase name="Student page rendering with lectures list" duration="1006" />
+<testCase name="Student page rendering without lectures list" duration="373" />
+<testCase name="Successfully book a lecture" duration="489" />
+<testCase name="Should fail to book a lecture if not logged in" duration="341" />
+<testCase name="Successfully cancel a lecture reservation" duration="316" />
+<testCase name="Should fail to cancel a lecture reservation" duration="316" />
+</file>
+<file path="src\Components\Teacher\TeacherPage.test.js">
+<testCase name="Teacher page rendering with lectures" duration="517" />
+<testCase name="Teacher page rendering with failing lectures api" duration="12" />
+<testCase name="LectureTable filter lectures button works" duration="146" />
+<testCase name="LectureTable cancel filter lectures button works" duration="152" />
+<testCase name="Cancel lecture button from Teacher Page works" duration="372" />
+<testCase name="Insert attendance form from Teacher Page works" duration="615" />
+<testCase name="Modify lecture button from Teacher Page works" duration="802" />
 </file>
 <file path="src\Components\SupportOfficer\OfficerPage.test.js">
-<testCase name="test OfficerPage student-upload-button" duration="610" />
-<testCase name="test OfficerPage teacher-upload-button" duration="45" />
-<testCase name="test OfficerPage lecture-upload-button" duration="44" />
-<testCase name="test OfficerPage course-upload-button" duration="50" />
-<testCase name="test OfficerPage subject-upload-button" duration="51" />
-</file>
-<file path="src\pages\logins\index.test.js">
-<testCase name="Input handle login with non-empty email and password" duration="156" />
-<testCase name="Input handle login with empty email and password" duration="98" />
+<testCase name="test OfficerPage student-upload-button" duration="812" />
+<testCase name="test OfficerPage teacher-upload-button" duration="91" />
+<testCase name="test OfficerPage lecture-upload-button" duration="52" />
+<testCase name="test OfficerPage course-upload-button" duration="69" />
+<testCase name="test OfficerPage subject-upload-button" duration="54" />
 </file>
 <file path="src\Components\SupportOfficer\ModifyLecture.test.js">
-<testCase name="List of Courses for Officer" duration="44" />
-<testCase name="Officer page Change Modality" duration="24" />
-<testCase name="Officer page Change Schedule" duration="26" />
-<testCase name="Officer check Box" duration="25" />
-<testCase name="Officer filter lectures button check" duration="381" />
+<testCase name="List of Courses for Officer" duration="117" />
+<testCase name="Officer page Change Modality" duration="33" />
+<testCase name="Officer page Change Schedule" duration="59" />
+<testCase name="Officer check Box" duration="23" />
+<testCase name="Officer filter lectures button check" duration="619" />
 </file>
-<file path="src\pages\manager\index.test.js">
-<testCase name="Manager page rendering" duration="47" />
-<testCase name="Manager page rendering with Contact Tracing report" duration="35" />
+<file path="src\pages\logins\index.test.js">
+<testCase name="Input handle login with non-empty email and password" duration="216" />
+<testCase name="Input handle login with empty email and password" duration="125" />
 </file>
 <file path="src\index.test.js">
 <testCase name="Application root should render without crashing" duration="16" />
 </file>
-<file path="src\Components\Teacher\ActionsForm.test.js">
-<testCase name="Cancel lecture button works" duration="48" />
-<testCase name="Modify lecture button works" duration="43" />
-</file>
-<file path="src\Components\Student\LecturesCalendar.test.js">
-<testCase name="Calendar rendering with lectures list" duration="144" />
-</file>
-<file path="src\Components\SupportOfficer\ExcludeHolidayModal.test.js">
-<testCase name="Exclude Holiday Modal rendering" duration="77" />
-</file>
-<file path="src\Components\Student\AvailableCourses.test.js">
-<testCase name="AvailableCourses page rendering with lectures list" duration="54" />
-<testCase name="Successfully book a lecture" duration="61" />
-<testCase name="Successfully cancel a lecture reservation" duration="65" />
-</file>
-<file path="src\Components\Teacher\StudentList.test.js">
-<testCase name="StudentList modal rendering with student list" duration="65" />
-<testCase name="StudentList modal rendering without student list" duration="35" />
-<testCase name="Student list modal rendering with checkbox" duration="49" />
-</file>
-<file path="src\Components\Student\HelpStudentModal.test.js">
-<testCase name="Student page Modal rendering" duration="17" />
+<file path="src\pages\manager\index.test.js">
+<testCase name="Manager page rendering" duration="58" />
+<testCase name="Manager page rendering with Contact Tracing report" duration="58" />
 </file>
 <file path="src\Components\SupportOfficer\AddStudent.test.js">
-<testCase name="full app rendering/navigating to login and logout" duration="6" />
+<testCase name="full app rendering/navigating to login and logout" duration="8" />
+</file>
+<file path="src\Components\Student\AvailableCourses.test.js">
+<testCase name="AvailableCourses page rendering with lectures list" duration="59" />
+<testCase name="Successfully book a lecture" duration="66" />
+<testCase name="Successfully cancel a lecture reservation" duration="48" />
+</file>
+<file path="src\Components\Teacher\StudentList.test.js">
+<testCase name="StudentList modal rendering with student list" duration="77" />
+<testCase name="StudentList modal rendering without student list" duration="51" />
+<testCase name="Student list modal rendering with checkbox" duration="49" />
+</file>
+<file path="src\Components\Student\LecturesCalendar.test.js">
+<testCase name="Calendar rendering with lectures list" duration="167" />
+</file>
+<file path="src\Components\SupportOfficer\ExcludeHolidayModal.test.js">
+<testCase name="Exclude Holiday Modal rendering" duration="90" />
+</file>
+<file path="src\Components\Teacher\ActionsForm.test.js">
+<testCase name="Cancel lecture button works" duration="67" />
+<testCase name="Modify lecture button works" duration="47" />
+</file>
+<file path="src\Components\Student\HelpStudentModal.test.js">
+<testCase name="Student page Modal rendering" duration="25" />
 </file>
 <file path="src\Components\Teacher\HelpTeacherModal.test.js">
 <testCase name="Teacher page Modal rendering" duration="11" />
