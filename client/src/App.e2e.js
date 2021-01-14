@@ -63,6 +63,9 @@ describe('Students', () => {
     await page.waitForSelector('[data-testid="logout-link"]');
     await page.goto(baseUrl + 'student');
     await page.waitForSelector('[data-testid="student-page"]');
+    const cards = await page.$$('[data-testid="card-toggle"]');
+    await cards[2].click();
+    await page.waitForSelector('[data-testid="course-book-button"]');
     await page.click('[data-testid="course-book-button"]');
     await page.waitForSelector('[data-testid="course-cancel-button"]');
   }, 9000000);
@@ -70,6 +73,9 @@ describe('Students', () => {
   test('students can cancel a booking for a lecture', async () => {
     await page.goto(baseUrl + 'student');
     await page.waitForSelector('[data-testid="student-page"]');
+    const cards = await page.$$('[data-testid="card-toggle"]');
+    await cards[2].click();
+    await page.waitForSelector('[data-testid="course-cancel-button"]');
     await page.click('[data-testid="course-cancel-button"]');
     await page.waitForSelector('[data-testid="course-book-button"]');
   }, 9000000);
@@ -98,6 +104,7 @@ describe('Students', () => {
   }, 9000000);
 
   test('students can logout', async () => {
+    await page.goto(baseUrl + 'student');
     await page.waitForSelector('[data-testid="logout-link"]');
     await page.click('[data-testid="logout-link"]');
     await page.waitForSelector('[data-testid="home-page"]');
@@ -379,3 +386,4 @@ describe('Managers', () => {
 afterAll(() => {
   browser.close();
 });
+
