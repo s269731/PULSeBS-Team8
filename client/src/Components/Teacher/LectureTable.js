@@ -220,6 +220,7 @@ class LectureTable extends React.Component {
                               changeModalityLecture={this.props.changeModalityLecture}
                               recordAttendance={this.props.recordAttendance}
                               notLoggedUser={this.props.notLoggedUser}
+                              getLectures={this.props.getLectures}
                             />
                     );
                   })}
