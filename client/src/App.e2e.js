@@ -94,6 +94,7 @@ describe('Students', () => {
     await page.click('[data-testid="help-button"]');
     await page.waitForSelector('[data-testid="student-page-modal"]');
     await page.click('[data-testid="understood-button"]');
+    await page.waitForSelector('[data-testid="logout-link"]');
   }, 9000000);
 
   test('students can logout', async () => {
@@ -160,7 +161,9 @@ describe('Teachers', () => {
     await page.waitForSelector('[data-testid="lecturetable"]');
     await page.click('[id="controlled-teacher-tab-tab-past-lectures"]');
     await page.waitForSelector('[id="controlled-teacher-tab-tabpane-past-lectures"]');
-    await page.waitForSelector('[data-testid="record-attendance-lecture-button"]');
+    // this was modified to have a different action/name, but test-id remains the same
+    // await page.waitForSelector('[data-testid="record-attendance-lecture-button"]');
+    await page.waitForSelector('[data-testid="studentlist-button"]');
   }, 9000000);
 
   test('teachers can show the statistics page', async () => {
@@ -252,11 +255,14 @@ describe('Officers', () => {
   test('officers can show the exclude holidays modal', async () => {
     await page.goto(baseUrl + 'officer');
     await page.waitForSelector('[data-testid="officer-page"]');
+    await page.click('[id="controlled-tab-tab-calendar"]');
+    await page.waitForSelector('[data-testid="exc-holiday-button"]');
     await page.click('[data-testid="exc-holiday-button"]');
     await page.waitForSelector('[data-testid="exc-holiday-modal"]');
   }, 9000000);
 
   test('officers can logout', async () => {
+    await page.goto(baseUrl + 'officer');
     await page.waitForSelector('[data-testid="logout-link"]');
     await page.click('[data-testid="logout-link"]');
     await page.waitForSelector('[data-testid="home-page"]');
@@ -343,7 +349,7 @@ describe('Managers', () => {
     await page.click('[id="manager-tab-tab-search"]');
     await page.waitForSelector('[data-testid="ssn-input"]');
     await page.focus('[data-testid="ssn-input"]')
-    await page.keyboard.type('XT6141390')
+    await page.keyboard.type('XT6141340')
     await page.click('[data-testid="ssn-button"]');
     await page.waitForSelector('[data-testid="csv-download-button"]');
     await page.click('[data-testid="csv-download-button"]');
@@ -356,7 +362,7 @@ describe('Managers', () => {
     await page.click('[id="manager-tab-tab-search"]');
     await page.waitForSelector('[data-testid="ssn-input"]');
     await page.focus('[data-testid="ssn-input"]')
-    await page.keyboard.type('XT6141390')
+    await page.keyboard.type('XT6141340')
     await page.click('[data-testid="ssn-button"]');
     await page.waitForSelector('[data-testid="pdf-download-button"]');
     await page.click('[data-testid="pdf-download-button"]');
