@@ -14,10 +14,10 @@
 # Contents
 
 - [How to run docker images](#how-to-run-docker-images)
-    - [Release 2 - Version v2](#version-v2)
-    - [Release 1.5 - Version v1.5](#version-v15)
-    - [Release 1 - Version v1](#version-v1)
-    - [Release 0 - Version v0](#version-v0)
+    - [Release 2 - Version v2](#release-2---version-v2)
+    - [Release 1.5 - Version v1.5](#release-15---version-v15)
+    - [Release 1 - Version v1](#release-1---version-v1)
+    - [Release 0 - Version v0](#release-0---version-v0)
 - [How to use the application](#how-to-use-the-application)
     - [Credentials](#credentials)
         - [Students](#students)
@@ -39,21 +39,21 @@
 # How to run docker images
 (if you are on windows, you must avoid "sudo")
 
-## Version v2
+## Release 2 - Version v2
 - `sudo docker pull se2team8/pulsebs-team8:v2`
 - `sudo docker run -p 3000:3000 -p 3001:3001 se2team8/pulsebs-team8:v2`
 
 Notice: to use the `Login with SoftEng credentials` feature in the login page, you have to run the IdP docker image. See [How to run SAML Identity provider](#how-to-run-saml-identity-provider).
 
-## Version v1.5
+## Release 1.5 - Version v1.5
 - `sudo docker pull se2team8/pulsebs-team8:v1.5`
 - `sudo docker run -p 3000:3000 -p 3001:3001 se2team8/pulsebs-team8:v1.5`
 
-## Version v1
+## Release 1 - Version v1
 - `sudo docker pull se2team8/pulsebs-team8:v1`
 - `sudo docker run -p 3000:3000 -p 3001:3001 se2team8/pulsebs-team8:v1`
 
-## Version v0
+## Release 0 - Version v0
 For only the very first version, we used docker-compose.
 So, you need to:
 - download the code of this repository with **tag v0**
