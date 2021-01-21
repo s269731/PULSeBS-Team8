@@ -50,6 +50,7 @@ Notice: to use the `Login with SoftEng credentials` feature in the login page, y
 ## Release 1.5 - Version v1.5
 - `sudo docker pull se2team8/pulsebs-team8:v1.5`
 - `sudo docker run -p 3000:3000 -p 3001:3001 se2team8/pulsebs-team8:v1.5`
+-  in the browser, go to `http://localhost:3000`
 
 ## Release 1 - Version v1
 - `sudo docker pull se2team8/pulsebs-team8:v1`
