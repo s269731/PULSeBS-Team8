@@ -37,11 +37,13 @@
 
 
 # How to run docker images
+
 (if you are on windows, you must avoid "sudo")
 
 ## Release 2 - Version v2
 - `sudo docker pull se2team8/pulsebs-team8:v2`
 - `sudo docker run -p 3000:3000 -p 3001:3001 se2team8/pulsebs-team8:v2`
+-  in the browser, go to `http://localhost:3000`
 
 Notice: to use the `Login with SoftEng credentials` feature in the login page, you have to run the IdP docker image. See [How to run SAML Identity provider](#how-to-run-saml-identity-provider).
 
@@ -52,6 +54,7 @@ Notice: to use the `Login with SoftEng credentials` feature in the login page, y
 ## Release 1 - Version v1
 - `sudo docker pull se2team8/pulsebs-team8:v1`
 - `sudo docker run -p 3000:3000 -p 3001:3001 se2team8/pulsebs-team8:v1`
+-  in the browser, go to `http://localhost:3000`
 
 ## Release 0 - Version v0
 For only the very first version, we used docker-compose.
@@ -59,6 +62,7 @@ So, you need to:
 - download the code of this repository with **tag v0**
 - in the folder of the code, execute: `docker-compose pull`
 - then execute: `docker-compose run`
+-  in the browser, go to `http://localhost:3000`
 
 # How to use the application
 
